@@ -5,6 +5,44 @@ sidebar: on-premise-citylens
 
 Чтобы установить <Brand /> Ситискан версии 2.0.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-citylens/overview/2gis-cli/releases#v3) и следуйте [инструкциям по обновлению](/on-premise-citylens/update).
 
+## 2.3.0 {#v2.3.0}
+
+Дата релиза: 2026-06-10
+
+<h3 id="dependencies_v2.3.0">Зависимости</h3>
+
+Перед обновлением <Brand /> Ситискан до версии 2.3.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | 3      |
+| Базовые сервисы                          | 2.1.0  |
+| API-платформа                            | 2.47.0 |
+| <Brand /> Про                            | 2.1.0  |
+
+Подробнее см. в разделе [Обновление <Brand /> Ситискан](/on-premise-citylens/update).
+
+<h3 id="new_v2.3.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| ------------------------------------------- | --------- |
+| CityLens API и CityLens Routes API | Добавлена возможность [загружать точки из файла](/citylens/administrator/planner/tasks#uploading-points) для создания маршрута в Планировщике задач. |
+| CityLens Routes UI | <ul><li>Добавлен параметр `progressDeadlineSeconds` для задания максимального времени на развёртывание сервиса в Kubernetes. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.3.0/charts/citylens-routes-ui/values.yaml).</li><li>В Планировщике задач добавлена возможность [исключать сегменты дорог](/citylens/administrator/planner/tasks#roads) из маршрута.</li></ul> |
+
+<h3 id="breaking_v2.3.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| ------------------------------------------- | --------- |
+| CityLens API и CityLens Routes API | Добавлена ролевая модель для [управления доступом сотрудников](/citylens/administrator/planner/overview#role-model) к Планировщику задач:<ul><li>Добавлены обязательные параметры `routes.endpointInternalApiKey.users` и `routes.adminCredentials.cookieSigningKey`.</li><li>Удалены параметры `routes.api.openApi` и `routes.realtimeDataApi.openApi`.</li><li>После обновления сервиса выполните миграцию существующих пользователей на новую ролевую модель: см. инструкцию [После установки](/on-premise-citylens/install/installation#after-installing).</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.3.0/charts/citylens/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-api). |
+| CityLens Routes UI | Добавлен обязательный параметр `env.CATALOG_API_KEY` для указания API-ключа для работы с Catalog APIs. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.3.0/charts/citylens-routes-ui/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-ui). |
+
+<h3 id="bugfix_v2.3.0">Исправленные ошибки/Улучшения</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| ------------------------------------------- | --------- |
+| CityLens API и CityLens Routes API | В Планировщике задач:<ul><li>Теперь при редактировании задачи перестраивается маршрут при изменении фильтров для исключения дорог.</li><li>Исправлены ошибки получения статистики по объездам.</li><li>Исправлены ошибки в работе сервиса Hangfire: теперь создаются разовые CronJob-ы.</li><li>Теперь подложки карты привязываются к компании, а не к пользователю.</li><li>Улучшена обработка объездов в режиме реального времени.</li><li>Изменены коды системных ошибок.</li><li>Добавлена сортировка задач по статусу в списке на вкладке **Задачи**.</li><li>Теперь пользователю выдаётся доступ ко всем проектам территории, к которой у него есть доступ.</li><li>Добавлена возможность редактировать территории и проекты водителей.</li></ul> |
+| CityLens Routes UI | В Планировщике задач:<ul><li>Добавлена сортировка водителей в списке по времени последней активности на вкладке **Водители**.</li><li>Исправлено отображение прогресса по задачам на странице проекта.</li><li>Добавлено перенаправление пользователей без компании в Менеджер Платформы.</li><li>Исправлено отображение данных в тултипе при наведении на полигон.</li><li>Добавлены переводы для ошибок в интерфейсе.</li><li>Исправлены ошибки в расчёте маршрута при изменении задачи.</li><li>Теперь при выборе дорог при создании задачи не выбираются туристические маршруты.</li></ul> |
+
 ## 2.2.0 {#v2.2.0}
 
 Дата релиза: 2025-12-05
@@ -26,13 +64,13 @@ sidebar: on-premise-citylens
 
 | <div style={{"width":"170px"}}>Сервис</div> | Изменения |
 | ------------------------------------------- | --------- |
-| CityLens API и CityLens Routes API | Добавлена возможность [cтроить маршруты по точкам на карте](/citylens/administrator/planner/tasks#creating-task) в Планировщике задач. |
+| CityLens API и CityLens Routes API | Добавлена возможность [строить маршруты по точкам на карте](/citylens/administrator/planner/tasks#creating-task) в Планировщике задач. |
 
 <h3 id="breaking_v2.2.0">Изменения, влияющие на обратную совместимость</h3>
 
 | <div style={{"width":"170px"}}>Сервис</div> | Изменения |
 | ------------------------------------------- | --------- |
-| CityLens API и CityLens Routes API | Добавлены обязательные параметры для доступа к Планировщику задач и внутренним сервисам:<ul><li>`routes.adminCredentials.password`,</li><li>`routes.adminCredentials.username`,</li><li>`routes.endpointInternalApiKey.dataScience`,</li><li>`routes.endpointInternalApiKey.companies`.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.2.0/charts/citylens/values.yaml) и обновлённый [конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-api).|
+| CityLens API и CityLens Routes API | Добавлены обязательные параметры для доступа к Планировщику задач и внутренним сервисам:<ul><li>`routes.adminCredentials.password`,</li><li>`routes.adminCredentials.username`,</li><li>`routes.endpointInternalApiKey.dataScience`,</li><li>`routes.endpointInternalApiKey.companies`.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.2.0/charts/citylens/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-api). |
 
 ## 2.1.0 {#v2.1.0}
 
@@ -55,15 +93,15 @@ sidebar: on-premise-citylens
 
 | <div style={{"width":"170px"}}>Сервис</div> | Изменения |
 | ------------------------------------------- | --------- |
-| CityLens API и CityLens Routes API    | <ul><li>Добавлена возможность логировать SQL-запросы: см. параметры `routes.api.logging.extendedSqlLogging`, `routes.worker.logging.extendedSqlLogging`, `routes.realtimeDataApi.logging.extendedSqlLogging`.</li><li>Добавлена возможность просматривать информацию о маршруте и точку последней активности водителя на карте в Планировщике задач.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens/values.yaml). |
-| CityLens Routes UI                    | Добавлена переменная окружения `env.METRICS_API_URL`, которая определяет адрес сервиса для сбора метрик: см. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens-routes-ui/values.yaml). |
+| CityLens API и CityLens Routes API | <ul><li>Добавлена возможность логировать SQL-запросы: см. параметры `routes.api.logging.extendedSqlLogging`, `routes.worker.logging.extendedSqlLogging`, `routes.realtimeDataApi.logging.extendedSqlLogging`.</li><li>Добавлена возможность просматривать информацию о маршруте и точку последней активности водителя на карте в Планировщике задач.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens/values.yaml). |
+| CityLens Routes UI | Добавлена переменная окружения `env.METRICS_API_URL`, которая определяет адрес сервиса для сбора метрик: см. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens-routes-ui/values.yaml). |
 
 <h3 id="breaking_v2.1.0">Изменения, влияющие на обратную совместимость</h3>
 
-| <div style={{"width":"170px"}}>Сервис</div> | Изменения                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CityLens API и CityLens Routes API    | <ul><li>Параметр `routes.api.logging.extended` для логирования REST-запросов переименован в `routes.api.logging.extendedRestLogging`.</li><li>Все настройки для подключения к базам данных вынесены в отдельный блок `routes.postgres`:<ul><li>Группа параметров `routes.postgres` перемещена в `routes.postgres.api`.</li><li>Группа параметров `routes.hangfire.postgres` перемещена в `routes.postgres.hangfire`.</li><li>Группа параметров `routes.realtimeDataApi.postgres` перемещена в `routes.postgres.realtimeDataApi`.</li><li>Параметры `routes.postgres.maxPoolSize` и `routes.postgres.pooling` для настройки пула соединений с PostgreSQL объединены в группу `routes.postgres.api.poolSize`.</li></ul></li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens/values.yaml), а также обновлённый [конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-api). |
-| CityLens Routes UI                    | Добавлена обязательная переменная окружения `env.MAPGL_DEFAULT_CENTER`, которая определяет координаты центра карты по умолчанию: см. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens-routes-ui/values.yaml), а также обновлённый [конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-ui). |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| ------------------------------------------- | --------- |
+| CityLens API и CityLens Routes API | <ul><li>Параметр `routes.api.logging.extended` для логирования REST-запросов переименован в `routes.api.logging.extendedRestLogging`.</li><li>Вынесены в отдельный блок `routes.postgres` все настройки для подключения к базам данных:<ul><li>Группа параметров `routes.postgres` перемещена в `routes.postgres.api`.</li><li>Группа параметров `routes.hangfire.postgres` перемещена в `routes.postgres.hangfire`.</li><li>Группа параметров `routes.realtimeDataApi.postgres` перемещена в `routes.postgres.realtimeDataApi`.</li><li>Параметры `routes.postgres.maxPoolSize` и `routes.postgres.pooling` для настройки пула соединений с PostgreSQL объединены в группу `routes.postgres.api.poolSize`.</li></ul></li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-api). |
+| CityLens Routes UI | Добавлена обязательная переменная окружения `env.MAPGL_DEFAULT_CENTER`, которая определяет координаты центра карты по умолчанию: см. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Citylens-2.1.0/charts/citylens-routes-ui/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-citylens/install/installation#install-citylens-ui). |
 
 ## 2.0.0 {#v2.0.0}
 
@@ -82,6 +120,6 @@ sidebar: on-premise-citylens
 
 Подробнее см. в разделе [Обновление <Brand /> Ситискан](/on-premise-citylens/update).
 
-## Предыдущие релизы
+## Предыдущие релизы {#previous-releases}
 
-Информацию о релизах предыдущих версий можно найти в [архиве](/on-premise-api-platform/previous-releases).
+Информацию о релизах предыдущих версий можно найти в [архиве](/on-premise-citylens/previous-releases).

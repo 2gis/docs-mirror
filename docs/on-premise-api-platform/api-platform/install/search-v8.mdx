@@ -49,7 +49,7 @@ sidebar: on-premise-api-platform
    * [Search API v8](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/search-api-v8/values.yaml),
    * [Catalog APIs](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/catalog-api/values.yaml).
 
-   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/api-platform/install/requirements#resources).
+   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/requirements#resources).
 
    :::note[Используйте чарты, соответствующие версии API-платформы]
 
@@ -293,29 +293,29 @@ sidebar: on-premise-api-platform
      * `manifest`: путь до файла с манифестом в формате `manifests/search-api-v8/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, которые требуются сервисам для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
      * `region`: регион S3-совместимого хранилища.
 
-   * `worker.resources`: настройки вычислительных ресурсов для сервиса Worker. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `worker.resources`: настройки вычислительных ресурсов для сервиса Worker. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `head.head.resources`: настройки вычислительных ресурсов для основного контейнера сервиса Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `head.head.resources`: настройки вычислительных ресурсов для основного контейнера сервиса Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `head.nginx.resources`: настройки вычислительных ресурсов для Nginx в поде Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `head.nginx.resources`: настройки вычислительных ресурсов для Nginx в поде Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `head.envoy.resources`: настройки вычислительных ресурсов для Envoy в поде Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `head.envoy.resources`: настройки вычислительных ресурсов для Envoy в поде Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `ingressRouter.enabled`: включить компонент IngressRouter — точку входа для внешних запросов.
 
-   * `ingressRouter.resources`: настройки вычислительных ресурсов для сервиса IngressRouter. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `ingressRouter.resources`: настройки вычислительных ресурсов для сервиса IngressRouter. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `geodetector.enabled`: включить компонент Geodetector — сервис определения местоположения.
 
-   * `geodetector.resources`: настройки вычислительных ресурсов для сервиса Geodetector. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `geodetector.resources`: настройки вычислительных ресурсов для сервиса Geodetector. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `indexer.resources`: настройки вычислительных ресурсов для сервиса Indexer. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `indexer.resources`: настройки вычислительных ресурсов для сервиса Indexer. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `controller.resources`: настройки вычислительных ресурсов для сервиса Controller. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `controller.resources`: настройки вычислительных ресурсов для сервиса Controller. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `filesStorage.resources`: настройки вычислительных ресурсов для сервиса FilesStorage. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `filesStorage.resources`: настройки вычислительных ресурсов для сервиса FilesStorage. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `dataAdapter.resources`: настройки вычислительных ресурсов для сервиса DataAdapter. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `dataAdapter.resources`: настройки вычислительных ресурсов для сервиса DataAdapter. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). **URL, указанный в параметре `ingress.hosts[0].host`, должен быть доступен извне вашего кластера Kubernetes.**
 
@@ -551,7 +551,7 @@ sidebar: on-premise-api-platform
   * [<Brand /> Про](/on-premise-pro/install/installation),
   * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
   * [мобильный SDK](/on-premise-api-platform/api-platform/install/mobilesdk),
-  * [GIS-платформа](/on-premise-gis-platform/install/installation),
+  * [GIS-платформа](/on-premise-gis-platform/installation),
   * [прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy),
   * [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform).
 

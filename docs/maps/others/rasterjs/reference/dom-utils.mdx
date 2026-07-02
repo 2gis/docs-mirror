@@ -65,7 +65,7 @@ sidebar: rasterjsapi
         </tr>
         <tr id="domevent-getmouseposition">
             <td><code><b>getMousePosition</b>( <nobr>&lt;DOMEvent&gt; <i>ev</i>,</nobr> <nobr>&lt;HTMLElement&gt; <i>container?</i> </nobr>) </code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Возвращает нормализованную позицию мыши из события DOM относительно контейнера или относительно всей страницы, если контейнер не указан.</td>
         </tr>
         <tr id="domevent-getwheeldelta">
@@ -172,18 +172,18 @@ sidebar: rasterjsapi
 		    <td>Перебирает массив наименований стилей элемента и возвращает первое корректное наименование. Используется с префиксами производителей браузеров и стилями, вроде <code>transform</code>.</td>
 	    </tr>
         <tr id="domutil-settransform">
-		    <td><code><b>setTransform</b>( <nobr>&lt;HTMLElement&gt; <i>el</i>,</nobr> <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>offset</i>,</nobr> <nobr>&lt;Number&gt; <i>scale?</i> </nobr>) </code></td>
+		    <td><code><b>setTransform</b>( <nobr>&lt;HTMLElement&gt; <i>el</i>,</nobr> <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>offset</i>,</nobr> <nobr>&lt;Number&gt; <i>scale?</i> </nobr>) </code></td>
     		<td><code></code></td>
     		<td>Устанавливает стиль 3D CSS transform элемента <code>el</code> так, чтобы он был смещен на <code>offset</code> пикселей и увеличен/уменьшен в <code>scale</code> раз. Метод не работает, если браузер не поддерживает 3D CSS transforms.</td>
 	    </tr>
         <tr id="domutil-setposition">
-    		<td><code><b>setPosition</b>( <nobr>&lt;HTMLElement&gt; <i>el</i>,</nobr> <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>position</i> </nobr>) </code></td>
+    		<td><code><b>setPosition</b>( <nobr>&lt;HTMLElement&gt; <i>el</i>,</nobr> <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>position</i> </nobr>) </code></td>
     		<td><code></code></td>
     		<td>Изменяет позиционирование элемента <code>el</code>, используя CSS translate или свойства top/left в зависимости от поддержки браузером.</td>
 	    </tr>
         <tr id="domutil-getposition">
 		    <td><code><b>getPosition</b>( <nobr>&lt;HTMLElement&gt; <i>el</i> </nobr>) </code></td>
-    		<td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+    		<td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
 		    <td>Возвращает координаты элемента, ранее установленные методом <code>setPosition</code>.</td>
 	    </tr>
         <tr id="domutil-disabletextselection">
@@ -266,17 +266,17 @@ fx.run(el, [300, 500], 0.5);
     <tbody>
         <tr id="posanimation-start">
             <td><code><b>start</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается во время старта анимации.</td>
         </tr>
         <tr id="posanimation-step">
             <td><code><b>step</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается (периодически) в процессе анимации.</td>
         </tr>
         <tr id="posanimation-end">
             <td><code><b>end</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается во время окончания анимации.</td>
         </tr>
     </tbody>
@@ -294,7 +294,7 @@ fx.run(el, [300, 500], 0.5);
     </thead>
     <tbody>
         <tr id="posanimation-run">
-		    <td><code><b>run</b>( <nobr>&lt;HTMLElement&gt; <i>el</i>,</nobr> <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>newPos</i>,</nobr> <nobr>&lt;Number&gt; <i>duration?</i>,</nobr> <nobr>&lt;Number&gt; <i>easeLinearity?</i></nobr>) </code></td>
+		    <td><code><b>run</b>( <nobr>&lt;HTMLElement&gt; <i>el</i>,</nobr> <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>newPos</i>,</nobr> <nobr>&lt;Number&gt; <i>duration?</i>,</nobr> <nobr>&lt;Number&gt; <i>easeLinearity?</i></nobr>) </code></td>
 		    <td><code></code></td>
             <td>Запускает анимацию перемещения элемента, полученного через аргумент метода. Дополнительно можно задать продолжительность анимации в секундах (по умолчанию <code>0.25</code>) и функцию затухания (третий аргумент <a target="_blank" href="http://cubic-bezier.com/#0,0,.5,1">кубической кривой Безье</a>, по умолчанию <code>0.5</code>).</td>
 	    </tr>
@@ -306,7 +306,7 @@ fx.run(el, [300, 500], 0.5);
     </tbody>
 </table>
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
 
 ## DG.Draggable
 
@@ -352,22 +352,22 @@ draggable.enable();
     <tbody>
     	<tr id="draggable-down">
     		<td><code><b>down</b></code></td>
-    		<td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+    		<td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается перед началом перетаскивания.</td>
     	</tr>
     	<tr id="draggable-dragstart">
     		<td><code><b>dragstart</b></code></td>
-    		<td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+    		<td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается в момент начала перетаскивания.</td>
     	</tr>
     	<tr id="draggable-predrag">
     		<td><code><b>predrag</b></code></td>
-    		<td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+    		<td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается в процессе перетаскивания <i>перед</i> каждым обновлением позиции элемента.</td>
 	    </tr>
 	    <tr id="draggable-dragend">
     		<td><code><b>dragend</b></code></td>
-    		<td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+    		<td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается в момент окончания перетаскивания.</td>
 	    </tr>
     </tbody>
@@ -397,6 +397,6 @@ draggable.enable();
     </tbody>
 </table>
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
 
 

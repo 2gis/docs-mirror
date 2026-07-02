@@ -250,12 +250,14 @@ marker.iconMapDirection = MapDirection(0.5)
 marker.iconAnimationMode = AnimationMode.LOOP
 ```
 
-### Линия
+### Линия {#polyline}
 
-Чтобы нарисовать на карте линию, нужно создать объект [Polyline](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline), указав нужные настройки в [PolylineOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline-options), и передать его в вызов `addObject()` менеджера объектов.
+Чтобы нарисовать на карте линию (полилинию), создайте объект [Polyline](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline), укажите настройки линии в [PolylineOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline-options) и передайте объект в метод `addObject()` менеджера объектов.
+
+Вы можете указать координаты вершин линии и настроить её ширину, цвет и другие параметры.
 
 ```kotlin
-// Координаты вершин ломаной линии
+// Координаты вершин линии
 val points = listOf(
     GeoPoint(latitude = 55.7513, longitude = 37.6236),
     GeoPoint(latitude = 55.7405, longitude = 37.6235),
@@ -266,7 +268,8 @@ val points = listOf(
 val polyline = Polyline(
     PolylineOptions(
         points = points,
-        width = 2.lpx // Свойство-расширение .lpx преобразует целое число в объект LogicalPixel
+        width = 2.lpx, // Свойство .lpx преобразует целое число в объект LogicalPixel
+        color = Color(255, 0, 0)
     )
 )
 
@@ -274,20 +277,24 @@ val polyline = Polyline(
 mapObjectManager.addObject(polyline)
 ```
 
-Чтобы изменить настройки уже созданной линии, установите новые значения для параметров объекта `Polyline`: cм. полный список доступных параметров в описании [Polyline](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline).
+Чтобы изменить настройки созданной линии, установите новые значения для параметров объекта `Polyline`: см. полный список доступных параметров в описании [Polyline](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline).
 
 ```kotlin
 // Изменение координат вершин линии
-val newPoints = mutableListOf<GeoPoint>()
+val newPoints = listOf(
+    GeoPoint(latitude = 54.7513, longitude = 36.6236),
+    GeoPoint(latitude = 54.7405, longitude = 36.6235),
+    GeoPoint(latitude = 54.7439, longitude = 36.6506)
+)
 polyline.points = newPoints
 
 // Изменение толщины линии
 polyline.width = 2.lpx
 
 // Изменение цвета линии
-polyline.width = Color(255, 0, 0)
+polyline.color = Color(255, 0, 0)
 
-// Изменение стёртой части
+// Стирание части линии
 polyline.erasedPart = 0.4
 
 // Изменение параметров пунктирной линии
@@ -295,16 +302,34 @@ polyline.dashedPolylineOptions = DashedPolylineOptions(
     dashLength = 5.lpx,
     dashSpaceLength = 5.lpx
 )
+```
+
+Чтобы сделать линию градиентной, укажите параметры градиента в свойстве [GradientPolylineOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.gradient-polyline-options) объекта `Polyline`.
+
+Например, линия из трёх точек образует два сегмента. Чтобы окрасить первый сегмент в красный цвет, а второй — в зелёный, создайте палитру из трёх цветов (красный, жёлтый и зелёный) и укажите индексы этих цветов для каждого сегмента линии (0 — для красного цвета, 2 — для зелёного). Количество индексов должно быть равно количеству сегментов (количество точек минус 1). Переход между сегментами будет плавным градиентом через жёлтый цвет, так как он находится между красным и зелёным в палитре.
+
+Длина перехода между цветами задаётся через параметр `gradientLength`: чем больше значение, тем плавнее переход между цветами.
+
+```kotlin
+// Палитра цветов для градиента
+val colors = listOf(
+    Color(255, 0, 0),   // Красный (индекс 0)
+    Color(255, 255, 0), // Жёлтый (индекс 1)
+    Color(0, 255, 0)    // Зелёный (индекс 2)
+)
+
+// Индексы цветов для каждого сегмента линии
+val colorIndices = listOf<Byte>(0, 2)
 
 // Изменение параметров градиентной линии
 polyline.gradientPolylineOptions = GradientPolylineOptions(
-    borderWidth = 10.lpx,
-    secondBorderWidth = 5.lpx,
-    gradientLength = 10.lpx,
-    borderColor = Color(255,0,0),
-    secondBorderColor = Color(0,255,0),
-    colors = listOf(Color(255,0,0)),
-    colorIndices = colorIndices.toByteArray()
+    borderWidth = 10.lpx,                     // Ширина границы линии
+    secondBorderWidth = 5.lpx,                // Ширина второй границы линии
+    gradientLength = 10.lpx,                  // Длина градиентного перехода между цветами
+    borderColor = Color(255, 0, 0),           // Цвет границы линии
+    secondBorderColor = Color(0, 255, 0),     // Цвет второй границы линии
+    colors = colors,                          // Палитра цветов линии
+    colorIndices = colorIndices.toByteArray() // Индексы цветов линии
 )
 ```
 
@@ -1365,7 +1390,7 @@ mapView.getMapAsync {
 
 Для изменения настроек или получения информации о нескольких жестах за раз можно работать напрямую со свойством [enabledGestures](/android/sdk/reference/stable/class#ru.dgis.sdk.map.gesture-manager/set-settings-about-map-position-point%20enabledGestures).
 
-Конкретный жест задаётся при помощи значений из [Gesture](/android/sdk/reference/stable/ru.dgis.sdk.map.Gesture). Значение [SCALING](/android/sdk/reference/stable/ru.dgis.sdk.map.Gesture#nav-lvl1--SCALING) отвечает за всю группу жестов масштабирования карты. Отключить эти жесты по одному нельзя.
+Конкретный жест задаётся при помощи значений из [TransformGesture](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.map.transform-gesture). Значение [SCALING](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.map.transform-gesture/scaling) отвечает за всю группу жестов масштабирования карты. Отключить эти жесты по одному нельзя.
 
 Пример отключения сдвига карты одним пальцем:
 
@@ -1390,10 +1415,10 @@ Log.d("GestureExample", "${gestureManager.enabledGestures}") // result 'D/Gestur
 
 У некоторых жестов есть свой перечень настроек:
 
-* [MultiTouchShiftSettings](/android/sdk/reference/stable/ru.dgis.sdk.map.MultiTouchShiftSettings) для сдвига несколькими пальцами;
-* [RotationSettings](/android/sdk/reference/stable/ru.dgis.sdk.map.RotationSettings) для вращения;
-* [ScalingSettings](/android/sdk/reference/stable/ru.dgis.sdk.map.ScalingSettings) для масштабирования;
-* [TiltSettings](/android/sdk/reference/stable/ru.dgis.sdk.map.TiltSettings) для наклона.
+* [MultiTouchRecognizeSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.map.multi-touch-recognize-settings) для сдвига несколькими пальцами;
+* [RotationRecognizeSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.map.rotation-recognize-settings) для вращения;
+* [ScalingRecognizeSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.map.scaling-recognize-settings) для масштабирования;
+* [TiltRecognizeSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.map.tilt-recognize-settings) для наклона.
 
 Подробнее о настройках можно прочитать на соответствующих страницах в документации. Объекты этих настроек доступны через свойства [GestureManager](/android/sdk/reference/stable/class#ru.dgis.sdk.map.gesture-manager).
 

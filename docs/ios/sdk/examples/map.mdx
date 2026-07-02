@@ -349,38 +349,40 @@ marker.iconMapDirection = MapDirection(value: 10)
 marker.animatedAppearance = true
 ```
 
-### Линия
+### Линия {#polyline}
 
-Чтобы нарисовать на карте линию, нужно создать объект [Polyline](/ios/sdk/reference/stable/class#polyline), указав нужные настройки в [PolylineOptions](/ios/sdk/reference/stable/struct#polyline-options), и передать его в вызов `addObject()` менеджера объектов. Кроме массива координат для точек линии, в настройках можно указать ширину линии, цвет, пунктир, обводку и другие параметры.
+Чтобы нарисовать на карте линию (полилинию), создайте объект [Polyline](/ios/sdk/reference/stable/class#polyline), укажите настройки линии в [PolylineOptions](/ios/sdk/reference/stable/struct#polyline-options) и передайте объект в метод `addObject()` менеджера объектов.
+
+Вы можете указать координаты вершин линии и настроить её ширину, цвет, пунктир и другие параметры.
 
 ```swift
-// Координаты вершин ломаной линии.
+// Координаты вершин линии
 let points = [
-    GeoPoint(latitude: 55.7513, longitude: value: 37.6236),
-    GeoPoint(latitude: 55.7405, longitude: value: 37.6235),
-    GeoPoint(latitude: 55.7439, longitude: value: 37.6506)
+    GeoPoint(latitude: 55.7513, longitude: 37.6236),
+    GeoPoint(latitude: 55.7405, longitude: 37.6235),
+    GeoPoint(latitude: 55.7439, longitude: 37.6506)
 ]
 
-// Настройки линии.
+// Настройки линии
 let options = PolylineOptions(
     points: points,
     width: LogicalPixel(value: 2),
     color: DGis.Color.black
 )
 
-// Создание и добавление линии.
+// Создание линии и добавление линии на карту
 let polyline = try Polyline(options: options)
 objectManager.addObject(object: polyline)
 ```
 
-Чтобы изменить настройки уже созданной линии, установите новые значения для параметров объекта `Polyline`: cм. полный список доступных параметров в описании [Polyline](/ios/sdk/reference/stable/class#polyline).
+Чтобы изменить настройки созданной линии, установите новые значения для параметров объекта `Polyline`: см. полный список доступных параметров в описании [Polyline](/ios/sdk/reference/stable/class#polyline).
 
 ```swift
 // Изменение координат вершин линии
 polyline.points = [
-    GeoPoint(latitude: 55.7513, longitude: value: 37.6236),
-    GeoPoint(latitude: 55.7405, longitude: value: 37.6235),
-    GeoPoint(latitude: 55.7439, longitude: value: 37.6506)
+    GeoPoint(latitude: 54.7513, longitude: 36.6236),
+    GeoPoint(latitude: 54.7405, longitude: 36.6235),
+    GeoPoint(latitude: 54.7439, longitude: 36.6506)
 ]
 
 // Изменение толщины линии
@@ -397,16 +399,34 @@ polyline.dashedPolylineOptions = DashedPolylineOptions(
     dashLength: LogicalPixel(value: 5),
     dashSpaceLength: LogicalPixel(value: 2)
 )
+```
+
+Чтобы сделать линию градиентной, укажите параметры градиента в свойстве [GradientPolylineOptions](/ios/sdk/reference/stable/struct#gradient-polyline-options) объекта `Polyline`.
+
+Например, линия из трёх точек образует два сегмента. Чтобы окрасить первый сегмент в красный цвет, а второй — в зелёный, создайте палитру из трёх цветов (красный, жёлтый и зелёный) и укажите индексы этих цветов для каждого сегмента линии (0 — для красного цвета, 2 — для зелёного). Количество индексов должно быть равно количеству сегментов (количество точек минус 1). Переход между сегментами будет плавным градиентом через жёлтый цвет, так как он находится между красным и зелёным в палитре.
+
+Длина перехода между цветами задаётся через параметр `gradientLength`: чем больше значение, тем плавнее переход между цветами.
+
+```swift
+// Палитра цветов для градиента
+let colors: [DGis.Color] = [
+    Color(argb: 0xFFFF0000),   // Красный (индекс 0)
+    Color(argb: 0xFFFFFF00),   // Жёлтый (индекс 1)
+    Color(argb: 0xFF00FF00)    // Зелёный (индекс 2)
+]
+
+// Индексы цветов для каждого сегмента линии
+let colorIndices = Data([0, 2])
 
 // Изменение параметров градиентной линии
 polyline.gradientPolylineOptions = GradientPolylineOptions(
-    borderWidth: LogicalPixel(value: 0),
-    secondBorderWidth: LogicalPixel(value: 0),
-    gradientLength: LogicalPixel(value: 1),
-    borderColor: Color(argb: 4294967295),
-    secondBorderColor: Color(argb: 4294967295),
-    colors: [Color],
-    colorIndices: Data
+    borderWidth: LogicalPixel(value: 10),       // Ширина границы линии
+    secondBorderWidth: LogicalPixel(value: 5),  // Ширина второй границы линии
+    gradientLength: LogicalPixel(value: 10),    // Длина градиентного перехода между цветами
+    borderColor: Color(argb: 0xFFFF0000),       // Цвет границы линии
+    secondBorderColor: Color(argb: 0xFF00FF00), // Цвет второй границы линии
+    colors: colors,                             // Палитра цветов линии
+    colorIndices: colorIndices                  // Индексы цветов линии
 )
 ```
 
@@ -815,15 +835,15 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 
 ## Управление камерой
 
-Для работы с камерой используется объект [Camera](/ios/sdk/reference/stable/class#Camera), доступный через свойство `map.camera`.
+Для работы с камерой используется объект [Camera](/ios/sdk/reference/stable/class#camera), доступный через свойство `map.camera`.
 
 ### Перелёт
 
-Чтобы запустить анимацию перелёта камеры, нужно вызвать метод [move()](/ios/sdk/reference/stable/class#Camera) и указать параметры перелёта:
+Чтобы запустить анимацию перелёта камеры, нужно вызвать метод [move()](/ios/sdk/reference/stable/class#camera/move) и указать параметры перелёта:
 
-* `position` - конечная позиция камеры (координаты и уровень приближения). Дополнительно можно указать наклон и поворот камеры (см. [CameraPosition](/ios/sdk/reference/stable/class#CameraPosition)).
+* `position` - конечная позиция камеры (координаты и уровень приближения). Дополнительно можно указать наклон и поворот камеры (см. [CameraPosition](/ios/sdk/reference/stable/struct#camera-position)).
 * `time` - продолжительность перелёта в секундах ([TimeInterval](https://developer.apple.com/documentation/foundation/timeinterval)).
-* `animationType` - тип анимации ([CameraAnimationType](/ios/sdk/reference/stable/enumeration#CameraAnimationType)).
+* `animationType` - тип анимации ([CameraAnimationType](/ios/sdk/reference/stable/enumeration#camera-animation-type)).
 
 Функция `move()` возвращает объект [Future](/ios/sdk/reference/stable/class#Future), который можно использовать, чтобы обработать событие завершения перелета.
 
@@ -851,7 +871,7 @@ let cancellable = future.sink { _ in
 
 ### Получение состояния камеры
 
-Текущее состояние камеры (находится ли камера в полёте) можно получить, используя свойство `state`. См. [CameraState](/ios/sdk/reference/stable/enumeration#CameraState) для списка возможных состояний камеры.
+Текущее состояние камеры (находится ли камера в полёте) можно получить, используя свойство `state`. См. [CameraState](/ios/sdk/reference/stable/enumeration#camera-state) для списка возможных состояний камеры.
 
 ```swift
 let currentState = map.camera.state
@@ -1010,7 +1030,7 @@ let cameraPositionPoint = CameraPositionPoint(x: 0.5, y: 0.5)
 map.camera.setPositionPoint(positionPoint: Constants.cameraPositionPoint)
 ```
 
-При изменении точки позиции камеры меняется область видимости карты и смещается точка наблюдения [CameraPosition.Point](/ios/sdk/reference/stable/struct#camera-position/val-bearing%20point) — точка на местности в географических координатах, которая находится в точке позиции камеры. Угол наклона [CameraPosition.Tilt](/ios/sdk/reference/stable/struct#camera-position/val-bearing%20tilt) и угол поворота камеры [CameraPosition.Bearing](/ios/sdk/reference/stable/struct#camera-position/val-bearing) не меняются:
+При изменении точки позиции камеры меняется область видимости карты и смещается точка наблюдения [CameraPosition.Point](/ios/sdk/reference/stable/struct#camera-position/var-point) — точка на местности в географических координатах, которая находится в точке позиции камеры. Угол наклона [CameraPosition.Tilt](/ios/sdk/reference/stable/struct#camera-position/var-tilt) и угол поворота камеры [CameraPosition.Bearing](/ios/sdk/reference/stable/struct#camera-position/var-bearing) не меняются:
 
 <img src="/img/mobile-sdk/camera-position-point-before.png" height="500" align="center" /> <img src="/img/mobile-sdk/camera-position-point-after.png" height="500" align="center" />
 
@@ -1023,7 +1043,7 @@ let cameraViewPoint = CameraViewPoint(x: 0.5, y: 0.5)
 map.camera.setViewPoint(viewPoint: Constants.cameraViewPoint)
 ```
 
-При изменении точки обзора камеры меняется направление обзора относительно точки наблюдения. Точка наблюдения [CameraPosition.Point](/ios/sdk/reference/stable/struct#camera-position/val-bearing%20point) не смещается, также не меняется угол наклона [CameraPosition.Tilt](/ios/sdk/reference/stable/struct#camera-position/val-bearing%20tilt) и угол поворота камеры [CameraPosition.Bearing](/ios/sdk/reference/stable/struct#camera-position/val-bearing):
+При изменении точки обзора камеры меняется направление обзора относительно точки наблюдения. Точка наблюдения [CameraPosition.Point](/ios/sdk/reference/stable/struct#camera-position/var-point) не смещается, также не меняется угол наклона [CameraPosition.Tilt](/ios/sdk/reference/stable/struct#camera-position/var-tilt) и угол поворота камеры [CameraPosition.Bearing](/ios/sdk/reference/stable/struct#camera-position/var-bearing):
 
 <Video src="/video/MSDK.ViewPoint.mp4" width="300px" />
 
@@ -1057,9 +1077,9 @@ let intersects: Bool = map.camera.visibleArea.intersects(geometry: markerGeometr
 
 С помощью SDK вы можете отображать поэтажные планы зданий на карте и переключаться между этажами. Детальные поэтажные планы доступны только для определённых групп зданий (например, торговых центров). Чтобы начать работу, получите доступ к Places API и дополнительно к информации о поэтажных планах зданий. Подробнее см. в разделе [Начало работы](/ios/sdk/start).
 
-Основной объект для работы с поэтажными планами — класс [IndoorManager](/ios/sdk/reference/stable/class#indoormanager), который доступен через свойство карты [indoorManager](/ios/sdk/reference/stable/class#map).
+Основной объект для работы с поэтажными планами — класс [IndoorManager](/ios/sdk/reference/stable/class#indoor-manager), который доступен через свойство карты [indoorManager](/ios/sdk/reference/stable/class#map).
 
-Чтобы получить информацию о поэтажных планах здания, которое в данный момент отображается на карте, используйте свойство `focusedBuilding` класса [IndoorManager](/ios/sdk/reference/stable/class#indoormanager) или подпишитесь на канал `focusedBuildingChannel`.
+Чтобы получить информацию о поэтажных планах здания, которое в данный момент отображается на карте, используйте свойство `focusedBuilding` класса [IndoorManager](/ios/sdk/reference/stable/class#indoor-manager) или подпишитесь на канал `focusedBuildingChannel`.
 
 ```swift
 // Получение информации о текущем здании с поэтажными планами
@@ -1082,7 +1102,7 @@ connection.cancel()
 
 ### Показ и скрытие поэтажных планов
 
-Чтобы управлять отображением поэтажных планов, используйте метод `setIndoorState()` класса [IndoorManager](/ios/sdk/reference/stable/class#indoormanager):
+Чтобы управлять отображением поэтажных планов, используйте метод `setIndoorState()` класса [IndoorManager](/ios/sdk/reference/stable/class#indoor-manager):
 
 ```swift
 // Показать поэтажные планы
@@ -1094,7 +1114,7 @@ map.indoorManager.setIndoorState(newState: .disabled)
 
 ### Переключение между этажами
 
-Чтобы переключаться между этажами, укажите индекс нужного этажа в свойстве `activeLevelIndex` объекта [IndoorBuilding](/ios/sdk/reference/stable/class#indoorbuilding):
+Чтобы переключаться между этажами, укажите индекс нужного этажа в свойстве `activeLevelIndex` объекта [IndoorBuilding](/ios/sdk/reference/stable/class#indoor-building):
 
 ```swift
 // Получение информации о текущем здании
@@ -1124,7 +1144,7 @@ if let currentBuilding = currentBuilding {
 
 ### Создание UI для управления этажами
 
-Чтобы создать UI-элемент управления этажами, используйте модель [IndoorControlModel](/ios/sdk/reference/stable/class#indoorcontrolmodel):
+Чтобы создать UI-элемент управления этажами, используйте модель [IndoorControlModel](/ios/sdk/reference/stable/class#indoor-control-model):
 
 ```swift
 import UIKit
@@ -1250,7 +1270,7 @@ class IndoorControlViewController: UIViewController {
 
 ### Выделение этажей
 
-Чтобы выделить определённый этаж (например, с важными объектами), используйте свойство `markedLevels` модели [IndoorControlModel](/ios/sdk/reference/stable/class#indoorcontrolmodel):
+Чтобы выделить определённый этаж (например, с важными объектами), используйте свойство `markedLevels` модели [IndoorControlModel](/ios/sdk/reference/stable/class#indoor-control-model):
 
 ```swift
 // Установка отмеченных этажей
@@ -1516,7 +1536,7 @@ private func tap(location: CGPoint) {
 
 Чтобы установить функцию обратного вызова для тапа по экрану:
 
-* **UIKit**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#MapObjectTappedCallback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) с помощью методов [addObjectTappedCallback](/ios/sdk/reference/stable/interface#imap-uiview) и [addObjectLongPressCallback](/ios/sdk/reference/stable/interface#imap-uiview). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#RenderedObjectInfo) для объекта, который находится ближе всего к точке касания.
+* **UIKit**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) с помощью методов [addObjectTappedCallback](/ios/sdk/reference/stable/interface#imap-uiview) и [addObjectLongPressCallback](/ios/sdk/reference/stable/interface#imap-uiview). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
 
     ```swift
     ...
@@ -1529,7 +1549,7 @@ private func tap(location: CGPoint) {
     self.mapView.addObjectLongPressCallback(callback: mapObjectTappedOrLongPress)
     ```
 
-* **SwiftUI**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#MapObjectTappedCallback) для тапа или лонгтапа в [MapView](/ios/sdk/reference/stable/struct#MapView) с помощью методов [objectTappedCallback](/ios/sdk/reference/stable/struct#MapView) и [objectLongPressCallback](/ios/sdk/reference/stable/struct#MapView). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#RenderedObjectInfo) для объекта, который находится ближе всего к точке касания.
+* **SwiftUI**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#map-object-tapped-callback) для тапа или лонгтапа в [MapView](/ios/sdk/reference/stable/struct#map-view) с помощью методов [objectTappedCallback](/ios/sdk/reference/stable/struct#map-view) и [objectLongPressCallback](/ios/sdk/reference/stable/struct#map-view). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
 
     ```swift
     ...
@@ -1546,7 +1566,7 @@ private func tap(location: CGPoint) {
 </TabItem>
 <TabItem value="sdk-12" label="Для версии SDK 12.x">
 
-Установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapView](/ios/sdk/reference/stable/IMapView) с помощью методов [addObjectTappedCallback](/ios/sdk/reference/stable/IMapView#nav-lvl1--addObjectTappedCallback) и [addObjectLongPressCallback](/ios/sdk/reference/stable/IMapView#nav-lvl1--addObjectLongPressCallback). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
+Установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) с помощью методов [addObjectTappedCallback](/ios/sdk/reference/stable/interface#imap-uiview/add-object-tapped-callback) и [addObjectLongPressCallback](/ios/sdk/reference/stable/interface#imap-uiview/add-object-long-press-callback). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
 
 ```swift
 ...
@@ -1567,7 +1587,7 @@ self.mapView.addObjectLongPressCallback(callback: mapObjectTappedOrLongPress)
 <Tabs>
 <TabItem value="sdk-13" label="Для версии SDK 13.0.0 и выше" default>
 
-Для кастомизации распознавателя жестов карты задайте реализацию протокола [IMapGestureUIView](/ios/sdk/reference/stable/interface#IMapGestureView) в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) и [MapView](/ios/sdk/reference/stable/struct#MapView) или реализацию [IMapGestureViewFactory](/ios/sdk/reference/stable/interface#imap-gesture-uiview-factory) в [MapOptions](/ios/sdk/reference/stable/struct#map-options).
+Для кастомизации распознавателя жестов карты задайте реализацию протокола [IMapGestureUIView](/ios/sdk/reference/stable/interface#imap-gesture-uiview) в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) и [MapView](/ios/sdk/reference/stable/struct#map-view) или реализацию [IMapGestureUIViewFactory](/ios/sdk/reference/stable/interface#imap-gesture-uiview-factory) в [MapOptions](/ios/sdk/reference/stable/struct#map-options).
 
 Если ни одна из этих имплементаций не задана, используется реализация по умолчанию.
 Пример такой кастомизации распознавателя можно посмотреть [здесь](https://github.com/2gis/mobile-sdk-ios-demo/blob/master/app/Views/CustomGestures/CustomMapGestureView.swift).
@@ -1575,7 +1595,7 @@ self.mapView.addObjectLongPressCallback(callback: mapObjectTappedOrLongPress)
 </TabItem>
 <TabItem value="sdk-12" label="Для версии SDK 12.x">
 
-Для кастомизации распознавателя жестов карты задайте реализацию протокола [IMapGestureView](/ios/sdk/reference/stable/IMapGestureView) в [IMapView](/ios/sdk/reference/stable/IMapView) или реализацию [IMapGestureViewFactory](/ios/sdk/reference/stable/IMapGestureViewFactory) в [MapOptions](/ios/sdk/reference/stable/struct#map-options).
+Для кастомизации распознавателя жестов карты задайте реализацию протокола [IMapGestureUIView](/ios/sdk/reference/stable/interface#imap-gesture-uiview) в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) или реализацию [IMapGestureUIViewFactory](/ios/sdk/reference/stable/interface#imap-gesture-uiview-factory) в [MapOptions](/ios/sdk/reference/stable/struct#map-options).
 
 Если ни одна из этих имплементаций не задана, используется реализация по умолчанию.
 Пример такой кастомизации распознавателя можно посмотреть [здесь](https://github.com/2gis/mobile-sdk-ios-demo/blob/master/app/Views/CustomGestures/CustomMapGestureView.swift).
@@ -1590,7 +1610,7 @@ self.mapView.addObjectLongPressCallback(callback: mapObjectTappedOrLongPress)
 
 * **UIKit**:
 
-    [IMarkerUIViewFactory](/ios/sdk/reference/stable/interface#imarker-uiview-factory) — фабрика для создания UIView, привязанных к геокоординатам, находится в объекте [Container.markerViewFactory](/ios/sdk/reference/stable/class#Container). Создайте [IMarkerUIView](/ios/sdk/reference/stable/interface#imarker-uiview) с помощью этой фабрики:
+    [IMarkerUIViewFactory](/ios/sdk/reference/stable/interface#imarker-uiview-factory) — фабрика для создания UIView, привязанных к геокоординатам, находится в объекте [Container.markerViewFactory](/ios/sdk/reference/stable/class#container). Создайте [IMarkerUIView](/ios/sdk/reference/stable/interface#imarker-uiview) с помощью этой фабрики:
 
     ```swift
     let sdk: Container
@@ -1650,7 +1670,7 @@ self.mapView.addObjectLongPressCallback(callback: mapObjectTappedOrLongPress)
 </TabItem>
 <TabItem value="sdk-12" label="Для версии SDK 12.x">
 
-[IMarkerViewFactory](/ios/sdk/reference/stable/IMarkerViewFactory) — фабрика для создания View, привязанных к геокоординатам, находится в объекте [Container](/ios/sdk/reference/stable/class#container/var-marker-view-factory). Создайте [IMarkerView](/ios/sdk/reference/stable/IMarkerView) с помощью этой фабрики:
+[IMarkerUIViewFactory](/ios/sdk/reference/stable/interface#imarker-uiview-factory) — фабрика для создания View, привязанных к геокоординатам, находится в объекте [Container](/ios/sdk/reference/stable/class#container/var-marker-view-factory). Создайте [IMarkerUIView](/ios/sdk/reference/stable/interface#imarker-uiview) с помощью этой фабрики:
 
 ```swift
 let sdk: Container
@@ -1673,7 +1693,7 @@ sdk.markerViewFactory.make(
 )
 ```
 
-Для отображения полученного View, необходимо добавить его методом `add()` объекта [IMarkerViewOverlay](/ios/sdk/reference/stable/IMarkerViewOverlay), полученного из фабрики [IMapFactory](/ios/sdk/reference/stable/interface#imap-factory).
+Для отображения полученного View, необходимо добавить его методом `add()` объекта [IMarkerOverlayUIView](/ios/sdk/reference/stable/interface#imarker-overlay-uiview), полученного из фабрики [IMapFactory](/ios/sdk/reference/stable/interface#imap-factory).
 
 </TabItem>
 </Tabs>

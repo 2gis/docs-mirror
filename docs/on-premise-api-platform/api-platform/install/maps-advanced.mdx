@@ -7,39 +7,38 @@ sidebar: on-premise-api-platform
 
 Для хранения данных о тайлах сервис использует пространства ключей ([keyspace](https://cassandra.apache.org/doc/latest/cassandra/architecture/overview.html)) в Cassandra.
 
-Если настройки безопасности Cassandra разрешают автоматическое создание пространств ключей, то пространство ключей для хранения данных о тайлах будет автоматически пересоздаваться при установке или обновлении сервиса карт.
+Если настройки безопасности Cassandra разрешают автоматическое создание пространств ключей, то пространство ключей для хранения данных о тайлах будет автоматически создаваться при установке и пересоздаваться при обновлении сервиса карт.
 
 Название пространства ключей генерируется на основе:
 
 * типа данных (`web`, `raster` или `native`);
-* значения параметра `cassandra.environment`;
-* названия кластера Cassandra;
+* значения параметра `cassandra.environment` — не более 13 символов;
 * [Unix-времени](https://ru.wikipedia.org/wiki/Unix-время) в момент генерации манифеста.
 
-Пример названия: `dgis_tileserver_web_test_1653477379`.
+Пример названия: `ts_web_test_1779269805`.
 
 Если настройки безопасности Cassandra не разрешают автоматическое создание пространств ключей, то выполните следующие действия.
 
-### При первоначальной установке сервиса карт
+### При первоначальной установке сервиса карт {#initial-installation}
 
-1. [Создайте пространство вручную](https://cassandra.apache.org/doc/latest/cassandra/developing/cql/ddl.html#create-keyspace-statement).
-2. Укажите имя этого пространства в настройке `types[0].keyspace` конфигурационного файла `values-tiles.yaml`:
+1. [Создайте пространство ключей вручную](https://cassandra.apache.org/doc/latest/cassandra/developing/cql/ddl.html#create-keyspace-statement).
+2. Укажите имя пространства в параметре `types[0].keyspace` конфигурационного файла `values-tiles.yaml`:
 
     ```yaml
     types:
       - kind: web
       - kind: raster
-      keyspace: TILES-KEYSPACE-NAME
+        keyspace: TILES-KEYSPACE-NAME
     ```
 
-### При последующих обновлениях сервиса карт
+### При последующих обновлениях сервиса карт {#subsequent-updates}
 
-Отключите автоматический импорт и очистку данных о тайлах, добавив параметр `types[0].importAndCleanerDisabled: true` в конфигурационном файле `values-tiles.yaml`:
+Отключите автоматический импорт и очистку данных о тайлах, добавив параметр `types[0].importAndCleanerDisabled: true` в конфигурационный файл `values-tiles.yaml`:
 
 ```yaml
 types:
   - kind: web
   - kind: raster
-  keyspace: TILES-KEYSPACE-NAME
-  importAndCleanerDisabled: true
+    keyspace: TILES-KEYSPACE-NAME
+    importAndCleanerDisabled: true
 ```

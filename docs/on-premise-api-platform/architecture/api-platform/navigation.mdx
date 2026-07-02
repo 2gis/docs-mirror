@@ -233,9 +233,9 @@ sidebar: on-premise-api-platform
 
 Для [решения задачи коммивояжёра (TSP/VRP)](/api/navigation/tsp/overview) используйте сервис TSP API. Он позволяет построить кратчайший по времени или расстоянию маршрут обхода точек одним или несколькими курьерами.
 
-TSP API состоит из двух компонентов: VRP Task Manager и VRP Solver. TSP API взаимодействует с сервисом Distance Matrix Async API, чтобы получить матрицу расстояний для всех возможных пар точек, а затем выбирает наиболее оптимальную комбинацию этих расстояний для решения задачи.
+TSP API состоит из двух компонентов: VRP Task Manager и VRP Solver. TSP API взаимодействует с сервисом Distance Matrix Async API, чтобы получить матрицу расстояний для всех возможных пар точек, и выбирает оптимальную комбинацию этих расстояний для решения задачи.
 
-Для работы TSP API необходимо установить сервис Distance Matrix Async API. Для построения маршрутов для автомобилей и грузового транспорта дополнительно установите инстансы Navi-Back, Navi-Attractor, Navi-Router и Navi-Front с соответствующими правилами (`rules`) обработки запросов `direction-car` и `direction-truck`. Для других способов передвижения (велосипедов, пешеходов и самокатов) дополнительная установка не требуется.
+Для работы TSP API установите сервис Distance Matrix Async API. Для построения маршрутов для автомобилей и грузового транспорта дополнительно установите инстансы Navi-Back, Navi-Attractor, Navi-Router и Navi-Front с соответствующими правилами (`rules`) обработки запросов `direction-car` и `direction-truck`. Для других способов передвижения (велосипедов, пешеходов и самокатов) дополнительная установка не требуется.
 
 <NoInvert>
 ![Архитектура сервисов по решению задачи коммивояжёра](/img/on-premise/navi-tsp-architecture-470.svg)
@@ -250,6 +250,33 @@ TSP API состоит из двух компонентов: VRP Task Manager и
 5. На основе рассчитанной матрицы расстояний сервис VRP Solver вычисляет оптимальный маршрут. Сервис VRP Task Manager обновляет статус задачи.
 6. Сервис VRP Solver записывает результат в S3-совместимое хранилище. Сервис VRP Task Manager обновляет статус задачи.
 7. Пользователь запрашивает статус решения задачи, и сервис VRP Task Manager возвращает решение.
+
+Для коммуникации с другими сервисами используются топики Apache Kafka (на схеме — **Broker**) следующим образом:
+
+<NoInvert>
+![Структура топиков Apache Kafka для обмена данными между сервисами при решении задачи коммивояжёра](/img/on-premise/tsp_topics_diagram.svg)
+</NoInvert>
+
+* Обмен сообщениями между Distance Matrix Async API и VRP Task Manager:
+
+  * VRP Task Manager отправляет задачу на расчёт матрицы расстояний в Distance Matrix Async API и получает от него результат через `messageBusTopic` (общий топик для обоих сервисов). Имя топика указывается в параметрах:
+
+    * `kafka.messageBusTopic` в конфигурационном файле VRP Task Manager;
+    * `kafka.vrpStatusTopic` в конфигурационном файле Distance Matrix Async API.
+
+* Обмен данными между VRP Task Manager и VRP Solver:
+
+  * VRP Task Manager публикует задачу на оптимизацию маршрута в `taskTopic`. Имя топика указывается в параметрах:
+
+    * `kafka.taskTopic` в конфигурационном файле VRP Task Manager;
+    * `kafka.taskTopic` в конфигурационном файле VRP Solver.
+
+  * VRP Solver читает задачу из `taskTopic`, вычисляет оптимальный маршрут и отправляет результат в `statusTopic`. Имя топика указывается в параметрах:
+
+    * `kafka.statusTopic` в конфигурационном файле VRP Solver;
+    * `kafka.statusTopic` в конфигурационном файле VRP Task Manager.
+
+  * VRP Task Manager читает результат из `statusTopic` и обновляет статус задачи для пользователя.
 
 Подробнее об использовании TSP API см. в [документации](/api/navigation/tsp/overview).
 
@@ -367,11 +394,11 @@ cron:
 
 ## Зависимости {#dependencies}
 
-Подробнее о том, как проверить требования для каждого сервиса, см. в документе [Системные требования](/on-premise-api-platform/api-platform/install/requirements).
+Подробнее о том, как проверить требования для каждого сервиса, см. в документе [Системные требования](/on-premise-api-platform/requirements).
 
 :::tip[Можно использовать аналоги из реестра Минцифры]
 
-Доступные аналоги указанного программного обеспечения, включённые в реестр Минцифры, см. в разделе [Системные требования](/on-premise-api-platform/api-platform/install/requirements).
+Доступные аналоги указанного программного обеспечения, включённые в реестр Минцифры, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
 
 :::
 
@@ -499,4 +526,4 @@ cron:
 * Узнайте больше о программном комплексе <Brand />:
 
   * [Архитектура программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture)
-  * [Системные требования](/on-premise-api-platform/api-platform/install/requirements)
+  * [Системные требования](/on-premise-api-platform/requirements)

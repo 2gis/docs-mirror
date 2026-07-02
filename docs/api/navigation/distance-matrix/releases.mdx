@@ -27,11 +27,11 @@ sidebar: distancematrixapi
 
 ## 30 сентября 2024 г.
 
-* Добавлен параметр запроса [vehicle\_speed\_limit](/api/navigation/distance-matrix/reference#:~:text=vehicle_speed_limit), с помощью которого можно задать [дополнительное ограничение скорости движения](/api/navigation/distance-matrix/examples#additional-speed-limit) при построении маршрута.
+* Добавлен параметр запроса [vehicle\_speed\_limit](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=vehicle_speed_limit), с помощью которого можно задать [дополнительное ограничение скорости движения](/api/navigation/distance-matrix/examples#additional-speed-limit) при построении маршрута.
 
 ## 28 августа 2023 г.
 
-* Добавлена возможность строить маршруты для [грузового транспорта](/api/navigation/distance-matrix/examples#truck). При построении можно указать дополнительные параметры грузового автомобиля в [truck\_params](/api/navigation/distance-matrix/reference).
+* Добавлена возможность строить маршруты для [грузового транспорта](/api/navigation/distance-matrix/examples#truck). При построении можно указать дополнительные параметры грузового автомобиля в [truck\_params](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=truck_params).
 
 ## 18 мая 2023 г.
 
@@ -39,16 +39,16 @@ sidebar: distancematrixapi
 
 ## 30 июня 2021 г.
 
-* Добавлена возможность строить велосипедные маршруты (параметр запроса `mode: "bicycle"`). При построении велосипедного маршрута можно исключить новые типы дорог (с помощью параметра [filters](/api/navigation/distance-matrix/reference#:~:text=filters)): подземные/надземные переходы, лестницы и автомобильные дороги.
+* Добавлена возможность строить велосипедные маршруты (параметр запроса `mode: "bicycle"`). При построении велосипедного маршрута можно исключить новые типы дорог (с помощью параметра [filters](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=filters)): подземные/надземные переходы, лестницы и автомобильные дороги.
 
 ## 31 марта 2021 г.
 
 * Добавлена возможность задать области, которые следует избегать при построении маршрута. См. раздел [Исключение областей](/api/navigation/distance-matrix/examples#exclude) для подробной информации.
-* Добавлена возможность указать направление движения в начальной и конечной точках маршрута (см. параметр [azimuth](/api/navigation/distance-matrix/reference#:~:text=azimuth)).
+* Добавлена возможность указать направление движения в начальной и конечной точках маршрута (см. параметр [azimuth](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=azimuth)).
 * Добавлена возможность строить автомобильные маршруты с учётом полос общественного транспорта (параметр запроса `mode: "taxi"`).
-* Для начальной точки маршрута теперь можно указать необязательный параметр [distance\_direction](/api/navigation/distance-matrix/reference#:~:text=distance_direction), который определяет расстояние, на котором должно быть сохранено направление движения. Если параметр `distance_direction` указан, ответ будет содержать дополнительное поле `reliability`, показывающее точность построенного маршрута.
-* Добавлен параметр запроса [type](/api/navigation/distance-matrix/reference#:~:text=type), с помощью которого можно изменить тип маршрута (кратчайший по времени или расстоянию).
-* Добавлена поддержка параметра запроса [filters](/api/navigation/distance-matrix/reference#:~:text=filters), который используется для исключения типов дорог из маршрута. Подробнее см. раздел [Исключение типов дорог](/api/navigation/distance-matrix/examples#exclude).
+* Для начальной точки маршрута теперь можно указать необязательный параметр [distance\_direction](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=distance_direction), который определяет расстояние, на котором должно быть сохранено направление движения. Если параметр `distance_direction` указан, ответ будет содержать дополнительное поле `reliability`, показывающее точность построенного маршрута.
+* Добавлен параметр запроса [type](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=type), с помощью которого можно изменить тип маршрута (кратчайший по времени или расстоянию).
+* Добавлена поддержка параметра запроса [filters](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=filters), который используется для исключения типов дорог из маршрута. Подробнее см. раздел [Исключение типов дорог](/api/navigation/distance-matrix/examples#exclude).
 * Параметр запроса `start_time` стал необязательным. Если время начала движения не задано, используется текущее время.
 * Удалено поле `mode` в ответе.
 

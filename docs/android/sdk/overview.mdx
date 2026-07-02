@@ -5,9 +5,13 @@ sidebar: androidsdk
 
 Android SDK позволяет добавить [карту <Brand />](https://2gis.ru/) в ваше Android-приложение. С помощью SDK можно отобразить карту на экране, получать информацию об объектах карты, строить маршруты, использовать навигатор и т. д.
 
-Примеры использования SDK см. в разделе [Примеры](/android/sdk/examples). Описание всех классов и методов см. в разделе [Справочник API](/android/sdk/reference/stable/class).
+Примеры использования SDK см. в разделе [Примеры](/android/sdk/examples/base). Описание всех классов и методов см. в разделе [Справочник API](/android/sdk/reference/stable/class).
 
 Картографические данные поддерживают [стандарты OGC](https://ru.wikipedia.org/wiki/Open_Geospatial_Consortium).
+
+<CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_android" target="_blank">
+   В кабинет
+</CtaButton>
 
 ## Версии SDK {#versions}
 
@@ -44,6 +48,7 @@ Android SDK позволяет добавить [карту <Brand />](https://2
 | [Создание карты в приложении](/android/sdk/examples/map#creating-map)<br />(класс [MapView](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view)) | <ul><li>[Map Tiles API](/maps/others/maptiles/overview)</li><li>[Regions API](/api/search/regions/overview)</li></ul> |
 | [Отображение растровой карты в приложении](/android/sdk/examples/map#add-raster-map)<br />(класс [RasterTileSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.raster-tile-source)) | [Raster Tiles API](/maps/others/rastertiles/overview) |
 | [Отображение пробок на карте](/android/sdk/examples/map#traffic)<br />(класс [TrafficSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.traffic-source)) | [Regions API](/api/search/regions/overview) |
+| [Отображение поэтажных планов зданий](/android/sdk/examples/map#floor-plans)<br />(класс [IndoorManager](/android/sdk/reference/stable/class#ru-dgis-sdk-map-indoormanager)) | [Places API](/api/search/places/overview) (доступ к планам этажей предоставляется по запросу и за дополнительную плату) |
 
 ### Справочник (для Full и Map)
 
@@ -111,5 +116,19 @@ Android SDK позволяет добавить [карту <Brand />](https://2
 
 ## Варианты размещения {#distribution}
 
-- **Облако**: Android SDK доступен для работы в облачной инфраструктуре <Brand />.
-- **On-Premise**: Android SDK до версии 12.10 включительно доступен при установке API-платформы <Brand /> в закрытом контуре. Подробнее см. в разделе [API-платформа для сервера](/on-premise-api-platform/overview/summary).
+* **Облако**: Android SDK доступен для работы в облачной инфраструктуре <Brand />.
+* **On-Premise**: Android SDK доступен при установке API-платформы <Brand /> в закрытом контуре.
+
+   * Для версий SDK выше 12.10 установите API-платформу версии 2.54.0 и выше и включите поддержку тайлов типа `native-v4`.
+   * Для версий SDK 12.10 и ниже установите API-платформу любой версии и включите поддержку тайлов типа `native`.
+
+   Подробнее см. в разделе [API-платформа для сервера](/on-premise-api-platform/overview/summary).
+
+## Помощь {#support}
+
+* Если у вас возникли вопросы при работе с Android SDK, задайте их AI-ассистенту (в правом нижнем углу cайта), воспользуйтесь поиском по документации или отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+* Если вы хотите обсудить возможности Android SDK или его интеграцию с вашим продуктом, обратитесь к менеджеру.
+
+   <CtaButton href="https://dev.2gis.ru/api/mobile-sdk" target="_blank" appearance="lightFill">
+     Получить консультацию
+   </CtaButton>

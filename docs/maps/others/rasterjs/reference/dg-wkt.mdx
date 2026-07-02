@@ -36,12 +36,12 @@ DG.Wkt.geoJsonLayer(polygonComponents).addTo(map);
         <tr>
             <td><code><b>DG.Wkt.toLatLngs</b>( <nobr>&lt;String | Array&gt; <i>wkt</i></nobr>) </code></td>
             <td><code>Array</code></td>
-            <td>Считывает строку в WKT-формате и возвращает массив точек в формате <a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLng">LatLng</a> (ее внутреннее представление). Может принимать массив WKT строк.</td>
+            <td>Считывает строку в WKT-формате и возвращает массив точек в формате <a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLng">LatLng</a> (ее внутреннее представление). Может принимать массив WKT строк.</td>
         </tr>
         <tr>
-            <td><code><b>DG.Wkt.geoJsonLayer</b>( <nobr>&lt;String&gt; <i>wkt</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/other-layers#geojson-option">GeoJSON options</a>&gt; <i>options?</i></nobr>)</code></td>
+            <td><code><b>DG.Wkt.geoJsonLayer</b>( <nobr>&lt;String&gt; <i>wkt</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/other-layers#geojson-option">GeoJSON options</a>&gt; <i>options?</i></nobr>)</code></td>
             <td><code>Object</code></td>
-            <td>Создает GeoJSON слой. Принимает строку в WKT-формате для отображения данных на карте и объект опций. Формирует векторный слой API карт на основе данных, считанных методом DG.Wkt.toGeoJSON. Этот метод поддерживает все опции конструктора класса <a href="/ru/maps/others/rasterjs/reference/other-layers#nav-lvl1--DG.GeoJSON">DG.GeoJSON</a>. Например, можно передать параметр <code>DG.Wkt.geoJsonLayer(polygonComponents, {"{"}clickable:false{"}"})</code>, чтобы сделать слой некликабельным.</td>
+            <td>Создает GeoJSON слой. Принимает строку в WKT-формате для отображения данных на карте и объект опций. Формирует векторный слой API карт на основе данных, считанных методом DG.Wkt.toGeoJSON. Этот метод поддерживает все опции конструктора класса <a href="/maps/others/rasterjs/reference/other-layers#nav-lvl1--DG.GeoJSON">DG.GeoJSON</a>. Например, можно передать параметр <code>DG.Wkt.geoJsonLayer(polygonComponents, {"{"}clickable:false{"}"})</code>, чтобы сделать слой некликабельным.</td>
         </tr>
     </tbody>
 </table>

@@ -3,6 +3,67 @@ sidebar: androidsdk
 ---
 # Релизы
 
+## 13.6.0 (2026-06-22)
+
+### 🌟 Новые возможности
+
+* Новый класс [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller):
+
+  * [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller) – класс для управления картой, объединяющий [Map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map), [MapRenderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-renderer) и [MapGestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-gesture-recognizer).
+  * [MapControllerOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller-options) – класс с параметрами создания [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+  * [MapController.create](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/create) – статический метод для асинхронного создания [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller) на основе [Context](/android/sdk/reference/stable/class#ru.dgis.sdk.context) и [MapControllerOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller-options).
+  * [MapController.map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/map) – свойство для получения объекта [Map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+  * [MapController.renderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/renderer) – свойство для получения объекта [MapRenderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-renderer) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+  * [MapController.gestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/gesture-recognizer) – свойство для получения объекта [MapGestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-gesture-recognizer) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+
+* [CameraZoomRestrictions.minZoom](/android/sdk/reference/stable/class#ru.dgis.sdk.map.camera-zoom-restrictions/val-min-zoom) – значение по умолчанию изменено с `0` на `2`.
+
+### 🛠 Исправления
+
+* Механизм восстановления автонаклона доработан так, чтобы он работал независимо от других перелётов.
+* Исправлен [WorkStatus](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.work-status) для расписаний, работающих почти круглосуточно.
+* Исправлена ошибка, вызывавшая сбой приложения при увеличении масштаба карты на Samsung Tab A8 с Android 14.
+* Исправлена ошибка, из-за которой не работали повторные добавления и удаления дорожных событий через [RoadEventManager](/android/sdk/reference/stable/class#ru.dgis.sdk.road-events.road-event-manager).
+* Добавлена корректная логика расчёта и заполнения полей `ageMs` и `lastSeenMs` для сотовых вышек в модуле Radar с учётом текущего времени и версии Android API; также исправлена очистка устаревших значений.
+
+## 13.5.0 (2026-05-19)
+
+### 🌟 Новые возможности
+
+* UI-элементы для фреймворка [Android Compose](/android/sdk/examples/controls/compose):
+
+  * [RouteEditorErrorComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.routeeditor/-route-editor-error-composable.html) – UI-элемент для отображения ошибки построения маршрута.
+  * [ru.dgis.sdk.compose.navigation.settings](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-bicycle-route-settings-layout.html) – набор UI-элементов (макетов) для отображения настроек навигации. Чтобы включить отображение настроек в дашборде навигации, передайте [NavigationSettingsRepository](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-repository/index.html) в конструктор [DefaultNavigationControlsState](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.defaultcontrols.navigation/-default-navigation-controls-state/index.html).
+
+* [SearchQueryBuilder()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/-init-) – конструктор по умолчанию, который позволяет устанавливать различные параметры поиска: текст, идентификаторы рубрик, зданий или организации.
+* [SearchQueryBuilder.setQueryText()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-query-text) – метод для задания текста поискового запроса.
+* [SearchQueryBuilder.setRubricIds()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-rubric-ids) – метод для задания идентификаторов рубрик в поисковом запросе.
+* [SearchQueryBuilder.setOrgId()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-org-id) – метод для задания фильтра по идентификатору организации.
+* [SearchQueryBuilder.setBuildingId()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-building-id) – метод для задания фильтра по идентификатору здания.
+* [SearchQueryBuilder.setRestrictionGeometry()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-restriction-geometry) – метод для задания строгого ограничения области поиска в виде геометрии.
+* [SearchQueryBuilder.setTerritoryOfInterest()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-territory-of-interest) – метод для задания нестрогого ограничения области поиска: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [SuggestQueryBuilder.setRestrictionGeometry()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.suggest-query-builder/set-restriction-geometry) – метод для задания строгого ограничения области для поисковых подсказок в виде геометрии.
+* [SuggestQueryBuilder.setTerritoryOfInterest()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.suggest-query-builder/set-territory-of-interest) – метод для задания нестрогого ограничения области для поисковых подсказок: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [PackedSearchQuery.geometryRestriction](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.packed-search-query/val-geometry-restriction) – свойство для получения геометрии, ограничивающей область поиска.
+* [PackedSearchQuery.territoryOfInterest](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.packed-search-query/val-territory-of-interest) – свойство для нестрогого ограничения области поиска объектов: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [PolygonGeometry.elevation](/android/sdk/reference/stable/class#ru.dgis.sdk.geometry.polygon-geometry/val-elevation) – свойство для задания высоты полигона над поверхностью.
+* [PolylineGeometry.elevation](/android/sdk/reference/stable/class#ru.dgis.sdk.geometry.polyline-geometry/val-elevation) – свойство для задания высоты полилинии над поверхностью.
+* [Polyline.elevation](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline/var-elevation) – свойство для задания высоты полилинии над поверхностью.
+* [PolylineOptions.elevation](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polyline-options/val-elevation) – свойство для задания высоты полилинии над поверхностью в параметрах полилинии.
+* [Polygon.elevation](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polygon/var-elevation) – свойство для задания высоты полигона над поверхностью.
+* [PolygonOptions.elevation](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polygon-options/val-elevation) – свойство для задания высоты полигона над поверхностью в параметрах полигона.
+* [DashedPolygonOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.dashed-polygon-options) – класс для параметров пунктирного контура полигона.
+* [Polygon.dashedPolygonOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polygon/var-dashed-polygon-options) – свойство для параметров пунктирного контура полигона.
+* [PolygonOptions.dashedPolygonOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.polygon-options/val-dashed-polygon-options) – свойство для настройки пунктирного контура полигона в параметрах полигона.
+* [RouteEnclosingRectsOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-enclosing-rects-options) – класс для параметров получения прямоугольников, описанных вокруг упрощённой геометрии маршрута.
+* [getRouteEnclosingRects()](/android/sdk/reference/stable/method#ru.dgis.sdk.map.get-route-enclosing-rects-route-geometry-options-) – метод для получения набора прямоугольников вокруг упрощённой геометрии маршрута.
+* [SharedRouteData](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.shared-route-data) – класс с информацией о заранее построенном маршруте и параметрах его поиска.
+* [TrafficRouter.fetchSharedRoute()](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router/fetch-shared-route) – метод для получения ранее построенного маршрута и параметров его поиска по идентификатору. Подробнее см. в примере [Готовый маршрут](/android/sdk/examples/routing#using-ready-route).
+
+### 🛠 Исправления
+
+* Исправлено отображение нижних этажей в этажном плане через UI-элемент [IndoorComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls.modern.indoor/-indoor-composable.html).
+
 ## 13.4.0 (2026-04-22)
 
 ### 🌟 Новые возможности

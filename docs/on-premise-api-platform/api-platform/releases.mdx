@@ -5,6 +5,37 @@ sidebar: on-premise-api-platform
 
 Чтобы установить сервисы API-платформы версии 2.44.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-api-platform/overview/2gis-cli/releases#v3) и следуйте инструкциям по обновлению.
 
+## 2.54.0
+
+Дата релиза: 2026-05-27
+
+<h3 id="dependencies_v2.54.0">Зависимости</h3>
+
+Перед обновлением любого сервиса в составе API-платформы версии 2.54.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | 3      |
+| Базовые сервисы                          | 2.7.0  |
+
+Подробнее см. в разделе **Руководство администратора → Обновление**.
+
+<h3 id="new_v2.54.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| API карт<br />(MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1730) с версии 1.72.0 по версию 1.73.0. |
+| API карт<br />(Tiles API) | Добавлена поддержка векторных тайлов версии 4 для версий мобильного SDK выше 12.10 (`types[0].kind: native-v4`). См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.54.0/charts/tiles-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/maps#install-tiles-api). |
+| API поиска<br />(Search API v8) | <ul><li>Добавлены параметры `worker.gracefulShutdownInterval`, `head.head.gracefulShutdownInterval`, `ingressRouter.gracefulShutdownInterval` и `geodetector.gracefulShutdownInterval` для задания времени, в течение которого приложение завершает обработку текущих запросов перед остановкой.</li><li>Добавлен параметр `controller.allowedProjectKeys` для управления списком проектов, которые должны быть проиндексированы.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.54.0/charts/search-api-v8/values.yaml).|
+| Менеджер Платформы | <ul><li>Добавлен параметр `ui.bffSecure` для включения протокола HTTPS при использовании cookies.</li><li>Добавлен параметр `ui.license.url` для указания URL сервиса лицензий.</li><li>Добавлено значение `license` параметра `ui.pages` для отображения страницы **Лицензии** в приложении. На странице отображается список лицензий для сервисов, установленных в комплексе On-Premise, и их срок действия: подробнее см. в разделе [Просмотр лицензий](/on-premise-api-platform/api-platform/user-guide/platform-manager#viewing-licenses).</li><li>Добавлено отображение уведомлений об истечении лицензии на страницах **Пользователи** и **Лицензии**.</li><li>Добавлено значение `static` параметра `ui.playgrounds` для отображения песочницы сервиса Static API в приложении. Сервис Static API будет доступен в следующих релизах.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.54.0/charts/platform/values.yaml), а также [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/platform#install-platform). |
+
+<h3 id="breaking_v2.54.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"200px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| API поиска<br />(Search API v8) | <ul><li>Переименованы параметры:<ul><li>`worker.loggerLevel` в `worker.logLevel`,</li><li>`worker.loggerFormat` в `worker.logFormat`,</li><li>`head.head.loggerLevel` в `head.head.logLevel`,</li><li>`head.head.loggerFormat` в `head.head.logFormat`,</li><li>`s3.endpoint` в `s3.host`,</li><li>`ingressRouter.loggerLevel` в `ingressRouter.logLevel`,</li><li>`ingressRouter.loggerFormat` в `ingressRouter.logFormat`,</li><li>`ingressRouter.headers` в `ingressRouter.routeHeader`,</li><li>`ingressRouter.debug_headers` в `ingressRouter.debugHeaders`,</li><li>`ingressRouter.debug_routing` в `ingressRouter.debugRouting`,</li><li>`geodetector.loggerLevel` в `geodetector.logLevel`,</li><li>`geodetector.loggerFormat` в `geodetector.logFormat`.</li></ul></li><li>Удалены параметры `worker.prestopHook.enabled` и `geodetector.prestopHook.enabled`.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.54.0/charts/search-api-v8/values.yaml).|
+| Менеджер Платформы | Для отображения страницы **Лицензии** обновите базовые сервисы до [версии 2.7.0](/on-premise-api-platform/core/releases#270). |
+
 ## 2.53.0
 
 Дата релиза: 2026-04-29
@@ -30,13 +61,13 @@ sidebar: on-premise-api-platform
 | API навигации <br /> (Navi-Back) | Обновлена структура конфигурационного файла: <ul> <li>Добавлен блок параметров `httpRoute` для настройки [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/).</li> <li>Добавлен блок параметров `naviback.telemetry`, позволяющий настроить экспорт телеметрии.</li><li>Блок настроек `naviback.sentry` дополнен параметрами `environment`, `minSeverityLevel` и `logsBufferSize`.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.53.0/charts/navi-back/values.yaml).|
 | API навигации <br /> (Navi-Router) | Обновлена структура конфигурационного файла: <ul> <li>Добавлен блок параметров `router.telemetry`, позволяющий настроить экспорт телеметрии.</li><li>Блок настроек `router.sentry` дополнен параметрами `environment`, `minSeverityLevel` и `logsBufferSize`.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.53.0/charts/navi-router/values.yaml).|
 | API навигации <br /> (Navi-Front) | Добавлен блок параметров `httpRoute` для настройки [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/). См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.53.0/charts/navi-front/values.yaml). |
+| API карт <br /> (Tiles API) | При скором истечении лицензии и наступлении периода soft block на растровых тайлах больше не отображается водяной знак с текстом предупреждения. |
 
 <h3 id="breaking_v2.53.0">Изменения, влияющие на обратную совместимость</h3>
 
 | <div style={{"width":"200px"}}>Сервис</div> | Изменения |
 | --- | --- |
 | API навигации <br /> (Navi-Router) | Public Transport API стал частью Routing API. Если для построения маршрутов вы используете Public Transport API, обновите базовые сервисы до [версии 2.6.0](/on-premise-api-platform/core/releases#260). Routing API подключится автоматически с сохранением прежних лимитов и условий, а статистика расходования лимитов и распределения запросов для Public Transport API сохранится. |
-
 
 ## 2.52.0
 
@@ -57,9 +88,9 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Сервис</div> | Изменения |
 | --- | --- |
-| API карт <br /> (MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1710) с версии 1.70.1 по версию 1.71.0. |
-| API карт <br /> (Tiles API) | Удалён блок параметров `proxy.access.skipExactOrigins`. |
-| API поиска <br />(Search API) | <ul><li>Добавлена возможность искать адреса с почтовым индексом.</li><li>В поисковые конфигурации добавлена привязка к городу для уточнения результатов поиска в случаях, когда название улицы совпадает с названием города.</li><li>Теперь при поиске достопримечательностей доступны дополнительные фильтры для уточнения результатов поисковой выдачи.</li></ul> |
+| API карт<br />(MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1710) с версии 1.70.1 по версию 1.71.0. |
+| API карт<br />(Tiles API) | Удалён блок параметров `proxy.access.skipExactOrigins`. |
+| API поиска<br />(Search API) | <ul><li>Добавлена возможность искать адреса с почтовым индексом.</li><li>В поисковые конфигурации добавлена привязка к городу для уточнения результатов поиска в случаях, когда название улицы совпадает с названием города.</li><li>Теперь при поиске достопримечательностей доступны дополнительные фильтры для уточнения результатов поисковой выдачи.</li></ul> |
 
 ## 2.51.0
 
@@ -167,8 +198,8 @@ sidebar: on-premise-api-platform
 
 <h3 id="new_v2.48.0">Новое</h3>
 
-| <div style={{"width":"200px"}}>Сервис</div> | Изменения |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | Сервис сбора статистики | Добавлен сервис исторической статистики Stat API, позволяющий отобразить информацию о распределении запросов на вкладке **Статистика** в Менеджере Платформы. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.48.0/charts/stat-receiver/values.yaml), а также см. [конфигурационный файл](/on-premise-api-platform/api-platform/install/statreceiver#install-stat-api). |
 | API карт<br />(Tiles API) | Добавлена возможность использовать существующий секрет Kubernetes с TLS-сертификатом для подключения к Apache Cassandra. См. блок параметров `cassandra.tls.existingSecret` в [примере values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.48.0/charts/tiles-api/values.yaml).
 | API навигации <br />(Distance Matrix Async API) | Обновлена структура конфигурационного файла: <ul><li>Добавлен блок параметров `startupProbe` для настройки Startup Probe.</li><li>Добавлены параметры для настройки Readiness и Liveness Probe для Distance Matrix Async Merger, а также возможность использовать собственные проверки. См. блоки параметров `livenessProbe`, `readinessProbe`, а также параметры `customLivenessProbe` и `customReadinessProbe`.</li><li>Добавлена возможность искать остановочные платформы при построении маршрутов на общественном транспорте: см. параметры `kafka.findPlatformTopic` и `kafka.findPlatformTopicRules`.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.48.0/charts/navi-async-matrix/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/navigation#install-navi-async-matrix). |
@@ -201,8 +232,8 @@ sidebar: on-premise-api-platform
 
 <h3 id="bugfix_v2.47.1">Исправленные ошибки/Улучшения</h3>
 
-| <div style={{"width":"200px"}}>Сервис</div> | Изменения                                                                           |
-| ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | API навигации<br />(Distance Matrix Async API) | Исправлена ошибка, при которой завершённые задачи не удалялись из базы данных в соответствии с таймером. |
 
 ## 2.47.0
@@ -222,8 +253,8 @@ sidebar: on-premise-api-platform
 
 <h3 id="new_v2.47.0">Новое</h3>
 
-| <div style={{"width":"200px"}}>Сервис</div> | Изменения                                                                                                                                                                                 |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | API карт<br />(Styles API) | Обновлена версия сервиса, поддерживающая обновлённые версии MapGL и Zenith.|
 | API карт<br />(MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1670) с версии 1.66.0 по версию 1.67.0.|
 | API карт<br />(Tiles API) | <ul><li>Добавлена возможность подключения к Apache Cassandra через TLS.</li><li>В конфигурационный файл добавлены параметры: `cassandra.tls.enableHostVerification`, `cassandra.tls.deploySecret`, `cassandra.tls.ca`, `cassandra.tls.cert` и `cassandra.tls.key`.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.47.0/charts/tiles-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/maps#install-tiles-api).|
@@ -232,8 +263,8 @@ sidebar: on-premise-api-platform
 
 <h3 id="breaking_v2.47.0">Изменения, влияющие на обратную совместимость</h3>
 
-| <div style={{"width":"170px"}}>Сервис</div> | Изменения                                                                                                                                                                                                                                                                                         |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | API карт<br />(Tiles API) | Параметр `cassandra.ssl` переименован в `cassandra.tls`. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.47.0/charts/tiles-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/maps#install-tiles-api). |
 | API поиска<br />(Catalog APIs) | <ul><li>Теперь расширение JsQuery не требуется для работы сервиса.</li><li> Для оптимальной производительности рекомендуется обновить данные и запустить приложение с новой версией манифеста.</li></ul> |
 | Прокси для API пробок    | Параметр  `proxy.apiKey` переименован в `proxy.licenseKey`. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.47.0/charts/traffic-proxy/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/trafficproxy#install-traffic-proxy). |
@@ -257,8 +288,8 @@ sidebar: on-premise-api-platform
 
 <h3 id="new_v2.46.0">Новое</h3>
 
-| <div style={{"width":"200px"}}>Сервис</div> | Изменения                                                                                                                                                                                 |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | API навигации<br />(Navi-Back)    | <ul><li> Параметр `naviback.app_rule` переименован в `naviback.appRule`. Предыдущее имя параметра действительно, но работает с предупреждением. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.46.0/charts/navi-back/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/navigation#install-navi-back).</li><li>Параметр `app_project` переименован в `appProject`. Предыдущее имя параметра действительно, но работает с предупреждением. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.46.0/charts/navi-back/values.yaml).</li></ul>|
 | API навигации<br />(Navi-Attractor)    | <ul><li> Параметр `attractor.app_rule` переименован в `attractor.appRule`. Предыдущее имя параметра действительно, но работает с предупреждением. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.46.0/charts/navi-attractor/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/navigation#install-navi-attractor).</li><li>Параметр `app_project` переименован в `appProject`. Предыдущее имя параметра действительно, но работает с предупреждением.  См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.46.0/charts/navi-attractor/values.yaml).</li></ul>|
 | API навигации<br/>(Navi-Splitter)         | <ul><li>Параметр `splitter.app_rule` переименован в `splitter.appRule`. Предыдущее имя параметра действительно, но работает с предупреждением. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.46.0/charts/navi-splitter/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/api-platform/install/navigation#install-navi-splitter).</li><li> Добавлена возможность переопределять точку монтирования файлов конфигурации: см. параметр `envoy.configFilepath` в [примере values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.46.0/charts/navi-splitter/values.yaml).</li></ul> |
@@ -266,8 +297,8 @@ sidebar: on-premise-api-platform
 
 <h3 id="bugfix_v2.46.0">Исправленные ошибки/Улучшения</h3>
 
-| <div style={{"width":"170px"}}>Сервис</div> | Изменения                                                                           |
-| ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | API навигации<br/>(Navi-Back, Navi-Attractor)                     | Обновлён путь к сертификатам Apache Kafka. |
 | API навигации<br/>(Distance Matrix Async API)                     | Оптимизирована подготовка задач для больших матриц. |
 
@@ -288,8 +319,8 @@ sidebar: on-premise-api-platform
 
 <h3 id="new_v2.45.0">Новое</h3>
 
-| <div style={{"width":"200px"}}>Сервис</div> | Изменения                                                                                                                                                                                 |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | API карт<br />(Tiles API)              | <ul><li>Добавлена возможность указывать источник, запросы из которого к Tiles API не будут проходить проверку ключа доступа: см. параметр `proxy.access.skipExactOrigins`.</li><li>Добавлена возможность указывать определённые хосты Tiles API, данные о запросах к которым будут отправляться в сервис сбора статистики: см. параметр `proxy.access.stat.registerExactHosts`.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.45.0/charts/tiles-api/values.yaml). |
 | API карт<br />(MapGL JS API)          | См. [полный список изменений](/mapgl/releases) с версии 1.65.0 по версию 1.66.0.                                                                                                       |
 | API навигации                         | Добавлена возможность строить маршруты на общественном транспорте при помощи мобильного SDK. Чтобы начать работать с маршрутами на общественном транспорте, переустановите сервисы навигации с обновлённым [файлом правил](/on-premise-api-platform/api-platform/install/navigation#rules-file) и затем используйте endpoint `/ctx/3.0`. |
@@ -316,12 +347,12 @@ sidebar: on-premise-api-platform
 
 <h3 id="new_v2.44.0">Новое</h3>
 
-| <div style={{"width":"200px"}}>Сервис</div> | Изменения                                                                                                                                                                                 |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
 | API карт<br />(MapGL JS API)           | См. [полный список изменений](/mapgl/releases) с версии 1.63.0 по версию 1.65.0.                                                                                                       |
 | API поиска<br />(Catalog APIs)         | В тело ответа на запрос к endpoint `3.0/markers` добавлено поле `items.trade_license` с информацией о торговой лицензии организации.                                                      |
 | Сервис сбора статистики                | Добавлен новый сервис для сбора статистики использования API и расходования лимитов в рамках API-ключей. См. описание [архитектуры](/on-premise-api-platform/architecture/api-platform/statreceiver) и [установки](/on-premise-api-platform/api-platform/install/statreceiver) сервиса. |
 
-## Предыдущие релизы
+## Предыдущие релизы {#previous-releases}
 
 Информацию о релизах предыдущих версий можно найти в [архиве](/on-premise-api-platform/previous-releases).

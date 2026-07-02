@@ -15,7 +15,7 @@ sidebar: on-premise-api-platform
 
    * [Документация сервиса Менеджер Платформы](/on-premise-api-platform/architecture/api-platform/platform)
    * [Архитектура программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture)
-   * [Системные требования](/on-premise-api-platform/api-platform/install/requirements)
+   * [Системные требования](/on-premise-api-platform/requirements)
 
 2. Выполните предварительные шаги:
 
@@ -33,11 +33,11 @@ sidebar: on-premise-api-platform
    | Endpoint MapGL JS API           | `http://mapgl-js-api`                          | См. [Установка API для работы с картами](/on-premise-api-platform/api-platform/install/maps)          |
    | Endpoint Catalog APIs           | `http://catalog-api`                           | См. [Установка API для работы с поиском](/on-premise-api-platform/api-platform/install/search)        |
    | Endpoint API навигации          | `http://navi-front`                            | См. [Установка API для работы с навигацией](/on-premise-api-platform/api-platform/install/navigation) |
-   | API-ключи                       | `MAPGL_KEY` <br /> `CATALOG_KEY` <br /> `NAVI_KEY` | См. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)                |
+   | API-ключи                       | `MAPGL_KEY`<br />`CATALOG_KEY`<br />`NAVI_KEY`<br />`STATIC_KEY` | См. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)                |
 
 4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чартe](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform/values.yaml).
 
-   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/api-platform/install/requirements).
+   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/requirements).
 
    :::note[Используйте подходящий чарт]
 
@@ -53,8 +53,8 @@ sidebar: on-premise-api-platform
 
    Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
 
-      <details>
-      <summary><code>values-platform.yaml</code></summary>
+   <details>
+   <summary><code>values-platform.yaml</code></summary>
 
    ```yaml
    dgctlDockerRegistry: docker.registry.example.com
@@ -62,9 +62,9 @@ sidebar: on-premise-api-platform
    imagePullSecrets: [onpremise-registry-creds]
 
    ui:
-    playgrounds: mapgl,geocoder,directions
+    playgrounds: mapgl,geocoder,directions,static
     brand: 2gis
-    pages: "profile,statistics,signup,status,playground,map_styles,users"
+    pages: "profile,signup,status,playground,map_styles,users,keys,statistics,license"
 
     oauth:
       wellknownUrl: https://keycloak.example.com/realms/platform/.well-known/openid-configuration
@@ -88,6 +88,9 @@ sidebar: on-premise-api-platform
       api:
         url: 'https://keys-api.example.com'
 
+    license:
+      url: 'http://license.example.com'
+
     mapgl:
       url: 'https://mapgl-js-api.example.com'
       scriptPath: /api.js
@@ -101,6 +104,10 @@ sidebar: on-premise-api-platform
     navi:
       url: 'https://navi.example.com'
       key: 'NAVI_KEY'
+
+    static:
+      url: 'https://static.example.com'
+      key: 'STATIC_KEY'
 
     resources:
       requests:
@@ -124,7 +131,7 @@ sidebar: on-premise-api-platform
       #   secretName: secret.tls
    ```
 
-      </details>
+   </details>
 
    Где:
 
@@ -132,7 +139,7 @@ sidebar: on-premise-api-platform
    * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
    * `ui`: базовые настройки приложения.
 
-     * `playgrounds`: список доступных песочниц в приложении. Возможные значения: `mapgl` (дополнительно укажите параметр `ui.mapgl.url`), `geocoder` (дополнительно укажите параметр `ui.catalog.url`), `directions` (дополнительно укажите параметр `ui.navi.url`). Значения записываются одной строкой через запятую и без пробелов, например, `'mapgl,geocoder'`.
+     * `playgrounds`: список доступных песочниц в приложении. Возможные значения: `mapgl` (дополнительно укажите параметр `ui.mapgl.url`), `geocoder` (дополнительно укажите параметр `ui.catalog.url`), `directions` (дополнительно укажите параметр `ui.navi.url`), `static` (дополнительно укажите параметр `ui.static.url`). Значения записываются одной строкой через запятую и без пробелов, например, `'mapgl,geocoder'`.
 
      * `brand`: брендирование внутри приложения. Возможные значения: `2gis`, `urbi`.
 
@@ -164,6 +171,10 @@ sidebar: on-premise-api-platform
 
         * `api.url`: хост сервиса в формате `HTTP(S)://HOST`.
 
+      * `license`: настройки доступа к [сервису лицензий](/on-premise-api-platform/architecture/core/license):
+
+        * `url`: хост сервиса в формате `HTTP://HOST`.
+
       * `mapgl`: настройки доступа к сервису [MapGL JS API](/on-premise-api-platform/architecture/api-platform/maps):
 
         * `url`: хост сервиса в формате `HTTP(S)://HOST`.
@@ -181,7 +192,12 @@ sidebar: on-premise-api-platform
         * `url`: хост сервиса в формате `HTTP(S)://HOST`.
         * `key`: API-ключ для сервиса.
 
-      * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+      * `static`: настройки доступа к сервису [Static API](/on-premise-api-platform/architecture/api-platform/maps):
+
+        * `url`: хост сервиса в формате `HTTP(S)://HOST`.
+        * `key`: API-ключ для сервиса.
+
+      * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
       * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
 
@@ -205,7 +221,7 @@ sidebar: on-premise-api-platform
 
 В Менеджере Платформы вы можете проверить статус работы установленных сервисов, загрузить пользовательские стили и протестировать работу ключевых API: подробнее см. в инструкции [Работа с Менеджером Платформы](/on-premise-api-platform/api-platform/user-guide/platform-manager).
 
-## 4. Настройте аутентификацию пользователей
+## 4. Настройте аутентификацию пользователей {#authentication}
 
 Чтобы работать с Менеджером Платформы, конечные пользователи должны проходить аутентификацию. Программный комплекс <Brand /> не предоставляет готовый сервис аутентификации для установки в закрытом контуре, поэтому используйте собственного поставщика OpenID Connect (OIDC) для авторизации пользователей по технологии единого входа (SSO).
 
@@ -247,7 +263,7 @@ sidebar: on-premise-api-platform
 
   * [<Brand /> Про](/on-premise-pro/install/installation),
   * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
-  * [GIS-платформа](/on-premise-gis-platform/install/installation),
+  * [GIS-платформа](/on-premise-gis-platform/installation),
   * [прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy).
 
 * Изучите рекомендации по [обслуживанию системы](/on-premise-api-platform/api-platform/administering).

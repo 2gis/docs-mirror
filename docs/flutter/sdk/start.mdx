@@ -1,19 +1,23 @@
 ---
 sidebar: fluttersdk
 ---
-
 # Начало работы
 
-## 1. Получение ключа доступа {#get-api-key}
+## 1. Получите ключ доступа {#get-api-key}
 
 Чтобы подключиться к серверам <Brand />, получать геоданные и включить возможности SDK, получите файл ключа доступа `dgissdk.key`:
 
-1. Зарегистрируйтесь в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_flutter).
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_flutter" target="_blank">
+      В кабинет
+   </CtaButton>
+
 2. Купите [подписку](/platform-manager/subscription/purchase) для доступа к необходимым API. Набор API зависит от необходимых функциональностей и [версии SDK](/flutter/sdk/overview#versions). См. подробнее в разделе [API для работы SDK](/flutter/sdk/overview#api-list).
 3. Создайте [ключ доступа](/platform-manager/subscription/keys#production) или [настройте существующий ключ для использования с мобильным SDK](/platform-manager/subscription/managing-keys#sdk-key-configuration).
 4. Скачайте файл ключа `dgissdk.key`.
 
-Работать с ключами можно в Менеджере Платформы: подробнее см. в документации [личного кабинета](/platform-manager/overview).
+Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
 
 ### Требования к работе с ключами {#key-requirements}
 
@@ -59,7 +63,7 @@ Name: ru.dgis.flutter_app
 
 Полные примеры файлов см. в GitHub-репозитории: [ru.dgis.flutter\_app.desktop](https://github.com/2gis/dgis_mobile_sdk_full/blob/aurora-release/example/aurora/desktop/ru.dgis.flutter_app.desktop#L12) и [ru.dgis.flutter\_app.spec](https://github.com/2gis/dgis_mobile_sdk_full/blob/aurora-release/example/aurora/rpm/ru.dgis.flutter_app.spec#L4).
 
-## 2. Установка SDK {#install}
+## 2. Установите SDK {#install}
 
 ### Для всех платформ {#all-platforms}
 
@@ -172,7 +176,7 @@ repositories {
 
    Полный пример файла см. в GitHub-репозитории: [ru.dgis.flutter\_app.desktop](https://github.com/2gis/dgis_mobile_sdk_full/blob/aurora-release/example/aurora/desktop/ru.dgis.flutter_app.desktop).
 
-## 3. Инициализация SDK
+## 3. Инициализируйте SDK {#initialize}
 
 1. Добавьте [полученный файл ключа](#get-api-key) `dgissdk.key` в `assets` приложения.
 

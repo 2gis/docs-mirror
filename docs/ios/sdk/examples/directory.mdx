@@ -27,9 +27,9 @@ sidebar: iossdk
 
 Для поиска объектов в справочнике создайте объект [SearchManager](/ios/sdk/reference/stable/class#search-manager) и вызовите один из методов, который определяет режим работы справочника:
 
-* [SearchManager.createOnlineManager()](/ios/sdk/reference/stable/class#search-manager/create-offline-manager) — создаёт онлайн-справочник.
+* [SearchManager.createOnlineManager()](/ios/sdk/reference/stable/class#search-manager/create-online-manager) — создаёт онлайн-справочник.
 * [SearchManager.createOfflineManager()](/ios/sdk/reference/stable/class#search-manager/create-offline-manager) — создаёт офлайн-справочник, работающий только с предзагруженными данными.
-* [SearchManager.createSmartManager()](/ios/sdk/reference/stable/class#search-manager/create-offline-manager) — создаёт комбинированный справочник, работающий с онлайн-данными при наличии сети и с предзагруженными данными при отсутствии сети.
+* [SearchManager.createSmartManager()](/ios/sdk/reference/stable/class#search-manager/create-smart-manager) — создаёт комбинированный справочник, работающий с онлайн-данными при наличии сети и с предзагруженными данными при отсутствии сети.
 
 Пример создания поискового движка с онлайн-справочником:
 
@@ -315,7 +315,7 @@ searchManager.search(query: searchQuery).sink { searchResult in
 </TabItem>
 </Tabs>
 
-Чтобы получить следующую страницу результатов поиска, вызовите метод страницы [fetchNextPage()](/ios/sdk/reference/stable/class#Page), который вернёт отложенный результат [Page](/ios/sdk/reference/stable/class#Page):
+Чтобы получить следующую страницу результатов поиска, вызовите метод страницы [fetchNextPage()](/ios/sdk/reference/stable/class#page), который вернёт отложенный результат [Page](/ios/sdk/reference/stable/class#page):
 
 <Tabs>
 <TabItem value="sdk-13" label="Для версии SDK 13.0.0 и выше" default>
@@ -346,7 +346,7 @@ firstPage?.fetchNextPage().sink { nextPage in
 
 Чтобы отобразить на карте маркеры всех найденных объектов:
 
-1. Подготовьте список объектов [Marker](/ios/sdk/reference/stable/class#Marker). Чтобы задать позицию маркера (параметр `position`), используйте координаты из поля [ItemMarkerInfo.geoPoint](/ios/sdk/reference/stable/class#ItemMarkerInfo).
+1. Подготовьте список объектов [Marker](/ios/sdk/reference/stable/class#marker). Чтобы задать позицию маркера (параметр `position`), используйте координаты из поля [ItemMarkerInfo.geoPoint](/ios/sdk/reference/stable/class#ItemMarkerInfo).
 2. Добавьте готовый набор маркеров на карту с помощью метода `addObjects()` менеджера объектов [MapObjectManager](/ios/sdk/reference/stable/class#MapObjectManager). Подробнее см. в инструкции [Добавление нескольких объектов на карту](/ios/sdk/examples/map#add-multiple-objects).
 
 Пример:
@@ -1100,12 +1100,12 @@ searchHistory.onHistoryChanged.sink { changeType in
 
 [DgisObjectId](/ios/sdk/reference/stable/struct#dgis-object-id) содержит два идентификатора:
 
-* [objectId](/ios/sdk/reference/stable/struct#dgis-object-id/val-entrance-id%20objectId) — стабильный числовой идентификатор объекта;
-* [entranceId](/ios/sdk/reference/stable/struct#dgis-object-id/val-entrance-id) — стабильный числовой идентификатор входа/подъезда для объекта.
+* [objectId](/ios/sdk/reference/stable/struct#dgis-object-id/var-object-id) — стабильный числовой идентификатор объекта;
+* [entranceId](/ios/sdk/reference/stable/struct#dgis-object-id/var-entrance-id) — стабильный числовой идентификатор входа/подъезда для объекта.
 
-Если [entranceId](/ios/sdk/reference/stable/struct#dgis-object-id/val-entrance-id) отличен от нуля, то результатом поиска является не просто дом, а конкретный подъезд в доме.
+Если [entranceId](/ios/sdk/reference/stable/struct#dgis-object-id/var-entrance-id) отличен от нуля, то результатом поиска является не просто дом, а конкретный подъезд в доме.
 
-Если необходимо нарисовать маркер на конкретном подъезде или взять его координаты для построения маршрута, не используйте [markerPosition](/ios/sdk/reference/stable/class#directory-object/val-marker-position). В этом свойстве будет располагаться позиция, относящаяся к маркеру дома. Для получения позиции подъезда используйте информацию из [entrances](/ios/sdk/reference/stable/class#directory-object/val-marker-position%20entrances):
+Если необходимо нарисовать маркер на конкретном подъезде или взять его координаты для построения маршрута, не используйте [markerPosition](/ios/sdk/reference/stable/class#directory-object/var-marker-position). В этом свойстве будет располагаться позиция, относящаяся к маркеру дома. Для получения позиции подъезда используйте информацию из [entrances](/ios/sdk/reference/stable/class#directory-object/var-entrances):
 
 ```swift
 func getMarkerPosition(directoryObject: DirectoryObject) -> GeoPoint? {

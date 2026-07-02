@@ -1,7 +1,7 @@
 ﻿---
 sidebar: placesAPI
 ---
-# Places API
+# Обзор
 
 Places API выполняет поиск организаций, зданий и мест.
 
@@ -30,22 +30,27 @@ Places API выполняет поиск организаций, зданий и
 
 1. Получите ключ доступа:
 
-   1. Зарегистрируйтесь в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_places).
+   1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+      <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_places" target="_blank">
+         В кабинет
+      </CtaButton>
+
    2. Создайте [демо-ключ](/platform-manager/subscription/keys#demo) или купите [подписку](/platform-manager/subscription/purchase) для доступа к API. Подробнее о стоимости сервиса см. в разделе [Тарифы](#tariffs).
 
    :::note[Данные по запросу]
 
    Для получения некоторой информации об объектах требуется дополнительное согласование. Изучите список методов и полей для получения [дополнительной информации по запросу](#info-on-demand).
-      
+
    :::
 
-   Работать с ключами можно в Менеджере Платформы: подробнее см. в документации [личного кабинета](/platform-manager/overview).
+   Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
 
-2. Изучите формат [запроса](#request) и [ответа](#response).
+2. Изучите [формат запроса](#request) и [формат ответа](#response).
 
-3. Изучите [примеры запросов к Places API](/api/search/places/examples) и полный [справочник API](/api/search/places/reference).
+3. Изучите [примеры запросов](/api/search/places/examples) к Places API и полный [справочник API](/api/search/places/reference/3.0/items/).
 
-    Если вы хотите создать поисковый виджет на карте, изучите готовый пример [интеграции поисковых API в веб-приложение](./tutorial).
+   Если вы хотите создать поисковый виджет на карте, изучите готовый пример [интеграции поисковых API в веб-приложение](./tutorial).
 
 ### Дополнительная информация по запросу {#info-on-demand}
 
@@ -122,7 +127,7 @@ Places API выполняет поиск организаций, зданий и
    :::tip
 
    Геоограничение можно не задавать, если вы ищете конкретный объект по его уникальному свойству с помощью следующих методов:
-   
+
    * [`/3.0/items/byid`](/api/search/places/reference/3.0/items/byid),
    * [`/3.0/items/bysite`](/api/search/places/reference/3.0/items/bysite),
    * [`/3.0/items/byphone`](/api/search/places/reference/3.0/items/byphone),
@@ -139,7 +144,7 @@ Places API выполняет поиск организаций, зданий и
 
 Также вы можете применить [дополнительные настройки поиска](#additional-config).
 
-### Пример запроса
+### Пример запроса {#request-example}
 
 ```http
 https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&key=YOUR_KEY
@@ -157,7 +162,7 @@ https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&k
 
 Ответ на запрос возвращается в формате JSON:
 
-```json
+```json snippedId='test-snipped'
 {
     "meta": {
         "api_version": "3.0.448950",
@@ -303,12 +308,33 @@ https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&k
 
 ## Тарифы {#tariffs}
 
-* Стоимость сервиса рассчитывается исходя из количества запросов в месяц. 
-* Актуальные тарифы можно посмотреть в [Менеджере Платформы](https://platform.2gis.ru/ru/tariffs?utm_source=docs&utm_medium=referral&utm_campaign=api_places).
+* Стоимость сервиса рассчитывается исходя из количества успешных запросов в месяц. Успешным запросом к API считается запрос, который возвращает HTTP-код 200 в поле `meta.code` в теле ответа, например:
+
+    ```json
+    {
+        "meta": {
+            "api_version": "3.0.17799",
+            "code": 200,
+            "issue_date": "20240524"
+        },
+        ...
+    }
+    ```
+
+* Актуальную стоимость и лимиты см. в разделе [Тарифы](/platform-manager/subscription/pricing).
 
 ## Варианты размещения {#distribution}
 
-- **Облако**: все актуальные методы Places API доступны через публичные endpoint-ы <Brand />.
-- **On-Premise**: все актуальные методы Places API доступны при установке API-платформы <Brand /> в закрытом контуре. Подробнее см. в разделе [API-платформа для сервера](/on-premise-api-platform/overview/summary).
+* **Облако**: все актуальные методы Places API доступны через публичные endpoint-ы <Brand />.
+* **On-Premise**: все актуальные методы Places API доступны при установке API-платформы <Brand /> в закрытом контуре. Подробнее см. в разделе [API-платформа для сервера](/on-premise-api-platform/overview/summary).
 
 Методы, отмеченные как `deprecated`, устарели и не поддерживаются в обоих вариантах размещения.
+
+## Помощь {#support}
+
+* Если у вас возникли вопросы при работе с API, задайте их AI-ассистенту (в правом нижнем углу cайта), воспользуйтесь поиском по документации или отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+* Если вы хотите обсудить возможности API или его интеграцию с вашим продуктом, обратитесь к менеджеру.
+
+   <CtaButton href="https://dev.2gis.ru/api/places-api" target="_blank" appearance="lightFill">
+     Получить консультацию
+   </CtaButton>

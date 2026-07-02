@@ -55,7 +55,7 @@ sidebar: androidsdk
 
 ### 🌟 Новые возможности
 
-* Добавлен [DGis.initialize](/android/sdk/reference/10.4/ru.dgis.sdk.DGis) с параметром для переопределения аудиодрайвера для воспроизведения звуков SDK. Добавлен интерфейс [AudioDriver](/android/sdk/reference/10.4/interface#ru.dgis.sdk.platform.audio-driver) для задания платформенной реализации аудиодрайвера.
+* Добавлен [DGis.initialize](/android/sdk/reference/10.4/class#ru.dgis.sdk.dgis) с параметром для переопределения аудиодрайвера для воспроизведения звуков SDK. Добавлен интерфейс [AudioDriver](/android/sdk/reference/10.4/interface#ru.dgis.sdk.platform.audio-driver) для задания платформенной реализации аудиодрайвера.
 * [ZoomFollowSettings.speedRangeToStyleZoomFreeRoamSequence](/android/sdk/reference/10.4/class#ru.dgis.sdk.navigation.zoom-follow-settings) стал сеттером.
 
 ### 🛠 Исправления
@@ -126,7 +126,7 @@ sidebar: androidsdk
 * Добавлен параметр `styleZoomToTiltRelation` для функций [calcPosition](/android/sdk/reference/10.0/method#ru.dgis.sdk.map.calc-position-camera-geometry-style-zoom-to-tilt-relation-screen-area-tilt-bearing-size-) и [zoomOutToFit](/android/sdk/reference/10.0/method#ru.dgis.sdk.map.zoom-out-to-fit-camera-geometry-style-zoom-to-tilt-relation-size-): функция зависимости угла наклона камеры от стилевого zoom-уровня.
 * Добавлена новая функция [createDefaultStyleZoomToTiltRelation](/android/sdk/reference/10.0/method#ru.dgis.sdk.map.create-default-style-zoom-to-tilt-relation--) для получения зависимости угла наклона камеры от стилевого zoom-уровня для стандартного контроллера слежения за наклоном.
 * Добавлен enum [BearingSource](/android/sdk/reference/10.0/enumeration#ru.dgis.sdk.map.bearing-source) — источник направления.
-* В [DGis.initialize](/android/sdk/reference/10.0/ru.dgis.sdk.DGis) добавлена возможность переопределения сетевого клиента с помощью интерфейса [HttpClient](/android/sdk/reference/10.0/interface#ru.dgis.sdk.platform.http-client).
+* В [DGis.initialize](/android/sdk/reference/10.0/class#ru.dgis.sdk.DGis) добавлена возможность переопределения сетевого клиента с помощью интерфейса [HttpClient](/android/sdk/reference/10.0/interface#ru.dgis.sdk.platform.http-client).
 * Добавлены [MarkerOptions.iconAnimationMode](/android/sdk/reference/10.0/class#ru.dgis.sdk.map.marker-options) и [Marker.iconAnimationMode](/android/sdk/reference/10.0/class#ru.dgis.sdk.map.marker) для возможности задания режима анимации в маркерах. Режим может быть обычным или зацикленным.
 * Добавлены [SearchResult.actionWidgets](/android/sdk/reference/10.0/class#ru.dgis.sdk.directory.search-result) и [SearchResult.mainWidgets](/android/sdk/reference/10.0/class#ru.dgis.sdk.directory.search-result) для динамической фильтрации уже полученной поисковой выдачи. Добавлен базовый класс [Widget](/android/sdk/reference/10.0/class#ru.dgis.sdk.directory.widget), представляющий виджет для фильтрации поисковой выдачи.
 * В [LocaleManager](/android/sdk/reference/10.0/class#ru.dgis.sdk.platform.locale-manager) добавлены методы `locales` и `systemLocales` и соответствующие каналы для получения всех локалей приложения и системных локалей.

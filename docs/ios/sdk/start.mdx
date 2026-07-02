@@ -1,19 +1,23 @@
 ---
 sidebar: iossdk
 ---
-
 # Начало работы
 
-## 1. Получение ключа доступа {#get-api-key}
+## 1. Получите ключ доступа {#get-api-key}
 
 Чтобы подключиться к серверам <Brand />, получать геоданные и включить возможности SDK, получите файл ключа доступа `dgissdk.key`:
 
-1. Зарегистрируйтесь в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_ios).
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_ios" target="_blank">
+      В кабинет
+   </CtaButton>
+
 2. Купите [подписку](/platform-manager/subscription/purchase) для доступа к необходимым API. Набор API зависит от необходимых функциональностей и [версии SDK](/ios/sdk/overview#versions). См. подробнее в разделе [API для работы SDK](/ios/sdk/overview#api-list).
 3. Создайте [ключ доступа](/platform-manager/subscription/keys#production) или [настройте существующий ключ для работы с мобильным SDK](/platform-manager/subscription/managing-keys#sdk-key-configuration).
 4. Скачайте файл ключа `dgissdk.key`.
 
-Работать с ключами можно в Менеджере Платформы: подробнее см. в документации [личного кабинета](/platform-manager/overview).
+Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
 
 ### Требования к работе с ключами {#key-requirements}
 
@@ -24,7 +28,7 @@ sidebar: iossdk
   * Если используются разные версии SDK (**Full** и **Map**).
 * Изменение файла ключа во время работы приложения не поддерживается. Так как выбор файла ключа происходит при инициализации SDK, вы можете задать им разные названия (по умолчанию используется `dgissdk.key`): для этого передайте ключ с другим названием через параметр `keySource` в `DGis.Container`.
 
-## 2. Установка SDK {#install}
+## 2. Установите SDK {#install}
 
 ### Swift Package Manager {#swift-package-manager}
 
@@ -55,7 +59,7 @@ sidebar: iossdk
 
 В файле `Package.swift` будет указан URL, ведущий на загрузку архива с SDK по прямой ссылке. Для навигации по версиям используйте теги git.
 
-## 3. Инициализация SDK {#initialize}
+## 3. Инициализируйте SDK {#initialize}
 
 1. Создайте специальный объект [Container](/ios/sdk/reference/stable/class#container), который будет хранить все сущности, связанные с картой. При создании объекта укажите путь до [полученного файла ключа](#get-api-key) `dgissdk.key` одним из способов:
 

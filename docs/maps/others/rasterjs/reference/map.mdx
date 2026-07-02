@@ -56,7 +56,7 @@ var map = DG.map('map', {
             <td><code><b>preferCanvas</b></code></td>
             <td><code>Boolean </code></td>
             <td><code>false</code></td>
-            <td>Должны ли экземпляры <a href="/ru/maps/others/rasterjs/reference/vector-layers#dgpath"><code>Path</code></a> отрисовываться на <a href="/ru/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Canvas"> <code>Canvas</code></a>. По умолчанию все экземпляры <code>Path</code> отрисовываются с помощью <a href="/ru/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Svg"><code>SVG</code></a> рендерера. </td>
+            <td>Должны ли экземпляры <a href="/maps/others/rasterjs/reference/vector-layers#dgpath"><code>Path</code></a> отрисовываться на <a href="/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Canvas"> <code>Canvas</code></a>. По умолчанию все экземпляры <code>Path</code> отрисовываются с помощью <a href="/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Svg"><code>SVG</code></a> рендерера. </td>
         </tr>
     </tbody>
 </table>
@@ -77,13 +77,13 @@ var map = DG.map('map', {
             <td><code><b>zoomControl</b></code></td>
             <td><code>Boolean</code></td>
             <td><code>true</code></td>
-            <td>Добавлен ли <a href="/ru/maps/others/rasterjs/reference/controls#dgcontrol.zoom">элемент управления масштабом</a> на карту. </td>
+            <td>Добавлен ли <a href="/maps/others/rasterjs/reference/controls#dgcontrol.zoom">элемент управления масштабом</a> на карту. </td>
         </tr>
         <tr>
             <td><code><b>fullscreenControl</b></code></td>
             <td><code>Boolean</code></td>
             <td><code>true</code></td>
-            <td>Добавлена ли <a href="/ru/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Fullscreen"> кнопка включения полноэкранного режима</a> на карту. </td>
+            <td>Добавлена ли <a href="/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Fullscreen"> кнопка включения полноэкранного режима</a> на карту. </td>
         </tr>
     </tbody>
 </table>
@@ -116,7 +116,7 @@ var map = DG.map('map', {
             <td><code><b>zoomDelta</b></code></td>
             <td><code>Number </code></td>
             <td><code>1</code></td>
-            <td>Управляет тем, насколько изменится уровень масштаба после <a href="#map-zoomin"><code>zoomIn()</code></a>, <a href="#map-zoomout"><code>zoomOut()</code></a>, нажатия <code>+</code> или <code>-</code> на клавиатуре или используя <a href="/ru/maps/others/rasterjs/reference/controls#dgcontrol.zoom">элемент управления масштабом</a>. Значения меньшие чем <code>1</code> (например, <code>0.5</code>) предоставляют большую точность. </td>
+            <td>Управляет тем, насколько изменится уровень масштаба после <a href="#map-zoomin"><code>zoomIn()</code></a>, <a href="#map-zoomout"><code>zoomOut()</code></a>, нажатия <code>+</code> или <code>-</code> на клавиатуре или используя <a href="/maps/others/rasterjs/reference/controls#dgcontrol.zoom">элемент управления масштабом</a>. Значения меньшие чем <code>1</code> (например, <code>0.5</code>) предоставляют большую точность. </td>
         </tr>
         <tr id="map-trackresize">
             <td><code><b>trackResize</b></code></td>
@@ -221,7 +221,7 @@ var map = DG.map('map', {
             <td><code><b>renderer</b></code></td>
             <td><code>Renderer </code></td>
             <td><code>*</code></td>
-            <td>Метод, который используется для отрисовки векторных слоев на карте. По умолчанию устанавливается <a href="/ru/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Svg"><code>DG.SVG</code></a> или <a href="/ru/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Canvas"><code>DG.Canvas</code></a> в зависимости от поддержки браузером. </td>
+            <td>Метод, который используется для отрисовки векторных слоев на карте. По умолчанию устанавливается <a href="/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Svg"><code>DG.SVG</code></a> или <a href="/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Canvas"><code>DG.Canvas</code></a> в зависимости от поддержки браузером. </td>
         </tr>
         <tr id="map-poi">
             <td><code><b>poi</b></code></td>
@@ -233,7 +233,7 @@ var map = DG.map('map', {
             <td><code><b>currentLang</b></code></td>
             <td><code>string</code></td>
             <td><code>''</code></td>
-            <td>Язык пользовательского интерфейса карты (см. <a href="/ru/maps/others/rasterjs/reference/dg-locale">Локализация</a>)</td>
+            <td>Язык пользовательского интерфейса карты (см. <a href="/maps/others/rasterjs/reference/dg-locale">Локализация</a>)</td>
         </tr>
     </tbody>
 </table>
@@ -389,7 +389,7 @@ var map = DG.map('map', {
             <td><code><b>wheelPxPerZoomLevel</b></code></td>
             <td><code>Number </code></td>
             <td><code>50</code></td>
-            <td>Какое количество пикселей прокрутки (можно определить через <a href="/ru/maps/others/rasterjs/reference/dom-utils#domevent-getwheeldelta">DG.DomEvent.getWheelDelta</a>) означает изменение на один уровень масштабирования. Меньшие значения будут изменять масштаб карты, с помощью колеса, быстрей (и наоборот). </td>
+            <td>Какое количество пикселей прокрутки (можно определить через <a href="/maps/others/rasterjs/reference/dom-utils#domevent-getwheeldelta">DG.DomEvent.getWheelDelta</a>) означает изменение на один уровень масштабирования. Меньшие значения будут изменять масштаб карты, с помощью колеса, быстрей (и наоборот). </td>
         </tr>
     </tbody>
 </table>
@@ -448,12 +448,12 @@ var map = DG.map('map', {
     <tbody>
         <tr id="map-layeradd">
             <td><code><b>layeradd</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">LayerEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">LayerEvent</a></code></td>
             <td>Вызывается при добавлении нового слоя на карту.</td>
         </tr>
         <tr id="map-layerremove">
             <td><code><b>layerremove</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">LayerEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">LayerEvent</a></code></td>
             <td>Вызывается при удалении слоя с карты.</td>
         </tr>
     </tbody>
@@ -472,92 +472,92 @@ var map = DG.map('map', {
     <tbody>
         <tr id="map-zoomlevelschange">
             <td><code><b>zoomlevelschange</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается, если при добавлении или удалении слоя карты изменилось количество доступных уровней масштабирования. </td>
         </tr>
         <tr id="map-resize">
             <td><code><b>resize</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается при изменении размера карты.</td>
         </tr>
         <tr id="map-unload">
             <td><code><b>unload</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается при удалении карты c помощью метода <a href="#map-remove">remove</a>.</td>
         </tr>
         <tr id="map-viewreset">
             <td><code><b>viewreset</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается, когда нужно перерисовать содержимое карты (обычно при изменении масштаба или загрузке). Полезно при создании дополнительных слоев. </td>
         </tr>
         <tr id="map-load">
             <td><code><b>load</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается при инициализации карты (при первой установке ее центра и масштаба).</td>
         </tr>
         <tr id="map-zoomstart">
             <td><code><b>zoomstart</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается в начале изменения масштаба (перед анимацией изменения масштаба).</td>
         </tr>
         <tr id="map-movestart">
             <td><code><b>movestart</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается в начале изменения области просмотра карты (например, когда пользователь начинает перетаскивать карту). </td>
         </tr>
         <tr id="map-zoom">
             <td><code><b>zoom</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается периодически, в течении любого изменения уровня масштаба, включая анимации перелета. </td>
         </tr>
         <tr id="map-move">
             <td><code><b>move</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается периодически, во время любого передвижения карты, включая анимации перелета. </td>
         </tr>
         <tr id="map-zoomend">
             <td><code><b>zoomend</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается после изменения масштаба и анимаций.</td>
         </tr>
         <tr id="map-moveend">
             <td><code><b>moveend</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается при окончании передвижения карты (например, когда пользователь прекращает перетаскивать карту). </td>
         </tr>
         <tr id="map-projectchange">
             <td><code><b>projectchange</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#projectevent">ProjectEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#projectevent">ProjectEvent</a></code></td>
             <td>Вызывается при перемещении пользователя из одного <a href="#map-projectdetector">проекта <Brand /></a> в другой. </td>
         </tr>
         <tr id="map-projectleave">
             <td><code><b>projectleave</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#projectevent">ProjectEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#projectevent">ProjectEvent</a></code></td>
             <td>Вызывается при выходе пользователя из текущего <a href="#map-projectdetector">проекта <Brand /></a>. </td>
         </tr>
         <tr id="map-entranceshow">
             <td><code><b>entranceshow</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается при отображении входа в здание.</td>
         </tr>
         <tr id="map-entrancehide">
             <td><code><b>entrancehide</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается при скрытии входа в здание.</td>
         </tr>
         <tr id="map-poihover">
             <td><code><b>poihover</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#poievent">MetaEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#poievent">MetaEvent</a></code></td>
             <td>Вызывается при наведении курсора мыши на точку интереса.</td>
         </tr>
         <tr id="map-poileave">
             <td><code><b>poileave</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#poievent">MetaEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#poievent">MetaEvent</a></code></td>
             <td>Вызывается, когда курсор мыши покидает область точки интереса.</td>
         </tr>
         <tr id="map-langchange">
             <td><code><b>langchange</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#langevent">LangEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#langevent">LangEvent</a></code></td>
             <td>Вызывается при изменении языка карты.</td>
         </tr>
     </tbody>
@@ -605,52 +605,52 @@ var map = DG.map('map', {
     <tbody>
         <tr id="map-click">
             <td><code><b>click</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается при клике (или тапе) по карте.</td>
         </tr>
         <tr id="map-dblclick">
             <td><code><b>dblclick</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается при двойном клике (или двойном тапе) по карте.</td>
         </tr>
         <tr id="map-mousedown">
             <td><code><b>mousedown</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается при нажатии кнопки мыши над областью карты.</td>
         </tr>
         <tr id="map-mouseup">
             <td><code><b>mouseup</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается, когда пользователь отпускает кнопку мыши над областью карты.</td>
         </tr>
         <tr id="map-mouseover">
             <td><code><b>mouseover</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается при наведении курсора мыши на карту.</td>
         </tr>
         <tr id="map-mouseout">
             <td><code><b>mouseout</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается, когда курсор мыши покидает область карты.</td>
         </tr>
         <tr id="map-mousemove">
             <td><code><b>mousemove</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается, когда курсор мыши перемещается над картой.</td>
         </tr>
         <tr id="map-contextmenu">
             <td><code><b>contextmenu</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается при нажатии правой кнопки мыши на карте, предотвращает появление стандартного контекстного меню браузера, если на это событие подписаны обработчики. Также вызывается на мобильных устройствах, когда пользователь удерживает тач в течение секунды (долгое нажатие). </td>
         </tr>
         <tr id="map-keypress">
             <td><code><b>keypress</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#event">Event</a></code></td>
             <td>Вызывается при нажатии клавиш на клавиатуре, когда карта находится в фокусе.</td>
         </tr>
         <tr id="map-preclick">
             <td><code><b>preclick</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a></code></td>
             <td>Вызывается перед кликом мыши на карте (полезно, если нужно выполнить какое-либо действие до вызова обработчика клика). </td>
         </tr>
     </tbody>
@@ -669,7 +669,7 @@ var map = DG.map('map', {
     <tbody>
         <tr id="map-zoomanim">
             <td><code><b>zoomanim</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#zoomanimevent">ZoomAnimEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#zoomanimevent">ZoomAnimEvent</a></code></td>
             <td>Вызывается каждый кадр, в процессе изменения масштаба.</td>
         </tr>
     </tbody>
@@ -711,9 +711,9 @@ var map = DG.map('map', {
 	</thead>
     <tbody>
         <tr id="map-getrenderer">
-            <td> <code> <b>getRenderer</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/vector-layers#dgpath">Path</a>&gt; <i>layer</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Renderer">Renderer</a></code></td>
-            <td>Возвращает экземпляр <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Renderer"><code>Renderer</code></a>, который должен быть использован для отрисовки необходимого <a href="/ru/maps/others/rasterjs/reference/vector-layers#dgpath"><code>векторного слоя</code></a>. Метод гарантирует, что опции <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Renderer"><code>движка отображения</code></a> карты и векторных слоев будут учитываться, и что необходимые движки отображения действительно существуют на карте. </td>
+            <td> <code> <b>getRenderer</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/vector-layers#dgpath">Path</a>&gt; <i>layer</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Renderer">Renderer</a></code></td>
+            <td>Возвращает экземпляр <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Renderer"><code>Renderer</code></a>, который должен быть использован для отрисовки необходимого <a href="/maps/others/rasterjs/reference/vector-layers#dgpath"><code>векторного слоя</code></a>. Метод гарантирует, что опции <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Renderer"><code>движка отображения</code></a> карты и векторных слоев будут учитываться, и что необходимые движки отображения действительно существуют на карте. </td>
         </tr>
     </tbody>
 </table>
@@ -730,17 +730,17 @@ var map = DG.map('map', {
 	</thead>
     <tbody>
         <tr id="map-addlayer">
-            <td> <code> <b>addLayer</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i></nobr>) </code> </td>
+            <td> <code> <b>addLayer</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Добавляет слой на карту.</td>
         </tr>
         <tr id="map-removelayer">
-            <td> <code> <b>removeLayer</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i></nobr>) </code> </td>
+            <td> <code> <b>removeLayer</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Удаляет указанные слои с карты.</td>
         </tr>
         <tr id="map-haslayer">
-            <td> <code> <b>hasLayer</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i></nobr>) </code> </td>
+            <td> <code> <b>hasLayer</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i></nobr>) </code> </td>
             <td><code>Boolean</code></td>
             <td>Возвращает <code>true</code>, если слой, на данный момент, добавлен на карту.</td>
         </tr>
@@ -750,27 +750,27 @@ var map = DG.map('map', {
             <td> Выполняет заданную функцию для каждого слоя карты. Дополнительно можно указать контекст выполнения функции. <pre><code>map.eachLayer(function(layer){"{"} layer.bindPopup('Hello'); {"}"}); </code></pre> </td>
         </tr>
         <tr id="map-openpopup">
-            <td> <code> <b>openPopup</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/popup#dgpopup">Popup</a>&gt; <i>popup</i></nobr>) </code> </td>
+            <td> <code> <b>openPopup</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/popup#dgpopup">Popup</a>&gt; <i>popup</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Показывает указанный попап, предварительно закрыв все открытые.</td>
         </tr>
         <tr id="map-openpopup">
-            <td> <code> <b>openPopup</b>( <nobr>&lt;String|HTMLElement&gt; <i>content</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/popup#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i></nobr>) </code> </td>
+            <td> <code> <b>openPopup</b>( <nobr>&lt;String|HTMLElement&gt; <i>content</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/popup#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Создает попап с переданными опциями и содержимым и открывает его в определенной точке на карте.</td>
         </tr>
         <tr id="map-closepopup">
-            <td> <code> <b>closePopup</b>(<nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/popup#dgpopup">Popup</a>&gt; <i>popup?</i></nobr>) </code> </td>
+            <td> <code> <b>closePopup</b>(<nobr>&lt;<a href="/maps/others/rasterjs/reference/popup#dgpopup">Popup</a>&gt; <i>popup?</i></nobr>) </code> </td>
             <td><code>this</code></td>
-            <td>Закрывает попап, открытый с помощью <a href="/ru/maps/others/rasterjs/reference/popup#map-openpopup">openPopup</a>.</td>
+            <td>Закрывает попап, открытый с помощью <a href="/maps/others/rasterjs/reference/popup#map-openpopup">openPopup</a>.</td>
         </tr>
         <tr id="map-addcontrol">
-            <td> <code> <b>addControl</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/controls#dgcontrol">Control</a>&gt; <i>control</i></nobr>) </code> </td>
+            <td> <code> <b>addControl</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/controls#dgcontrol">Control</a>&gt; <i>control</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Добавляет элемент управления на карту.</td>
         </tr>
         <tr id="map-removecontrol">
-            <td> <code> <b>removeControl</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/controls#dgcontrol">Control</a>&gt; <i>control</i></nobr>) </code> </td>
+            <td> <code> <b>removeControl</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/controls#dgcontrol">Control</a>&gt; <i>control</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Удаляет элемент управления с карты.</td>
         </tr>
@@ -809,17 +809,17 @@ var map = DG.map('map', {
             <td>Уменьшает масштаб карты на величину <code>delta</code> (по умолчанию <a href="#map-zoomdelta"><code>zoomDelta</code></a>). </td>
         </tr>
         <tr id="map-setzoomaround">
-            <td> <code> <b>setZoomAround</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_масштабирования">Zoom options</a>&gt; <i>options</i></nobr>) </code> </td>
+            <td> <code> <b>setZoomAround</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_масштабирования">Zoom options</a>&gt; <i>options</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Масштабирует карту, сохраняя при этом указанную точку в неподвижном состоянии (например, используется для масштабировании при помощи колесика мыши и двойного клика). </td>
         </tr>
         <tr id="map-setzoomaround">
-            <td> <code> <b>setZoomAround</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>offset</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_масштабирования">Zoom options</a>&gt; <i>options</i></nobr>) </code> </td>
+            <td> <code> <b>setZoomAround</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>offset</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_масштабирования">Zoom options</a>&gt; <i>options</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Масштабирует карту, сохраняя при этом указанную точку в пикселях в неподвижном состоянии (относительно левого верхнего угла). </td>
         </tr>
         <tr id="map-fitbounds">
-            <td> <code> <b>fitBounds</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_соответствия_границам">fitBounds options</a>&gt; <i>options</i></nobr>) </code> </td>
+            <td> <code> <b>fitBounds</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_соответствия_границам">fitBounds options</a>&gt; <i>options</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Устанавливает область просмотра карты так, чтобы она содержала заданные границы, на максимально возможном уровне масштаба. </td>
         </tr>
@@ -829,17 +829,17 @@ var map = DG.map('map', {
             <td>Устанавливает область просмотра карты так, чтобы та отображала весь мир, на максимально возможном уровне масштаба. </td>
         </tr>
         <tr id="map-panto">
-            <td> <code> <b>panTo</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_перемещения">Pan options</a>&gt; <i>options?</i></nobr>) </code> </td>
+            <td> <code> <b>panTo</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_перемещения">Pan options</a>&gt; <i>options?</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Передвигает карту к указанному центру. </td>
         </tr>
         <tr id="map-panby">
-            <td> <code> <b>panBy</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>offset</i></nobr>) </code> </td>
+            <td> <code> <b>panBy</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>offset</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Перемещает карту на заданное количество пикселей (анимировано).</td>
         </tr>
         <tr id="map-setmaxbounds">
-            <td> <code> <b>setMaxBounds</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a>&gt; <i>bounds</i></nobr>) </code> </td>
+            <td> <code> <b>setMaxBounds</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a>&gt; <i>bounds</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Ограничивает область просмотра карты заданными границами (см. опцию <a href="#map-maxbounds">maxBounds</a>). </td>
         </tr>
@@ -854,7 +854,7 @@ var map = DG.map('map', {
             <td>Устанавливает верхний предел уровней масштабирования (см. опцию <a href="#map-minzoom">maxZoom</a>). </td>
         </tr>
         <tr id="map-paninsidebounds">
-            <td> <code> <b>panInsideBounds</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_перемещения">Pan options</a>&gt; <i>options?</i></nobr>) </code> </td>
+            <td> <code> <b>panInsideBounds</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_перемещения">Pan options</a>&gt; <i>options?</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Перемещает карту в ближайшую область просмотра, лежащую в пределах заданных границ. Можно контролировать анимацию, передав объект опций вторым параметром. </td>
         </tr>
@@ -874,19 +874,19 @@ var map = DG.map('map', {
             <td>Останавливает текущие запущенные анимации <code>panTo</code> или <code>flyTo</code>. </td>
         </tr>
         <tr id="map-flyto">
-            <td> <code> <b>flyTo</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;Number&gt; <i>zoom?</i></nobr>, <nobr>&lt;Zoom/Pan options&gt; <i>options?</i></nobr>) </code> </td>
+            <td> <code> <b>flyTo</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;Number&gt; <i>zoom?</i></nobr>, <nobr>&lt;Zoom/Pan options&gt; <i>options?</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Устанавливает область просмотра карты (гегорафический центр и масштаб), выполняя плавную анимацию изменения масштаба и перемещения. </td>
         </tr>
         <tr id="map-flytobounds">
-            <td> <code> <b>flyToBounds</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_соответствия_границам">fitBounds options</a>&gt; <i>options?</i></nobr>) </code> </td>
+            <td> <code> <b>flyToBounds</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;<a href="#nav-lvl1--Опции_соответствия_границам">fitBounds options</a>&gt; <i>options?</i></nobr>) </code> </td>
             <td><code>this</code></td>
             <td>Устанавливает область просмотра карты с плавной анимацией изменения масштаба и перемещения, как <a href="#map-flyto"><code>flyTo</code></a>, но примнимает в качестве параметра границы, как <a href="#map-fitbounds"><code>fitBounds</code></a>. </td>
         </tr>
         <tr id="map-setlang">
             <td><code><b>setLang</b>( <nobr>&lt;String&gt; <i>lang</i> </nobr>)</code></td>
             <td><code>String</code></td>
-            <td>Устанавливает <a href="/ru/maps/others/rasterjs/reference/dg-locale">язык карты</a>. В качестве параметра принимает код языка (например, 'en'). </td>
+            <td>Устанавливает <a href="/maps/others/rasterjs/reference/dg-locale">язык карты</a>. В качестве параметра принимает код языка (например, 'en'). </td>
         </tr>
     </tbody>
 </table>
@@ -905,7 +905,7 @@ var map = DG.map('map', {
         <tr id="map-addhandler">
             <td> <code> <b>addHandler</b>( <nobr>&lt;String&gt; <i>name</i></nobr>, <nobr>&lt;Function&gt; <i>HandlerClass</i></nobr>) </code> </td>
             <td><code>this</code></td>
-            <td>Добавляет новый <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler"><code>Handler</code></a> на карту, c переданным именем и функцией-конструктором. </td>
+            <td>Добавляет новый <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler"><code>Handler</code></a> на карту, c переданным именем и функцией-конструктором. </td>
         </tr>
         <tr id="map-remove">
             <td><code><b>remove</b>()</code></td>
@@ -953,7 +953,7 @@ var map = DG.map('map', {
     <tbody>
         <tr id="map-getcenter">
             <td><code><b>getCenter</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
             <td>Возвращает географический центр области просмотра карты.</td>
         </tr>
         <tr id="map-getzoom">
@@ -963,7 +963,7 @@ var map = DG.map('map', {
         </tr>
         <tr id="map-getbounds">
             <td><code><b>getBounds</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a></code></td>
             <td>Возвращает географические прямоугольные границы текущей области просмотра карты.</td>
         </tr>
         <tr id="map-getminzoom">
@@ -977,34 +977,34 @@ var map = DG.map('map', {
             <td>Возвращает максимальный уровень масштабирования карты (если установлена опция <code>maxZoom</code> у карты или любого слоя). </td>
         </tr>
         <tr id="map-getboundszoom">
-            <td> <code> <b>getBoundsZoom</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;Boolean&gt; <i>inside?</i></nobr>) </code> </td>
+            <td> <code> <b>getBoundsZoom</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a>&gt; <i>bounds</i></nobr>, <nobr>&lt;Boolean&gt; <i>inside?</i></nobr>) </code> </td>
             <td><code>Number</code></td>
             <td>Возвращает максимальный уровень масштабирования, при котором заданные границы полностью входят в область просмотра. Если опция <code>inside</code> установлена в <code>true</code>, тогда метод возвращает минимальный уровень зума, с теми же условиями. </td>
         </tr>
         <tr id="map-getsize">
             <td><code><b>getSize</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Возвращает текущий размер контейнера карты (в пикселях).</td>
         </tr>
         <tr id="map-getpixelbounds">
             <td><code><b>getPixelBounds</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a></code></td>
             <td>Возвращает прямоугольные границы области просмотра карты, спроецированные на пиксельные координаты (иногда полезно в реализациях слоев и оверлеев). </td>
         </tr>
         <tr id="map-getpixelorigin">
             <td><code><b>getPixelOrigin</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Возвращает спроецированные пиксельные координаты левой верхней точки слоя карты. Полезно при реализации дополнительных слоев и оверлеев. </td>
         </tr>
         <tr id="map-getpixelworldbounds">
             <td> <code> <b>getPixelWorldBounds</b>( <nobr>&lt;Number&gt; <i>zoom?</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a></code></td>
             <td>Возвращает пиксельные координаты границ мира для заданного уровня масштабирования <code>zoom</code>. Если <code>zoom</code> пропущен, используется текущий уровень масштаба карты. </td>
         </tr>
         <tr id="map-getlang">
             <td><code><b>getLang</b>()</code></td>
             <td><code>String</code></td>
-            <td>Возвращает текущий <a href="/ru/maps/others/rasterjs/reference/dg-locale">язык карты</a>.</td>
+            <td>Возвращает текущий <a href="/maps/others/rasterjs/reference/dg-locale">язык карты</a>.</td>
         </tr>
     </tbody>
 </table>
@@ -1031,68 +1031,68 @@ var map = DG.map('map', {
             <td>Возвращает уровень масштаба, на котором окажется карта, если ее текущий уровень масштабирования <code>fromZoom</code> и коэффициент масштабирования <code>scale</code>. Метод обратный <a href="#map-getZoomScale"><code>getZoomScale</code></a>. </td>
         </tr>
         <tr id="map-project">
-            <td> <code> <b>project</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
-            <td>Проецирует географические координаты <a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng"><code>LatLng</code></a> в соответствии с типом проекции карты (CRS), затем масштабирует их в соответствии с параметром zoom и CRS <a href="#transformation"><code>Transformation</code></a> Результат - пиксельные координаты относительно основания CRS. </td>
+            <td> <code> <b>project</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td>Проецирует географические координаты <a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng"><code>LatLng</code></a> в соответствии с типом проекции карты (CRS), затем масштабирует их в соответствии с параметром zoom и CRS <a href="#transformation"><code>Transformation</code></a> Результат - пиксельные координаты относительно основания CRS. </td>
         </tr>
         <tr id="map-unproject">
-            <td> <code> <b>unproject</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>point</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
+            <td> <code> <b>unproject</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>point</i></nobr>, <nobr>&lt;Number&gt; <i>zoom</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
             <td>Метод обратный <a href="#map-project"><code>project</code></a>. </td>
         </tr>
         <tr id="map-layerpointtolatlng">
-            <td> <code> <b>layerPointToLatLng</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
+            <td> <code> <b>layerPointToLatLng</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
             <td>По переданным пиксельным координатам относительно <a href="#map-getpixelorigin">origin pixel</a> возвращает соответствующие географические координаты (для текущего уровня масштабирования). </td>
         </tr>
         <tr id="map-latlngtolayerpoint">
-            <td> <code> <b>latLngToLayerPoint</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
+            <td> <code> <b>latLngToLayerPoint</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
             <td>По переданным географическим координатам возвращает соответствующие пиксельные координаты относительно <a href="#map-getpixelorigin">origin pixel</a>. </td>
         </tr>
         <tr id="map-wraplatlng">
-            <td> <code> <b>wrapLatLng</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
-            <td>Возвращает <a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng"><code>LatLng</code></a>, где <code>lat</code> и <code>lng</code> "зацикливаются" в соответствии с CRS-свойствами <code>wrapLat</code> и <code>wrapLng</code>, если они выходят за CRS-границы. По умолчанию это значит, что долгота переносится относительно линии перемены даты. Таким образом, ее значение всегда будет находиться между -180 и +180 градусами. </td>
+            <td> <code> <b>wrapLatLng</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
+            <td>Возвращает <a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng"><code>LatLng</code></a>, где <code>lat</code> и <code>lng</code> "зацикливаются" в соответствии с CRS-свойствами <code>wrapLat</code> и <code>wrapLng</code>, если они выходят за CRS-границы. По умолчанию это значит, что долгота переносится относительно линии перемены даты. Таким образом, ее значение всегда будет находиться между -180 и +180 градусами. </td>
         </tr>
         <tr id="map-distance">
-            <td> <code> <b>distance</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng1</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng2</i></nobr>) </code> </td>
+            <td> <code> <b>distance</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng1</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng2</i></nobr>) </code> </td>
             <td><code>Number</code></td>
             <td>Возвращает расстояние между двумя географическими координатами в соответствии с CRS карты. По умолчанию расстояние измеряется в метрах. </td>
         </tr>
         <tr id="map-containerpointtolayerpoint">
-            <td> <code> <b>containerPointToLayerPoint</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
+            <td> <code> <b>containerPointToLayerPoint</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
             <td>По переданным пиксельным координатам, относительно контейнера карты, возвращает соответствующие пиксельные координаты, относительно <a href="#map-getpixelorigin">origin pixel</a>. </td>
         </tr>
         <tr id="map-layerpointtocontainerpoint">
-            <td> <code> <b>layerPointToContainerPoint</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
+            <td> <code> <b>layerPointToContainerPoint</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
             <td>По переданным пиксельным координатам, относительно <a href="#map-getpixelorigin">origin pixel</a>, возвращает соответствующие пиксельные координаты, относительно контейнера карты. </td>
         </tr>
         <tr id="map-containerpointtolatlng">
-            <td> <code> <b>containerPointToLatLng</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
+            <td> <code> <b>containerPointToLatLng</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a>&gt; <i>point</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
             <td>По переданным пиксельным координатам, относительно контейнера карты, возвращает географические координаты (для текущего уровня масштабирования). </td>
         </tr>
         <tr id="map-latlngtocontainerpoint">
-            <td> <code> <b>latLngToContainerPoint</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
+            <td> <code> <b>latLngToContainerPoint</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a>&gt; <i>latlng</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
             <td>По переданным географическим координатам, возвращает пиксельные координаты, относительно контейнера карты. </td>
         </tr>
         <tr id="map-mouseeventtocontainerpoint">
-            <td> <code> <b>mouseEventToContainerPoint</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a>&gt; <i>ev</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
+            <td> <code> <b>mouseEventToContainerPoint</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a>&gt; <i>ev</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
             <td>По переданному объекту MouseEvent, возвращает пиксельную координату места, где произошло событие, относительно левого верхнего угла контейнера карты. </td>
         </tr>
         <tr id="map-mouseeventtolayerpoint">
-            <td> <code> <b>mouseEventToLayerPoint</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a>&gt; <i>ev</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
+            <td> <code> <b>mouseEventToLayerPoint</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a>&gt; <i>ev</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.point">Point</a></code></td>
             <td>По переданному объекту MouseEvent, возвращает пиксельную координату, где произошло событие, относительно <a href="#map-getpixelorigin">origin pixel</a>. </td>
         </tr>
         <tr id="map-mouseeventtolatlng">
-            <td> <code> <b>mouseEventToLatLng</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a>&gt; <i>ev</i></nobr>) </code> </td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
+            <td> <code> <b>mouseEventToLatLng</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">MouseEvent</a>&gt; <i>ev</i></nobr>) </code> </td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--dg.latlng">LatLng</a></code></td>
             <td>По переданному объекту MouseEvent, возвращает географическую координату, где произошло событие. </td>
         </tr>
     </tbody>
@@ -1123,13 +1123,13 @@ var map = DG.map('map', {
 
 ### Методы, унаследованные от Evented
 
-Методы, унаследованные от Evented, смотрите <a href="/ru/maps/others/rasterjs/reference/base-classes#dgevented-methods">здесь</a>.
+Методы, унаследованные от Evented, смотрите <a href="/maps/others/rasterjs/reference/base-classes#dgevented-methods">здесь</a>.
 
 ## Свойства
 
 Свойства карты включают в себя обработчики взаимодействия, которые позволяют контролировать интерактивное поведение,
 подключение и отключение определенных возможностей карты, таких как перетаскивание и масштабирование тачем
-(см. методы <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a>). Например:
+(см. методы <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a>). Например:
 
 ```js
 map.doubleClickZoom.disable();
@@ -1155,72 +1155,72 @@ map.zoomControl.setPosition('topright');
     <tbody>
         <tr id="map-boxzoom">
             <td><code><b>boxZoom</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
             <td>Обработчик box-масштабирования (shift + выделение мышью).</td>
         </tr>
         <tr id="map-doubleclickzoom">
             <td><code><b>doubleClickZoom</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
             <td>Обработчик масштабирования по двойному клику.</td>
         </tr>
         <tr id="map-dragging">
             <td><code><b>dragging</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
             <td>Обработчик перетаскивания карты (мышью и тачем).</td>
         </tr>
         <tr id="map-keyboard">
             <td><code><b>keyboard</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
             <td>Обработчик навигации с помощью клавиатуры.</td>
         </tr>
         <tr id="map-scrollwheelzoom">
             <td><code><b>scrollWheelZoom</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
             <td>Обработчик масштабирования по скроллу.</td>
         </tr>
         <tr id="map-tap">
             <td><code><b>tap</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
             <td>Обработчики мобильных тач хаков (быстрый тап и удерживание тача).</td>
         </tr>
         <tr id="map-touchzoom">
             <td><code><b>touchZoom</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler">Handler</a></code></td>
             <td>Обработчик масштабирования с помощью тача.</td>
         </tr>
         <tr id="map-geoclicker">
             <td><code><b>geoclicker</b></code></td>
-            <td><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler"><code>Handler</code></a></td>
+            <td><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler"><code>Handler</code></a></td>
             <td>Обработчик геокодирования по клику.</td>
         </tr>
         <tr id="map-projectDetector">
             <td><code><b>projectDetector</b></code></td>
-            <td><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler"><code>Handler</code></a></td>
+            <td><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Handler"><code>Handler</code></a></td>
             <td>Обработчик определения <a href="#map-projectdetector">проекта <Brand /></a>.</td>
         </tr>
         <tr id="map-zoomcontrol">
             <td><code><b>zoomControl</b></code></td>
-            <td><a href="/ru/maps/others/rasterjs/reference/controls#dgcontrol.zoom"><code>Control.Zoom</code></a></td>
+            <td><a href="/maps/others/rasterjs/reference/controls#dgcontrol.zoom"><code>Control.Zoom</code></a></td>
             <td>Элемент управления масштабом.</td>
         </tr>
         <tr id="map-fullscreenControl">
             <td><code><b>fullscreenControl</b></code></td>
-            <td><a href="/ru/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Fullscreen"><code>Control.FullScreen</code></a></td>
+            <td><a href="/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Fullscreen"><code>Control.FullScreen</code></a></td>
             <td>Кнопка включения полноэкранного режима.</td>
         </tr>
         <tr id="map-rulerControl">
             <td><code><b>rulerControl</b></code></td>
-            <td><a href="/ru/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Ruler"><code>Control.Ruler</code></a></td>
+            <td><a href="/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Ruler"><code>Control.Ruler</code></a></td>
             <td>Кнопка включения линейки.</td>
         </tr>
         <tr id="map-trafficControl">
             <td><code><b>trafficControl</b></code></td>
-            <td><a href="/ru/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Traffic"><code>Control.Traffic</code></a></td>
+            <td><a href="/maps/others/rasterjs/reference/controls#nav-lvl1--DG.Control.Traffic"><code>Control.Traffic</code></a></td>
             <td>Кнопка включения слоя с пробками.</td>
         </tr>
         <tr id="map-baseLayer">
             <td><code><b>baseLayer</b></code></td>
-            <td><a href="/ru/maps/others/rasterjs/reference/raster-layers#dgtilelayer"><code>TileLayer</code></a></td>
+            <td><a href="/maps/others/rasterjs/reference/raster-layers#dgtilelayer"><code>TileLayer</code></a></td>
             <td>Слой с тайлами <Brand />, автоматически добавляемый на карту при её создании.</td>
         </tr>
     </tbody>

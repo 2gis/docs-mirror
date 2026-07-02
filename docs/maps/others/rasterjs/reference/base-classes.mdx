@@ -116,7 +116,7 @@ a.options.myOption2; // 'bar'
 a.options.myOption3; // 5
 ```
 
-Также существует метод <a href="/ru/maps/others/rasterjs/reference/utils#util-setoptions"><code>DG.Util.setOptions</code></a>,
+Также существует метод <a href="/maps/others/rasterjs/reference/utils#util-setoptions"><code>DG.Util.setOptions</code></a>,
 который позволяет объединять опции, переданные в конструктор, с опциями, заданными по умолчанию:
 
 ```js
@@ -181,7 +181,7 @@ MyClass.FOO; // 'bar'
 
 Если вы разрабатываете модуль к API карт, существует вероятность того, что вам понадобится выполнить
 дополнительные действия при инициализации объектов существующих классов (например, при инициализации
-объекта <a href="/ru/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Polyline"><code>DG.Polyline</code></a>).
+объекта <a href="/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Polyline"><code>DG.Polyline</code></a>).
 
 Для подобного рода задач есть метод <code>addInitHook</code>:
 
@@ -234,8 +234,8 @@ MyClass.addInitHook(function () {
 
 ## DG.Evented
 
-Классы, использующие событийную модель (такие как <a href="/ru/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map"><code>Map</code></a>
-и <a href="/ru/maps/others/rasterjs/reference/markers#nav-lvl1--DG.Marker"><code>Marker</code></a>), наследуют методы <code>DG.Evented</code>.
+Классы, использующие событийную модель (такие как <a href="/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map"><code>Map</code></a>
+и <a href="/maps/others/rasterjs/reference/markers#nav-lvl1--DG.Marker"><code>Marker</code></a>), наследуют методы <code>DG.Evented</code>.
 В общем случае, класс дает возможность инициировать выполнение последовательности функций, при возникновении
 какого-либо события, связанного с объектом (например, пользователь щелкнул мышью по карте, тем самым создав
 событие <code>'click'</code>).
@@ -377,7 +377,7 @@ layer.remove();
             <td><code><b>pane</b></code></td>
             <td><code>String</code></td>
             <td><code>'overlayPane'</code></td>
-            <td>По умолчанию, слои добавляются в т.н. <a href="/ru/maps/others/rasterjs/reference/map#map-overlaypane">панель слоев</a>. Поведение по умолчанию можно изменить, переопределив данную опцию.</td>
+            <td>По умолчанию, слои добавляются в т.н. <a href="/maps/others/rasterjs/reference/map#map-overlaypane">панель слоев</a>. Поведение по умолчанию можно изменить, переопределив данную опцию.</td>
         </tr>
     </tbody>
 </table>
@@ -442,7 +442,7 @@ layer.remove();
     </thead>
     <tbody>
         <tr id="layer-addto">
-            <td><code><b>addTo</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i></nobr>) </code></td>
+            <td><code><b>addTo</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i></nobr>) </code></td>
             <td><code>this</code></td>
             <td>Добавляет слой на карту.</td>
         </tr>
@@ -452,7 +452,7 @@ layer.remove();
             <td>Удаляет слой с карты, к которой он в данный момент прикреплен.</td>
         </tr>
         <tr id="layer-removefrom">
-            <td><code><b>removeFrom</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/map#dgmap">Map</a>&gt; <i>map</i> </nobr>) </code></td>
+            <td><code><b>removeFrom</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/map#dgmap">Map</a>&gt; <i>map</i> </nobr>) </code></td>
             <td><code>this</code></td>
             <td>Удаляет слой с карты.</td>
         </tr>
@@ -488,7 +488,7 @@ layer.closePopup();
     </thead>
     <tbody>
         <tr id="layer-bindpopup">
-            <td><code><b>bindPopup</b>( <nobr>&lt;String|HTMLElement|Function|Popup&gt; <i>content</i>,</nobr> <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/popup#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i> </nobr>) </code></td>
+            <td><code><b>bindPopup</b>( <nobr>&lt;String|HTMLElement|Function|Popup&gt; <i>content</i>,</nobr> <nobr>&lt;<a href="/maps/others/rasterjs/reference/popup#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i> </nobr>) </code></td>
             <td><code>this</code></td>
             <td>Связывает попап со слоем и устанавливает необходимые обработчики событий. Если в качестве параметра передать функцию, она получит текущий объект в качестве своего первого аргумента и должна вернуть <code>String</code> или <code>HTMLElement</code>.</td>
         </tr>
@@ -498,9 +498,9 @@ layer.closePopup();
             <td>Удаляет попап, ранее привязанный с помощью <code>bindPopup</code>.</td>
         </tr>
         <tr id="layer-openpopup">
-            <td><code><b>openPopup</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng?</i> </nobr>) </code></td>
+            <td><code><b>openPopup</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng?</i> </nobr>) </code></td>
             <td><code>this</code></td>
-            <td>Открывает, связанный со слоем попап, в заданных координатах <a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng"><code>latlng</code></a> или в координатах, сохраненных в параметрах самого элемента.</td>
+            <td>Открывает, связанный со слоем попап, в заданных координатах <a href="/maps/others/rasterjs/reference/basic-types#dglatlng"><code>latlng</code></a> или в координатах, сохраненных в параметрах самого элемента.</td>
         </tr>
         <tr id="layer-closepopup">
             <td><code><b>closePopup</b>()</code></td>
@@ -508,13 +508,13 @@ layer.closePopup();
             <td>Закрывает, связанный со слоем попап, если он ранее был открыт. Также, может работать как триггер, открывая или закрывая связанный элемент, в зависимости от его предыдущего состояния. Возвращает <code>true</code>, если попап, был открыт в момент вызова метода.</td>
         </tr>
         <tr id="layer-setpopupcontent">
-            <td><code><b>setPopupContent</b>( <nobr>&lt;String|HTMLElement|Popup&gt; <i>content</i>,</nobr> <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/popup#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i> </nobr>) </code></td>
+            <td><code><b>setPopupContent</b>( <nobr>&lt;String|HTMLElement|Popup&gt; <i>content</i>,</nobr> <nobr>&lt;<a href="/maps/others/rasterjs/reference/popup#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i> </nobr>) </code></td>
             <td><code>this</code></td>
             <td>Задает содержимое попапа, связанного с данным слоем.</td>
         </tr>
         <tr id="layer-getpopup">
             <td><code><b>getPopup</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/popup#dgpopup">Popup</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/popup#dgpopup">Popup</a></code></td>
             <td>Возвращает попап, связанный с данным слоем.</td>
         </tr>
     </tbody>
@@ -535,14 +535,14 @@ layer.closePopup();
     </thead>
     <tbody>
         <tr id="layer-onadd">
-            <td><code><b>onAdd</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i> </nobr>) </code></td>
+            <td><code><b>onAdd</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i> </nobr>) </code></td>
             <td><code>this</code></td>
-            <td>Должен содержать код, который создает DOM элемент для слоя и добавляет его в одну из панелей карты, а также создает обработчики для соответствующих событий карты. Вызывается из <a href="/ru/maps/others/rasterjs/reference/map#map-addlayer"><code>map.addLayer(layer)</code></a>.</td>
+            <td>Должен содержать код, который создает DOM элемент для слоя и добавляет его в одну из панелей карты, а также создает обработчики для соответствующих событий карты. Вызывается из <a href="/maps/others/rasterjs/reference/map#map-addlayer"><code>map.addLayer(layer)</code></a>.</td>
         </tr>
         <tr id="layer-onremove">
-            <td><code><b>onRemove</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/map#dgmap">Map</a>&gt; <i>map</i> </nobr>) </code></td>
+            <td><code><b>onRemove</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/map#dgmap">Map</a>&gt; <i>map</i> </nobr>) </code></td>
             <td><code>this</code></td>
-            <td>Должен содержать код, который убирает слой и сопутствующие элементы из DOM, а также удаляет обработчики, ранее выставленные в <a href="#layer-onadd"><code>onAdd</code></a>. Вызывается из <a href="/ru/maps/others/rasterjs/reference/map#map-removelayer"><code>map.removeLayer(layer)</code></a>.</td>
+            <td>Должен содержать код, который убирает слой и сопутствующие элементы из DOM, а также удаляет обработчики, ранее выставленные в <a href="#layer-onadd"><code>onAdd</code></a>. Вызывается из <a href="/maps/others/rasterjs/reference/map#map-removelayer"><code>map.removeLayer(layer)</code></a>.</td>
         </tr>
         <tr id="layer-getevents">
             <td><code><b>getEvents</b>()</code></td>
@@ -550,9 +550,9 @@ layer.closePopup();
             <td>Опциональный метод, который должен возвращать объект вида <code>{"{"} viewreset: this._reset {"}"}</code>, подходящего для вызова <a href="#evented-addeventlistener"><code>addEventListener</code></a>. Эти обработчики будут автоматически добавлены и удалены для событий карты вместе с операциями добавления и удаления слоя.</td>
         </tr>
         <tr id="layer-beforeadd">
-            <td><code><b>beforeAdd</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i> </nobr>) </code></td>
+            <td><code><b>beforeAdd</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i> </nobr>) </code></td>
             <td><code>this</code></td>
-            <td>Опциональный метод, который вызывается из <a href="/ru/maps/others/rasterjs/reference/map#map-addlayer"><code>map.addLayer(layer)</code></a>, перед тем как слой будет добавлен к карте и инициализированы соответствующие обработчики событий. Объект карты может быть не до конца подготовлен к использованию (не загружены необходимые данные и т.п.) в момент вызова. Поэтому метод можно использовать только для базовой инициализации структур данных слоя.</td>
+            <td>Опциональный метод, который вызывается из <a href="/maps/others/rasterjs/reference/map#map-addlayer"><code>map.addLayer(layer)</code></a>, перед тем как слой будет добавлен к карте и инициализированы соответствующие обработчики событий. Объект карты может быть не до конца подготовлен к использованию (не загружены необходимые данные и т.п.) в момент вызова. Поэтому метод можно использовать только для базовой инициализации структур данных слоя.</td>
         </tr>
     </tbody>
 </table>
@@ -611,7 +611,7 @@ layer.closePopup();
             <td>Возвращает объект HTMLElement, который содержит элемент управления.</td>
         </tr>
         <tr id="control-addto">
-            <td><code><b>addTo</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i> </nobr>) </code></td>
+            <td><code><b>addTo</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/map#nav-lvl1--DG.Map">Map</a>&gt; <i>map</i> </nobr>) </code></td>
             <td><code>this</code></td>
             <td>Добавляет элемент управления на карту.</td>
         </tr>
@@ -704,13 +704,13 @@ API карт использует сферическую проекцию Мер
     </thead>
     <tbody>
         <tr id="projection-project">
-            <td><code><b>project</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng</i> </nobr>) </code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><b>project</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng</i> </nobr>) </code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Осуществляет проекцию географических координат на двухмерную координатную плоскость.</td>
         </tr>
         <tr id="projection-unproject">
-            <td><code><b>unproject</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#dgpoint">Point</a>&gt; <i>point</i> </nobr>) </code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
+            <td><code><b>unproject</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#dgpoint">Point</a>&gt; <i>point</i> </nobr>) </code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
             <td>Обратная операция от <code>project</code>. Осуществляет проекцию двухмерных координат в плоскости на географические координаты.</td>
         </tr>
     </tbody>
@@ -730,7 +730,7 @@ API карт использует сферическую проекцию Мер
     <tbody>
         <tr id="projection-bounds">
             <td><code><b>bounds</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a></code></td>
             <td>Географические границы области, в пределах которой возможно осуществление преобразований.</td>
         </tr>
     </tbody>
@@ -742,9 +742,9 @@ API карт использует сферическую проекцию Мер
 
 Обслуживает операции, связанные с DOM-контейнером, его размерами и анимацией процесса
 масштабирования. <a href="#nav-lvl1--DG.Renderer"><code>Renderer</code></a> выступает в качестве неявной группы слоев для
-всех элементов, которые наследуются от <a href="/ru/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Path"><code>DG.Path</code></a>.
+всех элементов, которые наследуются от <a href="/maps/others/rasterjs/reference/vector-layers#nav-lvl1--DG.Path"><code>DG.Path</code></a>.
 Все векторные элементы используют движок отображения, который может быть задан неявно (и тогда API карт примет решение
-о том, какой тип движка использовать для отображения) или явно (с помощью опции векторного слоя <a href="/ru/maps/others/rasterjs/reference/vector-layers#path-renderer"><code>renderer</code></a>). Не используйте этот класс
+о том, какой тип движка использовать для отображения) или явно (с помощью опции векторного слоя <a href="/maps/others/rasterjs/reference/vector-layers#path-renderer"><code>renderer</code></a>). Не используйте этот класс
 напрямую. Используйте классы, которые наследуются от него, такие как <code>DG.SVG</code> или <code>DG.Canvas</code>.
 
 #### Опции
@@ -831,17 +831,17 @@ map.on('click', function (ev) {
     <tbody>
         <tr id="mouseevent-latlng">
             <td><code><b>latlng</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#latlng">LatLng</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#latlng">LatLng</a></code></td>
             <td>Географические координаты точки, в которой было инициировано событие мыши.</td>
         </tr>
         <tr id="mouseevent-layerpoint">
             <td><code><b>layerPoint</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Пиксельные координаты, в которых было инициировано событие мыши, относительно слоя карты.</td>
         </tr>
         <tr id="mouseevent-containerpoint">
             <td><code><b>containerPoint</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Пиксельные координаты, в которых было инициировано событие мыши, относительно объекта-контейнера карты.</td>
         </tr>
         <tr id="mouseevent-originalevent">
@@ -867,12 +867,12 @@ map.on('click', function (ev) {
     <tbody>
         <tr id="locationevent-latlng">
             <td><code><b>latlng</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#latlng">LatLng</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#latlng">LatLng</a></code></td>
             <td>Географическое положение пользователя</td>
         </tr>
         <tr id="locationevent-bounds">
             <td><code><b>bounds</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#latlngbounds">LatLngBounds</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#latlngbounds">LatLngBounds</a></code></td>
             <td>Географические границы, в которых находится пользователь (с учетом точности определения местоположения).</td>
         </tr>
         <tr id="locationevent-accuracy">
@@ -1038,12 +1038,12 @@ map.on('click', function (ev) {
     <tbody>
         <tr id="resizeevent-oldsize">
             <td><code><b>oldSize</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Старый размер, до изменения размера.</td>
         </tr>
         <tr id="resizeevent-newsize">
             <td><code><b>newSize</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Новый размер, после изменения размера.</td>
         </tr>
     </tbody>
@@ -1098,7 +1098,7 @@ map.on('click', function (ev) {
         </thead><tbody>
         <tr id="popup-event-popup">
             <td><code><b>popup</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/popup#dgpopup">Popup</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/popup#dgpopup">Popup</a></code></td>
             <td>Попап, который был открыт или закрыт.</td>
         </tr>
     </tbody>
@@ -1138,7 +1138,7 @@ map.on('click', function (ev) {
     <tbody>
         <tr>
             <td><code><b>latlng</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
             <td>Географические координаты точки объекта допслоя.</td>
         </tr>
         <tr>

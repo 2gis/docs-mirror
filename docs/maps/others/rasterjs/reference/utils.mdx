@@ -300,12 +300,12 @@ if (DG.Browser.ie6) {
             <td>Уменьшает количество точек в ломаной и возвращает новую упрощенную ломаную. Позволяет увеличить производительность обработки/отображения ломаных на карте. Параметр <code>tolerance</code> влияет на величину упрощения (чем меньше значение, тем лучше качество геометрии и ниже производительность).</td>
         </tr>
         <tr id="lineutil-pointtosegmentdistance">
-            <td><code><b>pointToSegmentDistance</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p1</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p2</i> </nobr>) </code></td>
+            <td><code><b>pointToSegmentDistance</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p1</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p2</i> </nobr>) </code></td>
             <td><code>Number</code></td>
             <td>Возвращает расстояние между точкой <code>p</code> и сегментом между точками <code>p1</code> и <code>p2</code>.</td>
         </tr>
         <tr id="lineutil-closestpointonsegment">
-            <td><code><b>closestPointOnSegment</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p1</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p2</i> </nobr>) </code></td>
+            <td><code><b>closestPointOnSegment</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p1</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a>&gt; <i>p2</i> </nobr>) </code></td>
             <td><code>Number</code></td>
             <td>Возвращает ближайшую точку на сегменте <code>p1</code> <code>p2</code> до точки <code>p</code>.</td>
         </tr>
@@ -329,7 +329,7 @@ if (DG.Browser.ie6) {
     </thead>
     <tbody>
         <tr id="polyutil-clippolygon">
-		    <td><code><b>clipPolygon</b>( <nobr>&lt;Point[]&gt; <i>points</i>,</nobr> <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a>&gt; <i>bounds</i>,</nobr> <nobr>&lt;Boolean&gt; <i>round?</i> </nobr>) </code></td>
+		    <td><code><b>clipPolygon</b>( <nobr>&lt;Point[]&gt; <i>points</i>,</nobr> <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Bounds">Bounds</a>&gt; <i>bounds</i>,</nobr> <nobr>&lt;Boolean&gt; <i>round?</i> </nobr>) </code></td>
     		<td><code>Point[]</code></td>
     		<td>Обрезает многоугольник, заданный координатами <code>points</code> по заданным границам (используя алгоритм <a href="https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm">Sutherland-Hodgeman</a>а).</td>
     	</tr>

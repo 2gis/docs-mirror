@@ -7,7 +7,7 @@ sidebar: rasterjsapi
 
 Используется для группировки нескольких слоев, чтобы обрабатывать их как один. При добавлении
 группового слоя на карту, все другие слои, добавляемые и удаляемые из группы, также будут
-добавлены или удалены с карты. Расширяет <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer"><code>DG.Layer</code></a>.
+добавлены или удалены с карты. Расширяет <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer"><code>DG.Layer</code></a>.
 
 ```js
 DG.layerGroup([marker1, marker2]).addLayer(polyline).addTo(map);
@@ -32,11 +32,11 @@ DG.layerGroup([marker1, marker2]).addLayer(polyline).addTo(map);
 
 #### Опции
 
-Опции, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include options  */}
+Опции, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include options  */}
 
 #### События
 
-События, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
+События, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
 
 #### Методы
 
@@ -55,12 +55,12 @@ DG.layerGroup([marker1, marker2]).addLayer(polyline).addTo(map);
             <td>Возвращает <a href="http://en.wikipedia.org/wiki/GeoJSON"> <code>GeoJSON</code></a> объект, описывающий группу слоев, как <code>GeometryCollection</code>.</td>
         </tr>
         <tr id="layergroup-addlayer">
-            <td><code><b>addLayer</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
+            <td><code><b>addLayer</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
             <td><code>this</code></td>
             <td>Добавляет указанный слой в группу.</td>
         </tr>
         <tr id="layergroup-removelayer">
-            <td><code><b>removeLayer</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
+            <td><code><b>removeLayer</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
             <td><code>this</code></td>
             <td>Удаляет указанный слой из группы.</td>
         </tr>
@@ -70,7 +70,7 @@ DG.layerGroup([marker1, marker2]).addLayer(polyline).addTo(map);
             <td>Удаляет из группы слой, с указанным ID.</td>
         </tr>
         <tr id="layergroup-haslayer">
-            <td><code><b>hasLayer</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
+            <td><code><b>hasLayer</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
             <td><code>Boolean</code></td>
             <td>Возвращает <code>true</code>, если указанный слой уже добавлен в группу.</td>
         </tr>
@@ -91,7 +91,7 @@ DG.layerGroup([marker1, marker2]).addLayer(polyline).addTo(map);
         </tr>
         <tr id="layergroup-getlayer">
             <td><code><b>getLayer</b>( <nobr>&lt;Number&gt; <i>id</i> </nobr>) </code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a></code></td>
             <td>Возвращает слой с указанным ID.</td>
         </tr>
         <tr id="layergroup-getlayers">
@@ -105,16 +105,16 @@ DG.layerGroup([marker1, marker2]).addLayer(polyline).addTo(map);
             <td>Вызывает метод <code>setZIndex</code> у каждого слоя из группы, передавая аргумент z-index.</td>
         </tr>
         <tr id="layergroup-getlayerid">
-            <td><code><b>getLayerId</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
+            <td><code><b>getLayerId</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>layer</i> </nobr>) </code></td>
             <td><code>Number</code></td>
             <td>Возвращает ID для указанного слоя.</td>
         </tr>
     </tbody>
 </table>
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
 
 ## DG.FeatureGroup
 
@@ -149,11 +149,11 @@ DG.featureGroup([marker1, marker2, polyline])
 
 #### Опции
 
-Опции, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include options  */}
+Опции, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include options  */}
 
 #### События
 
-События, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
+События, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
 
 #### Методы
 
@@ -167,7 +167,7 @@ DG.featureGroup([marker1, marker2, polyline])
     </thead>
     <tbody>
         <tr id="featuregroup-setstyle">
-            <td><code><b>setStyle</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/vector-layers#dgpath-options">Path options</a>&gt; <i>style</i> </nobr>) </code></td>
+            <td><code><b>setStyle</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/vector-layers#dgpath-options">Path options</a>&gt; <i>style</i> </nobr>) </code></td>
             <td><code>this</code></td>
             <td>Устанавливает указанные опции векторного объекта для каждого слоя из группы, у которого реализован метод <code>setStyle</code>.</td>
         </tr>
@@ -183,7 +183,7 @@ DG.featureGroup([marker1, marker2, polyline])
         </tr>
         <tr id="featuregroup-getbounds">
             <td><code><b>getBounds</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds">LatLngBounds</a></code></td>
             <td>Возвращает прямоугольные границы LatLngBounds объекта Feature Group (для корректной работы метода слои в группе должны возвращать подобную информацию о себе).</td>
         </tr>
     </tbody>
@@ -191,9 +191,9 @@ DG.featureGroup([marker1, marker2, polyline])
 
 Методы, унаследованные от <a href="#nav-lvl1--DG.LayerGroup">LayerGroup</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
 
 ## DG.GeoJSON
 
@@ -245,19 +245,19 @@ DG.geoJson(data, {
             <td><code><b>pointToLayer</b></code></td>
             <td><code>Function </code></td>
             <td><code>*</code></td>
-            <td><code>Функция</code>, определяющая, как точки GeoJSON будут создавать слои API карт. API карт вызывает метод, если он реализован, передавая объекты точек GeoJSON и <a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a>. По умолчанию, будут создаваться обычные <a href="/ru/maps/others/rasterjs/reference/markers#dgmarker"><code>Маркеры</code></a>: <code class="lang-js">function(geoJsonPoint, latlng) {"{"} return DG.marker(latlng); {"}"} </code></td>
+            <td><code>Функция</code>, определяющая, как точки GeoJSON будут создавать слои API карт. API карт вызывает метод, если он реализован, передавая объекты точек GeoJSON и <a href="/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a>. По умолчанию, будут создаваться обычные <a href="/maps/others/rasterjs/reference/markers#dgmarker"><code>Маркеры</code></a>: <code class="lang-js">function(geoJsonPoint, latlng) {"{"} return DG.marker(latlng); {"}"} </code></td>
         </tr>
         <tr id="geojson-style">
             <td><code><b>style</b></code></td>
             <td><code>Function </code></td>
             <td><code>*</code></td>
-            <td><code>Функция</code>, определяющая <a href="/ru/maps/others/rasterjs/reference/vector-layers#dgpath-options"><code>Path options</code></a> для стилизации отображения GeoJSON линий и полигонов. API карт вызывает метод, если он реализован, при каждом добавлении данных. По умолчанию, стили никак не изменяются: <code class="lang-js">function (geoJsonFeature) {"{"} return {"{"}{"}"} {"}"} </code></td>
+            <td><code>Функция</code>, определяющая <a href="/maps/others/rasterjs/reference/vector-layers#dgpath-options"><code>Path options</code></a> для стилизации отображения GeoJSON линий и полигонов. API карт вызывает метод, если он реализован, при каждом добавлении данных. По умолчанию, стили никак не изменяются: <code class="lang-js">function (geoJsonFeature) {"{"} return {"{"}{"}"} {"}"} </code></td>
         </tr>
         <tr id="geojson-oneachfeature">
             <td><code><b>onEachFeature</b></code></td>
             <td><code>Function </code></td>
             <td><code>*</code></td>
-            <td><code>Функция</code>, которая будет вызвана после каждого создания и стилизации нового <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer"><code>слоя</code></a>. Удобно использовать для подключения обработчиков событий и попапов. По умолчанию, никаких дополнительных действий не происходит: <code class="lang-js">function (layer) {"{"}{"}"} </code></td>
+            <td><code>Функция</code>, которая будет вызвана после каждого создания и стилизации нового <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer"><code>слоя</code></a>. Удобно использовать для подключения обработчиков событий и попапов. По умолчанию, никаких дополнительных действий не происходит: <code class="lang-js">function (layer) {"{"}{"}"} </code></td>
         </tr>
         <tr id="geojson-filter">
             <td><code><b>filter</b></code></td>
@@ -269,16 +269,16 @@ DG.geoJson(data, {
             <td><code><b>coordsToLatLng</b></code></td>
             <td><code>Function </code></td>
             <td><code>*</code></td>
-            <td><code>Функция</code>, которая будет использоваться для преобразования координат GeoJSON в координаты <a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a>s. По умолчанию будет использован статический метод <code>coordsToLatLng</code>.</td>
+            <td><code>Функция</code>, которая будет использоваться для преобразования координат GeoJSON в координаты <a href="/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a>s. По умолчанию будет использован статический метод <code>coordsToLatLng</code>.</td>
         </tr>
     </tbody>
 </table>
 
-Опции, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include options  */}
+Опции, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include options  */}
 
 #### События
 
-События, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
+События, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
 
 #### Методы
 
@@ -286,9 +286,9 @@ DG.geoJson(data, {
 
 Методы, унаследованные от <a href="#nav-lvl1--DG.LayerGroup">LayerGroup</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
 
 #### Статические функции
 
@@ -305,21 +305,21 @@ DG.geoJson(data, {
 	<tbody>
         <tr id="geojson-geometrytolayer">
             <td><code><b>geometryToLayer</b>( <nobr>&lt;Object&gt; <i>featureData</i>,</nobr> <nobr>&lt;<a href="#geojson-option">GeoJSON options</a>&gt; <i>options?</i> </nobr>) </code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a></code></td>
-            <td>Создает <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer"><code>Слой</code></a> на основе переданного GeoJSON объекта. Может использовать собственные функции <a href="#geojson-pointtolayer"><code>pointToLayer</code></a> и/или <a href="#geojson-coordstolatlng"><code>coordsToLatLng</code></a>, если они переданы в объекте опций.</td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a></code></td>
+            <td>Создает <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer"><code>Слой</code></a> на основе переданного GeoJSON объекта. Может использовать собственные функции <a href="#geojson-pointtolayer"><code>pointToLayer</code></a> и/или <a href="#geojson-coordstolatlng"><code>coordsToLatLng</code></a>, если они переданы в объекте опций.</td>
         </tr>
         <tr id="geojson-coordstolatlng">
             <td><code><b>coordsToLatLng</b>( <nobr>&lt;Array&gt; <i>coords</i> </nobr>) </code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
-            <td>Создает объект <a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a> из массива двух чисел, переданных в формате (longitude, latitude), или трех чисел, в формате (longitude, latitude, altitude), которые используются в GeoJSON для представления точек.</td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
+            <td>Создает объект <a href="/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a> из массива двух чисел, переданных в формате (longitude, latitude), или трех чисел, в формате (longitude, latitude, altitude), которые используются в GeoJSON для представления точек.</td>
         </tr>
         <tr id="geojson-coordstolatlngs">
             <td><code><b>coordsToLatLngs</b>( <nobr>&lt;Array&gt; <i>coords</i>,</nobr> <nobr>&lt;Number&gt; <i>levelsDeep?</i>,</nobr> <nobr>&lt;Function&gt; <i>coordsToLatLng?</i> </nobr>) </code></td>
             <td><code>Array</code></td>
-            <td>Создает многомерный массив объектов <a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a> из массива GeoJSON координат. <code>levelsDeep</code> определяет уровень вложенности (0 для массива точек, 1 для массива массивов точек, и т. д., по умолчанию 0). Может использовать собственную функцию <a href="#geojson-coordstolatlng"><code>coordsToLatLng</code></a> для преобразования.</td>
+            <td>Создает многомерный массив объектов <a href="/maps/others/rasterjs/reference/basic-types#dglatlng"><code>LatLng</code></a> из массива GeoJSON координат. <code>levelsDeep</code> определяет уровень вложенности (0 для массива точек, 1 для массива массивов точек, и т. д., по умолчанию 0). Может использовать собственную функцию <a href="#geojson-coordstolatlng"><code>coordsToLatLng</code></a> для преобразования.</td>
         </tr>
         <tr id="geojson-latlngtocoords">
-            <td><code><b>latLngToCoords</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng</i> </nobr>) </code></td>
+            <td><code><b>latLngToCoords</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng</i> </nobr>) </code></td>
             <td><code>Array</code></td>
             <td>Обратная операция для <a href="#geojson-coordstolatlng"><code>coordsToLatLng</code></a></td>
         </tr>
@@ -344,7 +344,7 @@ DG.geoJson(data, {
 
 #### Использование в синхронном коде
 
-Для того, чтобы создать собственный слой, нужно произвести наследование от GridLayer и реализовать метод <code>create()</code>, которому будет передан объект <a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point"><code>Point</code></a>
+Для того, чтобы создать собственный слой, нужно произвести наследование от GridLayer и реализовать метод <code>create()</code>, которому будет передан объект <a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point"><code>Point</code></a>
 с <code>x</code>, <code>y</code> и <code>z</code> (уровень увеличения) координатами для отображения тайла.
 
 ```js
@@ -454,7 +454,7 @@ var CanvasLayer = DG.GridLayer.extend({
             <td><code><b>bounds</b></code></td>
             <td><code>LatLngBounds </code></td>
             <td><code>undefined</code></td>
-            <td>Если задан, тайлы будут загружаться только для указанного региона, заданного <a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds"><code>LatLngBounds</code></a>.</td>
+            <td>Если задан, тайлы будут загружаться только для указанного региона, заданного <a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.LatLngBounds"><code>LatLngBounds</code></a>.</td>
         </tr>
         <tr id="gridlayer-minzoom">
             <td><code><b>minZoom</b></code></td>
@@ -496,38 +496,38 @@ var CanvasLayer = DG.GridLayer.extend({
     <tbody>
         <tr id="gridlayer-loading">
             <td><code><b>loading</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Возникает, когда GridLayer начинает загружать тайлы.</td>
         </tr>
         <tr id="gridlayer-tileunload">
             <td><code><b>tileunload</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
             <td>Возникает, когда тайл удаляется с карты (например, при выходе его за пределы экрана).</td>
         </tr>
         <tr id="gridlayer-tileloadstart">
             <td><code><b>tileloadstart</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
             <td>Возникает, когда запрашивается тайл.</td>
         </tr>
         <tr id="gridlayer-tileerror">
             <td><code><b>tileerror</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
             <td>Возникает при ошибке загрузки тайла.</td>
         </tr>
         <tr id="gridlayer-tileload">
             <td><code><b>tileload</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
             <td>Возникает, когда тайл загружен.</td>
         </tr>
         <tr id="gridlayer-load">
             <td><code><b>load</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">TileEvent</a></code></td>
             <td>Возникает, когда GridLayer загрузил все видимые тайлы.</td>
         </tr>
     </tbody>
 </table>
 
-События, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
+События, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include events  */}
 
 #### Методы
 
@@ -582,7 +582,7 @@ var CanvasLayer = DG.GridLayer.extend({
         </tr>
         <tr id="gridlayer-gettilesize">
             <td><code><b>getTileSize</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#nav-lvl1--DG.Point">Point</a></code></td>
             <td>Возвращает значение опции <a href="#gridlayer-tilesize">tileSize</a> приведенное к объекту DG.Point. Используется методом <code>createTile()</code>.</td>
         </tr>
     </tbody>
@@ -609,8 +609,8 @@ var CanvasLayer = DG.GridLayer.extend({
     </tbody>
 </table>
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Evented">Evented</a> {/*  TODO: include methods  */}
 
 

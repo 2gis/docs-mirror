@@ -3,6 +3,57 @@ sidebar: iossdk
 ---
 # Релизы
 
+## 13.6.0 (2026-06-22)
+
+### 🌟 Новые возможности
+
+* Новый класс [MapController](/ios/sdk/reference/stable/class#map-controller):
+
+  * [MapController](/ios/sdk/reference/stable/class#map-controller) – класс для управления картой, объединяющий [Map](/ios/sdk/reference/stable/class#map) и [MapGestureRecognizer](/ios/sdk/reference/stable/class#map-gesture-recognizer).
+  * [MapControllerOptions](/ios/sdk/reference/stable/struct#map-controller-options) – структура с параметрами создания [MapController](/ios/sdk/reference/stable/class#map-controller).
+  * [MapController.create](/ios/sdk/reference/stable/class#map-controller/create) – статический метод для асинхронного создания [MapController](/ios/sdk/reference/stable/class#map-controller) на основе [Context](/ios/sdk/reference/stable/class#context) и [MapControllerOptions](/ios/sdk/reference/stable/struct#map-controller-options).
+  * [MapController.map](/ios/sdk/reference/stable/class#map-controller/map) – свойство для получения объекта [Map](/ios/sdk/reference/stable/class#map) из [MapController](/ios/sdk/reference/stable/class#map-controller).
+  * [MapController.gestureRecognizer](/ios/sdk/reference/stable/class#map-controller/gesture-recognizer) – свойство для получения объекта [MapGestureRecognizer](/ios/sdk/reference/stable/class#map-gesture-recognizer) из [MapController](/ios/sdk/reference/stable/class#map-controller).
+
+* [CameraZoomRestrictions.minZoom](/ios/sdk/reference/stable/struct#camera-zoom-restrictions/min-zoom) – значение по умолчанию изменено с `0` на `2`.
+
+### 🛠 Исправления
+
+* Механизм восстановления автонаклона доработан так, чтобы он работал независимо от других перелётов.
+* Исправлен [WorkStatus](/ios/sdk/reference/stable/struct#work-status) для расписаний, работающих почти круглосуточно.
+* Исправлена ошибка, вызывавшая сбой приложения при увеличении масштаба карты на Samsung Tab A8 с Android 14.
+* Исправлена ошибка, из-за которой не работали повторные добавления и удаления дорожных событий через [RoadEventManager](/ios/sdk/reference/stable/class#road-event-manager).
+
+## 13.5.0 (2026-05-19)
+
+### 🌟 Новые возможности
+
+* [SearchQueryBuilder()](/ios/sdk/reference/stable/class#search-query-builder/init) – конструктор по умолчанию, который позволяет устанавливать различные параметры поиска: текст, идентификаторы рубрик, зданий или организаций.
+* [SearchQueryBuilder.setQueryText()](/ios/sdk/reference/stable/class#search-query-builder/set-query-text) — метод для задания текста поискового запроса.
+* [SearchQueryBuilder.setRubricIds()](/ios/sdk/reference/stable/class#search-query-builder/set-rubric-ids) – метод для задания идентификаторов рубрик в поисковом запросе.
+* [SearchQueryBuilder.setOrgId()](/ios/sdk/reference/stable/class#search-query-builder/set-org-id) – метод для задания фильтра по идентификатору организации.
+* [SearchQueryBuilder.setBuildingId()](/ios/sdk/reference/stable/class#search-query-builder/set-building-id) – метод для задания фильтра по идентификатору здания.
+* [SearchQueryBuilder.setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) – метод для задания строгого ограничения области поиска в виде геометрии.
+* [SearchQueryBuilder.setTerritoryOfInterest()](/ios/sdk/reference/stable/class#search-query-builder/set-territory-of-interest) – метод для задания нестрогого ограничения области поиска: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [SuggestQueryBuilder.setRestrictionGeometry()](/ios/sdk/reference/stable/class#suggest-query-builder/set-restriction-geometry) – метод для задания строгого ограничения области для поисковых подсказок в виде геометрии.
+* [SuggestQueryBuilder.setTerritoryOfInterest()](/ios/sdk/reference/stable/class#suggest-query-builder/set-territory-of-interest) – метод для задания нестрогого ограничения области для поисковых подсказок: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [PackedSearchQuery.geometryRestriction](/ios/sdk/reference/stable/class#packed-search-query/var-geometry-restriction) – свойство для получения геометрии, ограничивающей область поиска.
+* [PackedSearchQuery.territoryOfInterest](/ios/sdk/reference/stable/class#packed-search-query/var-territory-of-interest) – свойство для нестрогого ограничения области поиска объектов: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [PolygonGeometry.elevation](/ios/sdk/reference/stable/class#polygon-geometry/var-elevation) – свойство для задания высоты полигона над поверхностью.
+* [PolylineGeometry.elevation](/ios/sdk/reference/stable/class#polyline-geometry/var-elevation) – свойство для задания высоты полилинии над поверхностью.
+* [Polyline.elevation](/ios/sdk/reference/stable/class#polyline/var-elevation) – свойство для задания высоты полилинии над поверхностью.
+* [PolylineOptions.elevation](/ios/sdk/reference/stable/struct#polyline-options/var-elevation) – свойство для задания высоты полилинии над поверхностью в параметрах полилинии.
+* [Polygon.elevation](/ios/sdk/reference/stable/class#polygon/var-elevation) – свойство для задания высоты полигона над поверхностью.
+* [PolygonOptions.elevation](/ios/sdk/reference/stable/struct#polygon-options/var-elevation) – свойство для задания высоты полигона над поверхностью в параметрах полигона.
+* [DashedPolygonOptions](/ios/sdk/reference/stable/struct#dashed-polygon-options) – класс для параметров пунктирного контура полигона.
+* [Polygon.dashedPolygonOptions](/ios/sdk/reference/stable/class#polygon/var-dashed-polygon-options) – свойство для параметров пунктирного контура полигона.
+* [PolygonOptions.dashedPolygonOptions](/ios/sdk/reference/stable/struct#polygon-options/var-dashed-polygon-options) – свойство для настройки пунктирного контура полигона в параметрах полигона.
+* В SwiftUI-элемент [NavigationView](/ios/sdk/reference/stable/struct#navigation-view) добавлена возможность задавать выбранное на карте дорожное событие и отображать его через [RoadEventInfoView](/ios/sdk/reference/stable/struct#road-event-info-view).
+* [RouteEnclosingRectsOptions](/ios/sdk/reference/stable/struct#route-enclosing-rects-options) – класс для параметров получения прямоугольников, описанных вокруг упрощённой геометрии маршрута.
+* [getRouteEnclosingRects()](/ios/sdk/reference/stable/function#get-route-enclosing-rects) – метод для получения набора прямоугольников вокруг упрощённой геометрии маршрута.
+* [SharedRouteData](/ios/sdk/reference/stable/struct#shared-route-data) – класс с информацией о заранее построенном маршруте и параметрах его поиска.
+* [TrafficRouter.fetchSharedRoute()](/ios/sdk/reference/stable/class#traffic-router/fetch-shared-route) – метод для получения заранее построенного маршрута и параметров его поиска по идентификатору. Подробнее см. в примере [Готовый маршрут](/ios/sdk/examples/routing#using-ready-route).
+
 ## 13.4.0 (2026-04-22)
 
 ### 🌟 Новые возможности
@@ -206,7 +257,7 @@ sidebar: iossdk
 
 * Основные изменения в SwiftUI-элементах:
 
-  * Переименован основной слой карты `MapViewOverlay` в [MapView](/ios/sdk/reference/stable/struct#MapView) и переименованы все методы для настройки слоя.
+  * Переименован основной слой карты `MapViewOverlay` в [MapView](/ios/sdk/reference/stable/struct#map-view) и переименованы все методы для настройки слоя.
   * Переименовано свойство `IMapFactory.mapViewOverlay` в [IMapFactory.mapView](/ios/sdk/reference/stable/interface#imap-factory).
   * Переименована фабрика SwiftUI-элементов управления картой `IMapControlViewFactory` в [IMapViewsFactory](/ios/sdk/reference/stable/interface#imap-views-factory).
   * Переименованы методы SwiftUI-элементов для создания дорожных событий [RoadEventCreatorView](/ios/sdk/reference/stable/struct#road-event-creator-view).
@@ -442,7 +493,7 @@ sidebar: iossdk
 * [MyLocationMapObject.setModelData()](/ios/sdk/reference/stable/class#my-location-map-object) — метод для установки 3D-модели маркера геопозиции.
 * [BaseCamera.viewPoint](/ios/sdk/reference/stable/class#base-camera/var-view-point) — возможность изменения точки обзора камеры относительно размера области видимости карты.
 * [AnimationSettings.animationName](/ios/sdk/reference/stable/class#animation-settings/var-animation-name) — возможность переключения анимации 3D-модели по названию.
-* Добавлена инструкция по [управлению стилевыми слоями](/ios/sdk/examples/map_styles#managing-style-layers) карты.
+* Добавлена инструкция по [управлению стилевыми слоями](/ios/sdk/examples/map_styles#manage-style-layers) карты.
 
 ### 🛠 Исправления
 

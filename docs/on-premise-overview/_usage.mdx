@@ -448,7 +448,7 @@ import Link from '@docusaurus/Link';
       -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
       --user $(id -u):$(id -g) \
       2gis/dgctl:3 \
-      manifest list --component <component>
+      manifest list --component <component> --config=/dgctl-config.yaml
    ```
 
    Где `component` — название компонента (например, `api-platform`), для которого вы хотите получить список манифестов.

@@ -12,7 +12,7 @@
 
    * [Документацией сервиса API-ключей](/on-premise-api-platform/architecture/core/keys)
    * [Архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture)
-   * [Системными требованиями](/on-premise-api-platform/core/install/requirements) к программному обеспечению и вычислительным ресурсам.
+   * [Системными требованиями](/on-premise-api-platform/requirements) к программному обеспечению и вычислительным ресурсам.
 
 2. Убедитесь, что выполнены [подготовительные шаги](/on-premise-api-platform/preparation).
 
@@ -28,7 +28,7 @@
    | Секрет ключа для доступа к артефактам установки                 | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY` | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts) |
    | Путь к файлу манифеста                                          | `manifests/core/1640661259.json`         | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts) |
 
-4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/keys/values.yaml). Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/core/install/requirements).
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/keys/values.yaml). Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/requirements).
 
    Требования к хранилищу могут меняться в зависимости от настроенного временного периода для хранения статистики. Чем больше период, тем больший объём хранилища требуется.
 
@@ -187,7 +187,7 @@
         clientId: 'keys-counter'
 
     counter:
-      enabled: true
+      enabled: false
       preloader:
         refreshTick: 10s
 
@@ -373,7 +373,7 @@
 
    * `tasker`: настройки сервиса Tasker, который выполняет административные задачи, связанные с API-ключами.
 
-     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/core/install/requirements#resources).
+     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
      * `delay`: период (в секундах). Эта настройка определяет, с каким периодом проверять задачи, которые связаны с настроенными отложенными действиями (например, блокировкой API-ключа).
 
    * `admin`: настройки веб-сервиса администратора (предоставляет доступ к веб-интерфейсу для администрирования сервиса).
@@ -466,8 +466,8 @@ keysctl services
 * Установите продукты программного комплекса <Brand />:
 
   * [API-платформу](/on-premise-api-platform/overview/summary),
-  * [<Brand /> Про](/on-premise-pro/overview/summary),
-  * [<Brand /> Ситискан](/on-premise-citylens/overview/summary),
-  * [GIS-платформу](/on-premise-gis-platform/overview/summary).
+  * [<Brand /> Про](/on-premise-pro/install/installation),
+  * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
+  * [GIS-платформу](/on-premise-gis-platform/installation).
 
 * Изучите рекомендации по [обслуживанию системы](/on-premise-api-platform/core/administering).

@@ -5,6 +5,36 @@ sidebar: on-premise-pro
 
 Чтобы установить <Brand /> Про версии 2.0.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-pro/overview/2gis-cli/releases#v3) и следуйте [инструкциям по обновлению](/on-premise-pro/update).
 
+## 2.4.0 {#v2.4.0}
+
+Дата релиза: 2026-06-08
+
+<h3 id="dependencies_v2.4.0">Зависимости</h3>
+
+Перед обновлением любого сервиса в составе <Brand /> Про до версии 2.4.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | 3      |
+| Базовые сервисы                          | 2.1.0 |
+| API-платформа                            | 2.47.0 |
+
+Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
+
+<h3 id="breaking_v2.4.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Pro API | В блоке настроек `permissions.settings` переименованы параметры: <ul><li>`default_permissions` в `defaultPermissions`,</li><li>`defaultPermissions.open_pro_ui` в `defaultPermissions.openProUi`,</li><li>`defaultPermissions.add_user_assets` в `defaultPermissions.addUserAssets`,</li><li>`defaultPermissions.addUserAssets.file_size` в `defaultPermissions.addUserAssets.fileSize`.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.4.0/charts/pro-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-pro/install/installation#install-pro-api). |
+
+<h3 id="new_v2.4.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Pro API | <ul><li>Добавлен блок параметров `permissions.headlessService` для управления аннотациями и метками headless-сервиса Kubernetes.</li><li>Добавлен параметр `permissions.defaultPermissions.newUserExpirationDays`, позволяющий указать количество дней после регистрации, в течение которых у нового пользователя будет доступ.</li><li>В блок `pagerenderer` добавлены параметры:<ul><li>`pod.resources.requests.aliyun.com/gpu-mem` — запрашиваемый объём памяти GPU;</li><li>`pod.resources.limits.aliyun.com/gpu-mem` — максимально допустимый объём памяти GPU;</li><li>`settings.auth.apiKey` — API-ключ для межсервисных вызовов;</li><li>`settings.grpcRoute.hostname` — имя хоста для GRPCRoute;</li><li>`settings.grpcRoute.parentRefs` — список родительских ссылок (шлюзов) для GRPCRoute.</li></ul></li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.4.0/charts/pro-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-pro/install/installation#install-pro-api). |
+
+Полный список продуктовых изменений см. в разделе [Релизы](/pro/releases) c февраля по апрель 2026 г.
+
 ## 2.3.0 {#v2.3.0}
 
 Дата релиза: 2026-02-27
@@ -32,7 +62,7 @@ sidebar: on-premise-pro
 | <div style={{"width":"170px"}}>Сервис</div> | Изменения |
 | --- | --- |
 | Pro API | <ul><li>Обновлена структура конфигурационного файла:<ul><li>Добавлен параметр `permissions.settings.auth.uiRequiredRoles`, позволяющий указывать роли, необходимые для доступа к Permissions UI.</li><li>Добавлен блок параметров `authProvider` для настройки поставщика аутентификации для Permissions UI.</li><li>Добавлена поддержка значения `Plaintext` для параметра `kafka.securityProtocol`.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.3.0/charts/pro-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-pro/install/installation#install-pro-api).</li><li>Добавлены наборы данных:<ul><li>[Динамика организаций](/pro/data/built-in/dynamics),</li><li>[Территориальное деление](/pro/data/built-in/territorial).</li></ul></li></ul> |
-| Pro UI | <ul><li>Добавлена возможность рассчитывать удельные показатели (отношение двух значений атрибутов) при агрегации данных.</li><li>Улучшен процесс выдачи доступа к дашборду:<ul><li>Теперь можно выдавать ограниченный по времени доступ к дашборду.</li><li>В окне выдачи доступа к дашборду добавлен блок **Ограничить территорию**, в котором можно настроить фильтры по территориям.</li><li>Удалена кнопка **Поделиться дашбордом** из карточки дашборда на вкладке **Дашборды**. Теперь настроить доступ к дашборду можно только в самом дашборде.</li></ul></li><li>Теперь можно выбирать пользовательские цвета для раскраски диапазонов в настройках визуализации.</li><li>Добавлена возможность использовать сквозные атрибуты из разных наборов данных при фильтрации данных на дашборде через виджеты.</li></ul> |
+| Pro UI | <ul><li>Добавлена возможность рассчитывать удельные показатели (отношение двух значений атрибутов) при агрегации данных.</li><li>Улучшен процесс выдачи доступа к дашборду:<ul><li>Теперь можно выдавать ограниченный по времени доступ к дашборду.</li><li>В окне выдачи доступа к дашборду добавлен блок **Ограничить территорию**, в котором можно настроить фильтры по территориям.</li><li>Удалена кнопка **Поделиться дашбордом** из карточки дашборда на вкладке **Дашборды**. Теперь настроить доступ к дашборду можно только в самом дашборде.</li></ul></li><li>Теперь можно выбирать пользовательские цвета для раскраски диапазонов в настройках визуализации.</li><li>Добавлена возможность использовать сквозные атрибуты из разных наборов данных при фильтрации данных на сцене через виджеты.</li></ul> |
 
 <h3 id="bugfix_v2.3.0">Исправленные ошибки и улучшения</h3>
 

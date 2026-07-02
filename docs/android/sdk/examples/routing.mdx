@@ -3,58 +3,60 @@ sidebar: androidsdk
 ---
 # Маршруты
 
-В этом разделе описывается построение маршрутов для разных видов транспорта и отображение их на карте. Для построения любого маршрута вам понадобятся следующие компоненты:
+В этом разделе описывается работа с маршрутами для разных видов транспорта. Вы можете создавать маршруты двумя способами:
 
-* Точки маршрута: начальная, конечная и, если необходимо, промежуточные. Способы получения координат точек описаны [ниже](#getting-route-points).
-* [Параметры поиска маршрута](#route-parameters). Набор параметров зависит от типа транспорта, для которого строится маршрут.
+* [Построить новый маршрут](#building-route) по компонентам:
+
+    * Точки маршрута: начальная, конечная и, если необходимо, промежуточные. 
+    * [Параметры поиска маршрута](#route-parameters). Набор параметров зависит от типа транспорта, для которого строится маршрут.
+
+* [Использовать готовый маршрут](#using-ready-route), который был построен ранее с помощью [Routing API](/api/navigation/routing/overview). Готовый маршрут уже содержит необходимые данные для отображения и навигации.
 
 ## Построение маршрута {#building-route}
 
-Чтобы проложить маршрут на карте, создайте два объекта:
+Для работы с маршрутом вам понадобится два объекта:
 
-* [TrafficRouter](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router) для поиска оптимального маршрута;
-* Источник данных [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source) для отображения маршрута на карте.
+* [TrafficRouter](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router) для создания или загрузки маршрута;
+* источник данных [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source) для отображения маршрута на карте.
 
-Чтобы найти маршрут между двумя точками, вызовите метод [findRoute()](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router/find-route), передав координаты точек в виде объектов [RouteSearchPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-point). Дополнительно можно указать параметры маршрута ([RouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-options)) и список промежуточных точек маршрута (список `RouteSearchPoint`).
+1. Чтобы создать новый маршрут, вызовите метод [findRoute()](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router/find-route), передав координаты точек в виде объектов [RouteSearchPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-point). Дополнительно вы можете указать параметры маршрута ([RouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-options)) и список промежуточных точек маршрута (список `RouteSearchPoint`).
 
-```kotlin
-val startSearchPoint = RouteSearchPoint(
-    coordinates = GeoPoint(latitude = 55.759909, longitude = 37.618806)
-)
-val finishSearchPoint = RouteSearchPoint(
-    coordinates = GeoPoint(latitude = 55.752425, longitude = 37.613983)
-)
+    ```kotlin
+    val startSearchPoint = RouteSearchPoint(
+        coordinates = GeoPoint(latitude = 55.759909, longitude = 37.618806)
+    )
+    val finishSearchPoint = RouteSearchPoint(
+        coordinates = GeoPoint(latitude = 55.752425, longitude = 37.613983)
+    )
 
-val trafficRouter = TrafficRouter(sdkContext)
-val routesFuture = trafficRouter.findRoute(startSearchPoint, finishSearchPoint)
-```
+    val trafficRouter = TrafficRouter(sdkContext)
+    val routesFuture = trafficRouter.findRoute(startSearchPoint, finishSearchPoint)
+    ```
 
-Вызов вернёт отложенный результат со списком объектов [TrafficRoute](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-route). Чтобы отобразить найденный маршрут на карте, нужно на основе этих объектов создать объекты [RouteMapObject](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object) и добавить их в источник данных [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source).
+    Вызов `findRoute()` вернёт отложенный результат со списком объектов [TrafficRoute](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-route).
 
-```kotlin
-// Создаём источник данных
-val routeMapObjectSource = RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL)
-map.addSource(routeMapObjectSource)
+2. Чтобы отобразить найденный маршрут на карте, создайте объекты [RouteMapObject](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source).
 
-// Ищем маршрут
-val trafficRouter = TrafficRouter(sdkContext)
-val routesFuture = trafficRouter.findRoute(startSearchPoint, finishSearchPoint)
+    ```kotlin
+    // Создаём источник данных
+    val routeMapObjectSource = RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL)
+    map.addSource(routeMapObjectSource)
 
-// После получения маршрута добавляем его на карту
-routesFuture.onResult { routes: List<TrafficRoute> ->
-    var isActive = true
-    var routeIndex = 0
-    for (route in routes) {
-        routeMapObjectSource.addObject(
-            RouteMapObject(route, isActive, routeIndex)
-        )
-        isActive = false
-        routeIndex++
+    // Добавляем созданный маршрут на карту
+    routesFuture.onResult { routes: List<TrafficRoute> ->
+        var isActive = true
+        var routeIndex = 0
+        for (route in routes) {
+            routeMapObjectSource.addObject(
+                RouteMapObject(route, isActive, routeIndex)
+            )
+            isActive = false
+            routeIndex++
+        }
     }
-}
-```
+    ```
 
-Вместо пары [TrafficRouter](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router) и [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source) для построения маршрута можно использовать [RouteEditor](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-editor) и [RouteEditorSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-editor-source). В таком случае не нужно обрабатывать список [TrafficRoute](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-route), достаточно передать координаты маршрута в виде объекта [RouteParams](/android/sdk/reference/stable/ru.dgis.sdk.routing.RouteParams) в метод [setRouteParams()](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-editor/set-route-params) и маршрут отобразится автоматически.
+Вместо пары [TrafficRouter](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router) и [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source) для построения маршрута можно использовать [RouteEditor](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-editor) и [RouteEditorSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-editor-source). В таком случае не нужно обрабатывать список [TrafficRoute](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-route), достаточно передать координаты маршрута в виде объекта [RouteEditorRouteParams](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-editor-route-params) в метод [setRouteParams()](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-editor/set-route-params), и маршрут отобразится автоматически.
 
 ```kotlin
 val routeEditor = RouteEditor(sdkContext)
@@ -77,11 +79,11 @@ routeEditor.setRouteParams(
 
 Для построения маршрута необходимо получить точки типа [GeoPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.coordinates.geo-point), которые далее используются для создания [RouteSearchPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-point). Существует множество способов это сделать, ниже описаны некоторые из них.
 
-### Получение точек по нажатию на карту
+### Получение точек по нажатию на карту {#getting-points-on-tap}
 
 <img src="/img/mobile-sdk/device-2022-08-22-114935.gif"  />
 
-В интерфейсе [TouchEventsObserver](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer) существуют методы [onTap](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-tap) и [onLongTouch](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-long-touch), которые позволяют получить [ScreenPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.map.screen-point). Объект этого класса можно преобразовать в [GeoPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.coordinates.geo-point) с помощью метода [screenToMap()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.projection/screen-to-map).
+В интерфейсе [TouchEventsObserver](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer) существуют методы [onTap](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-tap) и [onLongTouch](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-long-touch), которые позволяют получить [ScreenPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.screen-point). Объект этого класса можно преобразовать в [GeoPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.coordinates.geo-point) с помощью метода [screenToMap()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.projection/screen-to-map).
 
 Таким образом, мы получим координаты в точке нажатия на карту.
 
@@ -91,7 +93,7 @@ routeEditor.setRouteParams(
     }
 ```
 
-### Получение координат объекта в месте нажатия на карту
+### Получение координат объекта в месте нажатия на карту {#getting-coordinates-on-tap}
 
 <img src="/img/mobile-sdk/device-2022-08-22-122901.gif"  />
 
@@ -121,7 +123,7 @@ map.getRenderedObjects(point).onResult {objects ->
 
 :::
 
-### Проезд промежуточных точек
+### Проезд промежуточных точек {#passing-intermediate-points}
 
 Для маршрута с промежуточными точками предполагается, что пользователь посетит каждую из этих точек на маршруте по очереди. Если промежуточная точка пропущена, маршрут может перестроиться:
 
@@ -156,7 +158,7 @@ val routeSearchOptions = RouteSearchOptions(car = carOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для такси
+### Для такси {#taxi-routing}
 
 Чтобы построить маршрут для такси, укажите свойство `taxi` в [RouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-options).
 
@@ -172,7 +174,7 @@ val routeSearchOptions = RouteSearchOptions(taxi = taxiOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для грузового транспорта
+### Для грузового транспорта {#truck-routing}
 
 Чтобы построить маршрут для грузового транспорта, укажите свойство `truck` в [RouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-options). Дополнительно вы можете настроить параметры построения маршрута [TruckRouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.truck-route-search-options):
 
@@ -214,7 +216,7 @@ val routeSearchOptions = RouteSearchOptions(truck = truckOptions)
 
 :::
 
-### Для общественного транспорта
+### Для общественного транспорта {#public-transport-routing}
 
 Чтобы построить маршрут для проезда на общественном транспорте, укажите свойство `publicTransport` в [RouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-options). Дополнительно вы можете настроить параметры построения маршрута [PublicTransportRouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.public-transport-route-search-options):
 
@@ -240,7 +242,7 @@ val routeSearchOptions = RouteSearchOptions(publicTransport = publicTransportOpt
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для велосипедов
+### Для велосипедов {#bicycle-routing}
 
 Чтобы построить маршрут для велосипеда, укажите свойство `bicycle` в [RouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-options). Дополнительно вы можете настроить параметры построения маршрута [BicycleRouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.bicycle-route-search-options):
 
@@ -262,7 +264,7 @@ val routeSearchOptions = RouteSearchOptions(bicycle = bicycleOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для самокатов
+### Для самокатов {#scooter-routing}
 
 Чтобы построить маршрут для самоката, укажите свойство `scooter` в [RouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-options). Дополнительно вы можете настроить параметры построения маршрута [ScooterRouteSearchOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.scooter-route-search-options):
 
@@ -284,7 +286,7 @@ val routeSearchOptions = RouteSearchOptions(scooter = scooterOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для пешеходов
+### Для пешеходов {#pedestrian-routing}
 
 Пешеходные маршруты могут включать в себя перемещения внутри зданий (например, вы можете построить маршрут до определённого магазина в торговом центре). Если одна из точек маршрута находится внутри здания, для неё необходимо указать дополнительные параметры `objectId` (идентификатор объекта, к которому нужно проложить маршрут) и `levelId` (идентификатор этажа здания, на котором находится объект).
 
@@ -346,9 +348,50 @@ val polygonExcludedArea = ExcludedArea(
 )
 ```
 
+## Готовый маршрут {#using-ready-route}
+
+Вы можете предварительно создать маршрут с помощью [Routing API](/api/navigation/routing/overview) и сохранить его для использования в мобильном SDK. Сохранённый маршрут доступен для использования в течение 24 часов. Маршруты для общественного транспорта недоступны для сохранения.
+
+1. Создайте маршрут с помощью Routing API, сохраните его и скопируйте идентификатор маршрута: см. [Сохранение маршрута](/api/navigation/routing/examples/special#save-route).
+2. Вызовите метод [fetchSharedRoute()](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router/fetch-shared-route) и передайте идентификатор сохранённого маршрута.
+
+    ```kotlin
+    val routeId = "ROUTE_ID"
+
+    val trafficRouter = TrafficRouter(sdkContext)
+    val sharedRouteFuture = trafficRouter.fetchSharedRoute(routeId)
+    ```
+
+    Вызов вернёт отложенный результат с объектом [SharedRouteData](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.shared-route-data), который содержит набор маршрутов (`List<TrafficRoute>`), точки маршрута и параметры поиска.
+
+3. Чтобы отобразить маршрут на карте, создайте объекты [RouteMapObject](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source).
+
+    ```kotlin
+    // Создаём источник данных
+    val routeMapObjectSource = RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL)
+    map.addSource(routeMapObjectSource)
+
+    // Добавляем полученный маршрут на карту
+    sharedRouteFuture.onResult { sharedRouteData: SharedRouteData ->
+        var isActive = true
+        var routeIndex = 0
+        for (route in sharedRouteData.routes) {
+            routeMapObjectSource.addObject(
+                RouteMapObject(route, isActive, routeIndex)
+            )
+            isActive = false
+            routeIndex++
+        }
+    }
+    ```
+
 ## Офлайн-режим {#offline-mode}
 
-По умолчанию построение маршрута работает в гибридном режиме: в первую очередь используются данные с серверов <Brand />. Если за определённое время не удаётся построить маршрут на онлайн-данных, используются предварительно загруженные данные, если они есть. Маршруты для грузового транспорта строятся только с использованием онлайн-данных.
+По умолчанию построение маршрута работает в гибридном режиме: в первую очередь используются данные с серверов <Brand />. Если за определённое время не удаётся построить маршрут на онлайн-данных, используются предварительно загруженные данные, если они есть.
 
 Чтобы загрузить данные для работы офлайн, необходимо получить соответствующие права в ключе доступа и скачать необходимые территории. См. [подготовительные шаги к работе с офлайн-данными](/android/sdk/start#offline-mode).
 
+Следующие функции доступны только в онлайн-режиме:
+
+* Построение маршрута для [грузового транспорта](#truck-routing).
+* [Использование готового маршрута](#using-ready-route), который был построен ранее с помощью Routing API.

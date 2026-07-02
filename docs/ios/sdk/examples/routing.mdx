@@ -3,64 +3,67 @@ sidebar: iossdk
 ---
 # Маршруты
 
-В этом разделе описывается построение маршрутов для разных видов транспорта и отображение их на карте. Для построения любого маршрута вам понадобятся следующие компоненты:
+В этом разделе описывается работа с маршрутами для разных видов транспорта. Вы можете создавать маршруты двумя способами:
 
-* Точки маршрута: начальная, конечная и, если необходимо, промежуточные. Способы получения координат точек описаны [ниже](#getting-route-points).
-* [Параметры поиска маршрута](#route-parameters). Набор параметров зависит от типа транспорта, для которого строится маршрут.
+* [Построить новый маршрут](#building-route) по компонентам:
+
+    * Точки маршрута: начальная, конечная и, если необходимо, промежуточные. 
+    * [Параметры поиска маршрута](#route-parameters). Набор параметров зависит от типа транспорта, для которого строится маршрут.
+
+* [Использовать готовый маршрут](#using-ready-route), который был построен ранее с помощью [Routing API](/api/navigation/routing/overview). Готовый маршрут уже содержит необходимые данные для отображения и навигации.
 
 ## Построение маршрута {#building-route}
 
-Чтобы проложить маршрут на карте, создайте два объекта:
+Для работы с маршрутом вам понадобится два объекта:
 
-* [TrafficRouter](/ios/sdk/reference/stable/class#traffic-router) для поиска оптимального маршрута;
+* [TrafficRouter](/ios/sdk/reference/stable/class#traffic-router) для создания или загрузки маршрута;
 * источник данных [RouteMapObjectSource](/ios/sdk/reference/stable/class#route-map-object-source) для отображения маршрута на карте.
 
-Чтобы найти маршрут между двумя точками, вызовите метод [findRoute()](/ios/sdk/reference/stable/class#traffic-router/find-route), передав координаты точек в виде объектов [RouteSearchPoint](/ios/sdk/reference/stable/struct#route-search-point) и параметры маршрута ([RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options)). Дополнительно можно указать также список промежуточных точек маршрута (`RouteSearchPoint`).
+1. Чтобы создать новый маршрут, вызовите метод [findRoute()](/ios/sdk/reference/stable/class#traffic-router/find-route), передав координаты точек в виде объектов [RouteSearchPoint](/ios/sdk/reference/stable/struct#route-search-point) и параметры маршрута ([RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options)). Дополнительно можно указать список промежуточных точек маршрута (`RouteSearchPoint`).
 
-Пример построения маршрута для автомобиля:
+    ```swift
+    let startPoint = RouteSearchPoint(coordinates: GeoPoint(latitude: 55.759909, longitude: 37.618806))
+    let finishPoint = RouteSearchPoint(coordinates: GeoPoint(latitude: 55.752425, longitude: 37.613983))
+    let routeSearchOptions = RouteSearchOptions.car(CarRouteSearchOptions())
 
-```swift
-let startPoint = RouteSearchPoint(coordinates: GeoPoint(latitude: 55.759909, longitude: 37.618806))
-let finishPoint = RouteSearchPoint(coordinates: GeoPoint(latitude: 55.752425, longitude: 37.613983))
-let routeSearchOptions = RouteSearchOptions.car(CarRouteSearchOptions())
+    let trafficRouter = TrafficRouter(context: sdk.context)
+    let routesFuture = trafficRouter.findRoute(
+        startPoint: startPoint,
+        finishPoint: finishPoint,
+        routeSearchOptions: routeSearchOptions
+    )
+    ```
 
-let trafficRouter = TrafficRouter(context: sdk.context)
-let routesFuture = trafficRouter.findRoute(
-	startPoint: startPoint,
-	finishPoint: finishPoint,
-	routeSearchOptions: routeSearchOptions
-)
-```
+    Вызов `findRoute()` вернёт отложенный результат со списком объектов [TrafficRoute](/ios/sdk/reference/stable/class#traffic-route).
 
-Вызов `findRoute()` вернёт отложенный результат со списком объектов [TrafficRoute](/ios/sdk/reference/stable/class#traffic-route). Чтобы отобразить найденный маршрут на карте, на основе этих объектов создайте объекты [RouteMapObject](/ios/sdk/reference/stable/class#route-map-object) и добавьте их в источник данных [RouteMapObjectSource](/ios/sdk/reference/stable/class#route-map-object-source).
+2. Чтобы отобразить найденный маршрут на карте, создайте объекты [RouteMapObject](/ios/sdk/reference/stable/class#route-map-object) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](/ios/sdk/reference/stable/class#route-map-object-source).
 
-```swift
-// Создаём источник данных
-let routeMapObjectSource = RouteMapObjectSource(context: sdk.context, routeVisualizationType: .normal)
-map.addSource(source: routeMapObjectSource)
+    ```swift
+    // Создаём источник данных
+    let routeMapObjectSource = RouteMapObjectSource(context: sdk.context, routeVisualizationType: .normal)
+    map.addSource(source: routeMapObjectSource)
 
-// Ищем маршруты
-self.routeSearchCancellable = routesFuture.sinkOnMainThread { routes in
-	// Добавляем их на карту
-	for (index, route) in routes.enumerated() {
-		let routeMapObject = RouteMapObject(
-			route: route,
-			isActive: index == 0,
-			index: RouteIndex(value: UInt64(index)),
-			displayFlags: nil
-		)
-		routeMapObjectSource.addObject(item: routeMapObject)
-	}
-} failure: { error in
-	print("Не удалось найти маршрут: \(error)")
-}
-```
+    // Добавляем созданный маршрут на карту
+    self.routeSearchCancellable = routesFuture.sinkOnMainThread { routes in
+        for (index, route) in routes.enumerated() {
+            let routeMapObject = RouteMapObject(
+                route: route,
+                isActive: index == 0,
+                index: RouteIndex(value: UInt64(index)),
+                displayFlags: nil
+            )
+            routeMapObjectSource.addObject(item: routeMapObject)
+        }
+    } failure: { error in
+        print("Не удалось найти маршрут: \(error)")
+    }
+    ```
 
 ## Точки маршрута {#getting-route-points}
 
 Для построения маршрута необходимо получить точки типа [GeoPoint](/ios/sdk/reference/stable/struct#geo-point), которые далее используются для создания [RouteSearchPoint](/ios/sdk/reference/stable/struct#route-search-point). Существует множество способов это сделать, ниже описаны некоторые из них.
 
-### Получение точек по нажатию на карту
+### Получение точек по нажатию на карту {#getting-points-on-tap}
 
 Чтобы получить географические координаты места нажатия, нужно получить [ScreenPoint](/ios/sdk/reference/stable/struct#screen-point), как в примере [Получение объектов по экранным координатам](/ios/sdk/examples/map#get-rendered-objects):
 
@@ -83,7 +86,7 @@ func tap(location: CGPoint) {
 
 Таким образом, мы получим координаты в точке нажатия на карту.
 
-### Получение координат объекта в месте нажатия на карту
+### Получение координат объекта в месте нажатия на карту {#getting-coordinates-on-tap}
 
 Можно получить координаты объекта (здания, дороги), который находится в месте клика. Для этого понадобится метод [getRenderedObjects()](/ios/sdk/reference/stable/class#map/get-rendered-objects). В нем нужно получить объект класса [DgisMapObject](/ios/sdk/reference/stable/class#dgis-map-object), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
 
@@ -130,7 +133,7 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 
 :::
 
-### Проезд промежуточных точек
+### Проезд промежуточных точек {#passing-intermediate-points}
 
 Для маршрута с промежуточными точками предполагается, что пользователь посетит каждую из этих точек на маршруте по очереди. Если промежуточная точка пропущена, маршрут может перестроиться:
 
@@ -165,7 +168,7 @@ let routeSearchOptions = RouteSearchOptions.car(carOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для такси
+### Для такси {#taxi-routing}
 
 Чтобы построить маршрут для такси, укажите свойство `taxi` в [RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options).
 
@@ -181,7 +184,7 @@ let routeSearchOptions = RouteSearchOptions.taxi(taxiOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для грузового транспорта
+### Для грузового транспорта {#truck-routing}
 
 Чтобы построить маршрут для грузового транспорта, укажите свойство `truck` в [RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options). Дополнительно вы можете настроить параметры построения маршрута [TruckRouteSearchOptions](/ios/sdk/reference/stable/struct#truck-route-search-options):
 
@@ -223,7 +226,7 @@ let routeSearchOptions = RouteSearchOptions.truck(truckOptions)
 
 :::
 
-### Для общественного транспорта
+### Для общественного транспорта {#public-transport-routing}
 
 Чтобы построить маршрут для проезда на общественном транспорте, укажите свойство `publicTransport` в [RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options). Дополнительно вы можете настроить параметры построения маршрута [PublicTransportRouteSearchOptions](/ios/sdk/reference/stable/struct#public-transport-route-search-options):
 
@@ -249,7 +252,7 @@ let routeSearchOptions = RouteSearchOptions.publicTransport(publicTransportOptio
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для велосипедов
+### Для велосипедов {#bicycle-routing}
 
 Чтобы построить маршрут для велосипеда, укажите свойство `bicycle` в [RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options). Дополнительно вы можете настроить параметры построения маршрута [BicycleRouteSearchOptions](/ios/sdk/reference/stable/struct#bicycle-route-search-options):
 
@@ -271,7 +274,7 @@ let routeSearchOptions = RouteSearchOptions.bicycle(bicycleOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для самокатов
+### Для самокатов {#scooter-routing}
 
 Чтобы построить маршрут для самоката, укажите свойство `scooter` в [RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options). Дополнительно вы можете настроить параметры построения маршрута [ScooterRouteSearchOptions](/ios/sdk/reference/stable/struct#scooter-route-search-options):
 
@@ -293,7 +296,7 @@ let routeSearchOptions = RouteSearchOptions.scooter(scooterOptions)
 
 Передайте готовые параметры `routeSearchOptions` в вызов функции `findRoute()` при [построении маршрута](#building-route).
 
-### Для пешеходов
+### Для пешеходов {#pedestrian-routing}
 
 Пешеходные маршруты могут включать в себя перемещения внутри зданий (например, вы можете построить маршрут до определённого магазина в торговом центре). Если одна из точек маршрута находится внутри здания, для неё необходимо указать дополнительные параметры `objectId` (идентификатор объекта, к которому нужно проложить маршрут) и `levelId` (идентификатор этажа здания, на котором находится объект).
 
@@ -355,10 +358,54 @@ let polygonExcludedArea = ExcludedArea(
 )
 ```
 
+## Готовый маршрут {#using-ready-route}
+
+Вы можете предварительно создать маршрут с помощью [Routing API](/api/navigation/routing/overview) и сохранить его для использования в мобильном SDK. Сохранённый маршрут доступен для использования в течение 24 часов. Маршруты для общественного транспорта недоступны для сохранения.
+
+1. Создайте маршрут с помощью Routing API, сохраните его и скопируйте идентификатор маршрута: см. [Сохранение маршрута](/api/navigation/routing/examples/special#save-route).
+2. Вызовите метод [fetchSharedRoute()](/ios/sdk/reference/stable/class#traffic-router/fetch-shared-route) и передайте идентификатор сохранённого маршрута.
+
+    ```swift
+    let routeId = "ROUTE_ID"
+
+    let trafficRouter = TrafficRouter(context: sdk.context)
+    let sharedRouteFuture = trafficRouter.fetchSharedRoute(requestId: routeId)
+    ```
+
+    Вызов вернёт отложенный результат с объектом [SharedRouteData](/ios/sdk/reference/stable/struct#shared-route-data), который содержит набор маршрутов (`[TrafficRoute]`), точки маршрута и параметры поиска.
+
+3. Чтобы отобразить маршрут на карте, создайте объекты [RouteMapObject](/ios/sdk/reference/stable/class#route-map-object) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](/ios/sdk/reference/stable/class#route-map-object-source).
+
+    ```swift
+    // Создаём источник данных
+    let routeMapObjectSource = RouteMapObjectSource(context: sdk.context, routeVisualizationType: .normal)
+    map.addSource(source: routeMapObjectSource)
+
+    // Добавляем полученный маршрут на карту
+    self.sharedRouteCancellable = sharedRouteFuture.sinkOnMainThread { sharedRouteData in
+        for (index, route) in sharedRouteData.routes.enumerated() {
+            let routeMapObject = RouteMapObject(
+                route: route,
+                isActive: index == 0,
+                index: RouteIndex(value: UInt64(index)),
+                displayFlags: nil
+            )
+            routeMapObjectSource.addObject(item: routeMapObject)
+        }
+    } failure: { error in
+        print("Не удалось получить маршрут: \(error)")
+    }
+    ```
+
 ## Офлайн-режим {#offline-mode}
 
-По умолчанию построение маршрута работает в гибридном режиме: в первую очередь используются данные с серверов <Brand />. Если за определённое время не удаётся построить маршрут на онлайн-данных, используются предварительно загруженные данные, если они есть. Маршруты для грузового транспорта строятся только с использованием онлайн-данных.
+По умолчанию построение маршрута работает в гибридном режиме: в первую очередь используются данные с серверов <Brand />. Если за определённое время не удаётся построить маршрут на онлайн-данных, используются предварительно загруженные данные, если они есть.
 
 Чтобы загрузить данные для работы офлайн, необходимо получить соответствующие права в ключе доступа и скачать необходимые территории. См. [подготовительные шаги к работе с офлайн-данными](/ios/sdk/start#offline-mode).
+
+Следующие функции доступны только в онлайн-режиме:
+
+* Построение маршрута для [грузового транспорта](#truck-routing).
+* [Использование готового маршрута](#using-ready-route), который был построен ранее с помощью Routing API.
 
 

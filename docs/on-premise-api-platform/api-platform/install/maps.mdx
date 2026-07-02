@@ -21,8 +21,6 @@ sidebar: on-premise-api-platform
    1. [Подготовка к установке](/on-premise-api-platform/preparation)
    2. [Установка сервиса лицензий](/on-premise-api-platform/core/install/license)
    3. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)
-   4. [Установка сервиса сбора статистики](/on-premise-api-platform/api-platform/install/statreceiver)
-   5. [Установка прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy)
 
 3. Ознакомьтесь с важными значениями, заданными или полученными на предыдущих шагах:
 
@@ -48,7 +46,7 @@ sidebar: on-premise-api-platform
    * [Tilegen API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/tilegen-api/values.yaml),
    * [Styles API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/styles-api/values.yaml).
 
-   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/api-platform/install/requirements).
+   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/requirements).
 
    :::note[Используйте чарты, соответствующие версии API-платформы]
 
@@ -182,8 +180,8 @@ sidebar: on-premise-api-platform
 
    Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
 
-    <details>
-    <summary><code>values-tiles.yaml</code></summary>
+   <details>
+   <summary><code>values-tiles.yaml</code></summary>
 
    ```yaml
    dgctlDockerRegistry: docker.registry.example.com
@@ -209,7 +207,7 @@ sidebar: on-premise-api-platform
          subtype: relief
 
    cassandra:
-     environment: ''
+     environment: prod
      hosts:
          - tiles-cassandra-1.storage.example.local
          - tiles-cassandra-2.storage.example.local
@@ -243,7 +241,8 @@ sidebar: on-premise-api-platform
          # -----END PRIVATE KEY-----
 
    importer:
-     workerNum: 20
+     enabled: true
+     workerNum: 4
      writerNum: 8
      workerResources:
        requests:
@@ -306,7 +305,7 @@ sidebar: on-premise-api-platform
        keyspace: dgis_userdata
    ```
 
-    </details>
+   </details>
 
    Где:
 
@@ -334,7 +333,8 @@ sidebar: on-premise-api-platform
        * `web`: векторные тайлы для MapGL JS API.
          * `subtype`: подтип векторных тайлов. Возможные значения: `immersive` для отображения 3D-моделей или `relief` для отображения трёхмерного рельефа местности и 3D-моделей.
        * `raster`: растровые тайлы.
-       * `native`: векторные тайлы для Mobile SDK.
+       * `native`: векторные тайлы для версий Mobile SDK 12.10 и ниже.
+       * `native-v4`: векторные тайлы для версий Mobile SDK выше 12.10.
        * `mapbox`: векторные тайлы в формате MVT для использования в сторонних ГИС-системах. Подробнее см. в разделе [Экспорт векторных тайлов](/on-premise-api-platform/api-platform/user-guide/vector-tiles).
 
    * `cassandra`: настройки хранилища данных Apache Cassandra.
@@ -353,6 +353,8 @@ sidebar: on-premise-api-platform
        * `key`: приватный клиентский ключ для установления защищённого соединения.
    * `importer`: настройки воркеров процесса импорта (Kubernetes Importer job).
 
+     * `enabled`: включить ли процесс импорта данных.
+
      * `workerNum`: число воркеров (параллельных процессов импорта).
 
      * `writerNum`: число процессов-писателей на один воркер.
@@ -365,7 +367,7 @@ sidebar: on-premise-api-platform
 
        :::
 
-     * `workerResources`: настройки вычислительных ресурсов для воркера. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+     * `workerResources`: настройки вычислительных ресурсов для воркера. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
      * `cleaner` и `clearSnapshots`: настройки автоматического удаления старых данных. Подробнее см. в разделе [Обновление сервиса Tiles API](/on-premise-api-platform/api-platform/update/maps#update-tiles-api).
 
@@ -577,7 +579,7 @@ sidebar: on-premise-api-platform
      * `region`: регион S3-совместимого хранилища.
      * `verifySsl`: включить ли проверку SSL-сертификатов при подключении. Значение по умолчанию: `false`.
 
-   * `api.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `api.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `api.ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
 
@@ -668,7 +670,7 @@ sidebar: on-premise-api-platform
      * `MAPGL_RTLPLUGIN`: URL плагина для поддержки языков с направлением письма справа налево (RTL).
      * `MAPGL_INVALID_KEY_MESSAGE`: текст сообщения об ошибке при использовании невалидного ключа для MapGL JS API.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. Обратите внимание, что для использования TLS необходимо создать секрет, содержащий сертификат и приватный ключ.
 
@@ -698,7 +700,7 @@ sidebar: on-premise-api-platform
   http://mapgl-js-api.example.com
   ```
 
-* Если вы хотите поменять настройки иницализации карты, создайте файл `test.html` со следующим содержимым и запустите его в браузере:
+* Если вы хотите поменять настройки инициализации карты, создайте файл `test.html` со следующим содержимым и запустите его в браузере:
 
   ```html
   <html>
@@ -759,20 +761,22 @@ curl -X 'GET' \
 
 ### Проверьте сервис Styles API {#test-styles-api}
 
-Чтобы подключить пользовательский стиль карты, установите [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform) и выполните шаги по [загрузке и применению стиля](/on-premise-api-platform/api-platform/user-guide/platform-manager#add-map-style).
+Чтобы подключить пользовательский стиль карты, установите [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform) и выполните шаги по [загрузке и применению стиля](/on-premise-api-platform/api-platform/user-guide/platform-manager#adding-map-style).
 
 ## Что дальше? {#whats-next}
 
 * Узнайте, как [обновить API для работы с картами и стили](/on-premise-api-platform/api-platform/update/maps).
 
-* Установите другие продукты программного комплекса <Brand />:
+* Установите другие продукты и сервисы программного комплекса <Brand />:
 
+  * [Cервис сбора статистики](/on-premise-api-platform/api-platform/install/statreceiver)
+  * [Прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy)
   * [API для работы с поиском](/on-premise-api-platform/api-platform/install/search),
   * [API для работы с навигацией](/on-premise-api-platform/api-platform/install/navigation),
   * [<Brand /> Про](/on-premise-pro/install/installation),
   * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
   * [мобильный SDK](/on-premise-api-platform/api-platform/install/mobilesdk),
-  * [GIS-платформа](/on-premise-gis-platform/install/installation),
+  * [GIS-платформа](/on-premise-gis-platform/installation),
   * [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform).
 
 * Изучите рекомендации по [обслуживанию системы](/on-premise-api-platform/api-platform/administering).

@@ -5825,3 +5825,81 @@ curl --request POST \
 ```
 
 </details>
+
+## Сохранение маршрута {#save-route}
+
+Вы можете сохранить построенный маршрут, чтобы использовать его в дальнейшем при запуске навигации из мобильного приложения на базе SDK от <Brand />. Сохранённый маршрут доступен для использования в течение 24 часов.
+
+:::note[Доступность для способов передвижения]
+
+Сохранение маршрутов на общественном транспорте недоступно.
+
+:::
+
+1. Обратитесь в [отдел продаж <Brand />](https://dev.2gis.ru/api/routing#form), чтобы получить права для вашего API-ключа на сохранение маршрутов.
+2. Отправьте POST-запрос на [/routing/7.0.0/global](/api/navigation/routing/reference/routing) со следующими параметрами:
+
+    * `points` (обязательный параметр) — массив координат [точек маршрута](/api/navigation/routing/examples/points#point-types). Укажите минимум две точки: начальную и конечную.
+    * `transport` — способ передвижения.
+    * `output` — формат выдачи результата:
+
+        * `summary` — упрощённая выдача, в ответе только время и длина маршрута.
+        * `detailed` — полная выдача с геометрией маршрута.
+
+    * `locale` — язык текстовых описаний элементов маршрута: русский.
+    * `save_route` — флаг сохранения маршрута. Укажите `true`, чтобы сохранить маршрут и получить его ID в ответе.
+
+    **Пример запроса:**
+
+    ```curl
+    curl -i --request POST \
+    --url 'https://routing.api.2gis.com/routing/7.0.0/global?key=96964c95-3c7c-4743-b71a-4a28445ef407' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "points": [
+            {
+                "type": "stop",
+                "lon": 37.582591,
+                "lat": 55.775364
+            },
+            {
+                "type": "stop",
+                "lon": 37.656625,
+                "lat": 55.765036
+            }
+        ],
+        "transport": "driving",
+        "output": "detailed",
+        "locale": "ru",
+        "save_route": true
+    }'
+    ```
+
+    **Пример ответа:**
+
+    ```json
+    HTTP/2 200
+    server: nginx
+    date: Wed, 27 May 2026 13:44:33 GMT
+    content-type: application/json; charset=utf-8
+    content-length: 25148
+    vary: Accept-Encoding
+    access-control-allow-origin: *
+    access-control-expose-headers: X-Request-Id,traceparent,tracestate
+    x-real-http-code: 200
+    x-dc: m1
+    x-region: moscow-cr-splitter
+    x-request-id: REQUEST-ID
+
+    {
+        "message": null,
+        "query": ... ,
+        "result": ...
+    }
+    ```      
+    
+3. Скопируйте ID запроса из HTTP-заголовка `x-request-id` ответа и передайте в метод `TrafficRouter.fetchSharedRoute()`. См. детали в документации мобильного SDK для нужной платформы:
+
+    * [iOS](/ios/sdk/examples/routing#using-ready-route),
+    * [Android](/android/sdk/examples/routing#using-ready-route),
+    * [Flutter](/flutter/sdk/examples/routing#using-ready-route).

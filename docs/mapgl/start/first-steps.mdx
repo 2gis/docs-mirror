@@ -12,16 +12,21 @@ sidebar: mapgljsapi
 
 ## 1. Получите ключ доступа {#get-access-key}
 
-1. Зарегистрируйтесь в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_vector).
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_vector" target="_blank">
+      В кабинет
+   </CtaButton>
+
 2. Создайте [демо-ключ](/platform-manager/subscription/keys#demo) или купите [подписку](/platform-manager/subscription/purchase) для доступа к сервису [Map Tiles API](/maps/others/maptiles/overview), который предоставляет доступ к векторным тайлам карты. Подробнее о стоимости сервиса см. в разделе [Тарифы](/mapgl/overview/tariffs).
 
-:::tip
+   :::tip
 
-Если у вас уже есть действующий API-ключ, полученный для MapGL JS API, вы можете использовать его для доступа к Map Tiles API до истечения срока действия подписки. Срок действия можно посмотреть в личном кабинете, на вкладке **Главная**.
+   Если у вас уже есть действующий API-ключ, полученный для MapGL JS API, вы можете использовать его для доступа к Map Tiles API до истечения срока действия подписки. Срок действия можно посмотреть в личном кабинете, на вкладке **Главная**.
 
-:::
+   :::
 
-Работать с ключами можно в Менеджере Платформы: подробнее см. в [документации личного кабинета](/platform-manager/overview).
+Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
 
 ## 2. Подключите библиотеку {#install-library}
 
@@ -194,4 +199,4 @@ const marker = new mapgl.Marker(map, {
 
 * Примените [дополнительные настройки](/mapgl/map/configuration/overview) для удобного взаимодействия с картой.
 * Настройте внешний вид карты и правила отрисовки объектов при помощи [стилей](/mapgl/map-style/create).
-* Добавьте объекты на карту [поштучно](/mapgl/objects) или подключите [источник данных](/mapgl/geodata/formats) с множеством объектов.
+* Добавьте объекты на карту [поштучно](/mapgl/objects/markers) или подключите [источник данных](/mapgl/geodata/formats) с множеством объектов.

@@ -21,7 +21,7 @@ sidebar: iossdk
 
     Создайте слой навигатора с помощью фабрики [INavigationUIViewFactory](/ios/sdk/reference/stable/interface#inavigation-view-factory) и класса [NavigationManager](/ios/sdk/reference/stable/class#navigation-manager).
 
-    Добавьте на карту маркер с текущей геопозицией устройства с помощью источника данных [MyLocationMapObjectSource](/ios/sdk/reference/stable/class#MyLocationMapObjectSource) и передайте его в метод карты [addSource()](/ios/sdk/reference/stable/class#Map).
+    Добавьте на карту маркер с текущей геопозицией устройства с помощью источника данных [MyLocationMapObjectSource](/ios/sdk/reference/stable/class#my-location-map-object-source) и передайте его в метод карты [addSource()](/ios/sdk/reference/stable/class#map).
 
     ```swift
     // Создание фабрики объектов карты
@@ -142,7 +142,7 @@ sidebar: iossdk
 </TabItem>
 <TabItem value="sdk-12" label="Для версии SDK 12.x">
 
-Чтобы создать навигатор, используйте готовый элемент интерфейса [INavigationView](/ios/sdk/reference/stable/interface#INavigationView) и класс [NavigationManager](/ios/sdk/reference/stable/class#navigation-manager).
+Чтобы создать навигатор, используйте готовый элемент интерфейса [INavigationUIView](/ios/sdk/reference/stable/interface#inavigation-uiview) и класс [NavigationManager](/ios/sdk/reference/stable/class#navigation-manager).
 
 Создайте слой навигатора с помощью фабрики [INavigationViewFactory](/ios/sdk/reference/stable/interface#inavigation-view-factory) и класса [NavigationManager](/ios/sdk/reference/stable/class#navigation-manager).
 
@@ -378,7 +378,7 @@ let routeBuildOptions = RouteBuildOptions(
 
 ### Отображение маршрута
 
-Если вы используете стандартный набор UI-элементов навигации, создавая стандартную фабрику [INavigationViewControlsFactory](/ios/sdk/reference/stable/INavigationViewControlsFactory), как рекомендуется в [начале раздела](#навигатор), эта возможность уже доступна и не требует предварительной конфигурации.
+Если вы используете стандартный набор UI-элементов навигации, создавая стандартную фабрику [INavigationUIControlsFactory](/ios/sdk/reference/stable/interface#inavigation-uicontrols-factory), как рекомендуется в [начале раздела](#навигатор), эта возможность уже доступна и не требует предварительной конфигурации.
 
 Если вы используете собственные UI-элементы, для определения вхождения в режим навигации внутри здания можно пользоваться стандартными возможностями SDK, а именно подпиской на канал [indoorChannel](/ios/sdk/reference/stable/class#indoor-detector/var-indoor-channel). Этот канал можно получить из [NavigationManager](/ios/sdk/reference/stable/class#navigation-manager/var-indoor-detector).
 

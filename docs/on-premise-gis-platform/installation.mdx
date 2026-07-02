@@ -36,7 +36,7 @@ sidebar: on-premise-gis-platform
    | Endpoint прокси для API пробок  | `http://traffic-proxy`              | См. [Установка прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy) |
    | API-ключи                       | `CATALOG_KEY`                       | См. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)            |
 
-4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/gis-platform/values.yaml). Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-gis-platform/install/requirements).
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/gis-platform/values.yaml). Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-gis-platform/requirements).
 
    Требования к хранилищу предполагают хранение большого объёма тайлированных снимков в высоком разрешении (например, спутниковых снимков). Если вы не планируете хранить данные подобного рода, то требования к объёму хранилища могут быть снижены.
 
@@ -226,7 +226,7 @@ sidebar: on-premise-gis-platform
 
      * `replicaCount`: число реплик сервиса SPCore.
 
-     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-gis-platform/install/requirements#resources).
+     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-gis-platform/requirements#resources).
 
      * `s3`: настройки доступа к S3-совместимому хранилищу для хранения растровых изображений.
 
@@ -240,13 +240,13 @@ sidebar: on-premise-gis-platform
    * `zookeeper`: настройки бэкенд-сервиса ZooKeeper.
 
      * `replicaCount`: число реплик сервиса ZooKeeper. Значение этой настройки может задаваться в пределах от 1 до 3.
-     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-gis-platform/install/requirements#resources).
+     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-gis-platform/requirements#resources).
 
    * `portal`: настройки фронтенд-сервиса Portal.
 
      * `replicaCount`: число реплик сервиса Portal.
      * `max_body_size`: максимальный размер файла, который можно загрузить через веб-интерфейс Portal.
-     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-gis-platform/install/requirements#resources).
+     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-gis-platform/requirements#resources).
 
    * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
 
@@ -264,7 +264,7 @@ sidebar: on-premise-gis-platform
    helm upgrade --install --version=VERSION --atomic --wait-for-jobs --values ./values-gis-platform.yaml gis-platform 2gis-on-premise/gis-platform --set spcore.resetCluster=true
    ```
 
-   В параметре `--version` укажите нужную версию GIS-платформы. Список версий см. в разделе [Релизы GIS-платформы](/on-premisegis-platform/releases).
+   В параметре `--version` укажите нужную версию GIS-платформы. Список версий см. в разделе [Релизы GIS-платформы](/on-premise-gis-platform/releases).
 
    :::warning
 

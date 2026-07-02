@@ -66,7 +66,7 @@ sidebar: on-premise-api-platform
    | [VRP Task Manager](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-task-manager/values.yaml)      | TSP API                                                                             |
    | [VRP Solver](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-solver/values.yaml)                  | TSP API                                                                             |
 
-   Подробнее о том, как проверить требования к ресурсам, см. в документе [Системные требования](/on-premise-api-platform/api-platform/install/requirements).
+   Подробнее о том, как проверить требования к ресурсам, см. в документе [Системные требования](/on-premise-api-platform/requirements).
 
    :::note[Используйте чарты, соответствующие версии API-платформы]
 
@@ -411,7 +411,7 @@ rules:
      * `manifest`: путь до файла с манифестом в формате `manifests/api-platform/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, которые требуются сервисам для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
      * `region`: регион S3-совместимого хранилища.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `cron`: настройки cron-заданий ([Kubernetes CronJob](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/)) для импорта данных. Cron-задание получает актуальные данные из хранилища артефактов установки и затем обновляет их на реплике Navi-Castle. Эти настройки одинаковы для всех реплик сервиса Navi-Castle.
 
@@ -552,7 +552,7 @@ rules:
      * `castleUrl`: URL сервиса Navi-Castle. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
      * `castleUrlProxy`: URL прокси для получения дорожных перекрытий. Имеет больший приоритет, чем `castleUrl`.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
 2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-attractor-<transport>.yaml`:
 
@@ -757,7 +757,7 @@ rules:
 
    * `replicaCount`: число реплик сервиса Navi-Back.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `license`: настройки [сервиса лицензий](/on-premise-api-platform/architecture/core/license).
 
@@ -992,7 +992,7 @@ rules:
 
    * `replicaCount`: число реплик сервиса Navi-Router.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
 2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-router.yaml`:
 
@@ -1060,7 +1060,7 @@ rules:
    * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
    * `navigroup`: идентификатор группы для построения маршрутов. Все компоненты, которые взаимодействуют друг с другом в рамках одного процесса построения маршрутов, должны иметь одинаковое значение этого параметра. Обычно можно использовать две стандартные группы: `sync` для синхронных сервисов и `async` для асинхронных сервисов (например, Distance Matrix Async API).
    * `replicaCount`: число реплик сервиса Navi-Front.
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
    * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
 
 2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-front.yaml`:
@@ -1207,7 +1207,7 @@ rules:
 
    * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `dm`: настройки сервиса Distance Matrix Async API.
 
@@ -1450,7 +1450,7 @@ rules:
 
    * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `kafka`: настройки доступа к брокеру Apache Kafka.
 
@@ -1590,7 +1590,7 @@ rules:
 
    * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/api-platform/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `kafka`: настройки доступа к брокеру Apache Kafka.
 
@@ -1888,7 +1888,7 @@ rules:
    * [Truck Directions API](/api/navigation/truck-directions/overview#request-example): маршруты для грузового транспорта.
    * [Routing API](/api/navigation/routing/overview): маршруты для общественного транспорта.
    * [Isochrone API](/api/navigation/isochrone/overview): достижимые области на автомобиле.
-   * [Distance Matrix API](/api/navigation/distance-matrix/overview#request-example): матрицы расстояний.
+   * [Distance Matrix API](/api/navigation/distance-matrix/overview): матрицы расстояний.
 
     Проверку сервиса Distance Matrix Async API см. [ниже](#test-distance-matrix-async-api).
 
@@ -2190,7 +2190,7 @@ rules:
   * [<Brand /> Про](/on-premise-pro/install/installation),
   * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
   * [мобильный SDK](/on-premise-api-platform/api-platform/install/mobilesdk),
-  * [GIS-платформа](/on-premise-gis-platform/install/installation),
+  * [GIS-платформа](/on-premise-gis-platform/installation),
   * [прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy),
   * [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform).
 

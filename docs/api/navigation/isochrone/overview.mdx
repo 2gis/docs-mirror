@@ -177,16 +177,19 @@ Isochrone API позволяет строить на карте изохроны
 
 ### 1. Получите ключ доступа {#get-access-key}
 
-Чтобы работать с API сервиса, получите ключ доступа:
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
 
-1. Зарегистрируйтесь в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_isochrone).
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_isochrone" target="_blank">
+      В кабинет
+   </CtaButton>
+
 2. Создайте [демо-ключ](/platform-manager/subscription/keys#demo) или купите [подписку](/platform-manager/subscription/purchase) для доступа к API. Подробнее о стоимости сервиса см. в разделе [Тарифы](#tariffs).
 
-Работать с ключами можно в Менеджере Платформы: подробнее см. в документации [личного кабинета](/platform-manager/overview).
+Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
 
 ### 2. Отправьте запрос {#send-request}
 
-Чтобы получить данные о зоне доступности, отправьте POST-запрос на endpoint `/isochrone/2.0.0`. Для этого:
+Чтобы получить данные о зоне доступности, отправьте POST-запрос на endpoint `/isochrone/2.0.0`:
 
 1. В строке запроса укажите значение API-ключа в параметре `key`:
 
@@ -210,7 +213,7 @@ Isochrone API позволяет строить на карте изохроны
 
 Более подробную информацию о параметрах см. в [Справочнике API](/api/navigation/isochrone/reference/isochrone_200).
 
-**Пример запроса:**
+#### Пример запроса {#request-example}
 
 ```bash
 curl --request POST \
@@ -236,7 +239,7 @@ curl --request POST \
 
 Дополнительно вы можете изменить направление движения (движение *к* заданной точке, а не *от*), указать время начала движения и другие параметры: подробнее см. в [примерах](/api/navigation/isochrone/examples).
 
-**Пример ответа:**
+#### Пример ответа {#response-example}
 
 Запрос вернёт массив `isochrones`, который описывает две области карты, достижимые за заданные промежутки времени.
 
@@ -295,12 +298,21 @@ curl --request POST \
 
 ## Тарифы {#tariffs}
 
-* Стоимость сервиса рассчитывается исходя из количества запросов в месяц. 
-* Актуальные тарифы можно посмотреть в [Менеджере Платформы](https://platform.2gis.ru/ru/tariffs?utm_source=docs&utm_medium=referral&utm_campaign=api_isochrone).
+* Стоимость сервиса рассчитывается исходя из количества успешных запросов в месяц. 
+* Актуальную стоимость и лимиты см. в разделе [Тарифы](/platform-manager/subscription/pricing).
 
 ## Варианты размещения {#distribution}
 
-- **Облако**: все актуальные методы Isochrone API доступны через публичные endpoint-ы <Brand />.
-- **On-Premise**: все актуальные методы Isochrone API доступны при установке API-платформы <Brand /> в закрытом контуре. Подробнее см. в разделе [API-платформа для сервера](/on-premise-api-platform/overview/summary).
+* **Облако**: все актуальные методы Isochrone API доступны через публичные endpoint-ы <Brand />.
+* **On-Premise**: все актуальные методы Isochrone API доступны при установке API-платформы <Brand /> в закрытом контуре. Подробнее см. в разделе [API-платформа для сервера](/on-premise-api-platform/overview/summary).
 
 Методы, отмеченные как `deprecated`, устарели и не поддерживаются в обоих вариантах размещения.
+
+## Помощь {#support}
+
+* Если у вас возникли вопросы при работе с API, задайте их AI-ассистенту (в правом нижнем углу cайта), воспользуйтесь поиском по документации или отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+* Если вы хотите обсудить возможности API или его интеграцию с вашим продуктом, обратитесь к менеджеру.
+
+   <CtaButton href="https://dev.2gis.ru/api/routing" target="_blank" appearance="lightFill">
+     Получить консультацию
+   </CtaButton>

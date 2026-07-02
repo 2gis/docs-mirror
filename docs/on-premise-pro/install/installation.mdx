@@ -15,7 +15,7 @@ sidebar: on-premise-pro
 
    * [Архитектура сервисов <Brand /> Про](/on-premise-pro/architecture/pro-architecture)
    * [Архитектура программного комплекса <Brand />](/on-premise-pro/architecture/solution-architecture)
-   * [Системные требования](/on-premise-pro/install/requirements)
+   * [Системные требования](/on-premise-pro/requirements)
 
 2. Выполните предварительные шаги:
 
@@ -46,7 +46,7 @@ sidebar: on-premise-pro
    * [Pro API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/pro-api/values.yaml),
    * [Pro UI](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/pro-ui/values.yaml).
 
-   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-pro/install/requirements).
+   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-pro/requirements).
 
    :::note[Используйте чарты, соответствующие версии <Brand /> Про]
 
@@ -57,7 +57,7 @@ sidebar: on-premise-pro
 5. Определите доменные имена для сервиса <Brand /> Про. Например:
 
    * Доменное имя для API-бэкенда: `pro-api.example.com`
-   * Доменное имя для Permissions UI: `pro-api-permissions.example.com`
+   * Доменное имя для Permissions UI: `pro-permissions-api.example.com`
    * Доменное имя для фронтенда: `pro-ui.example.com`
 
 ## 2. Подготовьте инфраструктуру {#prepare-infrastructure}
@@ -213,21 +213,19 @@ sidebar: on-premise-pro
          type: openid10
          userInfoEndpoint: realms/Pro/protocol/openid-connect/userinfo
          autoRegisterUsers: true
-         shareKeys:
-           - ''
 
    permissions:
      ingress:
        className: nginx
        enabled: true
        hosts:
-       - host: pro-api-permissions.example.com
+       - host: pro-permissions-api.example.com
          paths:
          - path: /
            pathType: Prefix
        tls:
        # - hosts:
-       #   - pro-api-permissions.example.com
+       #   - pro-permissions-api.example.com
        #   secretName: secret.tls
      settings:
        auth:
@@ -235,19 +233,19 @@ sidebar: on-premise-pro
          uiRequiredRoles:
          - permAdmin
        # Только для новых пользователей
-       default_permissions:
-         open_pro_ui: true
+       defaultPermissions:
+         openProUi: true
          assets: ['*']
          territories: ['*']
-         add_user_assets:
+         addUserAssets:
            allow: true
            quantity: 1000
-           file_size: 100
+           fileSize: 100
          isochrones: 1000
 
    authProvider:
      schema: Basic
-     host: https://pro-api-permissions.example.com
+     host: https://pro-permissions-api.example.com
      allowedHosts:
      - ['*']
      # Если в параметре authProvider.schema указано значение Basic
@@ -381,8 +379,8 @@ sidebar: on-premise-pro
       * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведённую конфигурацию для используемого вами Ingress. **URL, указанный в параметре `api.ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
          * `annotations`: [аннотации Kubernetes](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md), предназначенные для настройки поведения nginx Ingress-контроллера.
       * `pod.imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
-      * `pod.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-pro/install/requirements#resources).
-      * `settings.licenseKey`: ключ лицензии On-Premise.
+      * `pod.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-pro/requirements#resources).
+      * `settings.licenseKey`: лицензионный ключ <Brand /> Про. Чтобы получить ключ, обратитесь к менеджеру <Brand /> или вашему поставщику.
       * `settings.corsOrigins`: политика CORS. Если значение пустое, любому источнику разрешается выполнять запросы к сервису Pro API.
       * `settings.auth`: настройки сервиса аутентификации.
          * `url`: URL сервиса аутентификации.
@@ -390,7 +388,6 @@ sidebar: on-premise-pro
          * `type`: тип аутентификации. Возможные значения: `openid10` для протокола [OpenId 1.0/OAuth 2.0](https://openid.net/specs/openid-connect-core-1_0.html); `urbi` для внутреннего протокола Urbi.
          * `userInfoEndpoint`: путь к endpoint-у [Userinfo](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo).
          * `autoRegisterUsers`: регистрировать ли новых пользователей автоматически при первом входе.
-         * `shareKeys`: один или несколько секретных ключей для генерации защищённых ссылок или валидации уже существующих. Для генерации используется последний указанный в параметре ключ. Длина ключа должна быть не меньше 32 символов.
 
    * `permissions`: настройки Permissions API.
 
@@ -405,12 +402,12 @@ sidebar: on-premise-pro
 
       * `settings.auth.apiKey`: ключ доступа к Permissions API для выполнения авторизованных действий.
       * `settings.auth.uiRequiredRoles`: роли пользователей, необходимые для доступа к Permissions UI. Значения должны совпадать с ролями, определёнными в конфигурации `authProvider`.
-      * `settings.default_permissions`: настройки доступа по умолчанию для новых пользователей.
-
-         * `open_pro_ui`: доступ к Pro UI. Значение по умолчанию: `true`.
+      * `settings.defaultPermissions`: настройки доступа по умолчанию для новых пользователей.
+        
+         * `openProUi`: доступ к Pro UI. Значение по умолчанию: `true`.
          * `assets`: список идентификаторов системных наборов данных, к которым предоставляется доступ. Значение `['*']` предоставляет доступ ко всем наборам данных.
          * `territories`: список идентификаторов территорий, к которым предоставляется доступ. Значение `['*']` предоставляет доступ ко всем территориям.
-         * `add_user_assets`: блок настроек, который управляет возможностью добавления пользовательских наборов данных новыми пользователями.
+         * `addUserAssets`: блок настроек, который управляет возможностью добавления пользовательских наборов данных новыми пользователями.
          * `isochrones`: максимальное количество зон доступности, которые может создать пользователь.
 
    * `authProvider`: настройки поставщика аутентификации для Permissions UI.
@@ -660,7 +657,7 @@ sidebar: on-premise-pro
          * `styleUrl`: путь к директории с конфигурационным файлом (`styles.json`) для управления стилями карты. Пример: `https://artifacts.example.com/pro-ui-styles/styles/default/`.
          * `stylePreview`: URL для миниатюры изображения, которая будет отображаться в менеджере стилей карты для стиля по умолчанию.
 
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-pro/install/requirements#resources).
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-pro/requirements#resources).
 
    * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведённую конфигурацию для используемого вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
 
@@ -719,7 +716,7 @@ curl -X 'GET' \
 
    * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
    * [мобильный SDK](/on-premise-api-platform/api-platform/install/mobilesdk),
-   * [GIS-платформа](/on-premise-gis-platform/install/installation),
+   * [GIS-платформа](/on-premise-gis-platform/installation),
    * [прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy),
    * [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform).
 

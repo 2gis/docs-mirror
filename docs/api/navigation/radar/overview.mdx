@@ -26,16 +26,21 @@ Radar API возвращает радиус и координаты центра
 
 ## Начало работы {#getting-started}
 
-### 1. Получите ключ доступа {#getting-access-key}
+### 1. Получите ключ доступа {#get-access-key}
 
-1. Зарегистрируйтесь в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_radar).
-2. Создайте [демо-ключ](/platform-manager/subscription/keys#demo) или купите [подписку](/platform-manager/subscription/purchase) для доступа к API. Подробнее о стоимости сервиса см. в разделе [Тарифы](/api/navigation/radar/overview#tariffs).
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
 
-Работать с ключами можно в Менеджере Платформы: подробнее см. в документации [личного кабинета](/platform-manager/overview).
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_radar" target="_blank">
+      В кабинет
+   </CtaButton>
+
+2. Создайте [демо-ключ](/platform-manager/subscription/keys#demo) или купите [подписку](/platform-manager/subscription/purchase) для доступа к API. Подробнее о стоимости сервиса см. в разделе [Тарифы](#tariffs).
+
+Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
 
 ### 2. Отправьте запрос {#send-request}
 
-Чтобы определить местоположение устройства, отправьте POST-запрос на endpoint `https://radar.api.2gis.com/v2/geolocation`. Для этого:
+Чтобы определить местоположение устройства, отправьте POST-запрос на endpoint `https://radar.api.2gis.com/v2/geolocation`:
 
 1. В строке запроса укажите значение API-ключа в параметре `key`:
 
@@ -43,52 +48,88 @@ Radar API возвращает радиус и координаты центра
    https://radar.api.2gis.com/v2/geolocation?key=API_KEY
    ```
 
-2. В теле запроса передайте JSON с необходимыми параметрами. Например, чтобы получить местоположение устройства по информации об одной сотовой вышке, одной точке доступа Wi-Fi и GNSS-позиции, отправьте следующий запрос:
+2. В теле запроса передайте JSON с необходимыми параметрами:
 
-   ```curl
-   curl --request POST \
-     --url 'https://radar.api.2gis.com/v2/geolocation?key=API_KEY' \
-     --header 'Content-Type: application/json' \
-     --data '{
-       "sessionUUID": "deea0dba-0000-41a1-a1b4-8b6fc342b07d",
-       "captureTimestampUnix": 1628605467,
-       "gnssLocation": {
-         "latitude": 55.0302839,
-         "longitude": 82.9231227,
-         "horizontalAccuracyM": 6.228
-       },
-       "mobileNetwork": {
-         "homeMobileCountryCode": 250,
-         "homeMobileNetworkCode": 2,
-         "cellTowers": [
-           {
-             "ageMs": 75002,
-             "cellID": 138361350,
-             "networkType": "lte",
-             "locationAreaCode": 5401,
-             "signalStrengthDBm": -101
-           }
-         ]
-       },
-       "wifiAccessPoints": [
-         {
-           "ageMs": 1000,
-           "macAddress": "74:4d:28:2b:6c:32",
-           "signalStrengthDBm": -75
-         }
-       ]
-   }'
+   ```json
+   {
+      "sessionUUID": "deea0dba-0000-41a1-a1b4-8b6fc342b07d",
+      "captureTimestampUnix": 1628605467,
+      "gnssLocation": {
+        "latitude": 55.0302839,
+        "longitude": 82.9231227,
+        "horizontalAccuracyM": 6.228
+      },
+      "mobileNetwork": {
+        "homeMobileCountryCode": 250,
+        "homeMobileNetworkCode": 2,
+        "cellTowers": [
+          {
+            "ageMs": 75002,
+            "cellID": 138361350,
+            "networkType": "lte",
+            "locationAreaCode": 5401,
+            "signalStrengthDBm": -101
+          }
+        ]
+      },
+      "wifiAccessPoints": [
+        {
+          "ageMs": 1000,
+          "macAddress": "74:4d:28:2b:6c:32",
+          "signalStrengthDBm": -75
+        }
+      ]
+   }
    ```
 
-   Где:
+#### Пример запроса {#request-example}
 
-   * `gnssLocation` содержит данные о GNSS-местоположении устройства: широте, долготе и точности позиционирования.
-   * `mobileNetwork` содержит мобильный код страны, код мобильной сети и информацию о наблюдаемой в данный момент сотовой вышке: время с момента первого наблюдения, идентификатор, мощность сигнала и другие параметры.
-   * `wifiAccessPoints` содержит информацию о наблюдаемой в данный момент точке доступа Wi-Fi: время с момента первого наблюдения, MAC-адрес и мощность сигнала.
+Например, чтобы получить местоположение устройства по информации об одной сотовой вышке, одной точке доступа Wi-Fi и GNSS-позиции, отправьте следующий запрос:
 
-Более подробную информацию о параметрах см. в [Справочнике API](/api/navigation/radar/reference).
+```curl
+curl --request POST \
+  --url 'https://radar.api.2gis.com/v2/geolocation?key=API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sessionUUID": "deea0dba-0000-41a1-a1b4-8b6fc342b07d",
+    "captureTimestampUnix": 1628605467,
+    "gnssLocation": {
+      "latitude": 55.0302839,
+      "longitude": 82.9231227,
+      "horizontalAccuracyM": 6.228
+    },
+    "mobileNetwork": {
+      "homeMobileCountryCode": 250,
+      "homeMobileNetworkCode": 2,
+      "cellTowers": [
+        {
+          "ageMs": 75002,
+          "cellID": 138361350,
+          "networkType": "lte",
+          "locationAreaCode": 5401,
+          "signalStrengthDBm": -101
+        }
+      ]
+    },
+    "wifiAccessPoints": [
+      {
+        "ageMs": 1000,
+        "macAddress": "74:4d:28:2b:6c:32",
+        "signalStrengthDBm": -75
+      }
+    ]
+}'
+```
 
-**Пример ответа:**
+Где:
+
+* `gnssLocation` содержит данные о GNSS-местоположении устройства: широте, долготе и точности позиционирования.
+* `mobileNetwork` содержит мобильный код страны, код мобильной сети и информацию о наблюдаемой в данный момент сотовой вышке: время с момента первого наблюдения, идентификатор, мощность сигнала и другие параметры.
+* `wifiAccessPoints` содержит информацию о наблюдаемой в данный момент точке доступа Wi-Fi: время с момента первого наблюдения, MAC-адрес и мощность сигнала.
+
+Более подробную информацию о параметрах см. в [Справочнике API](/api/navigation/radar/reference/geolocation_v2).
+
+#### Пример ответа {#response-example}
 
 Запрос вернёт объект с предсказанием местоположения устройства: широту, долготу и радиус, в котором с вероятностью 68% находится устройство.
 
@@ -104,14 +145,23 @@ Radar API возвращает радиус и координаты центра
 }
 ```
 
-Подробную информацию о каждом поле см. в [Справочнике API](/api/navigation/radar/reference).
+Подробную информацию о каждом поле см. в [Справочнике API](/api/navigation/radar/reference/geolocation_v2).
 
 ## Тарифы {#tariffs}
 
-* Стоимость сервиса рассчитывается исходя из количества запросов в месяц.
-* Актуальные тарифы можно посмотреть в [Менеджере Платформы](https://platform.2gis.ru/ru/tariffs?utm_source=docs&utm_medium=referral&utm_campaign=api_radar).
+* Стоимость сервиса рассчитывается исходя из количества успешных запросов в месяц.
+* Актуальную стоимость и лимиты см. в разделе [Тарифы](/platform-manager/subscription/pricing).
 
 ## Варианты размещения {#distribution}
 
 * **Облако**: все методы Radar API доступны через публичные endpoint-ы <Brand />.
 * **On-Premise**: методы Radar API недоступны при установке API-платформы <Brand /> в закрытом контуре.
+
+## Помощь {#support}
+
+* Если у вас возникли вопросы при работе с API, задайте их AI-ассистенту (в правом нижнем углу cайта), воспользуйтесь поиском по документации или отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+* Если вы хотите обсудить возможности API или его интеграцию с вашим продуктом, обратитесь к менеджеру.
+
+   <CtaButton href="https://dev.2gis.ru/api/routing" target="_blank" appearance="lightFill">
+     Получить консультацию
+   </CtaButton>

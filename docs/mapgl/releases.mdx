@@ -6,7 +6,7 @@ sidebar: mapgljsapi
 There are two ways to choose MapGL version:
 
 1. (**recommended**) major version: https://mapgl.2gis.com/api/js/v1
-2. fixed version: https://mapgl.2gis.com/api/js/v1.72.3
+2. fixed version: https://mapgl.2gis.com/api/js/v1.75.0
 
 Major version guarantees to have stable API (breaking changes will land into the next major version).
 It is updated regularly with new features, bug fixes and performance improvements.
@@ -18,6 +18,50 @@ We guarantee that the version will be working during the support period.
 [Subresource Integrity (SRI)](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
 Because of short support period you have to update the version regularly.
 
+## v1.75.0
+
+**URL:** https://mapgl.2gis.com/api/js/v1.75.0
+
+**SRI:** sha512-5zhreVw5yzo1jdG1s5eXhVa5BzijYH6gM9ITF0rlTjxSBQYSFJcADZZZp845BkFIR7+2ymBZtZyiYHOdbhT7NA==
+
+**Release Date:** 26.06.2026
+
+- Fixed identify cache invalidation after tile mod changes, so hover now works for newly loaded custom source tiles
+- Added support for the format expression in style expressions, for example, for textField formatting
+- Fixed 3D line rendering
+- Added terrain contour line and contour label rendering, configurable via DEM style contour settings
+- Fixed tile visibility at the antimeridian when globe rendering is enabled and loopWorld is disabled
+
+## v1.74.0
+
+**URL:** https://mapgl.2gis.com/api/js/v1.74.0
+
+**SRI:** sha512-9yGkKBonvUFs/6zaNnk41GhluZa+rKXrP6QWmCvpHLuJd3W9oFBZnQof0I4MvZlsS77N02ryW/oEWuV8r3cOyA==
+
+**Release Date:** 09.06.2026
+
+**Support End Date:** 26.09.2026
+
+- Add touchmove event for map and dynamic objects on touch devices
+- Universe tiles are no longer filtered out based on regional coverage data
+- Update FPS stats accumulation and performance caveat detection
+- Improve tiered mesh rendering by skipping redundant tier framebuffer redraws
+- Fix mobile rendering of point, circle marker and dashed line symbols
+
+## v1.73.0
+
+**URL:** https://mapgl.2gis.com/api/js/v1.73.0
+
+**SRI:** sha512-3ySr4ArzEvQ/YwvXD4uoR2m3XowpdZEKnBADLL3OdllBW0adZNcb+zFwLERrhnMjVQqaP7cJJv+kvmKP2qg3Zw==
+
+**Release Date:** 26.05.2026
+
+**Support End Date:** 09.09.2026
+
+- Allowed expression values for PointStyleLayer iconPriority/textPriority and LabelLineStyleLayer textPriority in type declarations
+- Removed commercial POI layer injection into styles
+- Fixed a blinking frame when repeating GLTF model animations
+
 ## v1.72.3
 
 **URL:** https://mapgl.2gis.com/api/js/v1.72.3
@@ -25,6 +69,8 @@ Because of short support period you have to update the version regularly.
 **SRI:** sha512-Bs1FNW6l3HhIEjgdeI6b3T/IuYxOouAn01VPM46zXcG1bf/cGSbt3/z7FcJmzkPevEWRLqI+nScMR0voF76tmw==
 
 **Release Date:** 08.05.2026
+
+**Support End Date:** 26.08.2026
 
 - Metrics are now submitted when the graphics preset changes
 - Raster tile source URL function now processes map key when available

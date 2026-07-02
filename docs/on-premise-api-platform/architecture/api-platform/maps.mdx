@@ -5,7 +5,7 @@ sidebar: on-premise-api-platform
 
 Сервисы карт позволяют отображать карты <Brand /> на сайтах, а также в веб- и мобильных приложениях.
 
-В этой статье описывается, как установить и настроить сервисы карт в вашем окружении. Чтобы узнать, как использовать API, предоставляемые сервисами карт, обратитесь к [документации MapGL JS API](/mapgl/overview).
+В этой статье описывается, как установить и настроить сервисы карт в вашем окружении. Чтобы узнать, как использовать API, предоставляемые сервисами карт, обратитесь к [документации MapGL JS API](/mapgl/overview/features).
 
 ## Архитектура {#architecture}
 
@@ -41,7 +41,7 @@ sidebar: on-premise-api-platform
 
 ### Styles API
 
-Предоставляет API для удобного подключения пользовательских стилей карты. Вы можете создать собственный стиль в [Редакторе стилей](https://styles.2gis.com/), загрузить его в контур On-Premise через интерфейс [Менеджера Платформы](/on-premise-api-platform/architecture/api-platform/platform) и подключить к своей карте в настройках MapGL JS API. Подробнее см. в инструкции [Загрузка и применение стиля карты](/on-premise-api-platform/api-platform/user-guide/platform-manager#add-map-style).
+Предоставляет API для удобного подключения пользовательских стилей карты. Вы можете создать собственный стиль в [Редакторе стилей](https://styles.2gis.com/), загрузить его в контур On-Premise через интерфейс [Менеджера Платформы](/on-premise-api-platform/architecture/api-platform/platform) и подключить к своей карте в настройках MapGL JS API. Подробнее см. в инструкции [Загрузка и применение стиля карты](/on-premise-api-platform/api-platform/user-guide/platform-manager#adding-map-style).
 
 Если Styles API не установлен, к карте будет применён стиль по умолчанию.
 
@@ -67,7 +67,7 @@ sidebar: on-premise-api-platform
 
 :::tip[Можно использовать аналог из реестра Минцифры]
 
-Доступные аналоги Apache Cassandra, включённые в реестр Минцифры, см. в разделе [Системные требования](/on-premise-api-platform/api-platform/install/requirements).
+Доступные аналоги Apache Cassandra, включённые в реестр Минцифры, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
 
 :::
 
@@ -78,7 +78,7 @@ sidebar: on-premise-api-platform
 * Сервис Styles API, необходимый для загрузки пользовательских стилей, созданных в [Редакторе стилей](https://styles.2gis.com/). Для работы Styles API необходимо настроить PostgreSQL и S3-совместимое хранилище.
 * Сервис Tilegen API, необходимый для создания векторных тайлов из пользовательских данных. Для работы Tilegen API необходимо настроить Redis.
 
-Подробнее о том, как проверить требования для каждого сервиса, см. в документе [Системные требования](/on-premise-api-platform/api-platform/install/requirements).
+Подробнее о том, как проверить требования для каждого сервиса, см. в документе [Системные требования](/on-premise-api-platform/requirements).
 
 ## Что дальше? {#whats-next}
 
@@ -90,4 +90,4 @@ sidebar: on-premise-api-platform
 * Узнайте больше о программном комплексе <Brand />:
 
   * [Архитектура программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture)
-  * [Системные требования](/on-premise-api-platform/api-platform/install/requirements)
+  * [Системные требования](/on-premise-api-platform/requirements)

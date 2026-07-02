@@ -11,11 +11,13 @@ sidebar: mapgljsapi
 map.addIcon('newIconName', { url: '//path_to_icon/icon.svg' });
 ```
 
-В качестве аргументов метод принимает имя иконки и объект опций [StyleIconConfig](/mapgl/reference/interface#style-icon-config), содержащий путь до иконки.
+В качестве аргументов метод принимает имя иконки и объект опций [StyleIconConfig](/mapgl/reference/interface#style-simple-icon-config) или
+[StyleStretchableIconConfig](/mapgl/reference/interface#style-stretchable-icon-config), содержащий путь до иконки.
 
 Ограничения по работе с методом:
 
-* В качестве URL до иконки вы можете использовать только абсолютный или шаблонный путь, например `//absolute_path_to_icon/icon.svg` или `//{appHost}/path_to_icon/icon.svg`.
+* В качестве URL до иконки вы можете использовать только абсолютный путь, шаблонный путь или data URL,
+  например `//absolute_path_to_icon/icon.svg`, `//{appHost}/path_to_icon/icon.svg` или `data:image/svg+xml;base64,...`.
 * В качестве иконки вы можете использовать только SVG-изображение.
 
 Текст внутри SVG-файла рекомендуется конвертировать в кривые. Иначе, если на клиентском устройстве отсутствует используемый в SVG-файле шрифт, могут возникнуть визуальные отличия текста от исходной иконки.
@@ -90,6 +92,156 @@ map.addIcon('newIconName', { url: '//path_to_icon/icon.svg' });
             map.on('styleload', () => {
                 map.addIcon('custom', { url: '__BASE_URL__/img/mapgl/point-red.svg'});
                 map.addLayer(layer);
+            });
+        </script>
+    </body>
+</html>
+`}
+</HtmlExampleWithSrcCode>
+
+### Растягиваемая иконка
+
+Чтобы иконка растягивалась под текст, укажите исходные `width` и `height` SVG-изображения и задайте растягиваемые области с помощью `stretchX` и `stretchY`. Фиксированные области сохраняют углы без изменений, а заданные области растягиваются. Текст внутри иконки задается через `iconTextField`, а `iconTextPadding` управляет отступами вокруг него:
+
+В примере используется SVG-подложка размером 40 × 30 пикселей:
+
+<NoInvert>
+![stretchable-icon-bubble.svg](/img/mapgl/stretchable-icon-bubble.svg)
+</NoInvert>
+
+Параметры `stretchX` и `stretchY` задаются в пикселях исходного изображения:
+
+<NoInvert>
+![stretchable-icon-plot.svg](/img/mapgl/stretchable-icon-plot.svg)
+</NoInvert>
+
+```js
+map.addIcon('bubble', {
+    url: bubbleUrl,
+
+    // Ширина исходного изображения
+    width: 40,
+
+    // Высота исходного изображения
+    height: 30,
+
+    // Область изображения, которая будет растягиваться горизонтально — синяя полоса на схеме
+    stretchX: [
+        [10, 30], // пиксели между X=10 и X=30 (10 ≤ X ≤ 30)
+    ],
+
+    // Область изображения, которая будет растягиваться вертикально — розовая полоса на схеме
+    stretchY: [
+        [10, 20], // пиксели между Y=10 и Y=20 (10 ≤ Y ≤ 20)
+    ],
+});
+```
+
+В стиле слоя параметр `iconTextPadding: [6, 10, 6, 10]` задает отступы вокруг текста в порядке `[top, right, bottom, left]`.
+
+<HtmlExampleWithSrcCode iframeStyles={{ height: '300px' }}>
+{`
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MapGL JS API</title>
+        <meta name="description" content="Растягиваемая иконка" />
+        <style>
+            html,
+            body,
+            #container {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="__MAPGL_API_URL__"></script>
+        <script>
+            const bubbleSvg = [
+                '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="30"',
+                '  viewBox="0 0 40 30">',
+                '  <rect x="1" y="1" width="38" height="28" rx="8" ry="8"',
+                '    fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>',
+                '</svg>',
+            ].join('');
+
+            const bubbleUrl = 'data:image/svg+xml;base64,' + btoa(bubbleSvg);
+
+            const map = new mapgl.Map('container', {
+                center: [37.61951, 55.768944],
+                zoom: 15,
+                key: 'Your API access key',
+            });
+
+            map.on('styleload', () => {
+                map.addIcon('bubble', {
+                    url: bubbleUrl,
+                    width: 40,
+                    height: 30,
+                    stretchX: [[10, 30]],
+                    stretchY: [[10, 20]],
+                });
+
+                new mapgl.GeoJsonSource(map, {
+                    data: {
+                        type: 'FeatureCollection',
+                        features: [
+                            {
+                                type: 'Feature',
+                                properties: { label: 'Точка 1' },
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: [37.61951, 55.768944],
+                                },
+                            },
+                            {
+                                type: 'Feature',
+                                properties: { label: 'Длинный текст точки' },
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: [37.622, 55.7695],
+                                },
+                            },
+                            {
+                                type: 'Feature',
+                                properties: { label: 'Тчк 3' },
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: [37.6172, 55.7683],
+                                },
+                            },
+                        ],
+                    },
+                    attributes: {
+                        purpose: 'stretchable-icon',
+                    },
+                });
+
+                map.addLayer({
+                    id: 'stretchable-icon-layer',
+                    type: 'point',
+                    filter: [
+                        'match',
+                        ['sourceAttr', 'purpose'],
+                        ['stretchable-icon'],
+                        true,
+                        false,
+                    ],
+                    style: {
+                        iconImage: 'bubble',
+                        allowOverlap: true,
+                        iconTextFont: 'Open_Sans',
+                        iconTextField: ['get', 'label'],
+                        iconTextFontSize: 14,
+                        iconTextColor: '#ffffff',
+                        iconTextPadding: [6, 10, 6, 10],
+                    },
+                });
             });
         </script>
     </body>

@@ -3,7 +3,7 @@ sidebar: androidsdk
 ---
 # Android Compose
 
-[Android Compose (Jetpack Compose)](https://developer.android.com/compose) — это набор инструментов для создания UI в Android-приложениях на языке программирования Kotlin. Основное отличие фреймворка от Android View — декларативный подход к описанию интерфейса.
+[Android Compose (Jetpack Compose)](https://developer.android.com/compose) — это набор инструментов для создания пользовательского интерфейса в Android-приложениях на языке программирования Kotlin. Основное отличие фреймворка от Android View — декларативный подход к описанию интерфейса.
 
 Вы можете использовать [модули для Android Compose](https://2gis.github.io/android-compose-docs/index.html) от <Brand />, чтобы добавить в свой проект стандартные UI-элементы:
 
@@ -71,3 +71,217 @@ dependencies {
 14. [RouteOverviewComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.routeoverview/-route-overview-composable.html) для отображения общей информации о маршруте во время навигации.
 
 <img src="/img/mobile-sdk/android_navi_controls_6.png" width="250" /><img src="/img/mobile-sdk/android_navi_controls_7.png" width="250" /><img src="/img/mobile-sdk/android_navi_controls_8.png" width="250" />
+
+## Экран настроек навигатора {#navigator-settings}
+
+Модуль `compose-navigation` содержит экраны и макеты компонентов для интерфейса настроек навигатора. Вы можете использовать готовый экран настроек, который открывается из дашборда навигации, или встроить отдельные компоненты в собственный экран приложения.
+
+Настройки навигатора хранятся в [NavigationSettingsRepository](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-repository/index.html). Приложение создаёт и хранит экземпляр репозитория, а мобильный SDK использует экземпляр и читает из него настройки для управления навигатором и при [построении маршрута](#route-search-options). Используйте один и тот же репозиторий и в интерфейсе настроек навигатора, и в коде построения маршрута. Тогда значения, которые пользователь выбирает в настройках, будут доступны при создании [RouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchOptions-class.html), и приложение учтёт их перед построением маршрута.
+
+Если репозиторий передан в [DefaultNavigationControlsState](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.defaultcontrols.navigation/-default-navigation-controls-state/index.html), часть настроек применяется к активной сессии навигации автоматически.
+
+### Готовый экран настроек {#default-settings-screen}
+
+Создайте [NavigationSettingsRepository](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-repository/index.html) и передайте его в [DefaultNavigationControlsState](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.defaultcontrols.navigation/-default-navigation-controls-state/index.html). В примере ниже `DefaultNavigationControlsState` также применяет поддерживаемые динамические настройки к `NavigationManager` и учитывает их изменения во время навигации.
+
+```kotlin
+@Composable
+fun NavigationControls(
+    context: Context,
+    map: Map,
+    navigationManager: NavigationManager,
+    minimapState: MapComposableState,
+) {
+    val settingsRepository = remember(context) {
+        NavigationSettingsRepository.default(context.applicationContext)
+    }
+    val controlsState = remember(map, navigationManager, minimapState, settingsRepository) {
+        DefaultNavigationControlsState(
+            map = map,
+            navigationManager = navigationManager,
+            minimapState = minimapState,
+            settingsRepository = settingsRepository,
+        )
+    }
+
+    DisposableEffect(controlsState) {
+        onDispose { controlsState.onCleared() }
+    }
+
+    NavigationControlsComposable(state = controlsState)
+}
+```
+
+Если репозиторий задан, [NavigationControlsComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.defaultcontrols.navigation/-navigation-controls-composable.html) автоматически покажет кнопку настроек в дашборде навигации и откроет встроенный экран настроек по нажатию.
+
+<img src="/img/mobile-sdk/android_navi_settings_controls_button.png" width="250" />
+
+### Пользовательский сценарий {#custom-settings-screen}
+
+Если вы планируете создать собственный экран настроек или диалоговое окно, передайте `onSettingsClick` в `NavigationControlsComposable`. В этом случае встроенный экран не откроется, и будет вызван ваша функция обратного вызова
+
+```kotlin
+NavigationControlsComposable(
+    state = controlsState,
+    onSettingsClick = { settingsVisible = true },
+)
+```
+
+Также передайте репозиторий в `DefaultNavigationControlsState`, чтобы SDK применял динамические настройки. Видимость кнопки обеспечивает `onSettingsClick`: если передана функция обратного вызова, дашборд покажет кнопку настроек и вызовет эту функцию по нажатию.
+
+#### Готовые макеты {#ready-layouts}
+
+Для реализации собственного сценария вы можете использовать готовые макеты SDK:
+
+- [RouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-route-settings-layout.html) — основной экран настроек маршрута, звука, событий на карте и ссылок на настройки транспорта.
+
+    - [PedestrianRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-pedestrian-route-settings-layout.html) — настройки пешеходных маршрутов.
+    - [BicycleRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-bicycle-route-settings-layout.html) — настройки маршрутов для велосипеда.
+    - [ScooterRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-scooter-route-settings-layout.html) — настройки маршрутов для самоката.
+    - [MotorcycleRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-motorcycle-route-settings-layout.html) - настройки маршрутов для мотоцикла.
+    - [PublicTransportRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-public-transport-route-settings-layout.html) - настройки маршрутов для общественного транспорта.
+    - [TruckRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-truck-route-settings-layout.html) - настройки параметров грузовика и ограничений маршрута для грузового транспорта.
+
+    <img src="/img/mobile-sdk/android_navi_settings_controls_main.png" width="250" /><img src="/img/mobile-sdk/android_navi_settings_controls_transport.png" width="250" />
+
+- [SoundSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-sound-settings-layout.html) — настройки звука и предупреждений.
+
+    <img src="/img/mobile-sdk/android_navi_settings_controls_sound.png" width="250" />
+
+- [VoicesLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-voices-layout.html) — выбор, загрузка и удаление голосов.
+
+    <img src="/img/mobile-sdk/android_navi_settings_controls_voices.png" width="250" />
+
+В примере ниже добавлена собственная навигация между экранами, а их содержимое построено на основе готовых макетов:
+
+```kotlin
+@Composable
+fun CustomSettingsScreen(
+    settingsRepository: NavigationSettingsRepository,
+    onClose: () -> Unit,
+) {
+    var screen by remember { mutableStateOf(SettingsScreen.Root) }
+    val soundViewModel = remember(settingsRepository) {
+        DefaultSoundSettingsViewModel(settingsRepository)
+    }
+    val voicesViewModel = remember(settingsRepository) {
+        DefaultVoicesScreenViewModel(settingsRepository)
+    }
+
+    DisposableEffect(soundViewModel, voicesViewModel) {
+        onDispose {
+            soundViewModel.onCleared()
+            voicesViewModel.onCleared()
+        }
+    }
+
+    Column {
+        Button(onClick = onClose) {
+            Text(text = "Close")
+        }
+
+        when (screen) {
+            SettingsScreen.Root -> RouteSettingsLayout(
+                settingsRepository = settingsRepository,
+                onNavigateToSoundSettings = { screen = SettingsScreen.Sound },
+                onNavigateToBicycle = { screen = SettingsScreen.Bicycle },
+                onNavigateToVoicesSettings = { screen = SettingsScreen.Voices },
+            )
+            SettingsScreen.Sound -> SoundSettingsLayout(
+                viewModel = soundViewModel,
+                onNavigateToVoices = { screen = SettingsScreen.Voices },
+            )
+            SettingsScreen.Voices -> VoicesLayout(state = voicesViewModel)
+            SettingsScreen.Bicycle -> BicycleRouteSettingsLayout(
+                settingsRepository = settingsRepository,
+            )
+        }
+    }
+}
+```
+
+Если вы создаёте [DefaultSoundSettingsViewModel](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-default-sound-settings-view-model/index.html) или [DefaultVoicesScreenViewModel](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-default-voices-screen-view-model/index.html) самостоятельно, вызовите `onCleared()` при уничтожении экрана. При использовании готового экрана настроек через `DefaultNavigationControlsState` это делается автоматически.
+
+### Настройки поиска маршрута {#route-search-options}
+
+Настройки поиска маршрута не применяются автоматически к созданному [RouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchOptions-class.html). Перед построением маршрута приложение должно прочитать нужные значения из того же [NavigationSettingsRepository](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-repository/index.html), который использовался в интерфейсе настроек.
+
+Пример для автомобильного маршрута:
+
+```kotlin
+fun createRouteSearchOptions(
+    settingsRepository: NavigationSettingsRepository,
+): RouteSearchOptions = RouteSearchOptions(
+    CarRouteSearchOptions(
+        avoidTollRoads = settingsRepository[Keys.CAR_AVOID_TOLL_ROADS],
+        avoidUnpavedRoads = settingsRepository[Keys.CAR_AVOID_UNPAVED_ROADS],
+        avoidFerries = settingsRepository[Keys.CAR_AVOID_FERRIES],
+        avoidLockedRoads = settingsRepository[Keys.CAR_AVOID_LOCKED_ROADS],
+        routeSearchType = settingsRepository[Keys.CAR_ROUTE_SEARCH_TYPE],
+    )
+)
+```
+
+Аналогично можно читать ключи для пешеходных, велосипедных, грузовых и других маршрутов из [Keys](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-keys/index.html?query=object%20Keys).
+
+### Скрытие секций {#hide-sections}
+
+Чтобы скрыть части готового экрана настроек, `RouteSettingsLayout` или `SoundSettingsLayout`, используйте [SectionVisibilityConfig](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-section-visibility-config/index.html).
+
+```kotlin
+val visibilityConfig = remember {
+    SectionVisibilityConfig(
+        hiddenSections = setOf(
+            SectionVisibilityConfig.SECTION_TRUCK,
+            SectionVisibilityConfig.SECTION_PUBLIC_TRANSPORT,
+            SectionVisibilityConfig.SECTION_OTHER_SOUNDS,
+        )
+    )
+}
+
+NavigationControlsComposable(
+    state = controlsState,
+    settingsSectionVisibility = visibilityConfig,
+)
+```
+
+Доступные идентификаторы секций:
+
+| Идентификатор | Скрываемая секция |
+| --- | --- |
+| `SECTION_GENERAL_ROUTE` | Общие настройки маршрута |
+| `SECTION_CAR_ROUTE` | Настройки автомобильного маршрута |
+| `SECTION_CALLOUT_VISUALIZATION` | Визуализация подсказок |
+| `SECTION_MAP_EVENTS` | События на карте |
+| `SECTION_PASSED_ROUTE` | Пройденный маршрут |
+| `SECTION_NAVIGATION_LINKS` | Ссылки на вложенные экраны из основного экрана |
+| `SECTION_PEDESTRIAN` | Секция настроек пешеходного маршрута или ссылка на них |
+| `SECTION_BICYCLE` | Секция настроек маршрута для велосипеда или ссылка на них |
+| `SECTION_SCOOTER` | Секция настроек маршрута для самоката или ссылка на них |
+| `SECTION_MOTORCYCLE` | Секция настроек маршрута для мотоцикла или ссылка на них |
+| `SECTION_PUBLIC_TRANSPORT` | Секция настроек маршрута для общественного транспорта или ссылка на них |
+| `SECTION_TRUCK` | Секция настроек маршрута для грузового транспорта или ссылка на них |
+| `SECTION_SOUND_MASTER` | Главный переключатель звукового режима |
+| `SECTION_EVENT_WARNINGS` | Предупреждения о событиях |
+| `SECTION_VOICES` | Выбор голосов озвучки |
+| `SECTION_OTHER_SOUNDS` | Остальные звуковые события |
+
+### Тема {#theme}
+
+Вы можете использовать тему по умолчанию из [NavigationSettingsTheme](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-theme/index.html) или переопределить отдельные параметры темы:
+
+* [NavigationSettingsColors](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-colors/index.html) — цвета,
+* [NavigationSettingsTypography](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-typography/index.html) — типографика.
+
+```kotlin
+val theme = NavigationSettingsTheme.defaults(
+    colors = NavigationSettingsColors.colors().copy(
+        primary = Color(0xFF0A84FF),
+    )
+)
+
+RouteSettingsLayout(
+    settingsRepository = settingsRepository,
+    theme = theme,
+)
+```

@@ -7,6 +7,11 @@ The style specification defines the appearance of the map: how, in which order, 
 
 ## Specification versions {#versions}
 
+### 1.1.1
+
+* Updated the type of the `iconPriority` property value in the "point" layer: now `number` or `Expression<number>` is accepted.
+* Updated the type of the `textPriority` property value in the "point" and "labelLine" layers: now `number` or `Expression<number>` is accepted.
+
 ### 1.1.0
 
 * Added new layer types: "model", "polygonExtrusion", "lineExtrusion", "polygon3d", "metricPoint", "labelLine", and "group".
@@ -685,7 +690,7 @@ Extra icon margins in a labeling group.
 
 ##### iconPriority
 
-`number` *(optional)*
+`number` or `Expression<number>` *(optional)*
 (Non-negative integer. Default value is `0`.)
 
 Icon priority in a labeling group. The higher the value, the higher the priority.
@@ -705,7 +710,7 @@ Extra label margins in a labeling group.
 
 ##### textPriority
 
-`number` *(optional)*
+`number` or `Expression<number>` *(optional)*
 (Non-negative integer. Default value is `0`.)
 
 Label priority in a labeling group. The higher the value, the higher the priority. The value cannot exceed the `iconPriority` value. The label is hidden if its icon overlaps it.
@@ -1125,7 +1130,7 @@ Labeling group for the layer.
 
 ##### textPriority
 
-`number` *(optional)*
+`number` or `Expression<number>` *(optional)*
 (Non-negative integer. Default value is `0`.)
 
 Label priority for labeling. The higher the value, the higher the priority.

@@ -10,8 +10,8 @@ sidebar: rasterjsapi
 
 Используется для создания и открытия попапов в определенных местах на карте.
 
-Для открытия попапа можно использовать метод карты <a href="/ru/maps/others/rasterjs/reference/map#map-openpopup">Map.openPopup</a>, в таком случае
-одновременно может быть открыт лишь один попап, либо метод <a href="/ru/maps/others/rasterjs/reference/map#map-addlayer">Map.addLayer</a> для отображения
+Для открытия попапа можно использовать метод карты <a href="/maps/others/rasterjs/reference/map#map-openpopup">Map.openPopup</a>, в таком случае
+одновременно может быть открыт лишь один попап, либо метод <a href="/maps/others/rasterjs/reference/map#map-addlayer">Map.addLayer</a> для отображения
 любого количества попапов.
 
 ### Пример использования
@@ -43,7 +43,7 @@ var popup = DG.popup()
 	</thead>
     <tbody>
         <tr id="popup-dg-popup">
-            <td><code><b>DG.popup</b>( <nobr>&lt;<a href="#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i></nobr>, <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>source?</i></nobr>) </code></td>
+            <td><code><b>DG.popup</b>( <nobr>&lt;<a href="#nav-lvl2--Опции">Popup options</a>&gt; <i>options?</i></nobr>, <nobr>&lt;<a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--DG.Layer">Layer</a>&gt; <i>source?</i></nobr>) </code></td>
             <td>Создает объект Popup с переданными опциями, описывающими внешний вид и расположение попапа. Также вторым параметром можно передать объект <code>source</code>, указывающий привязку попапа к определенному объекту типа Layer.</td>
         </tr>
     </tbody>
@@ -125,7 +125,7 @@ var popup = DG.popup()
             <td><code><b>autoClose</b></code></td>
             <td><code>Boolean </code></td>
             <td><code>true</code></td>
-            <td>Установите эту опцию в <code>false</code>, если хотите изменить стандартное поведение, когда попап закрывается при кликах в область карты (устанавливается глобально с помощью метода карты <a href="/ru/maps/others/rasterjs/reference/map#map-closepopuponclick">closePopupOnClick</a>)</td>
+            <td>Установите эту опцию в <code>false</code>, если хотите изменить стандартное поведение, когда попап закрывается при кликах в область карты (устанавливается глобально с помощью метода карты <a href="/maps/others/rasterjs/reference/map#map-closepopuponclick">closePopupOnClick</a>)</td>
         </tr>
         <tr id="popup-zoomanimation">
             <td><code><b>zoomAnimation</b></code></td>
@@ -162,7 +162,7 @@ var popup = DG.popup()
 
 ### События
 
-События, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#dglayer-events">Layer</a> {/*  TODO: include events  */}
+События, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#dglayer-events">Layer</a> {/*  TODO: include events  */}
 
 <table>
     <thead>
@@ -175,18 +175,18 @@ var popup = DG.popup()
     <tbody>
         <tr id="popup-add">
             <td><code><b>add</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается при добавлении нового слоя на карту.</td>
         </tr>
         <tr id="popup-remove">
             <td><code><b>remove</b></code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/base-classes#nav-lvl1--Объекты_событий">Event</a></code></td>
             <td>Вызывается при удалении слоя с карты.</td>
         </tr>
     </tbody>
 </table>
 
-События попапа, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#dglayer-popup-events">Layer</a> {/*  TODO: include popup events  */}
+События попапа, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#dglayer-popup-events">Layer</a> {/*  TODO: include popup events  */}
 
 <table>
     <thead>
@@ -222,17 +222,17 @@ var popup = DG.popup()
 	</thead>
     <tbody>
         <tr id="popup-openon">
-            <td><code><b>openOn</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/map#dgmap">Map</a>&gt; <i>map</i></nobr>) </code></td>
+            <td><code><b>openOn</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/map#dgmap">Map</a>&gt; <i>map</i></nobr>) </code></td>
             <td><code>this</code></td>
             <td>Добавляет попап на карту, предварительно закрыв другие попапы. Аналогично map.openPopup(popup).</td>
         </tr>
         <tr id="popup-getlatlng">
             <td><code><b>getLatLng</b>()</code></td>
-            <td><code><a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
+            <td><code><a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a></code></td>
             <td>Возвращает географические координаты точки открытия попапа.</td>
         </tr>
         <tr id="popup-setlatlng">
-            <td><code><b>setLatLng</b>( <nobr>&lt;<a href="/ru/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng</i></nobr>)</code></td>
+            <td><code><b>setLatLng</b>( <nobr>&lt;<a href="/maps/others/rasterjs/reference/basic-types#dglatlng">LatLng</a>&gt; <i>latlng</i></nobr>)</code></td>
             <td><code>this</code></td>
             <td>Устанавливает географические координаты точки открытия попапа.</td>
         </tr>
@@ -294,10 +294,10 @@ var popup = DG.popup()
     </tbody>
 </table>
 
-Методы попапа, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#dglayer-popup-methods">Layer</a> {/*  TODO: include methods  */}
+Методы попапа, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#dglayer-popup-methods">Layer</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#dglayer-methods">Layer</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#dglayer-methods">Layer</a> {/*  TODO: include methods  */}
 
-Методы, унаследованные от <a href="/ru/maps/others/rasterjs/reference/base-classes#dgevented-methods">Evented</a> {/*  TODO: include methods  */}
+Методы, унаследованные от <a href="/maps/others/rasterjs/reference/base-classes#dgevented-methods">Evented</a> {/*  TODO: include methods  */}
 
 

@@ -287,24 +287,27 @@ marker.iconMapDirection = sdk.MapDirection(0.5);
 marker.animatedAppearance = true;
 ```
 
-### Линия
+### Линия {#polyline}
 
-Чтобы нарисовать на карте линию, нужно создать объект [Polyline](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline-class.html), указав нужные настройки в [PolylineOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolylineOptions-class.html), и передать его в вызов `addObject()` менеджера объектов.
+Чтобы нарисовать на карте линию (полилинию), создайте объект [Polyline](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline-class.html), укажите настройки линии в [PolylineOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolylineOptions-class.html) и передайте объект в метод `addObject()` менеджера объектов.
+
+Вы можете указать координаты вершин линии и настроить её ширину, цвет и другие параметры.
 
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-// Координаты вершин ломаной линии
-final sdk.GeoPoint point1 = sdk.GeoPoint(latitude: sdk.Latitude(55.7), longitude: sdk.Longitude(37.6));
-final sdk.GeoPoint point2 = sdk.GeoPoint(latitude: sdk.Latitude(55.8), longitude: sdk.Longitude(37.7));
-final sdk.GeoPoint point3 = sdk.GeoPoint(latitude: sdk.Latitude(55.9), longitude: sdk.Longitude(37.8));
-final sdk.GeoPoint geopoints = <sdk.GeoPoint>[point1,point2,point3]
+// Координаты вершин линии
+final sdk.GeoPoint point1 = sdk.GeoPoint(latitude: sdk.Latitude(55.7513), longitude: sdk.Longitude(37.6236));
+final sdk.GeoPoint point2 = sdk.GeoPoint(latitude: sdk.Latitude(55.7405), longitude: sdk.Longitude(37.6235));
+final sdk.GeoPoint point3 = sdk.GeoPoint(latitude: sdk.Latitude(55.7439), longitude: sdk.Longitude(37.6506));
+final List<sdk.GeoPoint> geopoints = <sdk.GeoPoint>[point1, point2, point3];
 
 // Создание линии
 final sdk.Polyline polyline = sdk.Polyline(
   sdk.PolylineOptions(
     points: geopoints,
-    width: sdk.LogicalPixel(2),
+    width: const sdk.LogicalPixel(2),
+    color: sdk.Color(0xFFFF0000),
   ),
 );
 
@@ -312,26 +315,59 @@ final sdk.Polyline polyline = sdk.Polyline(
 mapObjectManager.addObject(polyline);
 ```
 
-Чтобы изменить настройки уже созданной линии, установите новые значения для параметров объекта `Polyline`: cм. полный список доступных параметров в описании [Polyline](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline-class.html).
+Чтобы изменить настройки созданной линии, установите новые значения для параметров объекта `Polyline`: см. полный список доступных параметров в описании [Polyline](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline-class.html).
 
 ```dart
 // Изменение координат вершин линии
-polyline.points = geopoints;
+final sdk.GeoPoint point1 = sdk.GeoPoint(latitude: sdk.Latitude(54.7513), longitude: sdk.Longitude(36.6236));
+final sdk.GeoPoint point2 = sdk.GeoPoint(latitude: sdk.Latitude(54.7405), longitude: sdk.Longitude(36.6235));
+final sdk.GeoPoint point3 = sdk.GeoPoint(latitude: sdk.Latitude(54.7439), longitude: sdk.Longitude(36.6506));
+final List<sdk.GeoPoint> newPoints = <sdk.GeoPoint>[point1, point2, point3];
+polyline.points = newPoints;
 
 // Изменение толщины линии
-polyline.width = sdk.LogicalPixel(10);
+polyline.width = const sdk.LogicalPixel(10);
 
 // Изменение цвета линии
 polyline.color = sdk.Color(Colors.black.value);
 
-// Изменение стёртой части
- polyline.erasedPart = 0.1;
+// Стирание части линии
+polyline.erasedPart = 0.1;
 
 // Изменение параметров пунктирной линии
-polyline.dashedPolylineOptions = sdk.DashedPolylineOptions();
+polyline.dashedPolylineOptions = const sdk.DashedPolylineOptions(
+    dashLength: sdk.LogicalPixel(5),
+    dashSpaceLength: sdk.LogicalPixel(5),
+);
+```
+
+Чтобы сделать линию градиентной, укажите параметры градиента в свойстве [GradientPolylineOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline/gradientPolylineOptions.html) объекта `Polyline`.
+
+Например, линия из трёх точек образует два сегмента. Чтобы окрасить первый сегмент в красный цвет, а второй — в зелёный, создайте палитру из трёх цветов (красный, жёлтый и зелёный) и укажите индексы этих цветов для каждого сегмента линии (0 — для красного цвета, 2 — для зелёного). Количество индексов должно быть равно количеству сегментов (количество точек минус 1). Переход между сегментами будет плавным градиентом через жёлтый цвет, так как он находится между красным и зелёным в палитре.
+
+Длина перехода между цветами задаётся через параметр `gradientLength`: чем больше значение, тем плавнее переход между цветами.
+
+```dart
+// Палитра цветов для градиента
+final colors = <sdk.Color>[
+    sdk.Color(0xFFFF0000),   // Красный (индекс 0)
+    sdk.Color(0xFFFFFF00),   // Жёлтый (индекс 1)
+    sdk.Color(0xFF00FF00),   // Зелёный (индекс 2)
+];
+
+// Индексы цветов для каждого сегмента линии
+final colorIndices = Uint8List.fromList([0, 2]);
 
 // Изменение параметров градиентной линии
-polyline.gradientPolylineOptions = sdk.GradientPolylineOptions();
+polyline.gradientPolylineOptions = sdk.GradientPolylineOptions(
+    borderWidth: const sdk.LogicalPixel(10),       // Ширина границы линии
+    secondBorderWidth: const sdk.LogicalPixel(5),  // Ширина второй границы линии
+    gradientLength: const sdk.LogicalPixel(10),    // Длина градиентного перехода между цветами
+    borderColor: sdk.Color(0xFFFF0000),            // Цвет границы линии
+    secondBorderColor: sdk.Color(0xFF00FF00),      // Цвет второй границы линии
+    colors: colors,                                // Палитра цветов линии
+    colorIndices: colorIndices,                    // Индексы цветов линии
+);
 ```
 
 ### Многоугольник
@@ -1342,10 +1378,10 @@ mapWidgetController.getMapAsync((map) {
 
 У некоторых жестов есть свой перечень настроек:
 
-* `MultiTouchShiftSettings` для сдвига несколькими пальцами;
-* `RotationSettings` для вращения;
-* `ScalingSettings` для масштабирования;
-* `TiltSettings` для наклона.
+* `MultiTouchRecognizeSettings` для сдвига несколькими пальцами;
+* `RotationRecognizeSettings` для вращения;
+* `ScalingRecognizeSettings` для масштабирования;
+* `TiltRecognizeSettings` для наклона.
 
 Подробнее о настройках можно прочитать на соответствующих страницах в документации. Объекты этих настроек доступны через свойства [GestureManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GestureManager-class.html).
 

@@ -15,12 +15,17 @@ sidebar: mapgljsapi
 
 ### 1. Получите ключ доступа {#getting-access-key}
 
-Плагин работает на основе [Routing API](/api/navigation/routing/overview). Чтобы работать с API сервиса, получите ключ доступа:
+Получите ключ доступа к [Routing API](/api/navigation/routing/overview), на основе которого работает плагин:
 
-1. Зарегистрируйтесь в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_vector).
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_vector" target="_blank">
+      В кабинет
+   </CtaButton>
+
 2. Создайте [демо-ключ](/platform-manager/subscription/keys#demo) или купите [подписку](/platform-manager/subscription/purchase) для доступа к API.
 
-Работать с ключами можно в Менеджере Платформы: подробнее см. в документации [личного кабинета](/platform-manager/overview).
+Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
 
 ### 2. Подключите плагин {#install-plugin}
 
@@ -312,7 +317,7 @@ directions.clear();
 * линия подложки посередине (substrate line);
 * линия обводки внизу (halo line).
 
-Вы можете изменить ширину любой линии с помощью параметра `style`. Ширину можно задать в пикселях или как [InterpolateExpression](/mapgl/plugins/directions/reference/typeAlias#interpolateexpression) (в этом случае ширина будет меняться в зависимости от масштаба карты). Чтобы скрыть линию, укажите значение ширины `0`.
+Вы можете изменить ширину любой линии с помощью параметра `style`. Ширину можно задать в пикселях или как [InterpolateExpression](/mapgl/plugins/directions/reference/typeAlias#interpolate-expression) (в этом случае ширина будет меняться в зависимости от масштаба карты). Чтобы скрыть линию, укажите значение ширины `0`.
 
 Пример:
 
