@@ -80,7 +80,16 @@ import Link from '@docusaurus/Link';
          pull --config=/dgctl-config.yaml
       ```
 
-   Если вы используете утилиту 2GIS CLI версии 2, дополнительно укажите параметр `--version` с нужной версией программного комплекса On-Premise. Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+   :::note[Особенности версий 2GIS CLI]
+
+   Если вы используете утилиту 2GIS CLI:
+
+   * версии 2 — дополнительно укажите параметр `--version` с нужной версией программного комплекса On-Premise;
+   * версии 3.6 и выше — использовать аргумент `-v /var/run/docker.sock:/var/run/docker.sock` не требуется.
+
+   Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+
+   :::
 
 #### pull в файловую систему {#scenario-pull-to-fs}
 
@@ -139,7 +148,16 @@ import Link from '@docusaurus/Link';
          pull --config=/dgctl-config.yaml
       ```
 
-   Если вы используете утилиту 2GIS CLI версии 2, дополнительно укажите параметр `--version` с нужной версией программного комплекса On-Premise. Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+   :::note[Особенности версий 2GIS CLI]
+
+   Если вы используете утилиту 2GIS CLI:
+
+   * версии 2 — дополнительно укажите параметр `--version` с нужной версией программного комплекса On-Premise;
+   * версии 3.6 и выше — использовать аргумент `-v /var/run/docker.sock:/var/run/docker.sock` не требуется.
+
+   Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+
+   :::
 
 ### Режим `restore`
 
@@ -203,7 +221,15 @@ import Link from '@docusaurus/Link';
          restore --config=/dgctl-config.yaml --from-dir=/dgctl-source
       ```
 
+   :::note[Особенности версий 2GIS CLI и On-Premise]
+
    Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды, а также используйте аргументы `--only-apps` и/или `--only-data` для выгрузки образов сервисов и/или данных соответственно.
+
+   Если вы используете утилиту 2GIS CLI версии 3.6 и выше, использовать аргумент `-v /var/run/docker.sock:/var/run/docker.sock` не требуется.
+
+   Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+
+   :::
 
 #### restore в файловую систему {#scenario-restore-to-fs}
 
@@ -264,7 +290,15 @@ import Link from '@docusaurus/Link';
          restore --config=/dgctl-config.yaml --from-dir=/dgctl-source
       ```
 
+   :::note[Особенности версий 2GIS CLI и On-Premise]
+
    Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды, а также используйте аргументы `--only-apps` и/или `--only-data` для выгрузки образов сервисов и/или данных соответственно.
+
+   Если вы используете утилиту 2GIS CLI версии 3.6 и выше, использовать аргумент `-v /var/run/docker.sock:/var/run/docker.sock` не требуется.
+
+   Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+
+   :::
 
 ### Режим `save`
 
@@ -479,8 +513,16 @@ docker run -it \
    2gis/dgctl:3 \
    pull --config=/dgctl-config.yaml --apps-to-registry
 ```
+:::note[Особенности версий 2GIS CLI]
 
-Если вы используете утилиту 2GIS CLI версии 2, дополнительно укажите параметр `--version` с нужной версией программного комплекса On-Premise. Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+Если вы используете утилиту 2GIS CLI:
+
+* версии 2 — дополнительно укажите параметр `--version` с нужной версией программного комплекса On-Premise;
+* версии 3.6 и выше — использовать аргумент `-v /var/run/docker.sock:/var/run/docker.sock` не требуется.
+
+Подробнее см. в <Link to="./help">Справке по командам и аргументам 2GIS CLI</Link>.
+
+:::
 
 ### Запуск бинарного файла
 
