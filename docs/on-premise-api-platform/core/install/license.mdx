@@ -435,7 +435,7 @@
 
 2. Выполните запрос к endpoint-у `/status`:
 
-   ```curl
+   ```bash
    curl -v http://localhost:8080/status -H "Accept: application/json" | jq
    ```
 
@@ -446,7 +446,7 @@
       <details>
       <summary>Пример ответа</summary>
 
-      ```curl
+      ```bash
       curl -s http://localhost:8080/status -H "Accept: application/json" | jq
       {
          "status": 200,
@@ -470,7 +470,7 @@
       <details>
       <summary>Пример ответа</summary>
 
-      ```curl
+      ```bash
       curl -s http://localhost:8080/status -H "Accept: application/json" | jq
       {
          "status": 402,

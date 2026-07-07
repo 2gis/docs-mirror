@@ -32,7 +32,7 @@
     <details>
     <summary>Пример ответа на запрос растровых тайлов</summary>
 
-    ```curl
+    ```bash
     curl -i http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster
     HTTP/2 200
     ...
@@ -44,7 +44,7 @@
     <details>
     <summary>Пример ответа на запрос векторных тайлов</summary>
 
-    ```curl
+    ```bash
         curl -i 'http://tiles-api.example.com/vt?r=CgoIk6UBEPWuARgP&ts=web&key=<api-key>&appId=empty&lang=en&s=api-key'
         HTTP/2 200
         ...
@@ -56,7 +56,7 @@
     <details>
     <summary>Пример ответа на запрос тайлов в формате MVT</summary>
 
-    ```curl
+    ```bash
     curl -i https://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt
     HTTP/2 200
     ...
@@ -89,7 +89,7 @@
     <details>
     <summary>Пример ответа на запрос растровых тайлов</summary>
 
-    ```curl
+    ```bash
     curl -i http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster
     HTTP/2 403
     ...
@@ -101,7 +101,7 @@
     <details>
     <summary>Пример ответа на запрос векторных тайлов</summary>
 
-    ```curl
+    ```bash
     curl -i 'http://tiles-api.example.com/vt?r=CgoIk6UBEPWuARgP&ts=web&key=<api-key>&appId=empty&lang=en&s=<api-key>'
     HTTP/2 403
     ...
@@ -152,7 +152,7 @@
     <details>
     <summary>Пример ответа</summary>
 
-   ```curl
+   ```bash
         curl -i http://catalog-api.example.com/2.0/catalog/rubric/search?key=<api-key>&q=City&region_id=108
         HTTP/2 200
         ...

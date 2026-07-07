@@ -19,7 +19,7 @@ sidebar: citylens
 
 **Пример запроса:**
 
-```curl
+```bash
 curl --request GET \
   --url 'API_URL/export-api/v1/frames?from_dt=2025-09-11T11:03:00&to_dt=2025-09-11T11:05:00&limit=50' \
   --header 'X-API-Key: API_KEY'
@@ -548,7 +548,7 @@ curl --request GET \
 
 **Пример запроса:**
 
-```curl
+```bash
 curl --request GET \
   --url 'API_URL/export-api/v1/frames/10256311/image' \
   --header 'X-API-Key: API_KEY'
@@ -571,7 +571,7 @@ curl --request GET \
 
 **Пример запроса:**
 
-```curl
+```bash
 curl --request GET \
   --url 'API_URL/export-api/v1/frames/10256311/predictions-image' \
   --header 'X-API-Key: API_KEY'
@@ -594,7 +594,7 @@ curl --request GET \
 
 **Пример запроса:**
 
-```curl
+```bash
 curl --request GET \
   --url 'API_URL/export-api/v1/detectors' \
   --header 'X-API-Key: API_KEY'
@@ -630,7 +630,7 @@ curl --request GET \
 
 **Пример запроса:**
 
-```curl
+```bash
 curl --request GET \
   --url 'API_URL/export-api/v1/detections/objects?from_dt=2025-09-01T00:00:00&to_dt=2025-12-30T00:00:00&detector_name=signs&locale=ru_RU&limit=100' \
   --header 'X-API-Key: API_KEY'
