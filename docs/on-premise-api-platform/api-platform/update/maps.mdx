@@ -98,6 +98,37 @@ sidebar: on-premise-api-platform
 
 5. [Проверьте работоспособность сервиса](/on-premise-api-platform/api-platform/install/maps#test-tiles-api).
 
+## Обновление сервиса Static API {#update-static-api}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/api-platform/releases)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/preparation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/api-platform/releases). Если необходимо, обновите настройки в конфигурационном файле `values-staticmaps.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/api-platform/install/maps#install-static-api).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-staticmaps.yaml staticmaps 2gis-on-premise/staticmaps
+   ```
+
+   В параметр `--version` подставьте текущую установленную версию компонента `api-platform`.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/api-platform/install/maps#test-static-api).
+
 ## Обновление сервиса Tilegen API {#update-tilegen-api}
 
 1. Получите новые артефакты для установки.

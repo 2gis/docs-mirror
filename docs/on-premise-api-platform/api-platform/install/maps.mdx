@@ -387,8 +387,8 @@ sidebar: on-premise-api-platform
      * `access.raster.token`: отдельный сервисный токен для доступа к растровым данным Tiles Raster API. Этот ключ можно получить с помощью утилиты `keysctl`.
      * `stat`: настройки взаимодействия с сервисом сбора статистики.
 
-       * `stat.enabled`: включите, чтобы отправлять статистику использования ключей.
-       * `stat.url`: URL сервиса сбора статистики.
+       * `enabled`: включите, чтобы отправлять статистику использования ключей.
+       * `url`: URL сервиса сбора статистики.
 
    * `license`: настройки [сервиса лицензий](/on-premise-api-platform/architecture/core/license).
 
@@ -423,6 +423,190 @@ sidebar: on-premise-api-platform
    :::
 
    Процесс импорта (Kubernetes Importer job) получит все необходимые данные из хранилища артефактов установки и далее импортирует эти данные в Apache Casssandra. Затем Helm выполнит установку самого сервиса.
+
+### Установите сервис MapGL JS API {#install-mapgl-js-api}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+     <details>
+     <summary><code>values-mapgl.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   env:
+     MAPGL_DEMO_KEY: ''
+     MAPGL_HOST: https://mapgl-api.ingress.host
+     MAPGL_TILES_API: https://tiles-api.ingress.host
+     MAPGL_TILESET: web
+     MAPGL_IMMERSIVE_TILESET: web_immersive
+     MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
+     MAPGL_STYLESERVER: https://styles.ingress.host
+     MAPGL_ICONS_URL: https://s3.ingress.host/styles/assets/icons
+     MAPGL_MODELS_URL: https://s3.ingress.host/styles/assets/models
+     MAPGL_KEYSERVER: https://keys-api.example.com/public/v1/keys/{keyID}/services/mapgl-js-api
+     MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
+     MAPGL_INVALID_KEY_MESSAGE: Your MapGL key is invalid.
+
+   resources:
+     requests:
+       cpu: 30m
+       memory: 32Mi
+     limits:
+       cpu: 100m
+       memory: 96Mi
+
+   ingress:
+     enabled: true
+     className: nginx
+     hosts:
+       - host: mapgl-js-api.example.com
+         paths:
+           - path: /
+             pathType: Prefix
+     tls: []
+     # - hosts:
+     #   - mapgl-js-api.example.com
+     #   secretName: secret.tls
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `env`: переменные окружения.
+
+     * `MAPGL_DEMO_KEY`: API-ключ для доступа к сервису. Должен быть сгенерирован с помощью [сервиса API-ключей](/on-premise-api-platform/core/install/keys).
+     * `MAPGL_HOST`: URL сервиса, который ваши приложения должны использовать для коммуникаций с сервисами карт.
+     * `MAPGL_TILES_API`: URL [сервиса Tiles API](#install-tiles-api).
+     * `MAPGL_TILESET`: подложка сервиса Tiles API с векторными тайлами.
+     * `MAPGL_IMMERSIVE_TILESET`: подложка сервиса Tiles API с тайлами для отображения 3D-моделей.
+     * `MAPGL_TRAFFICSERVER`: URL [сервиса прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy).
+     * `MAPGL_STYLESERVER`: URL [сервиса Styles API](#install-styles-api).
+     * `MAPGL_ICONS_URL`: URL директории с иконками для стилей. URL должен быть публично доступен.
+     * `MAPGL_MODELS_URL`: URL директории с моделями для стилей. URL должен быть публично доступен.
+     * `MAPGL_KEYSERVER`: URL [сервиса API-ключей](/on-premise-api-platform/core/install/keys).
+     * `MAPGL_RTLPLUGIN`: URL плагина для поддержки языков с направлением письма справа налево (RTL).
+     * `MAPGL_INVALID_KEY_MESSAGE`: текст сообщения об ошибке при использовании невалидного ключа для MapGL JS API.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. Обратите внимание, что для использования TLS необходимо создать секрет, содержащий сертификат и приватный ключ.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-mapgl.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-mapgl.yaml mapgl-js-api 2gis-on-premise/mapgl-js-api
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/api-platform/releases).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+### Установите сервис Static API (опционально) {#install-static-api}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/staticmaps/README.md).
+
+    Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-staticmaps.yaml</code></summary>
+
+    ```yaml
+    app:
+      access:
+        enabled: true
+        stat:
+          enabled: true
+          url: http://stat-receiver-api/bss/3
+      log:
+        format: json
+        level: info 
+  
+    dgctlDockerRegistry: docker.registry.example.com
+  
+    ingress:
+      className: nginx
+      enabled: true
+      hosts:
+      - host: staticmaps.example.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls: []
+      # - hosts:
+      #   - staticmaps.example.com
+      #   secretName: secret.tls
+  
+    keys:
+      token: STATIC_API_TOKEN 
+      url: http://keys-service-api
+  
+    license:
+      url: https://license
+  
+    tiles:
+      key: TILES_KEY
+      url: http://tiles-api-raster
+    ``` 
+    </details>
+
+    Где:
+
+    * `app.access`: настройки доступа к сервису API-ключей.
+
+      * `enabled`: включить ли доступ к сервису API-ключей.
+      * `stat`: настройки взаимодействия с сервисом сбора статистики.
+
+        * `enabled`: отправлять ли статистику использования ключей.
+        * `url`: URL сервиса сбора статистики.
+      
+    * `app.log`: настройки логирования.
+
+      * `format`: формат логов.
+      * `level`: уровень логирования.
+
+    * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+    * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `api.ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+    * `keys`: настройки доступа к сервису API-ключей.
+
+      * `token`: сервисный токен (см. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)). Обязательный параметр, если для параметра `app.access.enabled` указано значение `true`.
+      * `url`: URL сервиса ключей. Этот URL должен быть доступен из всех подов вашего кластера Kubernetes. Обязательный параметр, если для параметра `app.access.enabled` указано значение `true`. 
+    
+    * `license.url`: URL [сервиса лицензий](/on-premise-api-platform/architecture/core/license).
+
+    * `tiles`: настройки доступа к сервису Tiles API.
+
+      * `key`: ключ доступа к Tiles API.
+      * `url`: URL сервиса Tiles API. Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.
+
+  2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-staticmaps.yaml`.
+
+      ```bash
+      helm upgrade --install --version=VERSION --atomic --values ./values-staticmaps.yaml staticmaps 2gis-on-premise/staticmaps
+      ```
+
+      В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/api-platform/releases).
+
+      :::warning
+
+      Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+      :::
 
 ### Установите сервис Tilegen API (опционально) {#install-tilegen-api}
 
@@ -597,98 +781,22 @@ sidebar: on-premise-api-platform
 
    :::
 
-### Установите сервис MapGL JS API {#install-mapgl-js-api}
-
-1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/README.md).
-
-   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
-
-     <details>
-     <summary><code>values-mapgl.yaml</code></summary>
-
-   ```yaml
-   dgctlDockerRegistry: docker.registry.example.com
-
-   imagePullSecrets: [onpremise-registry-creds]
-
-   env:
-     MAPGL_DEMO_KEY: ''
-     MAPGL_HOST: https://mapgl-api.ingress.host
-     MAPGL_TILES_API: https://tiles-api.ingress.host
-     MAPGL_TILESET: web
-     MAPGL_IMMERSIVE_TILESET: web_immersive
-     MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
-     MAPGL_STYLESERVER: https://styles.ingress.host
-     MAPGL_ICONS_URL: https://s3.ingress.host/styles/assets/icons
-     MAPGL_MODELS_URL: https://s3.ingress.host/styles/assets/models
-     MAPGL_KEYSERVER: https://keys-api.example.com/public/v1/keys/{keyID}/services/mapgl-js-api
-     MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
-     MAPGL_INVALID_KEY_MESSAGE: Your MapGL key is invalid.
-
-   resources:
-     requests:
-       cpu: 30m
-       memory: 32Mi
-     limits:
-       cpu: 100m
-       memory: 64Mi
-
-   ingress:
-     enabled: true
-     className: nginx
-     hosts:
-       - host: mapgl-js-api.example.com
-         paths:
-           - path: /
-             pathType: Prefix
-     tls: []
-     # - hosts:
-     #   - mapgl-js-api.example.com
-     #   secretName: secret.tls
-   ```
-
-    </details>
-
-   Где:
-
-   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
-
-   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
-
-   * `env`: переменные окружения.
-
-     * `MAPGL_DEMO_KEY`: API-ключ для доступа к сервису. Должен быть сгенерирован с помощью [сервиса API-ключей](/on-premise-api-platform/core/install/keys).
-     * `MAPGL_HOST`: URL сервиса, который ваши приложения должны использовать для коммуникаций с сервисами карт.
-     * `MAPGL_TILES_API`: URL [сервиса Tiles API](#install-tiles-api).
-     * `MAPGL_TILESET`: подложка сервиса Tiles API с векторными тайлами.
-     * `MAPGL_IMMERSIVE_TILESET`: подложка сервиса Tiles API с тайлами для отображения 3D-моделей.
-     * `MAPGL_TRAFFICSERVER`: URL [сервиса прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy).
-     * `MAPGL_STYLESERVER`: URL [сервиса Styles API](#install-styles-api).
-     * `MAPGL_ICONS_URL`: URL директории с иконками для стилей. URL должен быть публично доступен.
-     * `MAPGL_MODELS_URL`: URL директории с моделями для стилей. URL должен быть публично доступен.
-     * `MAPGL_KEYSERVER`: URL [сервиса API-ключей](/on-premise-api-platform/core/install/keys).
-     * `MAPGL_RTLPLUGIN`: URL плагина для поддержки языков с направлением письма справа налево (RTL).
-     * `MAPGL_INVALID_KEY_MESSAGE`: текст сообщения об ошибке при использовании невалидного ключа для MapGL JS API.
-
-   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
-
-   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. Обратите внимание, что для использования TLS необходимо создать секрет, содержащий сертификат и приватный ключ.
-
-2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-mapgl.yaml`:
-
-   ```bash
-   helm upgrade --install --version=VERSION --atomic --values ./values-mapgl.yaml mapgl-js-api 2gis-on-premise/mapgl-js-api
-   ```
-
-   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/api-platform/releases).
-
-   :::warning
-
-   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
-
-   :::
-
 ## 4. Проверьте работоспособность установленных сервисов {#test}
+
+### Проверьте сервис Tiles API {#test-tiles-api}
+
+Чтобы проверить работу сервиса Tiles API:
+
+* Для растровых тайлов: перейдите в браузере по адресу (приведён пример для Москвы):
+
+   ```text
+   http://tiles-api.example.com/tiles?x=1237&y=640&z=11&v=1
+   ```
+
+   Должен отобразиться демонстрационный растровый тайл.
+
+* Для векторных тайлов в формате MVT: см. инструкцию в разделе [Экспорт векторных тайлов](/on-premise-api-platform/api-platform/user-guide/vector-tiles).
+* Для других векторных тайлов: см. раздел [Тестирование MapGL JS API](#test-mapgl-js-api).
 
 ### Проверьте сервис MapGL JS API {#test-mapgl-js-api}
 
@@ -732,20 +840,23 @@ sidebar: on-premise-api-platform
 
   В этом случае опции [style](/mapgl/reference/interface#map-options/style) и [styleOptions](/mapgl/reference/interface#style-options) не указываются, и их значения будут разрешены по умолчанию относительно [MAPGL\_HOST](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/README.md#environment-variables). Если вы планируете использовать собственные стили, см. [проверку Styles API](#test-styles-api).
 
-### Проверьте сервис Tiles API {#test-tiles-api}
+### Проверьте сервис Static API {#test-static-api}
 
-Чтобы проверить работу сервиса Tiles API:
+1. Выберите произвольные координаты (широта, долгота) на доступной территории.
+ 
+2. Сформируйте ссылку:
 
-* Для растровых тайлов: перейдите в браузере по адресу (приведён пример для Москвы):
+    ```
+    https://staticmaps.example.com/static/2.0?s=640x400&pt={lat,lon}&z=13&key=YOUR_KEY
+    ```
 
-   ```text
-   http://tiles-api.example.com/tiles?x=1237&y=640&z=11&v=1
-   ```
-
-   Должен отобразиться демонстрационный растровый тайл.
-
-* Для векторных тайлов в формате MVT: см. инструкцию в разделе [Экспорт векторных тайлов](/on-premise-api-platform/api-platform/user-guide/vector-tiles).
-* Для других векторных тайлов: см. раздел [Тестирование MapGL JS API](#test-mapgl-js-api).
+    Где:
+    * `s` — размер изображения в пикселях.
+    * `pt` — координаты маркера (широта, долгота).
+    * `z` — уровень масштабирования (от 1 до 18). Чем больше число, тем подробнее карта.
+    * `key` — API-ключ для доступа к сервису (если для параметра `app.access.enabled` указано значение `true`).
+  
+3. Откройте сформированную ссылку в браузере. При успешном ответе вы получите изображение карты в формате PNG.
 
 ### Проверьте сервис Tilegen API {#test-tilegen-api}
 

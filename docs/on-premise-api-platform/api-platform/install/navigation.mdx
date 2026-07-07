@@ -496,7 +496,10 @@ rules:
     attractor:
       appRule: async-car
       castleUrl: http://navi-castle
+      # Если эта сущность Navi-Attractor работает с прокси для API пробок (используются онлайн-данные)
       castleUrlProxy: http://traffic-proxy/navi-castle
+      restrictions:
+        enabled: true
 
     resources:
       requests:
@@ -551,6 +554,7 @@ rules:
      * `appRule`: имя правила из списка `rules` для устанавливаемого типа навигации.
      * `castleUrl`: URL сервиса Navi-Castle. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
      * `castleUrlProxy`: URL прокси для получения дорожных перекрытий. Имеет больший приоритет, чем `castleUrl`.
+     * `restrictions.enabled`: включать ли получение информации о дорожных перекрытиях.
 
    * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
@@ -601,6 +605,8 @@ rules:
       castleUrlProxy: http://traffic-proxy-navi/navi-castle
       forecastUrl: http://traffic-proxy-navi/forecast
       longForecastUrl: http://traffic-proxy-navi/long-forecast
+      restrictions:
+        enabled: true
 
       indices:
         etaCorrectionCores:
@@ -716,6 +722,8 @@ rules:
      * `forecastUrl`: URL прокси для получения краткосрочных прогнозов скоростей.
 
      * `longForecastUrl`: URL прокси для получения долгосрочных прогнозов скоростей.
+
+     * `restrictions.enabled`: включать ли получение информации о дорожных перекрытиях.
 
      * `indices`: подключение данных для скачивания файлов. Если вы получаете данные через [прокси для API пробок](/on-premise-api-platform/architecture/api-platform/trafficproxy), параметры ниже обязательны и должны иметь значение `true`:
 

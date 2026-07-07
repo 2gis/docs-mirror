@@ -186,14 +186,6 @@ sidebar: on-premise-api-platform
          limits:
            cpu: 2000m
            memory: 8Gi
-     nginx:
-       resources:
-         requests:
-           cpu: 100m
-           memory: 64Mi
-         limits:
-           cpu: 250m
-           memory: 256Mi
      envoy:
        resources:
          requests:
@@ -213,7 +205,7 @@ sidebar: on-premise-api-platform
          cpu: 2
          memory: 2Gi
 
-   geodetector:
+   segmentDetector:
      enabled: true
      resources:
        requests:
@@ -297,17 +289,15 @@ sidebar: on-premise-api-platform
 
    * `head.head.resources`: настройки вычислительных ресурсов для основного контейнера сервиса Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `head.nginx.resources`: настройки вычислительных ресурсов для Nginx в поде Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
-
    * `head.envoy.resources`: настройки вычислительных ресурсов для Envoy в поде Head. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `ingressRouter.enabled`: включить компонент IngressRouter — точку входа для внешних запросов.
 
    * `ingressRouter.resources`: настройки вычислительных ресурсов для сервиса IngressRouter. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
-   * `geodetector.enabled`: включить компонент Geodetector — сервис определения местоположения.
+   * `segmentDetector.enabled`: включить компонент SegmentDetector — сервис определения местоположения.
 
-   * `geodetector.resources`: настройки вычислительных ресурсов для сервиса Geodetector. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+   * `segmentDetector.resources`: настройки вычислительных ресурсов для сервиса SegmentDetector. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `indexer.resources`: настройки вычислительных ресурсов для сервиса Indexer. Чтобы узнать рекомендуемые значения, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
