@@ -142,12 +142,12 @@ sidebar: on-premise-api-platform
 Выполните следующие запросы к адресу, указанному в параметре `ingress.hosts[0].host` [конфигурационного файла для установки прокси API пробок для сервисов навигации](#install-for-navigation-services):
 
 ```bash
-curl -X GET https://traffic-proxy-navi.example.com/eca/traffic/moses/speeds5.json
-curl -X GET https://traffic-proxy-navi.example.com/forecast/index.json
-curl -X GET https://traffic-proxy-navi.example.com/long-forecast/index.json
-curl -X GET https://traffic-proxy-navi.example.com/eta/eta-predictions/index.json
-curl -X GET https://traffic-proxy-navi.example.com/navi-castle/restrictions_index.json.zip --output restrictions_index.json.zip
-curl -X GET https://traffic-proxy-navi.example.com/navi-castle/restricted_transport.json.zip --output restricted_transport.json.zip
+curl -X GET 'https://traffic-proxy-navi.example.com/eca/traffic/moses/speeds5.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/forecast/index.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/long-forecast/index.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/eta/eta-predictions/index.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/navi-castle/restrictions_index.json.zip' --output restrictions_index.json.zip
+curl -X GET 'https://traffic-proxy-navi.example.com/navi-castle/restricted_transport.json.zip' --output restricted_transport.json.zip
 ```
 
 В ответе вы должны получить JSON-объекты и валидные архивы.
@@ -166,7 +166,7 @@ curl -X GET https://traffic-proxy-navi.example.com/navi-castle/restricted_transp
    * Получите значения метрик Navi-Back в формате Prometheus через endpoint `/metrics`. Добавьте к адресу из подготовительного шага путь `/metrics` и отправьте GET-запрос. Пример:
 
      ```bash
-     curl -X GET https://navi-back-ingress.example.com/metrics
+     curl -X GET 'https://navi-back-ingress.example.com/metrics'
      ```
 
      Ответ должен содержать метрики `mosesd_jams` (временную метку последнего получения данных пробок в формате `UNIX timestamp`) и `mosesd_jams_delay` (время, прошедшее с последнего момента получения данных). Если эти метрики отсутствуют, сервис не смог получить данные о пробках через прокси.
@@ -178,7 +178,7 @@ curl -X GET https://traffic-proxy-navi.example.com/navi-castle/restricted_transp
    * Отправьте GET-запрос по адресу из подготовительного шага и добавьте к нему путь `/city`. Например:
 
      ```bash
-     curl -X GET https://navi-back-ingress.example.com/city?type=json
+     curl -X GET 'https://navi-back-ingress.example.com/city?type=json'
      ```
 
      В ответе вы должны получить JSON-объект с полем `пробки` и временем последнего получения данных.
@@ -194,7 +194,7 @@ curl -X GET https://traffic-proxy-navi.example.com/navi-castle/restricted_transp
 * Выполните GET-запрос к аналогичному адресу:
 
     ```bash
-    curl -X GET https://traffic-proxy-map.example.com/meta?reg=65536,108&time&score
+    curl -X GET 'https://traffic-proxy-map.example.com/meta?reg=65536,108&time&score'
     ```
 
     Запрос должен выполниться успешно и вернуть результат в виде списка.

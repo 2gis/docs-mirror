@@ -1853,7 +1853,7 @@ rules:
 2. Отправьте GET-запрос на корневой endpoint (`/`) с использованием cURL или аналогичного инструмента:
 
    ```bash
-   curl -Lv http://127.0.0.1:7777/
+   curl -Lv 'http://127.0.0.1:7777/'
    ```
 
    Вы должны получить в ответ HTML-страницу со списком всех файлов и папок, подобную этой:
@@ -1931,7 +1931,7 @@ rules:
 3. Отправьте запрос с использованием cURL или аналогичного инструмента (пример для Directions API):
 
    ```bash
-   curl -Lv http://127.0.0.1:7777/carrouting/6.0.0/global -d @data.json
+   curl -Lv 'http://127.0.0.1:7777/carrouting/6.0.0/global' -d @data.json
    ```
 
    Вы должны получить ответ со следующей структурой (пример для Directions API):
@@ -1980,7 +1980,7 @@ rules:
 2. Отправьте запрос с использованием cURL или аналогичного инструмента:
 
    ```bash
-   curl -Lv http://127.0.0.1:7777/get_dist_matrix -d @data.json
+   curl -Lv 'http://127.0.0.1:7777/get_dist_matrix' -d @data.json
    ```
 
    Вы должны получить ответ со следующей структурой:
@@ -2009,7 +2009,7 @@ rules:
 4. Отправьте запрос с использованием cURL или аналогичного инструмента (пример для Directions API):
 
    ```bash
-   curl -Lv http://127.0.0.1:7777/carrouting/6.0.0/global?key=API_KEY -d @data.json
+   curl -Lv 'http://127.0.0.1:7777/carrouting/6.0.0/global?key=API_KEY' -d @data.json
    ```
 
    Где `API_KEY` — API-ключ для доступа к сервисам навигации.
@@ -2031,7 +2031,7 @@ rules:
 3. Отправьте запрос с использованием cURL или аналогичного инструмента (пример для Directions API):
 
    ```bash
-   curl -Lv http://navi-front.example.com/carrouting/6.0.0/global?key=API_KEY -d @data.json
+   curl -Lv 'http://navi-front.example.com/carrouting/6.0.0/global?key=API_KEY' -d @data.json
    ```
 
    Где `API_KEY` — API-ключ для доступа к сервисам навигации.
@@ -2082,7 +2082,7 @@ rules:
 3. Отправьте запрос с использованием cURL или аналогичного инструмента:
 
    ```bash
-   curl -Lv https://navi-async-matrix.example.com/create_task/get_dist_matrix?key=API_KEY --header 'Content-Type: application/json' -d @data.json
+   curl -Lv 'https://navi-async-matrix.example.com/create_task/get_dist_matrix?key=API_KEY' --header 'Content-Type: application/json' -d @data.json
    ```
 
    Где `API_KEY` — API-ключ для доступа к сервисам навигации.
@@ -2100,7 +2100,7 @@ rules:
 4. Выполните запрос статуса задачи, подставив в URL параметр `TASK_ID`, полученный в ответе на предыдущем шаге:
 
    ```bash
-   curl -Lv https://navi-async-matrix.example.com/result/get_dist_matrix/{TASK_ID}
+   curl -Lv 'https://navi-async-matrix.example.com/result/get_dist_matrix/{TASK_ID}'
    ```
 
    При необходимости выполните запрос несколько раз, пока задача будет выполняться. Спустя какое-то время в ответ на очередной запрос вы должны получить ответ со следующей структурой:
@@ -2155,7 +2155,7 @@ rules:
 2. Отправьте запрос с использованием cURL или аналогичного инструмента:
 
    ```bash
-   curl -Lv http://navi-restrictions:7777/points/ --header 'Content-Type: application/json' -d @data.json
+   curl -Lv 'http://navi-restrictions:7777/points/' --header 'Content-Type: application/json' -d @data.json
    ```
 
    Вы должны получить ответ со следующей структурой:
@@ -2176,13 +2176,13 @@ rules:
 3. Проверьте, что перекрытие появилось в системе:
 
    ```bash
-   curl -Lv http://navi-restrictions:7777/restrictions/
+   curl -Lv 'http://navi-restrictions:7777/restrictions/'
    ```
 
 4. Удалите перекрытие:
 
    ```bash
-   curl --request "DELETE" http://navi-restrictions:7777/restrictions/{RESTRICTION_ID}
+   curl --request DELETE 'http://navi-restrictions:7777/restrictions/{RESTRICTION_ID}'
    ```
 
    Где `{RESTRICTION_ID}` — значение поля `restriction_id` в ответе на запрос в шаге 2.

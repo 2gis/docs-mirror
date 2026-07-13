@@ -33,7 +33,7 @@
     <summary>Пример ответа на запрос растровых тайлов</summary>
 
     ```bash
-    curl -i http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster
+    curl -i 'http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster'
     HTTP/2 200
     ...
     x-blocked-reason: request blocked: license warning
@@ -57,7 +57,7 @@
     <summary>Пример ответа на запрос тайлов в формате MVT</summary>
 
     ```bash
-    curl -i https://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt
+    curl -i 'https://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt'
     HTTP/2 200
     ...
     x-blocked-reason: request blocked: license warning
@@ -90,7 +90,7 @@
     <summary>Пример ответа на запрос растровых тайлов</summary>
 
     ```bash
-    curl -i http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster
+    curl -i 'http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster'
     HTTP/2 403
     ...
     x-blocked-reason: request blocked: license error
@@ -115,7 +115,7 @@
     <summary>Пример ответа на запрос тайлов в формате MVT</summary>
 
     ```
-    curl -i https://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt
+    curl -i 'https://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt'
     HTTP/2 403
     ...
     x-blocked-reason: request blocked: license error
@@ -153,7 +153,7 @@
     <summary>Пример ответа</summary>
 
    ```bash
-        curl -i http://catalog-api.example.com/2.0/catalog/rubric/search?key=<api-key>&q=City&region_id=108
+        curl -i 'http://catalog-api.example.com/2.0/catalog/rubric/search?key=<api-key>&q=City&region_id=108'
         HTTP/2 200
         ...
         x-real-status: 403
