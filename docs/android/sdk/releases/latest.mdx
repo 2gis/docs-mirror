@@ -7,24 +7,23 @@ sidebar: androidsdk
 
 ### 🌟 Новые возможности
 
-* Новый класс [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller):
+Добавлен класс MapController:
 
-  * [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller) – класс для управления картой, объединяющий [Map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map), [MapRenderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-renderer) и [MapGestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-gesture-recognizer).
-  * [MapControllerOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller-options) – класс с параметрами создания [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
-  * [MapController.create](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/create) – статический метод для асинхронного создания [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller) на основе [Context](/android/sdk/reference/stable/class#ru.dgis.sdk.context) и [MapControllerOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller-options).
-  * [MapController.map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/map) – свойство для получения объекта [Map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
-  * [MapController.renderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/renderer) – свойство для получения объекта [MapRenderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-renderer) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
-  * [MapController.gestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/gesture-recognizer) – свойство для получения объекта [MapGestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-gesture-recognizer) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
-
-* [CameraZoomRestrictions.minZoom](/android/sdk/reference/stable/class#ru.dgis.sdk.map.camera-zoom-restrictions/val-min-zoom) – значение по умолчанию изменено с `0` на `2`.
+* [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller) — класс для управления картой, объединяющий [Map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map), [MapRenderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-renderer) и [MapGestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-gesture-recognizer).
+* [MapControllerOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller-options) — класс с параметрами создания [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+* [MapController.create()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/create) — статический метод для асинхронного создания [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller) на основе [Context](/android/sdk/reference/stable/class#ru.dgis.sdk.context) и [MapControllerOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller-options).
+* [MapController.map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/val-map) — свойство для получения объекта [Map](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+* [MapController.renderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/val-renderer) — свойство для получения объекта [MapRenderer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-renderer) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+* [MapController.gestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller/val-gesture-recognizer) — свойство для получения объекта [MapGestureRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-gesture-recognizer) из [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
 
 ### 🛠 Исправления
 
-* Механизм восстановления автонаклона доработан так, чтобы он работал независимо от других перелётов.
-* Исправлен [WorkStatus](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.work-status) для расписаний, работающих почти круглосуточно.
-* Исправлена ошибка, вызывавшая сбой приложения при увеличении масштаба карты на Samsung Tab A8 с Android 14.
+* Изменено значение по умолчанию для [CameraZoomRestrictions.minZoom](/android/sdk/reference/stable/class#ru.dgis.sdk.map.camera-zoom-restrictions/val-min-zoom) с `0` на `2`.
+* Теперь восстановление автонаклона камеры работает независимо от перелётов камеры.
+* Исправлена ошибка в [WorkStatus](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.work-status) для расписаний организаций, работающих почти круглосуточно.
+* Исправлена ошибка, вызывавшая сбой приложения при увеличении масштаба карты на Samsung Galaxy Tab A8 с Android 14.
 * Исправлена ошибка, из-за которой не работали повторные добавления и удаления дорожных событий через [RoadEventManager](/android/sdk/reference/stable/class#ru.dgis.sdk.road-events.road-event-manager).
-* Добавлена корректная логика расчёта и заполнения полей `ageMs` и `lastSeenMs` для сотовых вышек в модуле Radar с учётом текущего времени и версии Android API; также исправлена очистка устаревших значений.
+* Исправлена логика расчёта и заполнения полей `ageMs` и `lastSeenMs` для сотовых вышек в модуле `Radar` с учётом текущего времени и версии Android API. Исправлена очистка устаревших значений.
 
 ## 13.5.0 (2026-05-19)
 

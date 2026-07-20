@@ -7,55 +7,54 @@ sidebar: fluttersdk
 
 ### 🌟 Новые возможности
 
-* Новый класс [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html):
+Добавлен класс MapController:
 
-  * [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html) – класс для управления картой, объединяющий [Map](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map-class.html), [MapRenderer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapRenderer-class.html) и [MapGestureRecognizer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapGestureRecognizer-class.html).
-  * [MapControllerOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapControllerOptions-class.html) – класс с параметрами создания [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
-  * [MapController.create](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/create.html) – статический метод для асинхронного создания [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html) на основе `Context` и [MapControllerOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapControllerOptions-class.html).
-  * [MapController.map](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/map.html) – свойство для получения объекта [Map](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map-class.html) из [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
-  * [MapController.renderer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/renderer.html) – свойство для получения объекта [MapRenderer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapRenderer-class.html) из [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
-  * [MapController.gestureRecognizer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/gestureRecognizer.html) – свойство для получения объекта [MapGestureRecognizer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapGestureRecognizer-class.html) из [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
-
-* [CameraZoomRestrictions.minZoom](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/CameraZoomRestrictions/minZoom.html) – значение по умолчанию изменено с `0` на `2`.
+* [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html) — класс для управления картой, объединяющий [Map](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map-class.html), [MapRenderer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapRenderer-class.html) и [MapGestureRecognizer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapGestureRecognizer-class.html).
+* [MapControllerOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapControllerOptions-class.html) — класс с параметрами создания [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
+* [MapController.create()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/create.html) — статический метод для асинхронного создания [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html) на основе `Context` и [MapControllerOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapControllerOptions-class.html).
+* [MapController.map](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/map.html) — свойство для получения объекта [Map](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map-class.html) из [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
+* [MapController.renderer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/renderer.html) — свойство для получения объекта [MapRenderer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapRenderer-class.html) из [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
+* [MapController.gestureRecognizer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController/gestureRecognizer.html) — свойство для получения объекта [MapGestureRecognizer](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapGestureRecognizer-class.html) из [MapController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapController-class.html).
 
 ### 🛠 Исправления
 
-* Механизм восстановления автонаклона доработан так, чтобы он работал независимо от других перелётов.
+* Изменено значение по умолчанию для [CameraZoomRestrictions.minZoom](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/CameraZoomRestrictions/minZoom.html) с `0` на `2`.
+* Теперь восстановление автонаклона камеры работает независимо от перелётов камеры.
 * Исправлена ошибка, вызывавшая сбой приложения из-за некорректного срабатывания `assert` в `libflutter.so` (`assert.cc:54`).
-* Улучшена потокобезопасность удаления iOS-текстуры Flutter SDK; также добавлена приостановка слоя рендеринга Flutter iOS при переходе приложения в неактивное состояние.
-* Исправлен [WorkStatus](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/WorkStatus-class.html) для расписаний, работающих почти круглосуточно.
-* Исправлена ошибка, вызывавшая сбой приложения при увеличении масштаба карты на Samsung Tab A8 с Android 14.
+* Улучшена потокобезопасность удаления iOS-текстуры Flutter SDK и добавлена приостановка слоя отрисовки Flutter iOS при переходе приложения в неактивное состояние.
+* Исправлена ошибка в [WorkStatus](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/WorkStatus-class.html) для расписаний организаций, работающих почти круглосуточно.
+* Исправлена ошибка, вызывавшая сбой приложения при увеличении масштаба карты на Samsung Galaxy Tab A8 с Android 14.
 * Исправлена ошибка, из-за которой не работали повторные добавления и удаления дорожных событий через [RoadEventManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RoadEventManager-class.html).
-* Добавлена корректная логика расчёта и заполнения полей `ageMs` и `lastSeenMs` для сотовых вышек в модуле `Radar` с учётом текущего времени и версии Flutter Android API; также исправлена очистка устаревших значений.
+* Исправлена логика расчёта и заполнения полей `ageMs` и `lastSeenMs` для сотовых вышек в модуле `Radar` с учётом текущего времени и версии Flutter Android API. Исправлена очистка устаревших значений.
 
 ## 13.5.0 (2026-05-19)
 
 ### 🌟 Новые возможности
 
-* [SearchQueryBuilder()](/ios/sdk/reference/stable/class#search-query-builder/init) – конструктор по умолчанию, который позволяет устанавливать различные параметры поиска: текст, идентификаторы рубрик, зданий или организации.
-* [SearchQueryBuilder.setQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setQueryText.html) – метод для задания текста поискового запроса.
-* [SearchQueryBuilder.setRubricIds()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRubricIds.html) – метод для задания идентификаторов рубрик в поисковом запросе.
-* [SearchQueryBuilder.setOrgId()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setOrgId.html) – метод для задания фильтра по идентификатору организации.
-* [SearchQueryBuilder.setBuildingId()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setBuildingId.html) – метод для задания фильтра по идентификатору здания.
-* [SearchQueryBuilder.setRestrictionGeometry()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRestrictionGeometry.html) – метод для задания строгого ограничения области поиска в виде геометрии.
-* [SearchQueryBuilder.setTerritoryOfInterest()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setTerritoryOfInterest.html) – метод для задания нестрогого ограничения области поиска: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
-* [SuggestQueryBuilder.setRestrictionGeometry()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQueryBuilder/setRestrictionGeometry.html) – метод для задания строгого ограничения области для поисковых подсказок в виде геометрии.
-* [SuggestQueryBuilder.setTerritoryOfInterest()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQueryBuilder/setTerritoryOfInterest.html) – метод для задания нестрогого ограничения области для поисковых подсказок: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
-* [PackedSearchQuery.geometryRestriction](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PackedSearchQuery/geometryRestriction.html) – свойство для получения геометрии, ограничивающей область поиска.
-* [PackedSearchQuery.territoryOfInterest](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PackedSearchQuery/territoryOfInterest.html) – свойство для нестрогого ограничения области поиска объектов: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
-* [PolygonGeometry.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolygonGeometry/elevation.html) – свойство для задания высоты полигона над поверхностью.
-* [PolylineGeometry.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolylineGeometry/elevation.html) – свойство для задания высоты полилинии над поверхностью.
-* [Polyline.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline/elevation.html) – свойство для задания высоты полилинии над поверхностью.
-* [PolylineOptions.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolylineOptions/elevation.html) – свойство для задания высоты полилинии над поверхностью в параметрах полилинии.
-* [Polygon.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polygon/elevation.html) – свойство для задания высоты полигона над поверхностью.
-* [PolygonOptions.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolygonOptions/elevation.html) – свойство для задания высоты полигона над поверхностью в параметрах полигона.
-* [DashedPolygonOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DashedPolygonOptions-class.html) – класс для параметров пунктирного контура полигона.
-* [Polygon.dashedPolygonOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polygon/dashedPolygonOptions.html) – свойство для параметров пунктирного контура полигона.
-* [PolygonOptions.dashedPolygonOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolygonOptions/dashedPolygonOptions.html) – свойство для настройки пунктирного контура полигона в параметрах полигона.
-* [RouteEnclosingRectsOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEnclosingRectsOptions-class.html) – класс для параметров получения прямоугольников, описанных вокруг упрощённой геометрии маршрута.
-* [getRouteEnclosingRects()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/getRouteEnclosingRects.html) – метод для получения набора прямоугольников вокруг упрощённой геометрии маршрута.
-* [SharedRouteData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SharedRouteData-class.html) – класс с информацией о заранее построенном маршруте и параметрах его поиска.
-* [TrafficRouter.fetchSharedRoute()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter/fetchSharedRoute.html) – метод для получения заранее построенного маршрута и параметров его поиска по идентификатору. Подробнее см. в примере [Готовый маршрут](/flutter/sdk/examples/routing#using-ready-route).
+* [SearchQueryBuilder()](/ios/sdk/reference/stable/class#search-query-builder/init) — конструктор по умолчанию, который позволяет устанавливать различные параметры поиска: текст, идентификаторы рубрик, зданий или организации.
+* [SearchQueryBuilder.setQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setQueryText.html) — метод для задания текста поискового запроса.
+* [SearchQueryBuilder.setRubricIds()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRubricIds.html) — метод для задания идентификаторов рубрик в поисковом запросе.
+* [SearchQueryBuilder.setOrgId()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setOrgId.html) — метод для задания фильтра по идентификатору организации.
+* [SearchQueryBuilder.setBuildingId()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setBuildingId.html) — метод для задания фильтра по идентификатору здания.
+* [SearchQueryBuilder.setRestrictionGeometry()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRestrictionGeometry.html) — метод для задания строгого ограничения области поиска в виде геометрии.
+* [SearchQueryBuilder.setTerritoryOfInterest()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setTerritoryOfInterest.html) — метод для задания нестрогого ограничения области поиска: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [SuggestQueryBuilder.setRestrictionGeometry()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQueryBuilder/setRestrictionGeometry.html) — метод для задания строгого ограничения области для поисковых подсказок в виде геометрии.
+* [SuggestQueryBuilder.setTerritoryOfInterest()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQueryBuilder/setTerritoryOfInterest.html) — метод для задания нестрогого ограничения области для поисковых подсказок: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [PackedSearchQuery.geometryRestriction](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PackedSearchQuery/geometryRestriction.html) — свойство для получения геометрии, ограничивающей область поиска.
+* [PackedSearchQuery.territoryOfInterest](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PackedSearchQuery/territoryOfInterest.html) — свойство для нестрогого ограничения области поиска объектов: если объект не попадает в область, он не отбрасывается, но его ранг в результатах поиска понижается.
+* [PolygonGeometry.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolygonGeometry/elevation.html) — свойство для задания высоты полигона над поверхностью.
+* [PolylineGeometry.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolylineGeometry/elevation.html) — свойство для задания высоты полилинии над поверхностью.
+* [Polyline.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline/elevation.html) — свойство для задания высоты полилинии над поверхностью.
+* [PolylineOptions.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolylineOptions/elevation.html) — свойство для задания высоты полилинии над поверхностью в параметрах полилинии.
+* [Polygon.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polygon/elevation.html) — свойство для задания высоты полигона над поверхностью.
+* [PolygonOptions.elevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolygonOptions/elevation.html) — свойство для задания высоты полигона над поверхностью в параметрах полигона.
+* [DashedPolygonOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DashedPolygonOptions-class.html) — класс для параметров пунктирного контура полигона.
+* [Polygon.dashedPolygonOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polygon/dashedPolygonOptions.html) — свойство для параметров пунктирного контура полигона.
+* [PolygonOptions.dashedPolygonOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolygonOptions/dashedPolygonOptions.html) — свойство для настройки пунктирного контура полигона в параметрах полигона.
+* [RouteEnclosingRectsOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEnclosingRectsOptions-class.html) — класс для параметров получения прямоугольников, описанных вокруг упрощённой геометрии маршрута.
+* [getRouteEnclosingRects()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/getRouteEnclosingRects.html) — метод для получения набора прямоугольников вокруг упрощённой геометрии маршрута.
+* [SharedRouteData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SharedRouteData-class.html) — класс с информацией о заранее построенном маршруте и параметрах его поиска.
+* [TrafficRouter.fetchSharedRoute()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter/fetchSharedRoute.html) — метод для получения заранее построенного маршрута и параметров его поиска по идентификатору. Подробнее см. в примере [Готовый маршрут](/flutter/sdk/examples/routing#using-ready-route).
 
 ### 🛠 Исправления
 
@@ -67,11 +66,11 @@ sidebar: fluttersdk
 
 * UI-элементы с обновлённым дизайном:
 
-  * [ModernCompassWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernCompassWidget-class.html) – UI-элемент для отображения компаса.
-  * [ModernIndoorWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernIndoorWidget-class.html) – UI-элемент для переключения этажей в здании.
-  * [ModernMyLocationWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernMyLocationWidget-class.html) – UI-элемент для перелёта к текущему местоположению пользователя и переключения режима слежения.
-  * [ModernTrafficWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernTrafficWidget-class.html) – UI-элемент для отображения текущего уровня пробок и переключения видимости пробок на карте.
-  * [ModernZoomWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernZoomWidget-class.html) – UI-элемент для масштабирования карты.
+  * [ModernCompassWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernCompassWidget-class.html) — UI-элемент для отображения компаса.
+  * [ModernIndoorWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernIndoorWidget-class.html) — UI-элемент для переключения этажей в здании.
+  * [ModernMyLocationWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernMyLocationWidget-class.html) — UI-элемент для перелёта к текущему местоположению пользователя и переключения режима слежения.
+  * [ModernTrafficWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernTrafficWidget-class.html) — UI-элемент для отображения текущего уровня пробок и переключения видимости пробок на карте.
+  * [ModernZoomWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModernZoomWidget-class.html) — UI-элемент для масштабирования карты.
 
 * Свойство [IndoorControlModel.levelNames](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationControlModel/levelNames.html) теперь остаётся пустым, если на карте не отображается здание с этажными планами, даже если у здания один этаж.
 * [LocationQuality](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/LocationQuality.html) — качество определения текущего местоположения.
