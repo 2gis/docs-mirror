@@ -10,6 +10,8 @@ sidebar: iossdk
 * Получать [динамические данные маршрута](#dynamic-route-data) в ходе навигации.
 * Настраивать [звуковые оповещения](#sound-notifications) в навигаторе.
 
+Дополнительно вы можете использовать [собственный источник геопозиции](#custom-location-source) и изменить [маркер геопозиции](#custom-location-marker) в навигаторе на пользовательскую 3D-модель.
+
 ## Начало работы {#getting-started}
 
 <Tabs>
@@ -206,7 +208,9 @@ navigationView.closeButtonCallback = { [weak navigationManager] in
 
 Настройки навигатора можно изменить через свойства объекта [NavigationManager](/ios/sdk/reference/stable/class#navigation-manager/var-indoor-detector).
 
-## Собственный источник геопозиции {#custom-location-source}
+## Настройки геопозиции {#configure-geolocation}
+
+### Изменение источника геопозиции {#custom-location-source}
 
 В качестве источника данных о текущем местоположении вы можете использовать собственный источник геопозиции. Для этого реализуйте протокол [ILocationProvider](/ios/sdk/reference/stable/interface#ilocation-provider) и передайте его в параметр `locationProvider` при создании контейнера SDK.
 
@@ -272,6 +276,84 @@ navigationView.closeButtonCallback = { [weak navigationManager] in
    ```
 
    Если вы не передаёте координаты, SDK использует стандартный источник местоположения на основе [Core Location](https://developer.apple.com/documentation/corelocation).
+
+### Изменение маркера геопозиции {#custom-location-marker}
+
+Вы можете заменить стандартный маркер геопозиции в навигаторе на пользовательскую 3D-модель. См. требования к загружаемым моделям в разделе [3D-модели](/ios/sdk/examples/map#3d-models).
+
+Установите пользовательский маркер геопозиции одним из способов:
+
+<Tabs>
+<TabItem value="api" label="Через API" default>
+
+1. Преобразуйте подготовленную 3D-модель в объект [ModelData](/ios/sdk/reference/stable/class#model-data) с помощью [IModelFactory](/ios/sdk/reference/stable/interface#imodel-factory/make):
+
+    ```swift
+    let modelFactory = try DGis.Container.modelFactory
+    let modelData = try modelFactory.make(modelData: userModelData)
+    ```
+
+2. Получите провайдер источника маркера геопозиции через свойство `myLocationMapObjectSourceProvider` объекта [NavigationManager](/ios/sdk/reference/stable/class#navigation-manager):
+
+    ```swift
+    let sourceProvider = navigationManager.myLocationMapObjectSourceProvider
+    ```
+
+3. Получите источник данных маркера геопозиции через свойство `myLocationMapObjectSource` объекта [MyLocationMapObjectSourceProvider](/ios/sdk/reference/stable/class#my-location-map-object-source-provider):
+
+    ```swift
+    let source = sourceProvider.myLocationMapObjectSource
+    ```
+
+4. Получите объект маркера геопозиции через свойство `item` объекта [MyLocationMapObjectSource](/ios/sdk/reference/stable/class#my-location-map-object-source):
+
+    ```swift
+    let myLocationObject = source.item
+    ```
+
+5. Установите 3D-модель с помощью метода [setModelData()](/ios/sdk/reference/stable/class#my-location-map-object/set-model-data):
+
+    ```swift
+    myLocationObject.setModelData(data: modelData)
+    ```
+
+</TabItem>
+<TabItem value="style-editor" label="В Редакторе стилей">
+
+1. Откройте [Редактор стилей](https://styles.2gis.com/).
+2. Откройте стиль или [создайте новый](/maps/styles/create).
+3. Загрузите подготовленную 3D-модель:
+
+    1. В верхнем меню откройте вкладку **Модели** и выберите **Загрузить модели**.
+
+        <img src="/img/mobile-sdk/editor_load_model.png" alt="Загрузка моделей на вкладке Модели" />
+
+    2. Нажмите **Выбрать файлы** и загрузите один или несколько файлов с моделями.
+    3. Дождитесь загрузки файлов и нажмите **ОК**.
+
+        <img src="/img/mobile-sdk/editor_model_loaded.png" width="500" alt="Модели загружены" />
+
+        Теперь ваши модели будут доступны для работы в Редакторе стилей.
+
+4. В списке готовых слоёв выберите слой в папке **Dynamic objects**:
+
+    - **Vehicle GPS marker** — стиль маркера геопозиции при навигации. По умолчанию — маркер в виде цветного курсора.
+    - **Vehicle GPS marker degraded** — стиль маркера геопозиции при навигации в условиях низкой точности геопозиции. По умолчанию — маркер в виде серого курсора.
+
+    <br/>
+
+    <img src="/img/mobile-sdk/editor_dynamic_object_layers.png" width="400" alt="Слои динамических объектов" />
+
+5. Перейдите на вкладку **Стиль** и в выпадающем списке **Источник модели** выберите загруженную модель.
+
+    <img src="/img/mobile-sdk/editor_custom_model_source.png" alt="Выбор источника модели" />
+
+6. Если необходимо, повторите шаги 4–5, чтобы установить модели для других слоёв.
+
+7. [Экспортируйте и подключите стиль](/maps/styles/connect#ios-sdk).
+
+</TabItem>
+</Tabs>
 
 ## Свободная навигация {#free-drive-mode}
 

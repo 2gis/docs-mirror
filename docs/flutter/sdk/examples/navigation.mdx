@@ -15,6 +15,8 @@ sidebar: fluttersdk
 * Использовать стандартный источник данных и при необходимости включить определение текущего местоположения через [Radar API](#radar-api).
 * Настроить навигатор для работы с [собственным источником геопозиции](#custom-location-source).
 
+Дополнительно вы можете изменить [маркер геопозиции](#custom-location-marker) в навигаторе на пользовательскую 3D-модель.
+
 ## Начало работы {#getting-started}
 
 Создайте объект [NavigationManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager-class.html).
@@ -118,7 +120,9 @@ map.addSource(locationSource);
 
    Полный список настроек см. в разделе [Подключение Radar API](/android/sdk/examples/navigation#radar-api) для Android SDK.
 
-## Собственный источник геопозиции {#custom-location-source}
+## Настройки геопозиции {#configure-geolocation}
+
+### Изменение источника геопозиции {#custom-location-source}
 
 В качестве источника данных о текущем местоположении вы можете использовать собственный источник геопозиции. Для этого реализуйте интерфейс [LocationProvider](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/LocationProvider-class.html) и передайте его в параметр `locationProvider` при инициализации SDK.
 
@@ -192,6 +196,83 @@ map.addSource(locationSource);
 
      customLocationProvider.updateLocation(location);
     ```
+
+### Изменение маркера геопозиции {#custom-location-marker}
+
+Вы можете заменить стандартный маркер геопозиции в навигаторе на пользовательскую 3D-модель. См. требования к загружаемым моделям в разделе [3D-модели](/flutter/sdk/examples/map#3d-models).
+
+Установите пользовательский маркер геопозиции одним из способов:
+
+<Tabs>
+<TabItem value="api" label="Через API" default>
+
+1. Преобразуйте подготовленную 3D-модель в объект [ModelData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelData-class.html) с помощью метода [ModelLoader.loadFromAsset()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelLoader/loadFromAsset.html):
+
+    ```dart
+    final modelData = await sdk.ModelLoader(sdkContext).loadFromAsset('assets/models/model.glb');
+    ```
+
+2. Получите провайдер источника маркера геопозиции через свойство [myLocationMapObjectSourceProvider](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager/myLocationMapObjectSourceProvider.html) объекта [NavigationManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager-class.html):
+
+    ```dart
+    final sourceProvider = navigationManager.myLocationMapObjectSourceProvider;
+    ```
+
+3. Получите источник данных маркера геопозиции через свойство [myLocationMapObjectSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObjectSourceProvider/myLocationMapObjectSource.html) объекта [MyLocationMapObjectSourceProvider](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObjectSourceProvider-class.html):
+
+    ```dart
+    final source = sourceProvider.myLocationMapObjectSource;
+    ```
+
+4. Получите объект маркера геопозиции через свойство [item](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObjectSource/item.html) объекта [MyLocationMapObjectSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObjectSource-class.html):
+
+    ```dart
+    final myLocationObject = source.item;
+    ```
+
+5. Установите 3D-модель с помощью метода [setModelData()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObject/setModelData.html):
+
+    ```dart
+    myLocationObject.setModelData(modelData);
+    ```
+
+</TabItem>
+<TabItem value="style-editor" label="В Редакторе стилей">
+
+1. Откройте [Редактор стилей](https://styles.2gis.com/).
+2. Откройте стиль или [создайте новый](/maps/styles/create).
+3. Загрузите подготовленную 3D-модель:
+
+    1. В верхнем меню откройте вкладку **Модели** и выберите **Загрузить модели**.
+
+        <img src="/img/mobile-sdk/editor_load_model.png" alt="Загрузка моделей на вкладке Модели" />
+
+    2. Нажмите **Выбрать файлы** и загрузите один или несколько файлов с моделями.
+    3. Дождитесь загрузки файлов и нажмите **ОК**.
+
+        <img src="/img/mobile-sdk/editor_model_loaded.png" width="500" alt="Модели загружены" />
+
+        Теперь ваши модели будут доступны для работы в Редакторе стилей.
+
+4. В списке готовых слоёв выберите слой в папке **Dynamic objects**:
+
+    - **Vehicle GPS marker** — стиль маркера геопозиции при навигации. По умолчанию — маркер в виде цветного курсора.
+    - **Vehicle GPS marker degraded** — стиль маркера геопозиции при навигации в условиях низкой точности геопозиции. По умолчанию — маркер в виде серого курсора.
+
+    <br/>
+
+    <img src="/img/mobile-sdk/editor_dynamic_object_layers.png" width="400" alt="Слои динамических объектов" />
+
+5. Перейдите на вкладку **Стиль** и в выпадающем списке **Источник модели** выберите загруженную модель.
+
+    <img src="/img/mobile-sdk/editor_custom_model_source.png" alt="Выбор источника модели" />
+
+6. Если необходимо, повторите шаги 4–5, чтобы установить модели для других слоёв.
+
+7. [Экспортируйте и подключите стиль](/maps/styles/connect#flutter-sdk).
+
+</TabItem>
+</Tabs>
 
 ## Свободная навигация {#free-drive-mode}
 

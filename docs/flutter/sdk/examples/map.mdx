@@ -484,10 +484,10 @@ circle.strokeColor = sdk.Color(Colors.black.value);
 
 Чтобы добавить на карту 3D-модель:
 
-1. Преобразуйте модель в объект [ModelData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelData-class.html), который будет использоваться в SDK:
+1. Преобразуйте модель в объект [ModelData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelData-class.html), который будет использоваться в SDK, с помощью метода [ModelLoader.loadFromAsset()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelLoader/loadFromAsset.html):
 
     ```dart
-     final modelData = await sdk.ModelLoader(sdkContext).loadFromAsset('assets/models/model.glb'); // инициализация ModelData из файла модели
+    final modelData = await sdk.ModelLoader(sdkContext).loadFromAsset('assets/models/model.glb'); // инициализация ModelData из файла модели
     ```
 
 1. Создайте объект [ModelSize](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelSize-class.html) и укажите размер модели одним из способов:
@@ -654,6 +654,77 @@ mapObjectManager = sdk.MapObjectManager.withGeneralization(
 ```
 
 После создания менеджера объектов с генерализацией вы можете [добавлять маркеры](#add-objects) обычными способами через `addObject()` или `addObjects()`.
+
+## Изменение маркера геопозиции {#custom-location-marker}
+
+Вы можете заменить стандартный маркер геопозиции на карте на пользовательскую 3D-модель. См. требования к загружаемым моделям в разделе [3D-модели](#3d-models).
+
+Установите пользовательский маркер геопозиции одним из способов:
+
+<Tabs>
+<TabItem value="api" label="Через API" default>
+
+1. Преобразуйте подготовленную 3D-модель в объект [ModelData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelData-class.html) с помощью метода [ModelLoader.loadFromAsset()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelLoader/loadFromAsset.html):
+
+    ```dart
+    final modelData = await sdk.ModelLoader(sdkContext).loadFromAsset('assets/models/model.glb');
+    ```
+
+2. Добавьте на карту источник данных о геопозиции с помощью объекта [MyLocationMapObjectSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObjectSource-class.html) и установите тип маркера `model` в параметре `markerType`:
+
+    ```dart
+    final locationSource = sdk.MyLocationMapObjectSource(
+      sdkContext,
+      sdk.MyLocationControllerSettings(),
+      sdk.MyLocationMapObjectMarkerType.model,
+    );
+    map?.addSource(locationSource);
+    ```
+
+3. Установите 3D-модель с помощью метода [setModelData()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObject/setModelData.html):
+
+    ```dart
+    locationSource.item.setModelData(modelData);
+    ```
+
+</TabItem>
+<TabItem value="style-editor" label="В Редакторе стилей">
+
+1. Откройте [Редактор стилей](https://styles.2gis.com/).
+2. Откройте стиль или [создайте новый](/maps/styles/create).
+3. Загрузите подготовленную 3D-модель:
+
+    1. В верхнем меню откройте вкладку **Модели** и выберите **Загрузить модели**.
+
+        <img src="/img/mobile-sdk/editor_load_model.png" alt="Загрузка моделей на вкладке Модели" />
+
+    2. Нажмите **Выбрать файлы** и загрузите один или несколько файлов с моделями.
+    3. Дождитесь загрузки файлов и нажмите **ОК**.
+
+        <img src="/img/mobile-sdk/editor_model_loaded.png" width="500" alt="Модели загружены" />
+
+        Теперь ваши модели будут доступны для работы в Редакторе стилей.
+
+4. В списке готовых слоёв выберите слой в папке **Dynamic objects**:
+
+    - **Foot GPS model** — стиль маркера геопозиции. По умолчанию — маркер в виде цветной точки.
+    - **Foot GPS model degraded** — стиль маркера геопозиции при низкой точности геопозиции. По умолчанию — маркер в виде серой точки.
+    - **Foot GPS direction model** — стиль луча, который указывает направление движения, применяется вместе с маркером геопозиции. По умолчанию — цветной конус.
+
+    <br/>
+
+    <img src="/img/mobile-sdk/editor_dynamic_object_layers.png" width="400" alt="Слои динамических объектов" />
+
+5. Перейдите на вкладку **Стиль** и в выпадающем списке **Источник модели** выберите загруженную модель.
+
+    <img src="/img/mobile-sdk/editor_custom_model_source.png" alt="Выбор источника модели" />
+
+6. Если необходимо, повторите шаги 4–5, чтобы установить модели для других слоёв.
+
+7. [Экспортируйте и подключите стиль](/maps/styles/connect#flutter-sdk).
+
+</TabItem>
+</Tabs>
 
 ## Стилизация объектов
 

@@ -454,7 +454,7 @@ circle.strokeColor = Color(255,0,0)
 
 Чтобы добавить на карту 3D-модель:
 
-1. Преобразуйте модель в объект [ModelData](/android/sdk/reference/stable/class#ru.dgis.sdk.map.model-data), который будет использоваться в SDK:
+1. Преобразуйте модель в объект [ModelData](/android/sdk/reference/stable/class#ru.dgis.sdk.map.model-data), который будет использоваться в SDK, с помощью метода [modelDataFromAsset()](/android/sdk/reference/stable/method#ru.dgis.sdk.map.model-data-from-asset-context-asset-name-):
 
     ```kotlin
     val modelData = modelDataFromAsset(sdkContext, "model.glb")
@@ -602,6 +602,77 @@ mapObjectManager = MapObjectManager.withGeneralization(
 ```
 
 После создания менеджера объектов с генерализацией вы можете [добавлять маркеры](#add-objects) обычными способами через `addObject()` или `addObjects()`.
+
+## Изменение маркера геопозиции {#custom-location-marker}
+
+Вы можете заменить стандартный маркер геопозиции на карте на пользовательскую 3D-модель. См. требования к загружаемым моделям в разделе [3D-модели](#3d-models).
+
+Установите пользовательский маркер геопозиции:
+
+<Tabs>
+<TabItem value="api" label="Через API" default>
+
+1. Преобразуйте подготовленную 3D-модель в объект [ModelData](/android/sdk/reference/stable/class#ru.dgis.sdk.map.model-data) с помощью метода [modelDataFromAsset()](/android/sdk/reference/stable/method#ru.dgis.sdk.map.model-data-from-asset-context-asset-name-):
+
+    ```kotlin
+    val modelData = modelDataFromAsset(sdkContext, "model.glb")
+    ```
+
+2. Добавьте на карту источник данных о геопозиции с помощью объекта [MyLocationMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.my-location-map-object-source) и установите тип маркера `MODEL` в параметре `markerType`:
+
+    ```kotlin
+    val locationSource = MyLocationMapObjectSource(
+        sdkContext,
+        MyLocationControllerSettings(),
+        MyLocationMapObjectMarkerType.MODEL)
+    map.addSource(locationSource)
+    ```
+
+3. Установите 3D-модель с помощью метода [setModelData()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.my-location-map-object/set-model-data):
+
+    ```kotlin
+    locationSource.item.setModelData(modelData)
+    ```
+
+</TabItem>
+<TabItem value="style-editor" label="В Редакторе стилей">
+
+1. Откройте [Редактор стилей](https://styles.2gis.com/).
+2. Откройте стиль или [создайте новый](/maps/styles/create).
+3. Загрузите подготовленную 3D-модель:
+
+    1. В верхнем меню откройте вкладку **Модели** и выберите **Загрузить модели**.
+
+        <img src="/img/mobile-sdk/editor_load_model.png" alt="Загрузка моделей на вкладке Модели" />
+
+    2. Нажмите **Выбрать файлы** и загрузите один или несколько файлов с моделями.
+
+    3. Дождитесь загрузки файлов и нажмите **ОК**.
+
+        <img src="/img/mobile-sdk/editor_model_loaded.png" width="500" alt="Модели загружены" />
+
+        Теперь ваши модели будут доступны для работы в Редакторе стилей.
+
+4. В списке готовых слоёв выберите слой в папке **Dynamic objects**:
+
+    - **Foot GPS model** — стиль маркера геопозиции. По умолчанию — маркер в виде цветной точки.
+    - **Foot GPS model degraded** — стиль маркера геопозиции при низкой точности геопозиции. По умолчанию — маркер в виде серой точки.
+    - **Foot GPS direction model** — стиль луча, который указывает направление движения, применяется вместе с маркером геопозиции. По умолчанию — цветной конус.
+
+    <br/>
+
+    <img src="/img/mobile-sdk/editor_dynamic_object_layers.png" width="450" alt="Слои динамических объектов" />
+
+5. Перейдите на вкладку **Стиль** и в выпадающем списке **Источник модели** выберите загруженную модель.
+
+    <img src="/img/mobile-sdk/editor_custom_model_source.png" alt="Выбор источника модели" />
+
+6. Если необходимо, повторите шаги 4–5, чтобы установить модели для других слоёв.
+
+7. [Экспортируйте и подключите стиль](/maps/styles/connect#android-sdk).
+
+</TabItem>
+</Tabs>
 
 ## Стилизация объектов
 
