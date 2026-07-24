@@ -119,10 +119,12 @@ Routing API позволяет строить на карте маршруты �
 
             console.log(\`Координаты: \${lng}, \${lat}\`);
 
+            const dotIcon = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+bWlkZGxlYnVsbGV0PC90aXRsZT48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1IDUpIiBmaWxsPSJub25lIj48Y2lyY2xlIGZpbGw9IiMwMDAiIGN4PSI1IiBjeT0iNSIgcj0iNCIvPjxjaXJjbGUgc3Ryb2tlPSIjMDA4MUYyIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9IiNGRkYiIGN4PSI1IiBjeT0iNSIgcj0iNSIvPjwvZz48L3N2Zz4='
+
             if (selecting !== 'end') {
                 const marker = new mapgl.Marker(map, {
                     coordinates: [lng, lat],
-                    icon: 'https://docs.2gis.com/img/dotMarker.svg',
+                    icon: dotIcon,
                 });
                 markers.push(marker);
             }
@@ -207,8 +209,6 @@ Routing API позволяет строить на карте маршруты �
                 color: "#0078FF",
             });
         }
-
-        fetchRoute();
     </script>
 </body>
 
