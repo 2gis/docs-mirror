@@ -229,6 +229,7 @@ sidebar: on-premise-pro
        #   secretName: secret.tls
      settings:
        auth:
+         enabled: true
          apiKey: ''
          uiRequiredRoles:
          - permAdmin
@@ -244,6 +245,7 @@ sidebar: on-premise-pro
          isochrones: 1000
 
    authProvider:
+     enabled: true
      schema: Basic
      host: https://pro-permissions-api.example.com
      allowedHosts:
@@ -400,8 +402,9 @@ sidebar: on-premise-pro
          * `hosts[0].paths[0].pathType`: тип пути для Ingress.
          * `tls`: конфигурация TLS.
 
-      * `settings.auth.apiKey`: ключ доступа к Permissions API для выполнения авторизованных действий.
-      * `settings.auth.uiRequiredRoles`: роли пользователей, необходимые для доступа к Permissions UI. Значения должны совпадать с ролями, определёнными в конфигурации `authProvider`.
+      * `settings.auth.enabled`: включить ли аутентификацию. Значение параметра должно быть согласовано со значением `authProvider.enabled`: либо оба со значением `true`, либо оба со значением `false`.
+      * `settings.auth.apiKey`: ключ доступа к Permissions API для выполнения авторизованных действий. Обязателен, если у параметра `permissions.settings.auth.enabled` значение `true`.
+      * `settings.auth.uiRequiredRoles`: роли пользователей, необходимые для доступа к Permissions UI. Значения должны совпадать с ролями, определёнными в конфигурации `authProvider`. Обязателен, если у параметра `permissions.settings.auth.enabled` значение `true`.
       * `settings.defaultPermissions`: настройки доступа по умолчанию для новых пользователей.
         
          * `openProUi`: доступ к Pro UI. Значение по умолчанию: `true`.
@@ -412,8 +415,9 @@ sidebar: on-premise-pro
 
    * `authProvider`: настройки поставщика аутентификации для Permissions UI.
 
-      * `host`: адрес хоста поставщика аутентификации. Должен указывать на URL Permissions Ingress.
-      * `schema`: схема аутентификации. Поддерживаемые значения: `Basic`, `Oidc`. Подробнее о настройке OIDC-поставщика см. в разделе [Настройка внешнего поставщика аутентификации](/on-premise-pro/install/authentication).
+      * `enabled`: использовать ли поставщика аутентификации. Значение параметра должно быть согласовано со значением `permissions.settings.auth.enabled`: либо оба со значением `true`, либо оба со значением `false`. 
+      * `host`: адрес хоста поставщика аутентификации. Должен указывать на URL Permissions Ingress. Обязателен, если у параметра `authProvider.enabled` значение `true`.
+      * `schema`: схема аутентификации. Поддерживаемые значения: `Basic`, `Oidc`. Подробнее о настройке OIDC-поставщика см. в разделе [Настройка внешнего поставщика аутентификации](/on-premise-pro/install/authentication). Обязателен, если у параметра `authProvider.enabled` значение `true`.
       * `allowedHosts`: список разрешённых хостов. Значение `['*']` предоставляет доступ со всех хостов.
       * `basic`: настройки базовой аутентификации. Используется, если в параметре `authProvider.schema` указано `Basic`.
 

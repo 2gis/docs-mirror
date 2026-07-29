@@ -5,6 +5,36 @@ sidebar: on-premise-pro
 
 Чтобы установить <Brand /> Про версии 2.0.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-pro/overview/2gis-cli/releases#v3) и следуйте [инструкциям по обновлению](/on-premise-pro/update).
 
+## 2.5.0 {#v2.5.0}
+
+Дата релиза: 2026-07-27
+
+<h3 id="dependencies_v2.5.0">Зависимости</h3>
+
+Перед обновлением любого сервиса в составе <Brand /> Про до версии 2.5.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | 3      |
+| Базовые сервисы                          | 2.8.0  |
+| API-платформа                            | 2.55.0 |
+
+Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
+
+<h3 id="breaking_v2.5.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Pro API | Теперь, если используется синхронизация фильтров с <Brand /> Ситискан, токену, указанному в параметре `pro.key` [конфигурации CityLens API](/on-premise-citylens/install/installation#install-citylens-api), должно быть выдано разрешение `edit` на тип ресурса `asset`. |
+
+<h3 id="new_v2.5.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Pro API | Добавлены параметры `permissions.settings.auth.enabled` и `authProvider.enabled`, позволяющие включать или отключать аутентификацию для Permissions API и использование поставщика аутентификации соответственно. Оба параметра должны быть заданы согласованно: либо оба со значением `true`, либо оба со значением `false`. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.5.0/charts/pro-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-pro/install/installation#install-pro-api). |
+
+Полный список продуктовых изменений см. в разделе [Релизы](/pro/releases) c мая по июль 2026 г.
+
 ## 2.4.0 {#v2.4.0}
 
 Дата релиза: 2026-06-08
@@ -31,7 +61,7 @@ sidebar: on-premise-pro
 
 | <div style={{"width":"170px"}}>Сервис</div> | Изменения |
 | --- | --- |
-| Pro API | <ul><li>Добавлен блок параметров `permissions.headlessService` для управления аннотациями и метками headless-сервиса Kubernetes.</li><li>Добавлен параметр `permissions.defaultPermissions.newUserExpirationDays`, позволяющий указать количество дней после регистрации, в течение которых у нового пользователя будет доступ.</li><li>В блок `pagerenderer` добавлены параметры:<ul><li>`pod.resources.requests.aliyun.com/gpu-mem` — запрашиваемый объём памяти GPU;</li><li>`pod.resources.limits.aliyun.com/gpu-mem` — максимально допустимый объём памяти GPU;</li><li>`settings.auth.apiKey` — API-ключ для межсервисных вызовов;</li><li>`settings.grpcRoute.hostname` — имя хоста для GRPCRoute;</li><li>`settings.grpcRoute.parentRefs` — список родительских ссылок (шлюзов) для GRPCRoute.</li></ul></li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.4.0/charts/pro-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-pro/install/installation#install-pro-api). |
+| Pro API | <ul><li>Добавлен блок параметров `permissions.headlessService` для управления аннотациями и метками headless-сервиса Kubernetes.</li><li>Добавлен параметр `permissions.defaultPermissions.newUserExpirationDays`, позволяющий указать количество дней после регистрации, в течение которых у нового пользователя будет доступ.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.4.0/charts/pro-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-pro/install/installation#install-pro-api). |
 
 Полный список продуктовых изменений см. в разделе [Релизы](/pro/releases) c февраля по апрель 2026 г.
 
