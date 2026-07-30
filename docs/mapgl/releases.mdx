@@ -6,7 +6,7 @@ sidebar: mapgljsapi
 There are two ways to choose MapGL version:
 
 1. (**recommended**) major version: https://mapgl.2gis.com/api/js/v1
-2. fixed version: https://mapgl.2gis.com/api/js/v1.75.2
+2. fixed version: https://mapgl.2gis.com/api/js/v1.76.0
 
 Major version guarantees to have stable API (breaking changes will land into the next major version).
 It is updated regularly with new features, bug fixes and performance improvements.
@@ -18,6 +18,17 @@ We guarantee that the version will be working during the support period.
 [Subresource Integrity (SRI)](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
 Because of short support period you have to update the version regularly.
 
+## v1.76.0
+
+**URL:** https://mapgl.2gis.com/api/js/v1.76.0
+
+**SRI:** sha512-mFf2sak98AbbJECjxBuCoe3uGzCZj9rKIUjz0oPDObsWAebNPATkjeMm44hmJeCKHRy/QfKN6ITOVSXOa2O8Pw==
+
+**Release Date:** 29.07.2026
+
+- Labels now accept any font name and gracefully fall back to Noto_Sans when the font is missing
+- Improved rendering loop reliability, generating log events when performance degrades and critical errors occur
+
 ## v1.75.2
 
 **URL:** https://mapgl.2gis.com/api/js/v1.75.2
@@ -25,6 +36,8 @@ Because of short support period you have to update the version regularly.
 **SRI:** sha512-+7DNY5CzbQvX5uFtZkU55hc6iYJ0QDJOM7l/Rfhme6qLoECnKktiL1VRrJIMdfUpaEV647PdNxSx8HjFQxyRlA==
 
 **Release Date:** 16.07.2026
+
+**Support End Date:** 29.10.2026
 
 - Added shadow rendering for DEM terrain
 - 3D terrain is now disabled outside DEM tile coverage
