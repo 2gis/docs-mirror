@@ -133,10 +133,10 @@ TSP API предлагает наиболее оптимальный *поряд
 
 ### 1. Создание задачи {#create-task}
 
-Чтобы создать задачу на построение маршрута, отправьте POST-запрос на endpoint `/logistics/vrp/2.0.0/create`. В строке запроса укажите ваш ключ API в качестве значения параметра `key`:
+Чтобы создать задачу на построение маршрута, отправьте POST-запрос на endpoint `/logistics/vrp/2.0/create`. В строке запроса укажите ваш ключ API в качестве значения параметра `key`:
 
 ```http
-https://routing.api.2gis.com/logistics/vrp/2.0.0/create?key=API_KEY
+https://routing.api.2gis.com/logistics/vrp/2.0/create?key=API_KEY
 ```
 
 Координаты точек маршрута, количество курьеров и другие параметры передайте в виде JSON в теле запроса. Например, чтобы задать параметры обхода из [примера задачи](#task-example):
@@ -252,7 +252,7 @@ https://routing.api.2gis.com/logistics/vrp/2.0.0/create?key=API_KEY
 #### Пример запроса {#request-example}
 
 ```bash
-curl --location --request POST 'https://routing.api.2gis.com/logistics/vrp/2.0.0/create?key=API_KEY' \
+curl --location --request POST 'https://routing.api.2gis.com/logistics/vrp/2.0/create?key=API_KEY' \
 --header 'Content-Type: application/json' \
 --data '{
   "waypoints": [
@@ -391,13 +391,13 @@ curl --location --request POST 'https://routing.api.2gis.com/logistics/vrp/2.0.0
 
 ### 2. Проверка статуса задачи {#check-task-status}
 
-Чтобы проверить статус задачи, отправьте GET-запрос на endpoint `/logistics/vrp/2.0.0/status`. В строке запроса укажите два параметра:
+Чтобы проверить статус задачи, отправьте GET-запрос на endpoint `/logistics/vrp/2.0/status`. В строке запроса укажите два параметра:
 
 * `task_id` — идентификатор задачи;
 * `key` — ваш ключ API.
 
 ```bash
-curl --location --request GET 'https://routing.api.2gis.com/logistics/vrp/2.0.0/status?task_id=dcabb3f6188935187d54088556238b83&key=API_KEY'
+curl --location --request GET 'https://routing.api.2gis.com/logistics/vrp/2.0/status?task_id=dcabb3f6188935187d54088556238b83&key=API_KEY'
 ```
 
 Если задача в процессе обработки, запрос вернёт тот же ответ, что и при создании задачи (поле `status` будет содержать значение `"Run"`):
