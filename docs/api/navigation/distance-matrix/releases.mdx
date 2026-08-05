@@ -48,7 +48,7 @@ sidebar: distancematrixapi
 * Добавлена возможность строить автомобильные маршруты с учётом полос общественного транспорта (параметр запроса `mode: "taxi"`).
 * Для начальной точки маршрута теперь можно указать необязательный параметр [distance\_direction](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=distance_direction), который определяет расстояние, на котором должно быть сохранено направление движения. Если параметр `distance_direction` указан, ответ будет содержать дополнительное поле `reliability`, показывающее точность построенного маршрута.
 * Добавлен параметр запроса [type](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=type), с помощью которого можно изменить тип маршрута (кратчайший по времени или расстоянию).
-* Добавлена поддержка параметра запроса [filters](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=filters), который используется для исключения типов дорог из маршрута. Подробнее см. раздел [Исключение типов дорог](/api/navigation/distance-matrix/examples#exclude).
+* Добавлена поддержка параметра запроса [filters](/api/navigation/distance-matrix/reference/get_dist_matrix#:~:text=filters), который используется для исключения типов дорог из маршрута. Подробнее см. в разделе [Исключение типов дорог](/api/navigation/distance-matrix/examples#exclude).
 * Параметр запроса `start_time` стал необязательным. Если время начала движения не задано, используется текущее время.
 * Удалено поле `mode` в ответе.
 
