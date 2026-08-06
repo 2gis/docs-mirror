@@ -20,27 +20,27 @@ sidebar: on-premise-citylens
 2. Выполните предварительные шаги:
 
    1. [Подготовка к установке](/on-premise-citylens/preparation)
-   2. [Установка сервиса лицензий](/on-premise-api-platform/core/install/license)
-   3. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)
-   4. [Установка API для работы с картами](/on-premise-api-platform/api-platform/install/maps)
-   5. [Установка API для работы с поиском](/on-premise-api-platform/api-platform/install/search)
-   6. [Установка API для работы с навигацией](/on-premise-api-platform/api-platform/install/navigation)
+   2. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)
+   3. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)
+   4. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)
+   5. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search)
+   6. [Установка API для работы с навигацией](/on-premise-api-platform/installation#install-navi)
    7. [Установка <Brand /> Про](/on-premise-pro/install/installation)
 
 3. Соберите необходимые данные, заданные или полученные на предыдущих шагах:
 
    | Объект                                                 | Пример значения                          | Как получить значение                                                      |
    | ------------------------------------------------------ | ---------------------------------------- | -------------------------------------------------------------------------- |
-   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts) |
-   | Секрет Kubernetes для доступа к реестру Docker | `onpremise-registry-creds`                 | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)        |
-   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                    | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)        |
-   | Название бакета с артефактами установки                | `onpremise-artifacts`                    | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)  |
-   | Идентификатор ключа для доступа к артефактам установки | `AKIAIOSFODNN7EXAMPLE`                   | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)  |
-   | Секрет ключа для доступа к артефактам установки        | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY` | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)  |
-   | Путь к файлу манифеста                                 | `manifests/citylens/1640661259.json`     | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)  |
-   | Endpoint сервиса лицензий                              | `https://license.svc`                    | См. [Установка сервиса лицензий](/on-premise-api-platform/core/install/license)        |
-   | Endpoint MapGL JS API                                  | `mapgl.example.local`                    | См. [Установка API для работы с картами](/on-premise-api-platform/api-platform/install/maps)   |
-   | Endpoint Catalog APIs                                  | `catalog-api.example.local`              | См. [Установка API для работы с поиском](/on-premise-api-platform/api-platform/install/search) |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts) |
+   | Секрет Kubernetes для доступа к реестру Docker | `onpremise-registry-creds`                 | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)        |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                    | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)        |
+   | Название бакета с артефактами установки                | `onpremise-artifacts`                    | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)  |
+   | Идентификатор ключа для доступа к артефактам установки | `AKIAIOSFODNN7EXAMPLE`                   | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)  |
+   | Секрет ключа для доступа к артефактам установки        | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY` | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)  |
+   | Путь к файлу манифеста                                 | `manifests/citylens/1640661259.json`     | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)  |
+   | Endpoint сервиса лицензий                              | `https://license.svc`                    | См. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)        |
+   | Endpoint MapGL JS API                                  | `mapgl.example.local`                    | См. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)   |
+   | Endpoint Catalog APIs                                  | `catalog-api.example.local`              | См. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search) |
    | Endpoint Pro API                                       | `https://pro-api.host`                   | См. [Установка <Brand /> Про](/on-premise-pro/install/installation)                    |
 
 4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в Helm-чартах:
@@ -349,7 +349,7 @@ sidebar: on-premise-citylens
        * `storeOIDCUserinfoFields`: список полей из ответа провайдера OIDC для хранения информации о водителях, загружающих треки.
        * `predictorsTokens.camcom`: случайно сгенерированная строка длиной 64 символа (ASCII + цифры). Передается в Camcom для доступа к CityLens API.
 
-     * `licensing`: настройки [сервиса лицензий](/on-premise-api-platform/architecture/core/license).
+     * `licensing`: настройки [сервиса лицензий](/on-premise-api-platform/architecture/license).
 
        * `url`: URL-адрес сервиса лицензий. Пример: `https://license.svc`.
 
@@ -590,8 +590,8 @@ sidebar: on-premise-citylens
 
 * Установите другие продукты программного комплекса <Brand />:
 
-  * [мобильный SDK](/on-premise-api-platform/api-platform/install/mobilesdk),
+  * [мобильный SDK](/on-premise-api-platform/installation#install-msdk),
   * [GIS-платформа](/on-premise-gis-platform/installation),
-  * [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform).
+  * [Менеджер Платформы](/on-premise-api-platform/installation#install-pm).
 
 * Изучите рекомендации по [обслуживанию системы](/on-premise-citylens/administering).

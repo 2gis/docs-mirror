@@ -1,0 +1,355 @@
+---
+sidebar: on-premise-api-platform
+---
+# Обновление API навигации
+
+Вы можете обновить сервисы навигации как вместе с их данными, так и без их обновления. Чтобы загрузить только данные, достаточно обновить сервис Navi-Castle. В остальных случаях обновите все необходимые сервисы навигации.
+
+## Обновление сервиса Navi-Castle {#update-navi-castle}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts). Дополнительно вы можете указать следующие флаги:
+
+      * Чтобы обновить только образ сервиса, добавьте флаг `--only-apps` после команды `pull`.
+      * Чтобы обновить только данные, добавьте флаг `--only-data` после команды `pull`.
+      * Чтобы обновить и сервис, и данные, выполните команду без добавления флагов выше.
+
+      Дополнительно см. [справку по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Скопируйте путь к новому файлу манифеста из консольного вывода команды и подставьте его в параметр `dgctlStorage.manifest` в конфигурационном файле `values-castle.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-castle).
+
+   :::note[Настройка импорта данных]
+
+   Вы можете настроить процесс [импорта новых данных](/on-premise-api-platform/overview/lifecycle#importing-data) для Navi-Castle. За это отвечают настройки групп `cron` и `init` конфигурационного файла.
+   Если при очередном обновлении сервисов навигации вы не хотите импортировать новые данные, используйте тот же манифест, что и в предыдущем импорте. В остальных случаях рекомендуется использовать новый манифест.
+
+   :::
+
+3. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите другие настройки в конфигурационном файле `values-castle.yaml`.
+
+4. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-castle.yaml navi-castle 2gis-on-premise/navi-castle
+   ```
+
+   В параметр `--version` подставьте версию компонента `api-platform`:
+
+   * Чтобы обновить только сервис или сервис и данные, используйте новую версию, которую вы указывали в конфигурационном файле 2GIS CLI.
+   * Чтобы обновить только данные, подставьте текущую установленную версию.
+
+5. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-navi-castle).
+
+## Обновление сервиса Navi-Attractor {#update-navi-attractor}
+
+Выполните шаги ниже для каждого установленного инстанса Navi-Attractor:
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-attractor-<transport>.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-attractor).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-attractor-<transport>.yaml navi-attractor-<transport> 2gis-on-premise/navi-attractor
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+## Обновление сервиса Navi-Back {#update-navi-back}
+
+Выполните шаги ниже для каждого установленного инстанса Navi-Back:
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-back.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-back).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-back.yaml navi-back 2gis-on-premise/navi-back
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-navi-back).
+
+## Обновление сервиса Navi-Splitter {#update-navi-splitter}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-splitter.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-splitter).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-splitter.yaml navi-splitter 2gis-on-premise/navi-splitter
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-navi-splitter).
+
+## Обновление сервиса Navi-Router {#update-navi-router}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-router.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-router).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-router.yaml navi-router 2gis-on-premise/navi-router
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-navi-router).
+
+## Обновление сервиса Navi-Front {#update-navi-front}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-front.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-front).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-front.yaml navi-front 2gis-on-premise/navi-front
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-navi-front).
+
+## Обновление сервиса Distance Matrix Async API {#update-distance-matrix-async-api}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-navi-async-matrix.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-async-matrix).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-navi-async-matrix.yaml navi-async-matrix 2gis-on-premise/navi-async-matrix
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-distance-matrix-async-api).
+
+## Обновление сервиса Navi Async gRPC proxy {#update-navi-async-grpc-proxy}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-navi-async-grpc-proxy.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-navi-async-grpc-proxy).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-navi-async-grpc-proxy.yaml navi-async-grpc-proxy 2gis-on-premise/navi-async-grpc-proxy
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+## Обновление сервиса VRP Solver {#update-vrp-task-manager}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-vrp-solver.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-vrp-solver).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-vrp-solver.yaml navi-vrp-solver 2gis-on-premise/navi-vrp-solver
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+## Обновление сервиса VRP Task Manager {#update-vrp-task-manager}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-vrp-task-manager.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-vrp-task-manager).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-vrp-task-manager.yaml navi-vrp-task-manager 2gis-on-premise/navi-vrp-task-manager
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+## Обновление сервиса Restrictions API {#update-restrictions-api}
+
+1. (Рекомендуется) Выполните резервное копирование данных, которые использует сервис.
+
+2. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+3. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-restrictions.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-restrictions-api).
+
+4. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-restrictions.yaml navi-restrictions 2gis-on-premise/navi-restrictions
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+5. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-restrictions-api).

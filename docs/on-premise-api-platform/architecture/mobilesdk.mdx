@@ -1,0 +1,49 @@
+---
+sidebar: on-premise-api-platform
+---
+# Мобильный SDK
+
+Мобильный SDK предоставляет набор инструментов для добавления основных сервисов On-Premise (карта, поиска и навигация) в ваше мобильное приложение.
+
+## Архитектура {#architecture}
+
+<NoInvert>
+![Архитектура мобильного SDK](/img/on-premise/mobile-sdk-architecture.svg)
+</NoInvert>
+
+Мобильный SDK получает данные из следующих сервисов On-Premise:
+
+* [Сервисы карт](/on-premise-api-platform/architecture/maps) (Tiles API)
+
+  Предоставляют мобильные тайлы (изображения участков карты) для отображения карты в приложении.
+
+* [Сервисы поиска](/on-premise-api-platform/architecture/search)
+
+  Предоставляют RESTful APIs, которые приложение может использовать для реализации поискового движка.
+
+* [Сервисы навигации](/on-premise-api-platform/architecture/navigation)
+
+  Предоставляют RESTful APIs, которые приложение может использовать для реализации навигатора и построения маршрутов.
+
+* [Прокси для API пробок](/on-premise-api-platform/architecture/trafficproxy)
+
+  Позволяет получать данные о пробках в реальном времени с публичных серверов обновлений <Brand />. Прокси должен быть предоставлен доступ в интернет.
+
+## Зависимости {#dependencies}
+
+* Требования для связанных сервисов: см. описания архитектуры сервисов по ссылкам выше. Подробнее о том, как проверить требования для каждого сервиса, см. в документе [Системные требования](/on-premise-api-platform/requirements).
+
+* Требования к мобильным устройствам: см. документацию:
+
+  * [Android Mobile SDK](/android/sdk/overview)
+  * [iOS Mobile SDK](/ios/sdk/overview)
+  * [Flutter Mobile SDK](/flutter/sdk/overview)
+
+## Что дальше? {#whats-next}
+
+* Узнайте, как [установить мобильный SDK](/on-premise-api-platform/installation#install-msdk)
+
+* Узнайте больше о программном комплексе <Brand />:
+
+  * [Архитектура программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture)
+  * [Системные требования](/on-premise-api-platform/requirements)

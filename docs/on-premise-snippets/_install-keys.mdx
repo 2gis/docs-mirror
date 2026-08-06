@@ -1,0 +1,450 @@
+### 3.1. Перед установкой {#before-installing-keys}
+
+1. Ознакомьтесь с:
+
+   * [документацией сервиса API-ключей](/on-premise-api-platform/architecture/keys);
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture);
+   * [системными требованиями](/on-premise-api-platform/requirements) к программному обеспечению и вычислительным ресурсам.
+
+2. Убедитесь, что выполнены [подготовительные шаги](#preparation).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                                                          | Значение                                 | Как получить значение                                                     |
+   | --------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](#artifacts) |
+   | Секрет Kubernetes для доступа к реестру Docker | `onpremise-registry-creds`                 | См. [Получение артефактов установки](#artifacts)        |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                    | См. [Получение артефактов установки](#artifacts)        |
+   | Название бакета с артефактами установки                         | `onpremise-artifacts`                    | См. [Получение артефактов установки](#artifacts) |
+   | Идентификатор ключа для доступа к артефактам установки          | `AKIAIOSFODNN7EXAMPLE`                   | См. [Получение артефактов установки](#artifacts) |
+   | Секрет ключа для доступа к артефактам установки                 | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY` | См. [Получение артефактов установки](#artifacts) |
+   | Путь к файлу манифеста                                          | `manifests/core/1640661259.json`         | См. [Получение артефактов установки](#artifacts) |
+
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/keys/values.yaml). Подробнее о том, как это сделать, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
+
+   Требования к хранилищу могут меняться в зависимости от настроенного временного периода для хранения статистики. Чем больше период, тем больший объём хранилища требуется.
+
+   :::note[Используйте подходящий чарт]
+
+   Содержание Helm-чарта, описанное в этом разделе, актуально для последней версии базовых сервисов (см. [Релизы базовых сервисов](/on-premise-api-platform/releases/core)). Чтобы изучить параметры для предыдущих версий, откройте [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/keys/values.yaml) и в списке тегов слева выберите тег `Core-<версия>`.
+
+   :::
+
+5. Определите доменные имена для сервиса API-ключей.
+
+   **Пример:**
+
+   * Веб-интерфейс администратора: `keys-admin.example.com`.
+   * API backend: `keys-api.example.com`.
+
+### 3.2. Подготовьте инфраструктуру {#prepare-infrastructure-keys}
+
+:::note[Настройка аналогов из реестра Минцифры]
+
+Если вместо PostgreSQL, Apache Kafka и Redis вы используете [аналоги из реестра Минцифры](/on-premise-api-platform/requirements), для инструкции по их настройке обратитесь к официальной документации этих сервисов.
+
+:::
+
+#### Настройте PostgreSQL {#configure-postgresql}
+
+1. Разместите кластер PostgreSQL с доменным именем `keys-postgresql.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
+
+2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
+
+3. Создайте двух пользователей базы данных и установите пароли для них:
+
+   ```sql
+   create user keys_superuser_rw password 'KEYS_Db_Owner_Password_1234';
+   create user keys_user_ro password 'KEYS_Db_RO_User_Password_5678';
+   ```
+
+4. Создайте базу данных, принадлежащую одному из пользователей:
+
+   ```sql
+   create database onpremise_keys owner keys_superuser_rw;
+   ```
+
+5. Добавьте ограниченные права к этой базе данных другому пользователю:
+
+   ```sql
+   \c onpremise_keys
+
+   ALTER DEFAULT PRIVILEGES FOR ROLE keys_superuser_rw IN SCHEMA public GRANT SELECT ON TABLES TO keys_user_ro;
+   ALTER DEFAULT PRIVILEGES FOR ROLE keys_superuser_rw IN SCHEMA public GRANT SELECT ON SEQUENCES TO keys_user_ro;
+   ```
+
+#### Настройте LDAP {#configure-ldap}
+
+Чтобы сервисы могли выполнять аутентификацию администраторов сервиса API-ключей, рекомендуется использовать LDAP-сервер (например, Microsoft Active Directory). Этот шаг можно пропустить, если у вас нет возможности развернуть LDAP-сервер и вы собираетесь использовать аутентификацию по plaintext-паролям в конфигурационном файле.
+
+Разместите LDAP-сервер с доменным именем `keys-ldap.storage.example.local` в приватной сети. Предполагается, что сервер работает на стандартном порту `3268`.
+
+1. Получите значения настроек LDAP:
+
+   | Настройка                                                                                                                                                  | Пример значения                            |
+   | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+   | Пользователь для подключения к службе LDAP                                                                                                                 | `keys_ldap_user`                           |
+   | Пароль пользователя для подключения к службе LDAP                                                                                                          | `KEYS_LDAP_PaSSw0rd_8901`                  |
+   | Основное уникальное имя ([base relative distinguished name](https://ldap.com/ldap-dns-and-rdns/)), относительно которого выполняется поиск в каталоге LDAP | `dc=2gis`                                  |
+   | [Фильтр LDAP](https://ldap.com/ldap-filters/), используемый для идентификации записей в поисковых запросах                                                 | `(&(objectClass=user)(sAMAccountName=%s))` |
+
+2. Добавьте в LDAP пользователя `admin`, которому будет назначена роль администратора в сервисе API-ключей.
+
+#### Настройте Apache Kafka {#configure-kafka}
+
+:::note
+
+Если вы не планируете использовать [сервис сбора статистики](/on-premise-api-platform/architecture/statreceiver), пропустите этот шаг.
+
+:::
+
+1. Разместите кластер Apache Kafka с доменным именем `keys-kafka.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `9092`.
+
+2. Создайте пользователя для подключения к сервису. Запомните его реквизиты.
+
+   **Пример:**
+
+   * Имя пользователя: `kafka`.
+   * Пароль: `kafka_password`.
+
+#### Настройте Redis {#configure-redis}
+
+:::note
+
+Если вы не планируете использовать [сервис сбора статистики](/on-premise-api-platform/architecture/statreceiver), пропустите этот шаг.
+
+:::
+
+1. Разместите Redis в приватной сети.
+2. Создайте пользователя для подключения к сервису. Запомните его реквизиты.
+
+   **Пример:**
+
+   * Имя пользователя: `redisuser`.
+   * Пароль: `Redis_Password_6379`.
+
+### 3.3. Установите сервис API-ключей {#install-keys-service}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/keys/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-keys.yaml</code></summary>
+
+    ```yaml
+
+    dgctlDockerRegistry: docker.registry.example.com
+
+    dgctlStorage:
+      host: artifacts.example.com
+      secure: true
+      bucket: onpremise-artifacts
+      accessKey: AKIAIOSFODNN7EXAMPLE
+      secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+      manifest: manifests/core/1640661259.json
+      region: ''
+      verifySsl: true
+
+    redis:
+      enabled: false
+      host: redis.cache.example.local
+      port: 6379
+      db: 1
+      password: Redis_Password_6379
+
+    postgres:
+      ro:
+        host: keys-postgresql.storage.example.local
+        port: '5432'
+        name: onpremise_keys
+        username: keys_user_ro
+        password: KEYS_Db_RO_User_Password_5678
+      rw:
+        host: keys-postgresql.storage.example.local
+        port: '5432'
+        name: onpremise_keys
+        username: keys_superuser_rw
+        password: KEYS_Db_Owner_Password_1234
+
+    kafka:
+      bootstrapServers: 'keys-kafka.storage.example.local:9092'
+      username: kafka
+      password: kafka_password
+      securityProtocol: SASL_PLAINTEXT
+      saslMechanism: SCRAM-SHA-512
+      stats:
+        topic: 'stat_master_type.401'
+        groupId: 'keys-counter'
+        clientId: 'keys-counter'
+
+    counter:
+      enabled: false
+      preloader:
+        refreshTick: 10s
+
+    ldap:
+      host: ldap.keys.example.com
+      port: 3268
+
+      useStartTLS: false
+      useLDAPS: false
+      skipServerCertificateVerify: false
+      serverName: ldap.keys.example.com
+      clientCertificatePath: /home/user/certificates/cert.crt
+      clientKeyPath: /home/user/certificates/cert.key
+      rootCertificateAuthoritiesPath: /home/user/certificates/root.cer
+
+      bind:
+        dn: keys_ldap_user
+        password: KEYS_LDAP_PaSSw0rd_8901
+
+      search:
+        baseDN: dc=2gis
+        filter: (&(objectClass=user)(sAMAccountName=%s))
+
+    statApi:
+      enabled: false
+      url: ''
+      timeout: 30s
+      retryCount: 3
+
+    tasker:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+
+      delay: 30s
+
+    admin:
+      host: https://keys-admin.example.com
+
+      ingress:
+        enabled: true
+        className: nginx
+        hosts:
+          - host: keys-admin.example.com
+            paths:
+              - path: /
+                pathType: Prefix
+        tls: []
+        #- hosts:
+        #  - keys-admin.example.com
+        #  secretName: secret.tls
+
+    api:
+      adminUsers: 'admin:8k7RVCP8m3AABDzD'
+
+      oidc:
+        enabled: true
+        enableSinglePartnerMode: true
+        enableExternalProvider: true
+        url: https://keycloak.example.com/realms/platform
+        defaultPartner:
+          id: 1
+          name: 'Partner'
+          role: admin
+
+      ingress:
+        enabled: true
+        className: nginx
+        hosts:
+            - host:  keys-api.example.com
+            paths:
+                - path: /
+                    pathType: Prefix
+        tls: []
+        # - hosts:
+        #   - keys-api.example.com
+        #   secretName: secret.tls
+
+    customCAs:
+        bundle: ''
+        # bundle: |
+        #   -----BEGIN CERTIFICATE-----
+        #   ...
+        #   -----END CERTIFICATE-----
+        certsPath: ''
+    ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки.
+
+     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `manifest`: путь до файла с манифестом в формате `manifests/core/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, которые требуются сервисам для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
+     * `region`: регион S3-совместимого хранилища.
+     * `verifySsl`: включить ли проверку SSL-сертификатов при подключении к `dgctlStorage.host` по HTTPS. Значение по умолчанию: `true`.
+
+   * `redis`: настройки доступа к серверу Redis.
+
+     * `enabled`: включить ли использование Redis. Значение по умолчанию: `false`.
+     * `host`: имя хоста или IP-адрес сервера.
+     * `port`: порт, на котором слушает сервер.
+     * `db`: номер базы данных Redis.
+     * `password`: пароль пользователя Redis. Если аутентификация не требуется, оставьте поле пустым.
+
+   * `postgres`: настройки доступа к серверу PostgreSQL.
+
+     Сервис API-ключей работает с данными в двух режимах: только чтение (`ro`) и чтение-запись (`rw`). В обоих режимах сервис работает с одной базой, но от имени пользователей с разными правами (см. подробности в шаге 1).
+
+     * Настройки, общие для обоих режимов:
+
+       * `host`: имя хоста или IP-адрес сервера. Вы можете добавить несколько хостов или IP-адресов, разделив их запятыми.
+       * `port`: порт, на котором слушает сервер. Вы можете добавить несколько портов, разделив их запятыми.
+       * `name`: имя базы данных.
+
+     * Реквизиты для доступа к базе пользователя с правами только на чтение (секция `ro`).
+
+     * Реквизиты для доступа к базе пользователя с правами на чтение и запись (секция `rw`).
+
+     Для хранения настроек `password` в группах `ro` и `rw` Helm-чарт использует [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+
+   * `kafka`: настройки доступа к Apache Kafka.
+
+     * `bootstrapServers`: адреса и порты брокеров Apache Kafka через запятую. Пример: `HOST1:PORT1,HOST2:PORT2`.
+     * `username`: имя пользователя для аутентификации через SASL.
+     * `password`: пароль пользователя для аутентификации через SASL.
+     * `securityProtocol`: протокол безопасности для подключения.
+     * `saslMechanism`: механизм SASL-аутентификации.
+     * `stats`: настройки для сбора статистики использования API-ключей.
+
+       * `topic`: имя топика Kafka, из которого сервис API-ключей будет считывать данные о статистике использования ключей.
+       * `groupId`: идентификатор группы потребителей Kafka.
+       * `clientId`: идентификатор клиента Kafka.
+
+   * `counter`: настройки сервиса подсчёта использования API-ключей.
+
+     * `enabled`: включить ли сервис. Значение по умолчанию: `false`.
+     * `preloader.refreshTick`: период (в секундах), с которым сервис будет обновлять кеш с информацией о лимитах.
+
+   * `ldap`: настройки доступа к серверу LDAP.
+
+     * `host`: имя хоста или IP-адрес сервера.
+
+     * `port`: порт, на котором слушает сервер.
+
+     * Группа настроек для обеспечения защищенного соединения с сервером LDAP:
+
+       * `useStartTLS`: использовать StartTLS.
+       * `useLDAPS`: использовать Secure LDAP.
+       * `skipServerCertificateVerify`: не проверять сертификат сервера.
+       * `serverName`: строка с именем сервера. Используется при проверке сертификата сервера.
+       * `clientCertificatePath`: путь к сертификату клиента.
+       * `clientKeyPath`: путь к ключу клиента.
+       * `rootCertificateAuthoritiesPath`: путь к файлу с корневыми сертификатами от центров сертификации (root certificate authorities).
+
+     * `bind`: реквизиты для доступа к серверу LDAP:
+
+       * `dn`: уникальное имя пользователя (distinguished name).
+       * `password`: пароль пользователя.
+
+     * `search`: настройки поиска LDAP:
+
+       * `baseDN`: основное относительное уникальное имя ([base relative distinguished name](https://ldap.com/ldap-dns-and-rdns/)).
+       * `filter`: [фильтр LDAP](https://ldap.com/ldap-filters/), используемый для идентификации записей в поисковых запросах.
+
+   * `statApi`: настройки доступа к сервису Stat API.
+
+     * `enabled`: включён ли сервис. Значение по умолчанию: `false`.
+     * `url`: ссылка на сервис. Обязательное значение, если параметр `statApi.enabled` имеет значение `true`.
+     * `timeout`: таймаут запросов к сервису. Значение может быть числом с единицей времени и, при необходимости, дробной частью. Допустимые единицы: `ns`, `us` (или `µs`), `ms`, `s`, `m`, `h`. Например: `100ms`, `2.3h`, `4h35m`.
+     * `retryCount`: максимальное количество повторных попыток запроса к сервису.
+
+   * `tasker`: настройки сервиса Tasker, который выполняет административные задачи, связанные с API-ключами.
+
+     * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+     * `delay`: период (в секундах). Эта настройка определяет, с каким периодом проверять задачи, которые связаны с настроенными отложенными действиями (например, блокировкой API-ключа).
+
+   * `admin`: настройки веб-сервиса администратора (предоставляет доступ к веб-интерфейсу для администрирования сервиса).
+
+     * `host`: URL фронтенда сервиса API-ключей. **Этот URL должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+     * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+   * `api`: настройки API сервиса.
+
+      * `adminUsers`: список реквизитов пользователей с административными правами в формате `username1:password1,username2:password2,...`.
+
+        Для хранения этой настройки Helm-чарт использует [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+
+        :::note
+
+        Если у вас есть сервер LDAP, то рекомендуется использовать его для аутентификации, а настройку `api.adminUsers` пропустить.
+
+        :::
+      
+      * `oidc`: настройки внешнего поставщика OpenID Connect (OIDC). Необходимы для работы со статистикой по API-ключам в Менеджере Платформы.
+
+        * `enabled`: включить ли аутентификацию через OIDC.
+        * `enableSinglePartnerMode`: включить режим одного партнёра — все пользователи привязываются к сконфигурированному партнёру (компании). Статистика по API-ключам будет отображаться только для компании, указанной в параметре `defaultPartner`.
+        * `enableExternalProvider`: использовать ли внешнего поставщика OIDC. При включении управление пользователями осуществляется на стороне внешнего поставщика.
+        * `url`: URL OIDC-поставщика. 
+        * `defaultPartner`: параметры партнёра.
+
+      * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-keys.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --wait-for-jobs --values ./values-keys.yaml keys 2gis-on-premise/keys
+   ```
+
+   В параметре `--version` укажите нужную версию базовых сервисов. Список версий см. в разделе [Релизы базовых сервисов](/on-premise-api-platform/releases/core).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+3. Добавьте пользователей в сервис с помощью утилиты `keysctl`. Этим пользователям будет назначена роль администратора сервиса API-ключей.
+
+   Чтобы добавить одного пользователя, выполните эту команду из любого пода `keys-api`:
+
+   ```bash
+   keysctl users add admin 'Keys Service Admin'
+   ```
+
+### 3.4. Получите сервисные токены {#fetch-service-keys}
+
+Каждый сервис, который интегрируется с сервисом API-ключей, обязан отправлять информацию об использовании ключей конечными пользователями на бэкенд сервиса API-ключей. Чтобы сервис мог взаимодействовать с этим бэкендом, во время его конфигурации задайте сервисный токен.
+
+Чтобы получить список доступных сервисных токенов, выполните следующую команду из любого пода `keys-api`:
+
+```bash
+keysctl services
+```
+
+### 3.5. Проверьте работоспособность сервиса API-ключей {#test-keys-api}
+
+1. Откройте в браузере веб-интерфейс для администрирования сервиса (используйте значение настройки `admin.host` из конфигурационного файла `values-keys.yaml`):
+
+   ```text
+   https://keys-admin.example.com
+   ```
+
+2. Войдите в веб-интерфейс с учётными данными администратора — пользователя, которому назначена роль администратора с помощью утилиты `keysctl`. Вы должны увидеть [веб-интерфейс для управления API-ключами](/on-premise-api-platform/keys).
+
+### 3.6. Создайте API-ключ
+
+Для работы с сервисами добавьте первого партнёра, оформите для него подписку и выпустите API-ключ. Без корректного API-ключа Catalog APIs не пройдёт проверку работоспособности, а другие сервисы не будут возвращать ответы. Подробнее о создании подписки и API-ключа см. в разделе [Управление доступом к API](/on-premise-api-platform/keys).
+
+Можно использовать один API-ключ для нескольких сервисов. Для этого убедитесь, что необходимые сервисы включены в настройках ключа.

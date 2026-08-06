@@ -1,0 +1,245 @@
+### 9.1. Перед установкой {#before-installing-pm}
+
+1. Ознакомьтесь с:
+
+   * [документацией Менеджера Платформы](/on-premise-api-platform/architecture/platform);
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture);
+   * [системными требованиями](/on-premise-api-platform/requirements).
+
+2. Убедитесь, что выполнены предварительные шаги:
+
+   1. [Подготовка к установке](#preparation).
+   2. [Установка сервиса API-ключей](#install-keys).
+   3. [Установка API для работы с картами](#install-maps).
+   4. [Установка API для работы с поиском](#install-search).
+   5. [Установка API для работы с навигацией](#install-navi).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                          | Пример значения                                | Как получить значение                                                             |
+   | ------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------- |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](#artifacts) |
+   | Endpoint MapGL JS API           | `http://mapgl-js-api`                          | См. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)          |
+   | Endpoint Catalog APIs           | `http://catalog-api`                           | См. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search)        |
+   | Endpoint API навигации          | `http://navi-front`                            | См. [Установка API для работы с навигацией](/on-premise-api-platform/installation#install-navi) |
+   | API-ключи                       | `MAPGL_KEY`<br />`CATALOG_KEY`<br />`NAVI_KEY`<br />`STATIC_KEY` | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)                |
+
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чартe](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform/values.yaml).
+
+   Подробнее о том, как это сделать, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
+
+   :::note[Используйте подходящий чарт]
+
+   Содержание Helm-чарта, описанное в данном разделе, актуально для последней версии API-платформы (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)). Чтобы изучить параметры для предыдущих версий, откройте [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform/values.yaml) и в списке тегов слева выберите тег `Platform-<версия>`.
+
+   :::
+
+5. Определите доменное имя для сервиса Менеджер Платформы. Например, `platform.example.com`.
+
+### 9.2. Установите Менеджер Платформы {#install-platform}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+   <details>
+   <summary><code>values-platform.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   ui:
+    playgrounds: mapgl,geocoder,directions,static
+    brand: 2gis
+    pages: "profile,signup,status,playground,map_styles,users,keys,statistics,license"
+
+    oauth:
+      wellknownUrl: https://keycloak.example.com/realms/platform/.well-known/openid-configuration
+      clientId: platform
+      clientSecret: secret
+      scope: ''
+      codeUrl: https://platform.ingress.host/api/auth/code
+      safeHosts: '.*'
+      secure: true
+
+    status:
+      mapgl: "MapGL JS=http://mapgl-js-api,Tiles API=http://tiles-api/healthcheck"
+      search: "Catalog API=http://catalog-api,Search API=http://search-api/v2/status"
+      navi: "Castle=http://navi-castle/cities.conf,Back=http://navi-back-directions-car/about,Routing=http://navi-front/healthcheck"
+      pro: "PRO UI=http://pro-ui:3000/api/healthcheck/app,PRO API=http://pro-api/health/live,PRO Permissions API=http://pro-api-permissions"
+      gisPlatform: "http://gis-platform-portal"
+      keys: "Keys UI=http://keys-admin,Keys Service API=http://keys-service-api/healthcheck,Keys API=http://keys-api/healthcheck"
+      mapStyles: "http://styles-api/healthcheck"
+
+    platform:
+      api:
+        url: 'https://keys-api.example.com'
+
+    license:
+      url: 'http://license.example.com'
+
+    mapgl:
+      url: 'https://mapgl-js-api.example.com'
+      scriptPath: /api.js
+      key: 'MAPGL_KEY'
+      initCenter: ''
+
+    catalog:
+      url: 'https://catalog.example.com'
+      key: 'CATALOG_KEY'
+
+    navi:
+      url: 'https://navi.example.com'
+      key: 'NAVI_KEY'
+
+    static:
+      url: 'https://static.example.com'
+      key: 'STATIC_KEY'
+
+    resources:
+      requests:
+        cpu: 300m
+        memory: 384Mi
+      limits:
+        cpu: 1100m
+        memory: 512Mi
+
+    ingress:
+      enabled: true
+      className: nginx
+      hosts:
+        - host: platform.example.com
+          paths:
+            - path: /
+              pathType: Prefix
+      tls: []
+      # - hosts:
+      #   - platform.example.com
+      #   secretName: secret.tls
+   ```
+
+   </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+   * `ui`: базовые настройки приложения.
+
+     * `playgrounds`: список доступных песочниц в приложении. Возможные значения: `mapgl` (дополнительно укажите параметр `ui.mapgl.url`), `geocoder` (дополнительно укажите параметр `ui.catalog.url`), `directions` (дополнительно укажите параметр `ui.navi.url`), `static` (дополнительно укажите параметр `ui.static.url`). Значения записываются одной строкой через запятую и без пробелов, например, `'mapgl,geocoder'`.
+
+     * `brand`: брендирование внутри приложения. Возможные значения: `2gis`, `urbi`.
+
+     * `pages`: список доступных страниц в приложении. Значения записываются одной строкой через запятую и без пробелов, например, `'status,playground'`. Первое значение в списке — страница по умолчанию. Минимально необходимые значения: `map_styles` (если вы устанавливаете Styles API), `status` и `playground`. Полный список возможных значений см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform/README.md).
+
+      * `oauth`: настройки интеграции с поставщиком OIDC. Требуется для аутентификации пользователей и работы со статистикой по API-ключам.
+
+        * `wellknownUrl`: URL до конфигурации OIDC.
+        * `clientId`: идентификатор клиента OIDC.
+        * `clientSecret`: секрет клиента OIDC для обмена кода авторизации на токен.
+        * `scope`: области видимости (scopes) OIDC.
+        * `codeUrl`: URL для обмена кода авторизации на токен. Формируется на основе фактического хоста приложения: `https://<host>/api/auth/code`.
+        * `safeHosts`: регулярное выражение для валидации хоста, на который выполняется перенаправление после обмена токена.
+        * `secure`: используется ли HTTPS для токенов аутентификации.
+
+      * `status`: перечень статусов для сервисов On-Premise.
+
+        Значение — строка, содержащая пары из названия сервиса и URL до его healthcheck. Пары записываются через запятую. Значения внутри пары соединяются символом "`=`". Например, `mapgl: 'MapGL JS=https://example.com/healthcheck'`. URL должен быть абсолютным. Можно указать только URL, например, `mapgl: 'https://example.com/healthcheck'`.
+
+        * `mapgl`: статус сервиса [MapGL JS API](/on-premise-api-platform/architecture/maps).
+        * `search`: статус сервисов [Поиска](/on-premise-api-platform/architecture/search).
+        * `navi`: статус сервисов [Навигации](/on-premise-api-platform/architecture/navigation).
+        * `pro`: статус сервисов [<Brand /> Про](/on-premise-pro/architecture/pro-architecture).
+        * `gisPlatform`: статус сервиса [GIS-платформа](/on-premise-gis-platform/architecture/gis-platform-architecture).
+        * `keys`: статус [Сервиса ключей](/on-premise-api-platform/architecture/keys).
+        * `mapStyles`: статус [Styles API](/on-premise-api-platform/architecture/maps).
+
+      * `platform`: настройки доступа к [сервису API-ключей](/on-premise-api-platform/architecture/keys):
+
+        * `api.url`: хост сервиса в формате `HTTP(S)://HOST`.
+
+      * `license`: настройки доступа к [сервису лицензий](/on-premise-api-platform/architecture/license):
+
+        * `url`: хост сервиса в формате `HTTP://HOST`.
+
+      * `mapgl`: настройки доступа к сервису [MapGL JS API](/on-premise-api-platform/architecture/maps):
+
+        * `url`: хост сервиса в формате `HTTP(S)://HOST`.
+        * `scriptPath`: путь до скрипта инициализации сервиса. Путь строится относительно `ui.mapgl.url`. Возможные значения: `/api.js`.
+        * `key`: API-ключ для сервиса.
+        * `initCenter`: координаты карты по умолчанию. Состоят из двух чисел в массиве: `[lng, lat]`. Например: `[55.27, 25.2]` для Дубая, `[37.64, 55.74]` для Москвы.
+
+      * `catalog`: настройки доступа к сервису [Catalog APIs](/on-premise-api-platform/architecture/search):
+
+        * `url`: хост сервиса в формате `HTTP(S)://HOST`.
+        * `key`: API-ключ для сервиса.
+
+      * `navi`: настройки доступа к сервису [API навигации](/on-premise-api-platform/architecture/navigation):
+
+        * `url`: хост сервиса в формате `HTTP(S)://HOST`.
+        * `key`: API-ключ для сервиса.
+
+      * `static`: настройки доступа к сервису [Static API](/on-premise-api-platform/architecture/maps):
+
+        * `url`: хост сервиса в формате `HTTP(S)://HOST`.
+        * `key`: API-ключ для сервиса.
+
+      * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+      * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-platform.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-platform.yaml platform 2gis-on-premise/platform
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+### 9.3. Проверьте работоспособность Менеджера Платформы {#test-pm}
+
+Чтобы проверить работу Менеджера Платформы, перейдите по адресу `https://platform.example.com` в браузере. Должен открыться веб-интерфейс.
+
+В Менеджере Платформы вы можете проверить статус работы установленных сервисов, загрузить пользовательские стили и протестировать работу ключевых API: подробнее см. в инструкции [Работа с Менеджером Платформы](/on-premise-api-platform/user-guide/platform-manager).
+
+### 9.4. Настройте аутентификацию пользователей {#authentication}
+
+Чтобы работать с Менеджером Платформы, конечные пользователи должны проходить аутентификацию. Программный комплекс <Brand /> не предоставляет готовый сервис аутентификации для установки в закрытом контуре, поэтому используйте собственного поставщика OpenID Connect (OIDC) для авторизации пользователей по технологии единого входа (SSO).
+
+Аутентифицироваться и авторизоваться в Менеджере Платформы могут пользователи, зарегистрированные в базе внешнего поставщика OIDC. Управление пользователями также осуществляется на стороне этого поставщика.
+
+Настройте поставщика OIDC, выполнив следующие условия:
+
+1. Определите обязательные утверждения (claims) о данных пользователя. Следующие данные гарантированно должны быть заполнены в ответе `user-info`:
+
+   * `sub` — идентификатор пользователя.
+   * `email` — email пользователя.
+   * `email_verified` — флаг, указывающий на то, был ли email подтверждён пользователем.
+   * `name` — полное имя пользователя.
+   * `phone_number` — номер телефона пользователя.
+
+2. Настройте области видимости (scopes), по которым можно получать заданные утверждения (claims). Стандартно используются следующие scopes:
+
+   * `openid` — обязательный параметр, указывающий на использование OpenID Connect для аутентификации пользователя.
+   * `email` — email пользователя.
+   * `profile` — ссылка на профиль пользователя.
+   * `phone` — номер телефона пользователя.
+
+3. Создайте клиента в вашем поставщике OIDC:
+
+   1. Настройте идентификатор (`client_id`) и cекрет (`client_secret`) клиента.
+
+   2. Укажите Callback URL и Logout URL для сервиса:
+
+        * Callback URL: `https://{application_host}/api/auth/code`;
+        * Logout URL: `https://{application_host}/api/auth/post_sign_out`.
+
+   3. Настройте работу клиента с заданными на предыдущем шаге scopes.

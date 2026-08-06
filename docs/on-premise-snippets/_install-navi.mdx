@@ -1,0 +1,2177 @@
+### 8.1. Перед установкой {#before-installing-navi}
+
+1. Ознакомьтесь с:
+
+   * [документацией сервисов навигации](/on-premise-api-platform/architecture/navigation);
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture).
+
+2. Убедитесь, что выполнены предварительные шаги:
+
+   1. [Подготовка к установке](#preparation).
+   2. [Установка сервиса лицензий](#install-license).
+   3. [Установка сервиса API-ключей](#install-keys).
+   4. [Установка сервиса сбора статистики](#install-stat).
+   5. (Опционально) [Установка прокси для API пробок](#install-traffic-proxy).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                                                 | Пример значения                                                                                                                                                                                                                                                      | Как получить значение                                                         |
+   | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](#artifacts) |
+   | Секрет Kubernetes для доступа к реестру Docker | `onpremise-registry-creds`                 | См. [Получение артефактов установки](#artifacts)        |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                    | См. [Получение артефактов установки](#artifacts)        |
+   | Название бакета с артефактами установки                | `onpremise-artifacts`                                                                                                                                                                                                                                                | См. [Получение артефактов установки](#artifacts)     |
+   | Идентификатор ключа для доступа к артефактам установки | `AKIAIOSFODNN7EXAMPLE`                                                                                                                                                                                                                                               | См. [Получение артефактов установки](#artifacts)     |
+   | Секрет ключа для доступа к артефактам установки        | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY`                                                                                                                                                                                                                             | См. [Получение артефактов установки](#artifacts)     |
+   | Путь к файлу манифеста                                 | `manifests/api-platform/1640661259.json`                                                                                                                                                                                                                             | См. [Получение артефактов установки](#artifacts)     |
+   | Endpoint сервиса лицензий                              | `https://license`                                                                                                                                                                                                                                                    | См. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)           |
+   | Endpoint сервиса API-ключей                            | `http://keys-service-api`                                                                                                                                                                                                                                                    | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)            |
+   | Endpoint сервиса сбора статистики                      | `http://stat-receiver`                                                                                                                                                                                                                                               | См. [Установка сервиса сбора статистики](/on-premise-api-platform/installation#install-stat) |
+   | Endpoint прокси для API пробок                         | `http://traffic-proxy`                                                                                                                                                                                                                                               | См. [Установка прокси для API пробок](/on-premise-api-platform/installation#install-traffic-proxy) |
+   | Сервисные токены<sup>\*</sup>                          | `DIRECTIONS_TOKEN` <br /> `TRUCK_DIRECTIONS_TOKEN` <br /> `PAIRS_DIRECTIONS_TOKEN` <br /> `PUBLIC_TRANSPORT_TOKEN` <br /> `DISTANCE_MATRIX_TOKEN` <br /> `ISOCHRONE_TOKEN` <br /> `MAP_MATCHING_TOKEN` <br /> `TSP_TOKEN` <br /> `ROUTES_PLANNER_TOKEN` (для работы с <Brand /> Ситискан) | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)            |
+
+   \* В иллюстративных целях предполагается, что сервисные токены доступны для всех продуктов навигации.
+
+4. Определите, какие API вам необходимо установить:
+
+   * Базовые API навигации: Routing API, Directions API, Truck Directions API, Pairs Directions API, Distance Matrix API, Map Matching API и Isochrone API. Подробнее о сервисах см. в [обзоре](/on-premise-api-platform/overview/summary#navigation).
+   * Distance Matrix Async API для расчёта матрицы расстояний для большого количества точек. Может быть установлен отдельно или в сочетании с другими API. Подробнее о сервисе см. на [странице архитектуры](/on-premise-api-platform/architecture/navigation#async-distance-matrix-api).
+   * TSP API для решения задачи коммивояжёра (построить кратчайший маршрут обхода точек). Подробнее о сервисе см. на [странице архитектуры](/on-premise-api-platform/architecture/navigation#tsp-api).
+   * Restrictions API для управления собственной информацией о дорожных перекрытиях. Устанавливается в сочетании с другими API. Подробнее о сервисе см. на [странице архитектуры](/on-premise-api-platform/architecture/navigation#restrictions-api).
+
+5. Убедитесь, что удовлетворены требования к ресурсам, приведённые в Helm-чартах:
+
+   | Сервис                                                                                                                       | Для работы каких API необходим                                                      |
+   | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+   | [Navi-Castle](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-castle/values.yaml)                     | Все                                                                                 |
+   | [Navi-Attractor](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-attractor/values.yaml)               | Все                                                                                 |
+   | [Navi-Back](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-back/values.yaml)                         | Все                                                                                 |
+   | [Navi-Router](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-router/values.yaml)                     | Базовые API                                                                         |
+   | [Navi-Front](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-front/values.yaml)                       | Базовые API                                                                         |
+   | [Navi-Restrictions](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-restrictions/values.yaml)         | Restrictions API                                                                    |
+   | [Navi-Splitter](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-splitter/values.yaml)                 | Distance Matrix API (часть базовых API)                                             |
+   | [Distance Matrix Async API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-async-matrix/values.yaml) | Distance Matrix Async API, TSP API                                                  |
+   | [Navi Async gRPC proxy](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-async-grpc-proxy/values.yaml) | Distance Matrix Async API, если запросы к сервису будут отправляться в формате gRPC |
+   | [VRP Task Manager](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-task-manager/values.yaml)      | TSP API                                                                             |
+   | [VRP Solver](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-solver/values.yaml)                  | TSP API                                                                             |
+
+   Подробнее о том, как проверить требования к ресурсам, см. в документе [Системные требования](/on-premise-api-platform/requirements).
+
+   :::note[Используйте чарты, соответствующие версии API-платформы]
+
+   Содержание Helm-чартов, описанное в данном разделе, актуально для последней версии API-платформы (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)). Чтобы изучить параметры для предыдущих версий, откройте нужный [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts) и в списке тегов слева выберите тег `Platform-<версия>`.
+
+   :::
+
+6. Определите доменные имена для сервисов навигации.
+
+   **Пример:**
+
+   * Доменное имя для Navi-Front: `navi-front.example.com`.
+   * Доменное имя для Distance Matrix Async API: `navi-async-matrix.example.com`.
+   * Доменное имя для Restrictions API: `navi-restrictions.example.com`.
+
+### 8.2. Подготовьте инфраструктуру {#prepare-infrastructure-navi}
+
+:::note[Настройка аналогов из реестра Минцифры]
+
+Если вместо PostgreSQL и Apache Kafka вы используете аналоги из реестра Минцифры, для инструкций по их настройке обратитесь к официальной документации этих сервисов.
+
+:::
+
+#### Для установки Distance Matrix Async API
+
+Если вы планируете устанавливать Distance Matrix Async API, выполните дополнительные шаги:
+
+1. Настройте PostgreSQL:
+
+   1. Разместите кластер PostgreSQL с доменным именем `navi-async-matrix-postgresql.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
+
+   2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
+
+   3. Создайте пользователя базы данных и установите пароль для него:
+
+      ```sql
+      create user dbuser_navi_async_matrix password 'wNgJamrIym8UAcdX';
+      ```
+
+   4. Создайте базу данных, принадлежащую этому пользователю:
+
+      ```sql
+      create database onpremise_navi_async_matrix owner dbuser_navi_async_matrix;
+      ```
+
+2. Настройте доступ к S3-совместимому хранилищу:
+
+   1. Разместите S3-совместимое хранилище с доменным именем `navi-async-matrix-s3.storage.example.local` в приватной сети. Предполагается, что хранилище работает на стандартном порту `80`.
+
+   2. Создайте ключи для подключения к сервису. Запомните реквизиты.
+
+      **Пример:**
+
+      * Ключ доступа: `TRVR4ESNMDDSIXLB3ISV`.
+      * Секретный ключ: `6gejRs5fyRGKIFjwkiBDaowadGLtmWs2XjEH18YK`.
+
+   3. Определите название бакета, который будет использоваться для сервиса.
+
+      **Пример:** `navi-async-matrix-bucket`.
+
+      :::warning
+
+      По умолчанию Distance Matrix Async API удаляет все файлы старше 14 дней в бакете.
+
+      :::
+
+3. Настройте брокер сообщений Apache Kafka.
+
+   1. Разместите кластер Apache Kafka с доменным именем `kafka.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `9092`.
+
+   2. Создайте пользователя для подключения к сервису. Запомните его реквизиты.
+
+      **Пример:**
+
+      * Имя пользователя: `kafka-async-matrix`.
+      * Пароль: `1Y2u3gGvi6VjNHUt`.
+
+#### Для установки TSP API
+
+Если вы планируете устанавливать TSP API, выполните дополнительные шаги:
+
+1. Настройте PostgreSQL:
+
+   1. Разместите кластер PostgreSQL с доменным именем `navi-vrp-postgresql.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
+
+   2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
+
+   3. Создайте пользователя базы данных и установите пароль для него:
+
+      ```sql
+      create user dbuser_navi_vrp password 'wNgJamrIym8UAcdX';
+      ```
+
+   4. Создайте базу данных, принадлежащую этому пользователю:
+
+      ```sql
+      create database onpremise_navi_vrp owner dbuser_navi_vrp;
+      ```
+
+2. Настройте доступ к S3-совместимому хранилищу:
+
+   Определите название бакета, который будет использоваться для сервиса в S3-совместимом хранилище с доменным именем `navi-async-matrix-s3.storage.example.local`.
+
+   **Пример:** `navi-vrp-bucket`.
+
+3. Настройте брокер сообщений Apache Kafka:
+
+   1. Разместите кластер Apache Kafka с доменным именем `kafka.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `9092`.
+
+   2. Создайте пользователя для подключения к сервису. Запомните его реквизиты.
+
+      **Пример:**
+
+      * Имя пользователя: `kafka-vrp`.
+      * Пароль: `1Y2u3gGvi6VjNHUt`.
+
+#### Для установки Restrictions API
+
+Если вы планируете устанавливать Restrictions API, дополнительно настройте PostgreSQL:
+
+1. Разместите кластер PostgreSQL с доменным именем `navi-restrictions-postgresql.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
+
+2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
+
+3. Создайте пользователя базы данных и установите пароль для него:
+
+   ```sql
+   create user dbuser_restrictions password 'jwbK65iFrCCcNrkg';
+   ```
+
+4. Создайте базу данных, принадлежащую этому пользователю:
+
+   ```sql
+   create database onpremise_restrictions owner dbuser_restrictions;
+   ```
+
+### 8.3. Создайте файл правил {#rules-file}
+
+Navi-Back использует файл правил, чтобы указать, какие типы запросов он может обрабатывать. Это позволяет инстансу Navi-Back запрашивать и хранить минимальный набор данных от Navi-Castle, достаточный для обработки указанных типов запросов.
+
+Navi-Router использует файл правил, чтобы определить, какой из инстансов Navi-Back может обработать запрос.
+
+Создайте файл `rules.yaml` с необходимым набором правил для вашей установки. Вы можете скопировать необходимые блоки из [примера](#rules-example) ниже.
+
+#### Структура правила
+
+Одно правило содержит:
+
+* `name` — произвольное имя правила;
+* `queries` — список типов запросов, которые может обрабатывать инстанс;
+* `routing` — список типов транспорта, маршруты для которых поддерживаются в рамках этого правила.
+
+| Тип запросов (`queries`) | Назначение | Каким сервисом используется |
+| --- | --- | --- |
+| `free_roam` | Свободная навигация без маршрута. | Mobile SDK |
+| `routing` | Маршруты для транспорта, кроме общественного. | [Directions API](/api/navigation/directions/overview), [Truck Directions API](/api/navigation/truck-directions/overview), [Routing API](/api/navigation/routing/overview) |
+| `ctx`, `public_transport` | Маршруты для общественного транспорта. | [Routing API](/api/navigation/routing/overview) |
+| `get_pairs` | Построение нескольких маршрутов одновременно. | [Pairs Directions API](/api/navigation/pairs/overview) |
+| `get_hull` | Построение зон доступности. | [Isochrone API](/api/navigation/isochrone/overview) |
+| `map_matching` | Восстановление маршрута по точкам. | [Map Matching API](/api/navigation/map-matching/overview) |
+| `get_dist_matrix`  | Синхронная и асинхронная матрица расстояний. | [Distance Matrix API](/api/navigation/distance-matrix/start) |
+| `route_planner`, `area_clustering` | Маршруты для Планировщика задач <Brand /> Ситискан. | CityLens Routes API |
+
+| Тип транспорта (`routing`) | Значение |
+| --- | --- |
+| `driving` | Автомобили. |
+| `truck` | Грузовики. |
+| `pedestrian` | Пешеходы. |
+| `bicycle` | Велосипеды. |
+| `scooter` | Самокаты. |
+| `motorcycle` | Мотоциклы. |
+| `taxi` | Такси. |
+| `public_transport`, `ctx` | Общественный транспорт. |
+| `emergency` | Экстренные службы. |
+
+Рекомендуется объединять правила по типу транспорта, чтобы запросы, связанные с определённым типом транспорта, обрабатывались одним экземпляром Navi-Back. Например:
+
+```yml
+- name: all-truck
+  queries: ["routing", "get_dist_matrix"]
+  routing: ["truck"]
+```
+
+Чтобы запросы обслуживались разными экземплярами Navi-Back (например, для приоритетного обслуживания определённых типов запросов или распределения нагрузки), разбейте агрегированное правило на отдельные. Например:
+
+```yml
+- name: directions-truck
+  queries: ["routing"]
+  routing: ["truck"]
+
+- name: distance-matrix-truck
+  queries: ["get_dist_matrix"]
+  routing: ["truck"]
+```
+
+#### Пример файла правил {#rules-example}
+
+Скопируйте из примера только те блоки, которые понадобятся для вашей установки:
+
+{/*  prettier-ignore  */}
+
+```yml
+rules:
+    - name: freeroam
+      queries: ["free_roam"]
+      routing: []
+
+    - name: all-car
+      queries: ["routing", "get_hull", "map_matching", "route_planner", "area_clustering", "get_pairs", "get_dist_matrix"]
+      routing: ["driving"]
+
+    - name: all-truck
+      queries: ["routing", "get_dist_matrix"]
+      routing: ["truck"]
+
+    - name: all-pedestrian
+      queries: ["routing", "get_hull", "get_pairs", "get_dist_matrix"]
+      routing: ["pedestrian"]
+
+    - name: all-bicycle
+      queries: ["routing", "get_hull", "get_pairs", "get_dist_matrix"]
+      routing: ["bicycle", "scooter"]
+
+    - name: all-taxi
+      queries: ["routing", "get_pairs", "get_dist_matrix"]
+      routing: ["taxi"]
+
+    - name: all-motorcycle
+      queries: ["routing", "get_hull", "get_dist_matrix"]
+      routing: ["motorcycle"]
+
+    - name: all-ctx
+      queries: ["public_transport", "get_dist_matrix", "get_hull"]
+      routing: ["public_transport", "ctx"]
+
+    - name: emergency
+      queries: ["routing"]
+      routing: ["emergency"]
+
+    - name: async-car
+      queries: ["get_dist_matrix"]
+      routing: ["driving"]
+
+    - name: async-truck
+      queries: ["get_dist_matrix"]
+      routing: ["truck"]
+
+    - name: async-bicycle
+      queries: ["get_dist_matrix"]
+      routing: ["bicycle", "scooter"]
+
+    - name: async-pedestrian
+      queries: ["get_dist_matrix"]
+      routing: ["pedestrian"]
+    
+    - name: async-ctx
+      queries: ["get_dist_matrix"]
+      routing: ["ctx"]
+
+    - name: route-planner
+      queries: ["route_planner", "area_clustering"]
+      routing: ["driving"]
+```
+
+### 8.4. Установите сервисы навигации {#install-navi-services}
+
+#### Установите сервис Navi-Castle {#install-navi-castle}
+
+Установка Navi-Castle обязательна для работы любых API навигации.
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-castle/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-castle.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+   imagePullSecrets: [onpremise-registry-creds]
+
+   dgctlStorage:
+     host: artifacts.example.com
+     secure: true
+     bucket: onpremise-artifacts
+     accessKey: AKIAIOSFODNN7EXAMPLE
+     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+     manifest: manifests/api-platform/latest.json
+     region: ''
+
+   resources:
+     limits:
+       cpu: 1000m
+       memory: 512Mi
+     requests:
+       cpu: 500m
+       memory: 128Mi
+
+   cron:
+     enabled:
+       import: true
+       restriction: false
+       restrictionImport: true
+     schedule:
+       import: '*/10 * * * *'
+       restriction: "*/5 * * * *"
+       restrictionImport: "*/5 * * * *"
+     concurrencyPolicy: Forbid
+     successfulJobsHistoryLimit: 3
+     failedJobsHistoryLimit: 3
+
+   init:
+     enabled:
+       import: true
+       restriction: false
+       restrictionImport: false
+
+   customCAs:
+     bundle: ''
+     # bundle: |
+     #   -----BEGIN CERTIFICATE-----
+     #   ...
+     #   -----END CERTIFICATE-----
+     certsPath: ''
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки.
+
+     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `manifest`: путь до файла с манифестом в формате `manifests/api-platform/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, которые требуются сервисам для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
+     * `region`: регион S3-совместимого хранилища.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `cron`: настройки cron-заданий ([Kubernetes CronJob](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/)) для импорта данных. Cron-задание получает актуальные данные из хранилища артефактов установки и затем обновляет их на реплике Navi-Castle. Эти настройки одинаковы для всех реплик сервиса Navi-Castle.
+
+     * `enabled.import`: флаг, определяющий, включены ли задания для импорта данных. Если задания выключены, то ни одна из реплик Navi-Castle не будет получать обновления данных.
+     * `enabled.restriction`, `enabled.restrictionImport`: флаги, определяющие, включены ли задания для импорта данных о дорожных перекрытиях из сервиса Restrictions API или поставляемых данных <Brand />, соответственно. Флаги не могут быть включены одновременно.
+     * `schedule.import`, `schedule.restriction`, `schedule.restrictionImport`: расписания выполнения заданий в [cron-формате](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#schedule).
+     * `concurrencyPolicy`: политика одновременного выполнения ([concurrency policy](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#concurrency-policy)) для задания.
+     * `successfulJobsHistoryLimit`: ограничение на размер истории выполненных заданий.
+     * `failedJobsHistoryLimit`: ограничение на размер истории невыполненных заданий.
+
+   * `init`: настройки импорта данных при старте сервиса.
+
+     * `enabled.import`: флаг, определяющий, включен ли импорт данных. **Если флаг `persistentVolume.enabled` отключен, то старые данные будут утеряны при новом импорте**.
+     * `enabled.restriction`, `enabled.restrictionImport`: флаги, определяющие, включен ли сервис Restrictions API или импорт поставляемых данных <Brand /> о дорожных перекрытиях, соответственно. Флаги не могут быть включены одновременно.
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-castle.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-castle.yaml navi-castle 2gis-on-premise/navi-castle
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+   При первом запуске реплика Navi-Castle получит данные из хранилища артефактов установки. В дальнейшем, эти данные будут обновляться cron-заданием по расписанию.
+
+3. Проверьте работоспособность Navi-Castle по [инструкции](#test-navi-castle) сейчас (рекомендуется) или в конце процедуры установки.
+
+#### Установите сервис Navi-Attractor {#install-navi-attractor}
+
+Установка Navi-Attractor обязательна для работы любых API навигации.
+
+Выполните шаги ниже для каждого устанавливаемого типа навигации:
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-attractor/README.md). Присвойте файлу имя по схеме `values-attractor-<transport>.yaml` (например, `values-attractor-car.yaml`).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-attractor-TRANSPORT.yaml</code></summary>
+
+   ```yaml
+    dgctlDockerRegistry: docker.registry.example.com
+
+    imagePullSecrets: [onpremise-registry-creds]
+
+    navigroup: async
+
+    # Если эта сущность Navi-Attractor работает с Distance Matrix Async API
+    kafka:
+      enabled: true
+      groupId: navi-async
+      properties:
+        bootstrap.servers: kafka.example.local:9092
+        security.protocol: SASL_PLAINTEXT
+        sasl.mechanism: SCRAM-SHA-512
+        sasl.username: kafka-async-matrix
+        sasl.password: 1Y2u3gGvi6VjNHUt
+      distanceMatrix:
+        taskTopic: navi.attract.task.topic
+        cancelTopic: navi.cancel.topic
+        statusTopic: navi.attract.status.topic
+
+    # Если эта сущность Navi-Attractor работает с Distance Matrix Async API
+    s3:
+      enabled: true
+      host: navi-async-matrix-s3.storage.example.local:80
+      bucket: navi-async-matrix-bucket
+      accessKey: TRVR4ESNMDDSIXLB3ISV
+      secretKey: 6gejRs5fyRGKIFjwkiBDaowadGLtmWs2XjEH18YK
+
+    attractor:
+      appRule: async-car
+      castleUrl: http://navi-castle
+      # Если эта сущность Navi-Attractor работает с прокси для API пробок (используются онлайн-данные)
+      castleUrlProxy: http://traffic-proxy/navi-castle
+      restrictions:
+        enabled: true
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1024Mi
+      limits:
+        cpu: 2
+        memory: 4000Mi
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `navigroup`: идентификатор группы для построения маршрутов. Все компоненты, которые взаимодействуют друг с другом в рамках одного процесса построения маршрутов, должны иметь одинаковое значение этого параметра. Обычно можно использовать две стандартные группы: `sync` для синхронных сервисов и `async` для асинхронных сервисов (например, Distance Matrix Async API).
+
+   * `kafka`: настройки доступа к брокеру Apache Kafka для взаимодействия с Distance Matrix Async API. Укажите, только если сущность Navi-Attractor используется для работы с Distance Matrix Async API.
+
+     * `groupId`: идентификатор группы, которой принадлежит сервис Navi-Attractor.
+
+     * `properties`: параметры для доступа к серверу Kafka:
+
+       :::note[Варианты подключения к серверу Kafka]
+
+       В этом примере конфигурационного файла описан способ подключения к серверу Kafka по логину и паролю. Вы также можете настроить аутентификацию по SSL или подключение без аутентификации: см. пояснения к блоку параметров `kafka.properties` на [GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-attractor/values.yaml).
+
+       :::
+
+       * `bootstrap.servers`: URL сервера Kafka.
+       * `sasl.username`: имя пользователя Kafka.
+       * `sasl.password`: пароль для пользователя Kafka.
+
+     * `distanceMatrix`: названия топиков для взаимодействия с сервисом Distance Matrix Async API. Подробную схему взаимодействия см. в разделе [Архитектура сервисов навигации](/on-premise-api-platform/architecture/navigation#async-distance-matrix-api).
+
+       * `taskTopic`: название топика для обмена информацией о задачах. Distance Matrix Async API записывает данные, а Navi-Attractor считывает их.
+       * `cancelTopic`: название топика для отмены или завершения задач. Этот топик общий для Navi-Back и Navi-Attractor.
+       * `statusTopic`: название топика для обмена информацией о статусах задач. Navi-Attractor записывает данные, а Distance Matrix Async API считывает их.
+
+   * `s3`: настройки доступа к S3-совместимому хранилищу для взаимодействия с Distance Matrix Async API. Укажите, только если сущность Navi-Attractor используется для работы с Distance Matrix Async API.
+
+     * `host`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
+     * `bucket`: имя бакета S3 для хранения данных запросов.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+
+   * `attractor`: настройки сервиса Navi-Attractor.
+
+     * `appRule`: имя правила из списка `rules` для устанавливаемого типа навигации.
+     * `castleUrl`: URL сервиса Navi-Castle. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+     * `castleUrlProxy`: URL прокси для получения дорожных перекрытий. Имеет больший приоритет, чем `castleUrl`.
+     * `restrictions.enabled`: включать ли получение информации о дорожных перекрытиях.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-attractor-<transport>.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./rules.yaml --values ./values-attractor-<transport>.yaml --values ./rules.yaml navi-attractor-<transport> 2gis-on-premise/navi-attractor
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+3. Повторите шаги выше для следующего типа транспорта, если необходимо.
+
+#### Установите сервис Navi-Back {#install-navi-back}
+
+Установка Navi-Back обязательна для работы любых API навигации.
+
+Для каждого типа навигации необходимо установить **отдельную сущность Navi-Back**. Выполните шаги ниже для каждого устанавливаемого типа навигации:
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-back/README.md). Присвойте файлу имя по схеме `values-back-<service>.yaml` (например, `values-back-directions-car.yaml`).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-back-SERVICE.yaml</code></summary>
+
+   ```yaml
+    dgctlDockerRegistry: docker.registry.example.com
+
+    imagePullSecrets: [onpremise-registry-creds]
+
+    # Названия групп навигации должны различаться для синхронных и асинхронных сущностей Navi-Back
+    navigroup: async
+
+    naviback:
+      appRule: directions-car
+      castleUrl: http://navi-castle
+      handlersNumber: 1
+
+      # Если эта сущность Navi-Back работает с прокси для API пробок (используются онлайн-данные)
+      ecaUrl: http://traffic-proxy-navi/eca
+      castleUrlProxy: http://traffic-proxy-navi/navi-castle
+      forecastUrl: http://traffic-proxy-navi/forecast
+      longForecastUrl: http://traffic-proxy-navi/long-forecast
+      restrictions:
+        enabled: true
+
+      indices:
+        etaCorrectionCores:
+          enabled: true
+          proxy: true
+        forecastedLongSpeeds:
+          enabled: true
+        forecastedLongSpeedsIndex:
+          enabled: true
+        forecastedSpeeds:
+          enabled: true
+        forecastedSpeedsIndex:
+          enabled: true
+        onlineSpeeds:
+          enabled: true
+        speedIndex:
+          enabled: true
+
+      simpleNetwork:
+        emergency: false
+
+      # Если эта сущность Navi-Back работает с Distance Matrix API
+      behindSplitter: true
+
+      stat:
+        enabled: false
+        url: 'http://stat-receiver/bss/3'
+
+    # Если эта сущность Navi-Back не работает с Distance Matrix Async API
+    # (исключение — матрицы расстояний для общественного транспорта)
+    remoteAttractor:
+        enabled: true
+        host: navi-attractor
+
+    # Если эта сущность Navi-Back не работает с Distance Matrix Async API
+    envoy:
+      resources:
+        requests:
+          cpu: 0.1
+          memory: 128Mi
+        limits:
+          cpu: 0.1
+          memory: 128Mi
+
+    replicaCount: 1
+
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 16000Mi
+      requests:
+        cpu: 1000m
+        memory: 1024Mi
+
+    license:
+      url: 'https://license'
+
+    # Если эта сущность Navi-Back работает с Distance Matrix Async API
+    kafka:
+      enabled: true
+      groupId: navi-back
+      handlersNumber: 2
+      properties:
+        bootstrap.servers: kafka.example.local:9092
+        security.protocol: SASL_PLAINTEXT
+        sasl.mechanism: SCRAM-SHA-512
+        sasl.username: kafka-async-matrix
+        sasl.password: 1Y2u3gGvi6VjNHUt
+      distanceMatrix:
+        taskTopic: navi.<navigationType>.task.topic
+        cancelTopic: navi.cancel.topic
+        statusTopic: navi.one.to.many.topic
+
+    # Если эта сущность Navi-Back работает с Distance Matrix Async API
+    s3:
+      enabled: true
+      host: navi-async-matrix-s3.storage.example.local:80
+      bucket: navi-async-matrix-bucket
+      accessKey: TRVR4ESNMDDSIXLB3ISV
+      secretKey: 6gejRs5fyRGKIFjwkiBDaowadGLtmWs2XjEH18YK
+
+    customCAs:
+      bundle: ''
+      # bundle: |
+      #   -----BEGIN CERTIFICATE-----
+      #   ...
+      #   -----END CERTIFICATE-----
+      certsPath: ''
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `navigroup`: идентификатор группы для построения маршрутов. Все компоненты, которые взаимодействуют друг с другом в рамках одного процесса построения маршрутов, должны иметь одинаковое значение этого параметра. Обычно можно использовать две стандартные группы: `sync` для синхронных сервисов и `async` для асинхронных сервисов (например, Distance Matrix Async API).
+
+   * `naviback`: настройки сервиса Navi-Back.
+
+     * `appRule`: имя правила из списка `rules` для устанавливаемого типа навигации. Обратите внимание, что для построения маршрутов и для вычисления матриц расстояний используются разные правила.
+
+     * `castleUrl`: URL сервиса Navi-Castle. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+
+     * `handlersNumber`: количество параллельных потоков расчётов. Если обрабатывается много небольших задач (коротких маршрутов), рекомендуется установить значение ниже, чем указано в параметре `kafka.handlersNumber`. Если обрабатывается немного крупных задач, рекомендуется указывать значение, равное значению `kafka.handlersNumber`.
+
+     * `ecaUrl`: URL прокси для получения скоростей.
+
+     * `castleUrlProxy`: URL прокси для получения дорожных перекрытий. Имеет больший приоритет, чем `castleUrl`.
+
+     * `forecastUrl`: URL прокси для получения краткосрочных прогнозов скоростей.
+
+     * `longForecastUrl`: URL прокси для получения долгосрочных прогнозов скоростей.
+
+     * `restrictions.enabled`: включать ли получение информации о дорожных перекрытиях.
+
+     * `indices`: подключение данных для скачивания файлов. Если вы получаете данные через [прокси для API пробок](/on-premise-api-platform/architecture/trafficproxy), параметры ниже обязательны и должны иметь значение `true`:
+
+        * `etaCorrectionCores`: коэффициенты коррекции времени в пути.
+
+            * `enabled`: включать ли получение данных о коэффициентах коррекции времени в пути.
+
+            * `proxy`: использовать URL прокси `naviback.castleUrlProxy` вместо `naviback.castleUrl` или `naviback.castleHost`.
+
+        * `forecastedLongSpeeds.enabled`: долгосрочный прогноз скоростей (от часа до суток).
+
+        * `forecastedLongSpeedsIndex.enabled`: получение индекса долгосрочных прогнозов скоростей.
+
+        * `forecastedSpeeds.enabled`: краткосрочный прогноз скоростей (до 1 часа).
+
+        * `forecastedSpeedsIndex.enabled`:  получение индекса краткосрочных прогнозов скоростей.
+
+        * `onlineSpeeds.enabled`: текущие скорости, могут обновляться раз в минуту.
+
+        * `speedIndex.enabled`:  получение индекса текущих скоростей.
+
+     * `simpleNetwork.emergency`: включить поддержку построения [маршрутов для экстренных служб](/api/navigation/directions/examples#маршрут-для-экстренных-служб).
+
+       Обратите внимание, что для построения таких маршрутов необходимо также добавить тип маршрутизации `emergency` в один из проектов в вашем [файле правил](#rules-file).
+
+     * `behindSplitter`: взаимодействует ли Navi-Back с сервисом Navi-Splitter. Укажите значение `true`, только если сущность Navi-Back используется для работы Distance Matrix API (в синхронном режиме).
+
+     * `stat`: настройки взаимодействия с сервисом сбора статистики.
+
+       * `enabled`: включите, чтобы отправлять статистику использования ключей.
+       * `url`: URL сервиса сбора статистики.
+
+   * `remoteAttractor`: настройки взаимодействия Navi-Attractor. Укажите, только если сущность Navi-Back не используется для работы с Distance Matrix Async API (исключение — асинхронное вычисление матриц расстояний для общественного транспорта, для которого требуется взаимодействие с Navi-Attractor).
+
+     * `enabled`: требуется ли взаимодействие с Navi-Attractor.
+     * `host`: URL сервиса Navi-Attractor.
+
+   * `envoy`: настройки балансировщика. Укажите, только если сущность Navi-Back не используется для работы с Distance Matrix Async API.
+
+   * `replicaCount`: число реплик сервиса Navi-Back.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `license`: настройки [сервиса лицензий](/on-premise-api-platform/architecture/license).
+
+     * `url`: URL-адрес сервиса лицензий. Пример: `https://license`.
+
+   * `kafka`: настройки доступа к брокеру Apache Kafka для взаимодействия с Distance Matrix Async API.
+
+     * `groupId`: идентификатор группы, которой принадлежит сервис Navi-Back.
+
+     * `handlersNumber`: количество задач, которые одновременно читаются из Apache Kafka. Если обрабатывается много небольших задач (коротких маршрутов), рекомендуется установить значение выше, чем указано в параметре `naviback.handlersNumber`. Если обрабатывается немного крупных задач, рекомендуется указывать значение, равное значению `naviback.handlersNumber`.
+
+     * `properties`: параметры для доступа к серверу Kafka:
+
+       :::note[Варианты подключения к серверу Kafka]
+
+       В этом примере конфигурационного файла описан способ подключения к серверу Kafka по логину и паролю. Вы также можете настроить аутентификацию по SSL или подключение без аутентификации: см. пояснения к блоку параметров `kafka.properties` на [GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-back/values.yaml).
+
+       :::
+
+       * `bootstrap.servers`: URL сервера Kafka.
+       * `sasl.username`: имя пользователя Kafka.
+       * `sasl.password`: пароль для пользователя Kafka.
+
+     * `distanceMatrix`: названия топиков для взаимодействия с сервисом Distance Matrix Async API. Подробную схему взаимодействия см. в разделе [Архитектура сервисов навигации](/on-premise-api-platform/architecture/navigation#async-distance-matrix-api).
+
+       * `taskTopic`: название топика для обмена информацией о задачах. Distance Matrix Async API записывает данные о новых задачах, а Navi-Back считывает их. Придумайте и укажите `navigationType` в зависимости от типа навигации: например, `bicycle` или `pedestrian`. При использовании нескольких сущностей Navi-Back укажите уникальный `taskTopic` для каждой сущности.
+
+          Для асинхронных матриц расстояний для общественного транспорта нужно настроить две сущности Navi-Back, которые будут использовать разные топики Apache Kafka:
+
+            * Для сущности `navi-back-distance-matrix-ctx` (вычисление матриц) укажите `navi.ctx.task.topic` в параметре `taskTopic`.
+            * Для сущности `navi-back-find-platform` (поиск остановочных платформ) укажите `navi.find.platform.task.topic` в параметре `taskTopic`.
+
+       * `cancelTopic`: название топика для отмены или завершения задач. Этот топик общий для Navi-Back и Navi-Attractor.
+       * `statusTopic`: название топика для обмена информацией о статусах задач. Navi-Back записывает данные о статусах, а Distance Matrix Async API считывает их.
+
+          Для асинхронных матриц расстояний для общественного транспорта нужно настроить две сущности Navi-Back, которые будут использовать разные топики Apache Kafka:
+
+            * Для сущности `navi-back-distance-matrix-ctx` (вычисление матриц) укажите `navi.one.to.many.topic` в параметре `statusTopic`.
+            * Для сущности `navi-back-find-platform` (поиск остановочных платформ) укажите `navi.find.platform.status.topic` в параметре `statusTopic`.
+
+   * `s3`: настройки доступа к S3-совместимому хранилищу для взаимодействия с Distance Matrix Async API.
+
+     * `host`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
+     * `bucket`: имя бакета S3 для хранения данных запросов.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-back-<service>.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./rules.yaml --values ./values-back-<service>.yaml navi-back-<service> 2gis-on-premise/navi-back
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+   Пример команды для установки Directions API для автомобильных маршрутов:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./rules.yaml --values ./values-back-directions-car.yaml navi-back-directions-car 2gis-on-premise/navi-back
+   ```
+
+3. Проверьте работоспособность Navi-Back по [инструкции](#test-navi-back) сейчас (рекомендуется) или в конце процедуры установки.
+
+4. Повторите шаги выше для следующего типа навигации.
+
+#### Установите сервис Navi-Splitter (опционально) {#install-navi-splitter}
+
+Установка Navi-Splitter обязательна, если вы планируете использовать Distance Matrix API (в синхронном режиме).
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-splitter/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-splitter.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   splitter:
+     appRule:
+
+     # Если планируется работа с Distance Matrix API для общественного транспорта
+     ctxUrl: http://navi-back-distance-matrix-ctx.svc/ctx/2.0/?source=distance_matrix
+     ctxBaseUrl: http://navi-back-distance-matrix-ctx.svc/ctx/2.0
+     findPlatformUrl: http://navi-back-distance-matrix-ctx/find_platforms
+
+   attractor:
+     enabled: true
+     host: navi-attractor.svc
+
+   oneToMany:
+     enabled: true
+     host: navi-back-headless.svc
+
+   passThrough:
+     enabled: true
+     host: navi-back.svc
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `splitter`: настройки сервиса Navi-Splitter.
+
+     * `appRule`: имя правила из списка `rules` для устанавливаемого типа навигации.
+     * `ctxUrl`: полный URL хоста Navi-Back для работы с Distance Matrix API для общественного транспорта. Укажите, если планируете работать с таким типом матриц.
+     * `ctxBaseUrl`: базовый URL хоста Navi-Back для работы с Distance Matrix API для общественного транспорта. Укажите, если планируете работать с таким типом матриц.
+     * `findPlatformUrl`: полный URL хоста для поиска остановочных платформ при построении маршрутов общественного транспорта в формате `http(s)://HOST:PORT/find_platforms`.
+
+   * `attractor`: настройка сервиса Navi-Attractor.
+      * `enabled`: включена ли интеграция с Navi-Attractor.
+      * `host`: имя хоста сервиса Navi-Attractor.
+
+   * `oneToMany`: настройка поддержки маршрута от одной точки к нескольким.
+      * `enabled`: включена ли поддержка маршрута от одной точки к нескольким через Navi-Back. Укажите значение `true`, если планируете работать с Distance Matrix API.
+      * `host`: имя хоста Navi-Back.
+
+   * `passThrough`: настройка проксирования запросов напрямую в другой сервис.
+      * `enabled`: включено ли проксирование напрямую в Navi-Back. Укажите значение `true`, если вы планируете работать с другими базовыми API кроме Distance Matrix API.
+      * `host`: имя хоста Navi-Back, куда проксируются запросы.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-splitter.yaml`.
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-splitter.yaml navi-splitter 2gis-on-premise/navi-splitter
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+3. Проверьте работоспособность Navi-Splitter по [инструкции](#test-navi-splitter) сейчас (рекомендуется) или в конце процедуры установки.
+
+#### Установите сервис Navi-Router {#install-navi-router}
+
+Установка Navi-Router обязательна, если вы планируете использовать базовые API навигации.
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-router/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-router.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   navigroup: sync
+
+   router:
+     logLevel: Warning
+     castleUrl: http://navi-castle.svc
+
+   keys:
+     enabled: true
+     url: http://keys-service-api/service/v1/keys
+     refreshIntervalSec: 30
+     downloadTimeoutSec: 30
+     apis:
+       comboroutes-api: ''
+       directions-api: ''
+       distance-matrix-api: ''
+       freeroam-api: ''
+       isochrone-api: ''
+       map-matching-api: ''
+       pairs-directions-api: ''
+       ppnot-api: ''
+       public-transport-api: ''
+       truck-directions-api: ''
+       truck-distance-matrix-api: ''
+       routing-api: ''
+       route-planner-api: '' # для работы с 2ГИС Ситискан
+
+   replicaCount: 2
+
+   resources:
+     limits:
+       cpu: 2000m
+       memory: 1024Mi
+     requests:
+       cpu: 500m
+       memory: 128Mi
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `navigroup`: идентификатор группы для построения маршрутов. Все компоненты, которые взаимодействуют друг с другом в рамках одного процесса построения маршрутов, должны иметь одинаковое значение этого параметра. Обычно можно использовать две стандартные группы: `sync` для синхронных сервисов и `async` для асинхронных сервисов (например, Distance Matrix Async API).
+
+   * `router`: настройки сервиса Navi-Router.
+
+     * `logLevel`: уровень логирования, по умолчанию `Warning`. Доступные уровни: `Verbose`, `Info`, `Warning`, `Error`, `Fatal`.
+     * `castleUrl`: URL сервиса Navi-Castle. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+
+   * `keys`: настройки сервиса ключей. Если не задавать эти настройки, то проверка API-ключа для запроса будет пропущена.
+
+     * `enabled`: включено ли использование сервиса ключей.
+     * `url`: URL API-endpoint сервиса ключей. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+     * `refreshIntervalSec`: интервал обновления ключей в секундах.
+     * `downloadTimeoutSec`: таймаут загрузки ключей в секундах.
+     * `apis`: сервисные токены для сохранения статистики использования (см. [Сервис ключей](/on-premise-api-platform/architecture/keys)).
+
+   * `replicaCount`: число реплик сервиса Navi-Router.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-router.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./rules.yaml --values ./values-router.yaml navi-router 2gis-on-premise/navi-router
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+3. Проверьте работоспособность Navi-Router по [инструкции](#test-navi-router) сейчас (рекомендуется) или в конце процедуры установки.
+
+#### Установите сервис Navi-Front {#install-navi-front}
+
+Установка Navi-Front обязательна, если вы планируете использовать базовые API навигации.
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-front/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-front.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   navigroup: sync
+
+   replicaCount: 2
+
+   resources:
+     limits:
+       cpu: 100m
+       memory: 128Mi
+     requests:
+       cpu: 100m
+       memory: 128Mi
+
+   ingress:
+     enabled: true
+     className: nginx
+     hosts:
+       - host: navi-front.example.com
+         paths:
+           - path: /
+             pathType: Prefix
+     tls: []
+     # - hosts:
+     #   - navi-front.example.com
+     #   secretName: secret.tls
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+   * `navigroup`: идентификатор группы для построения маршрутов. Все компоненты, которые взаимодействуют друг с другом в рамках одного процесса построения маршрутов, должны иметь одинаковое значение этого параметра. Обычно можно использовать две стандартные группы: `sync` для синхронных сервисов и `async` для асинхронных сервисов (например, Distance Matrix Async API).
+   * `replicaCount`: число реплик сервиса Navi-Front.
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-front.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-front.yaml navi-front 2gis-on-premise/navi-front
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+3. Проверьте работоспособность Navi-Front по [инструкции](#test-navi-front) сейчас (рекомендуется) или в конце процедуры установки.
+
+#### Установите сервис Distance Matrix Async API (опционально) {#install-navi-async-matrix}
+
+Установка Distance Matrix Async API обязательна, если вы планируете использовать Distance Matrix Async API или TSP API.
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-async-matrix/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-navi-async-matrix.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   resources:
+     requests:
+       cpu: 100m
+       memory: 100Mi
+     limits:
+       cpu: 1
+       memory: 1Gi
+
+   dm:
+     citiesUrl: http://navi-castle/cities.conf
+     merger:
+       resources:
+         requests:
+           cpu: 100m
+           memory: 100Mi
+         limits:
+           cpu: 1
+           memory: 1Gi
+
+   serviceAccount:
+     create: true
+
+   s3:
+     host: http://navi-async-matrix-s3.storage.example.local:80
+     bucket: navi-async-matrix-bucket
+     accessKey: TRVR4ESNMDDSIXLB3ISV
+     secretKey: 6gejRs5fyRGKIFjwkiBDaowadGLtmWs2XjEH18YK
+     region: ''
+
+   db:
+     host: navi-async-matrix-postgresql.storage.example.local
+     port: 5432
+     name: onpremise_navi_async_matrix
+     user: dbuser_navi_async_matrix
+     password: wNgJamrIym8UAcdX
+     schema: public
+     tls:
+       enabled: false
+       rootCert: ''
+       cert: ''
+       key: ''
+       mode: verify-full
+
+   kafka:
+     groupId: navi_async
+     properties:
+       bootstrap.servers: kafka.example.local:9092
+       security.protocol: SASL_PLAINTEXT
+       sasl.mechanism: SCRAM-SHA-512
+       sasl.plain.username: kafka-async-matrix
+     sensitiveProperties:
+       sasl.plain.password: 1Y2u3gGvi6VjNHUt
+     cancelTopic: navi.cancel.topic
+     mergerGroupId: navi_async_matrix_merger
+     mergerStatusTopic: navi.merger.status.topic
+     mergerTaskTopic: navi.merger.task.topic
+     attractTopic: navi.attract.status.topic
+     oneToManyTopic: navi.one.to.many.topic
+     vrpStatusTopic: navi.tsp.message.bus.topic
+     findPlatformTopic: navi.find.platform.status.topic # для маршрутов на общественном транспорте
+     maxMessageSizeBytes: 1048576
+     taskTopicRules:
+     - topic: navi.task.topic
+       default: true
+       type: car
+     - topic: navi.ctx.task.topic # для маршрутов на общественном транспорте
+       type: public-transport
+       default: true
+     attractTopicRules:
+     - topic: navi.attract.task.topic
+       default: true
+       type: car
+     # Для маршрутов на общественном транспорте
+     findPlatformTopicRules:
+     - topic: navi.find.platform.task.topic
+       default: true
+       type: public-transport
+
+   keys:
+     url: http://keys-service-api/service/v1/keys
+     token: DISTANCE_MATRIX_TOKEN
+
+   ingress:
+     enabled: true
+     className: nginx
+     hosts:
+       - host: navi-async-matrix.example.com
+         paths:
+           - path: /
+             pathType: Prefix
+     tls: []
+     # - hosts:
+     #   - navi-async-matrix.example.com
+     #   secretName: secret.tls
+
+   customCAs:
+     bundle: ''
+     # bundle: |
+     #   -----BEGIN CERTIFICATE-----
+     #   ...
+     #   -----END CERTIFICATE-----
+     certsPath: ''
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `dm`: настройки сервиса Distance Matrix Async API.
+
+     * `citiesUrl`: URL информации о городах, предоставляемой сервисом Navi-Castle.
+     * `merger`: настройки сервиса Distance Matrix Async Merger.
+
+   * `serviceAccount.create`: создать ли сервисный аккаунт.
+
+   * `s3`: настройки доступа к S3-совместимому хранилищу.
+
+     * `host`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
+     * `bucket`: имя бакета S3 для хранения данных запросов. По умолчанию Distance Matrix Async API удаляет все файлы старше 14 дней в бакете.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `region`: регион S3-совместимого хранилища.
+
+   * `db`: настройки доступа к серверу PostgreSQL.
+
+     * `host`: имя хоста или IP-адрес сервера.
+     * `port`: порт, на котором слушает сервер.
+     * `name`: имя базы данных.
+     * `user` и `password`: реквизиты для доступа к базе данных, указанной в параметре `name`. Пользователь должен быть либо владельцем этой базы данных, либо суперпользователем.
+     * `schema`: используемая схема PostgreSQL. Значение по умолчанию - `public`.
+     * `tls`: настройки mTLS-соединения с базой данных.
+
+       * `enabled`: включено ли mTLS-соединение с сервером PostgreSQL.
+       * `rootCert`: файл корневого сертификата.
+       * `cert`: сертификат сервера PostgreSQL.
+       * `key`: ключ сервера PostgreSQL.
+       * `mode`: уровень защиты, один из следующих:
+
+         * `verify-full` (рекомендуется): обеспечивается защита от прослушивания и атаки посредника.
+         * `verify-ca`: обеспечивается защита от прослушивания, защита от атаки посредника зависит от политики центра сертификации.
+         * `require`: обеспечивается защита от прослушивания.
+         * `prefer`: возможна защита от прослушивания, если это поддерживает сервер.
+         * `allow`: возможна защита от прослушивания, если этого требует сервер.
+         * `disable`: защита не обеспечивается.
+
+   * `kafka`: настройки доступа к брокеру Apache Kafka. Подробную схему взаимодействия сервисов через Apache Kafka см. в разделе [Архитектура сервисов навигации](/on-premise-api-platform/architecture/navigation#async-distance-matrix-api).
+
+     * `groupId`: идентификатор группы, которой принадлежит сервис Distance Matrix Async API.
+
+     * `properties`: параметры для доступа к серверу Kafka:
+
+       :::note[Варианты подключения к серверу Kafka]
+
+       В этом примере конфигурационного файла описан способ подключения к серверу Kafka по логину и паролю. Вы также можете настроить аутентификацию по SSL или подключение без аутентификации: см. пояснения к блоку параметров `kafka.properties` на [GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-async-matrix/values.yaml).
+
+       :::
+
+       * `bootstrap.servers`: URL сервера Kafka.
+       * `sasl.plain.username`: имя пользователя Kafka.
+
+     * `sensitiveProperties.sasl.plain.password`: пароль для пользователя Kafka.
+
+     * `cancelTopic`: название топика для отмены задач или получения информации об их завершении. Этот топик общий для Navi-Back и Navi-Attractor.
+
+     * `mergerGroupId`: идентификатор группы, которой принадлежит сервис Distance Matrix Async Merger.
+
+     * `mergerStatusTopic`: название топика для получения информации о статусе задач Distance Matrix Async Merger. Distance Matrix Async Merger записывает данные, а Distance Matrix Async API считывает их.
+
+     * `mergerTaskTopic`: название топика для получения задач Distance Matrix Async Merger. Distance Matrix Async API записывает данные, а Distance Matrix Async Merger считывает их.
+
+     * `attractTopic`: название топика для получения результатов задач от Navi-Attractor. Navi-Attractor записывает данные, а Distance Matrix Async API считывает их.
+
+     * `oneToManyTopic`: название топика для обмена информацией о статусах задач. Navi-Back записывает данные, а Distance Matrix Async API считывает их.
+
+     * `vrpStatusTopic`: название топика для обмена сообщениями с сервисом VRP Task Manager.
+
+     * `findPlatformTopic`: название топика для данных об остановочных платформах общественного транспорта.
+
+     * `maxMessageSizeBytes`: максимальный размер сообщений в байтах, которые можно передавать через Apache Kafka. Стандартное значение — 1 Мб. Если сообщение превышает этот порог, оно сохраняется и передаётся через S3-совместимое хранилище. При настройке параметра учитывайте время хранения данных в Apache Kafka (`retention_time`), размер очереди и политику очистки базы данных.
+
+     * `taskTopicRules`: информация о топиках, в которые сервис будет направлять запросы. Задаётся как список, в каждом элементе которого должны присутствовать два параметра:
+
+       * `topic`: название топика Navi-Back. Distance Matrix Async API записывает данные, а Navi-Back считывает их.
+
+       * `projects` или `default`: параметры, определяющие, какие запросы направлять в этот топик.
+
+         Distance Matrix Async API распределяет запросы по топикам в зависимости от проекта, к которому они относятся. Для всех топиков, кроме топика по умолчанию, должна быть указана настройка `projects`, содержащая список проектов (см. [файл правил](#rules-file)). Для топика по умолчанию должна быть указана настройка `default: true`. В топик по умолчанию будут направляться запросы, относящиеся к проектам, не упомянутым в `projects` для других топиков.
+
+         В конфигурации должен быть задан один и только один топик с настройкой `default: true`.
+
+       * `type`: тип транспорта для построения маршрутов.
+
+     * `attractTopicRules`: правила для соотнесения типов запросов с топиками.
+
+       * `topic`: название топика Navi-Attractor. Distance Matrix Async API записывает данные, а Navi-Attractor считывает их.
+
+       * `projects` или `default`: параметры, определяющие, какие запросы направлять в этот топик.
+
+         Distance Matrix Async API распределяет запросы по топикам в зависимости от проекта, к которому они относятся. Для всех топиков, кроме топика по умолчанию, должна быть указана настройка `projects`, содержащая список проектов (см. [файл правил](#rules-file)). Для топика по умолчанию должна быть указана настройка `default: true`. В топик по умолчанию будут направляться запросы, относящиеся к проектам, не упомянутым в `projects` для других топиков.
+
+         В конфигурации должен быть задан один и только один топик с настройкой `default: true`.
+
+       * `type`: тип транспорта для построения маршрутов.
+
+     * `findPlatformTopicRules`: правила для соотнесения типов запросов с топиками.
+
+       * `topic`: название топика для данных об остановочных платформах общественного транспорта.
+
+       * `projects` или `default`: параметры, определяющие, какие запросы направлять в этот топик.
+
+           Distance Matrix Async API распределяет запросы по топикам в зависимости от проекта, к которому они относятся. Для всех топиков, кроме топика по умолчанию, должна быть указана настройка `projects`, содержащая список проектов (см. [файл правил](#rules-file)). Для топика по умолчанию должна быть указана настройка `default: true`. В топик по умолчанию будут направляться запросы, относящиеся к проектам, не упомянутым в `projects` для других топиков.
+
+           В конфигурации должен быть задан только один топик с настройкой `default: true`.
+
+       * `type`: тип транспорта для построения маршрутов.
+
+   * `keys`: настройки сервиса ключей.
+
+     * `url`: URL сервиса ключей. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+     * `token`: сервисный токен (см. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)).
+
+   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-navi-async-matrix.yaml`.
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-navi-async-matrix.yaml navi-async-matrix 2gis-on-premise/navi-async-matrix
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+#### Установите сервис Navi Async gRPC proxy (опционально) {#install-navi-async-grpc-proxy}
+
+Установка Navi Async gRPC proxy обязательна, если запросы к Distance Matrix Async API будут приходить в формате gRPC.
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-async-grpc-proxy/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-navi-async-grpc-proxy.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   dm:
+     url: http://navi-async-matrix.host
+     port: 80
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+   * `dm`: настройки доступа к сервису Distance Matrix Async API.
+
+     * `url`: URL хоста.
+     * `port`: порт, на котором слушает сервер.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-navi-async-grpc-proxy.yaml`.
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-navi-async-grpc-proxy.yaml navi-async-grpc-proxy 2gis-on-premise/navi-async-grpc-proxy
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+#### Установите сервис VRP Solver (опционально) {#install-vrp-solver}
+
+Установка VRP Solver обязательна, если вы планируете использовать TSP API.
+
+1. Создайте конфигурационный файл для установки VRP Solver с помощью Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-solver/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+     <details>
+     <summary><code>values-vrp-solver.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   resources:
+     limits:
+       cpu: 1000m
+       memory: 2Gi
+     requests:
+       cpu: 3000m
+       memory: 8Gi
+
+   kafka:
+     groupId: navi_vrp_solver
+     properties:
+       bootstrap.servers: kafka.example.local:9092
+       security.protocol: SASL_PLAINTEXT
+       sasl.mechanism: SCRAM-SHA-512
+       sasl.plain.username: kafka-async-matrix
+     sensitiveProperties:
+       sasl.plain.password: 1Y2u3gGvi6VjNHUt
+     taskTopic: navi.tsp.task.topic
+     statusTopic: navi.tsp.status.topic
+
+   s3:
+     url: http://navi-async-matrix-s3.storage.example.local:80
+     dm:
+       bucket: navi-async-matrix-bucket
+       accessKey: TRVR4ESNMDDSIXLB3ISV
+       secretKey: 6gejRs5fyRGKIFjwkiBDaowadGLtmWs2XjEH18YK
+     vrp:
+       bucket: navi-vrp-bucket
+       accessKey: TRVR4ESNMDDSIXLB3ISV
+       secretKey: 6gejRs5fyRGKIFjwkiBDaowadGLtmWs2XjEH18YK
+
+   # Для автомобильных и грузовых маршрутов
+   naviFront:
+     url: http://navi-front/carrouting/6.0.1/global
+     key: key
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `kafka`: настройки доступа к брокеру Apache Kafka.
+
+     * `groupId`: идентификатор группы, которой принадлежит сервис VRP Solver.
+
+     * `properties`: параметры для доступа к серверу Kafka:
+
+       :::note[Варианты подключения к серверу Kafka]
+
+       В этом примере конфигурационного файла описан способ подключения к серверу Kafka по логину и паролю. Вы также можете настроить аутентификацию по SSL или подключение без аутентификации: см. пояснения к блоку параметров `kafka.properties` на [GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-solver/values.yaml).
+
+       :::
+
+       * `bootstrap.servers`: URL сервера Kafka.
+       * `sasl.plain.username`: имя пользователя Kafka.
+
+     * `sensitiveProperties.sasl.plain.password`: пароль для пользователя Kafka.
+
+     * `taskTopic`: название топика для получения задач от VRP Task Manager.
+
+     * `statusTopic`: название топика для отправки запросов к VRP Task Manager.
+
+   * `s3`: настройки доступа к S3-совместимому хранилищу.
+
+     * `url`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
+
+     * `dm`: настройки доступа для хранения результатов расчётов матриц расстояний.
+
+       * `bucket`: имя бакета S3 для сервиса Distance Matrix Async API.
+       * `accessKey`: идентификатор ключа для доступа к бакету S3.
+       * `secretKey`: секретный ключ для доступа к бакету S3.
+
+     * `vrp`: настройки доступа для хранения результатов расчётов VRP.
+
+       * `bucket`: имя бакета S3.
+       * `accessKey`: идентификатор ключа для доступа к бакету S3.
+       * `secretKey`: секретный ключ для доступа к бакету S3.
+
+   * `naviFront`: настройки доступа к сервису Navi-Front для автомобильных и грузовых маршрутов.
+
+     * `url`: URL сервиса Navi-Front.
+     * `key`: API-ключ для доступа к сервису Navi-Front.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-vrp-solver.yaml`.
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-vrp-solver.yaml navi-vrp-solver 2gis-on-premise/navi-vrp-solver
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+#### Установите сервис VRP Task Manager (опционально) {#install-vrp-task-manager}
+
+Установка VRP Task Manager обязательна, если вы планируете использовать TSP API.
+
+1. Создайте конфигурационный файл для установки VRP Task Manager с помощью Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-task-manager/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+     <details>
+     <summary><code>values-vrp-task-manager.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   resources:
+     limits:
+       cpu: 1000m
+       memory: 2Gi
+     requests:
+       cpu: 3000m
+       memory: 8Gi
+
+   kafka:
+     solver:
+       groupId: navi_vrp_task_manager
+       properties:
+         bootstrap.servers: kafka.example.local:9092
+         security.protocol: SASL_PLAINTEXT
+         sasl.mechanism: SCRAM-SHA-512
+         sasl.plain.username: kafka-async-matrix
+       sensitiveProperties:
+         sasl.plain.password: 1Y2u3gGvi6VjNHUt
+     dm:
+       groupId: navi_vrp_task_manager
+       properties:
+         bootstrap.servers: kafka.example.local:9092
+         security.protocol: SASL_PLAINTEXT
+         sasl.mechanism: SCRAM-SHA-512
+         sasl.plain.username: kafka-async-matrix
+       sensitiveProperties:
+         sasl.plain.password: 1Y2u3gGvi6VjNHUt
+     taskTopic: navi.tsp.task.topic
+     statusTopic: navi.tsp.status.topic
+     messageBusTopic: navi.tsp.message.bus.topic
+
+   s3:
+     url: http://navi-async-matrix-s3.storage.example.local:80
+     publicUrl: http://navi-async-matrix-s3.storage.example.local:80
+       vrp:
+         bucket: navi-vrp-bucket
+         accessKey: TRVR4ESNMDDSIXLB3ISV
+         secretKey: 6gejRs5fyRGKIFjwkiBDaowadGLtmWs2XjEH18YK
+
+   db:
+     host: navi-vrp-postgresql.storage.example.local
+     port: 5432
+     name: onpremise_navi_vrp
+     user: dbuser_navi_vrp
+     password: wNgJamrIym8UAcdX
+
+   keys:
+     url: http://keys-service-api/service/v1/keys
+     token: TSP_TOKEN
+
+   dm:
+     url: http://navi-async-matrix.host
+     key: key
+
+   cities:
+     linkToCitiesFile: http://castle.svc/cities.conf
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `kafka`: настройки доступа к брокеру Apache Kafka.
+
+     * `solver`: настройки для сервиса VRP Task Manager.
+
+       * `groupId`: идентификатор группы, которой принадлежит сервис VRP Task Manager.
+
+       * `properties`: параметры для доступа к серверу Kafka:
+
+         :::note[Варианты подключения к серверу Kafka]
+
+         В этом примере конфигурационного файла описан способ подключения к серверу Kafka по логину и паролю. Вы также можете настроить аутентификацию по SSL или подключение без аутентификации: см. пояснения к блоку параметров `kafka.properties` на [GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-task-manager/values.yaml).
+
+         :::
+
+         * `bootstrap.servers`: URL сервера Kafka.
+         * `sasl.plain.username`: имя пользователя Kafka.
+
+       * `sensitiveProperties.sasl.plain.password`: пароль пользователя Kafka.
+
+     * `dm`: настройки для сервиса Distance Matrix Async API.
+
+       * `groupId`: идентификатор группы, которой принадлежит сервис VRP Task Manager.
+
+       * `properties`: параметры для доступа к серверу Kafka:
+
+         :::note[Варианты подключения к серверу Kafka]
+
+         В этом примере конфигурационного файла описан способ подключения к серверу Kafka по логину и паролю. Вы также можете настроить аутентификацию по SSL или подключение без аутентификации: см. пояснения к блоку параметров `kafka.properties` на [GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-vrp-task-manager/values.yaml).
+
+         :::
+
+         * `bootstrap.servers`: URL сервера Kafka.
+         * `sasl.plain.username`: имя пользователя Kafka.
+
+       * `sensitiveProperties.sasl.plain.password`: пароль пользователя Kafka.
+
+     * `taskTopic`: название топика для отправки задач сервису VRP Solver.
+
+     * `statusTopic`: название топика для получения результатов решения задач от VRP Solver.
+
+     * `messageBusTopic`: название топика для обмена сообщениями с сервисом Distance Matrix Async API.
+
+   * `s3`: настройки доступа к S3-совместимому хранилищу.
+
+     * `url`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
+     * `publicUrl`: проксируемый адрес для доступа к S3-совместимому хранилищу.
+     * `vrp`: настройки доступа для хранения результатов расчётов VRP.
+
+       * `bucket`: имя бакета S3.
+       * `accessKey`: идентификатор ключа для доступа к бакету S3.
+       * `secretKey`: секретный ключ для доступа к бакету S3.
+
+   * `db`: настройки доступа к серверу PostgreSQL.
+
+     * `host`: имя хоста или IP-адрес сервера.
+     * `port`: порт, на котором слушает сервер.
+     * `name`: имя базы данных.
+     * `user` и `password`: реквизиты для доступа к базе данных, указанной в параметре `name`. Пользователь должен быть либо владельцем этой базы данных, либо суперпользователем.
+
+   * `keys`: настройки доступа к сервису API-ключей.
+
+     * `url`: URL сервиса ключей. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+     * `token`: сервисный токен (см. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)).
+
+   * `dm`: настройки доступа к Distance Matrix Async API.
+
+     * `url`: URL сервиса Distance Matrix Async API.
+     * `key`: API-ключ для доступа к сервису. См. инструкцию [Управление доступом к API](/on-premise-api-platform/keys).
+
+   * `cities.linkToCitiesFile`: URL файла `cities.conf` c информацией о городах, доступных для VRP Task Manager.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-vrp-task-manager.yaml`.
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-vrp-task-manager.yaml navi-vrp-task-manager 2gis-on-premise/navi-vrp-task-manager
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+#### Установите сервис Restrictions API (опционально) {#install-restrictions-api}
+
+Установка Restrictions API обязательна, если вы планируете использовать только собственную информацию о дорожных перекрытиях. Одновременное использование Restrictions API и поставляемых данных <Brand /> приведёт к некорректной работе: подробнее см. в разделе [Работа с дорожными перекрытиями](/on-premise-api-platform/architecture/navigation#restrictions-api).
+
+1. Создайте конфигурационный файл для установки Restrictions API с помощью Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/navi-restrictions/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+     <details>
+     <summary><code>values-restrictions.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+   imagePullSecrets: [onpremise-registry-creds]
+
+   naviBackHost: 'navi-back-directions-car'
+   naviCastleHost: 'navi-castle'
+
+   postgres:
+     host: navi-restrictions-postgresql.storage.example.local
+     port: 5432
+     name: onpremise_restrictions
+     user: dbuser_restrictions
+     password: jwbK65iFrCCcNrkg
+
+   api:
+     key: ''
+
+     ingress:
+       enabled: true
+       className: nginx
+       hosts:
+         - host: navi-restrictions.example.com
+           paths:
+             - path: /
+               pathType: Prefix
+       tls: []
+       # - hosts:
+       #   - navi-restrictions.example.com
+       #   secretName: secret.tls
+
+   cron:
+     enabled: true
+     schedule: '1 * * * *'
+     concurrencyPolicy: Forbid
+     successfulJobsHistoryLimit: 3
+     failedJobsHistoryLimit: 3
+     projects:
+       - moscow
+     maxAttributesFetcherRps: 25
+
+   customCAs:
+     bundle: ''
+     # bundle: |
+     #   -----BEGIN CERTIFICATE-----
+     #   ...
+     #   -----END CERTIFICATE-----
+     certsPath: ''
+   ```
+
+     </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `naviBackHost`: имя хоста любого установленного сервиса Navi-Back.
+
+   * `naviCastleHost`: имя хоста Navi-Castle.
+
+   * `postgres`: настройки доступа к серверу PostgreSQL.
+
+     * `host`: имя хоста или IP-адрес сервера.
+     * `port`: порт, на котором слушает сервер.
+     * `name`: имя базы данных.
+     * `user` and `password`: реквизиты для доступа к базе данных, указанной в параметре `name`. Пользователь должен быть либо владельцем этой базы данных, либо суперпользователем.
+
+   * `api`: настройки API сервиса.
+
+     * `key`: API-ключ для взаимодействия с сервисами навигации. Должен совпадать с настройкой `restrictions.key` сервиса Navi-Castle.
+     * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+   * `cron`: настройки cron-заданий ([Kubernetes CronJob](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/)) для получения информации от сервисов навигации.
+
+     * `enabled`: флаг, определяющий, включено ли задание.
+     * `schedule`: расписание выполнения заданий в [cron-формате](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#schedule).
+     * `concurrencyPolicy`: политика одновременного выполнения ([concurrency policy](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#concurrency-policy)) для задания.
+     * `successfulJobsHistoryLimit`: ограничение на размер истории выполненных заданий.
+     * `failedJobsHistoryLimit`: ограничение на размер истории невыполненных заданий.
+     * `projects`: список проектов Navi-Back (см. [Файл правил](#rules-file)).
+     * `maxAttributesFetcherRps`: максимальное количество запросов к `edgeAttributesUrlTemplate` в секунду.
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-restrictions.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --wait-for-jobs --values ./values-restrictions.yaml navi-restrictions 2gis-on-premise/navi-restrictions
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+3. В конфигурационном файле Navi-Castle отредактируйте настройки `castle.restrictions` и `cron` следующим образом:
+
+   ```yaml
+   castle:
+     restrictions:
+       key: secret
+       url: http://navi-restrictions.example.local
+
+   cron:
+     enabled:
+       import: true
+       restriction: true
+     schedule:
+       import: '*/10 * * * *'
+       restriction: '*/10 * * * *'
+     concurrencyPolicy: Forbid
+     successfulJobsHistoryLimit: 3
+     failedJobsHistoryLimit: 3
+   ```
+
+   Где:
+
+   * `castle`: настройки Navi-Castle.
+
+     * `restrictions.key`: ключ для взаимодействия с сервисом Restrictions API. Любая строка.
+     * `restrictions.url`: URL сервиса Restrictions API. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+
+   * `cron`: настройки cron-заданий ([Kubernetes CronJob](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/)) для импорта данных. Cron-задание получает актуальные данные из хранилища артефактов установки и затем обновляет их на реплике Navi-Castle. Эти настройки одинаковы для всех реплик сервиса Navi-Castle.
+
+     * `enabled.import`, `enabled.restriction`: флаги, определяющие, включены ли задания для импорта данных о дорожных перекрытиях из сервиса Restrictions API. Если задания выключены, то ни одна из реплик Navi-Castle не будет получать обновления данных.
+     * `schedule.import`, `schedule.restriction`: расписания выполнения заданий в [cron-формате](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#schedule).
+
+4. Обновите сервис Navi-Castle, используя отредактированный конфигурационный файл `values-castle.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-castle.yaml navi-castle 2gis-on-premise/navi-castle
+   ```
+
+   В параметре `--version` укажите ту же версию API-платформы, что и при прошлом выполнении команды.
+
+### 8.5. Проверьте работоспособность сервисов навигации {#test-navi}
+
+#### Проверьте сервис Navi-Castle {#test-navi-castle}
+
+Чтобы проверить работу сервиса Navi-Castle:
+
+1. Пробросьте порт сервиса с помощью `kubectl`:
+
+   ```bash
+   kubectl port-forward navi-castle-0 7777:8080
+   ```
+
+2. Отправьте GET-запрос на корневой endpoint (`/`) с использованием cURL или аналогичного инструмента:
+
+   ```bash
+   curl -Lv 'http://127.0.0.1:7777/'
+   ```
+
+   Вы должны получить в ответ HTML-страницу со списком всех файлов и папок, подобную этой:
+
+   ```html
+   <html>
+       <head>
+           <title>Index of /</title>
+       </head>
+       <body>
+           <h1>Index of /</h1>
+           <hr />
+           <pre>
+               <a href="../">../</a>
+               <a href="lost%2Bfound/">lost+found/</a>          09-Mar-2022 13:33        -
+               <a href="packages/">packages/</a>                09-Mar-2022 13:33        -
+               <a href="index.json">index.json</a>              09-Mar-2022 13:33      634
+               <a href="index.json.zip">index.json.zip</a>      09-Mar-2022 13:33      357
+           </pre>
+           <hr />
+       </body>
+   </html>
+   ```
+
+#### Проверьте сервис Navi-Back {#test-navi-back}
+
+Чтобы проверить работу инстанса Navi-Back:
+
+1. Пробросьте порт сервиса с помощью `kubectl`:
+
+   ```bash
+   kubectl port-forward service/navi-back-<service> 7777:8080
+   ```
+
+   Где `navi-back-<service>` — имя инстанса, который вы указывали на этапе [установки Navi-Back](#install-navi-back) (например, `navi-back-directions-car`).
+
+2. Создайте файл `data.json` с телом запроса к API навигации. Примеры запросов вы можете найти в документации сервисов навигации:
+
+   * [Directions API](/api/navigation/directions/examples): маршруты для автомобилей, такси, велосипедов, самокатов, мотоциклов, экстренных служб и пешеходов.
+   * [Truck Directions API](/api/navigation/truck-directions/overview#request-example): маршруты для грузового транспорта.
+   * [Routing API](/api/navigation/routing/overview): маршруты для общественного транспорта.
+   * [Isochrone API](/api/navigation/isochrone/overview): достижимые области на автомобиле.
+   * [Distance Matrix API](/api/navigation/distance-matrix/overview): матрицы расстояний.
+
+    Проверку сервиса Distance Matrix Async API см. [ниже](#test-distance-matrix-async-api).
+
+   Пример ниже содержит тело запроса к Directions API для построения автомобильного маршрута (приведён пример для Москвы):
+
+   `data.json`
+
+   ```json
+   {
+       "alternative": 1,
+       "locale": "en",
+       "point_a_name": "start",
+       "point_b_name": "finish",
+       "type": "jam",
+       "points": [
+           {
+               "start": true,
+               "type": "walking",
+               "x": 37.616489,
+               "y": 55.751225
+           },
+           {
+               "start": false,
+               "type": "walking",
+               "x": 37.418451,
+               "y": 55.68355
+           }
+       ]
+   }
+   ```
+
+3. Отправьте запрос с использованием cURL или аналогичного инструмента (пример для Directions API):
+
+   ```bash
+   curl -Lv 'http://127.0.0.1:7777/carrouting/6.0.0/global' -d @data.json
+   ```
+
+   Вы должны получить ответ со следующей структурой (пример для Directions API):
+
+   ```json
+   {
+     "query": {..},
+     "result": [{..}, {..}]
+     "type": "result"
+   }
+   ```
+
+   Примеры ответов для других сервисов навигации вы можете найти в их документации.
+
+#### Проверьте сервис Navi-Splitter {#test-navi-splitter}
+
+Чтобы проверить работу сервиса Navi-Splitter:
+
+1. Создайте файл `data.json` с телом запроса к Distance Matrix API. Пример:
+
+   ```json
+   {
+       "points": [
+           {
+               "lon": 37.5833,
+               "lat": 55.7404
+           },
+           {
+               "lon": 37.5803,
+               "lat": 55.7696
+           },
+           {
+               "lon": 37.6539,
+               "lat": 55.7692
+           },
+           {
+               "lon": 37.6546,
+               "lat": 55.7415
+           }
+       ],
+       "sources": [0, 1],
+       "targets": [2, 3]
+   }
+   ```
+
+2. Отправьте запрос с использованием cURL или аналогичного инструмента:
+
+   ```bash
+   curl -Lv 'http://127.0.0.1:7777/get_dist_matrix' -d @data.json
+   ```
+
+   Вы должны получить ответ со следующей структурой:
+
+   ```json
+   {
+       "generation_time": 1111,
+       "routes":  [{..}, {..}]
+   }
+   ```
+
+#### Проверьте сервис Navi-Router {#test-navi-router}
+
+Чтобы проверить работу сервиса Navi-Router:
+
+1. Сгенерируйте API-ключ в сервисе API-ключей. Подробнее см. в разделе [Ключи и токены](/on-premise-api-platform/overview/api-keys).
+
+2. Пробросьте порт сервиса с помощью `kubectl`:
+
+   ```bash
+   kubectl port-forward navi-router-6864944c7-vrpns 7777:8080
+   ```
+
+3. Создайте файл `data.json` с телом запроса к сервису навигации, идентичный файлу из раздела [Проверка работоспособности Navi-Back](#test-navi-back).
+
+4. Отправьте запрос с использованием cURL или аналогичного инструмента (пример для Directions API):
+
+   ```bash
+   curl -Lv 'http://127.0.0.1:7777/carrouting/6.0.0/global?key=API_KEY' -d @data.json
+   ```
+
+   Где `API_KEY` — API-ключ для доступа к сервисам навигации.
+
+   Вы должны получить ответ, содержащий имя правила, например:
+
+   ```text
+   directions-car
+   ```
+
+#### Проверьте сервис Navi-Front {#test-navi-front}
+
+Чтобы проверить работу сервиса Navi-Front:
+
+1. Сгенерируйте API-ключ в сервисе API-ключей. Подробнее см. в разделе [Ключи и токены](/on-premise-api-platform/overview/api-keys).
+
+2. Создайте файл `data.json` с телом запроса к сервису навигации, идентичный файлу из раздела [Проверка работоспособности Navi-Back](#test-navi-back).
+
+3. Отправьте запрос с использованием cURL или аналогичного инструмента (пример для Directions API):
+
+   ```bash
+   curl -Lv 'http://navi-front.example.com/carrouting/6.0.0/global?key=API_KEY' -d @data.json
+   ```
+
+   Где `API_KEY` — API-ключ для доступа к сервисам навигации.
+
+   Вы должны получить ответ со следующей структурой:
+
+   ```json
+   {
+     "query": {..},
+     "result": [{..}, {..}]
+     "type": "result"
+   }
+   ```
+
+#### Проверьте сервис Distance Matrix Async API {#test-distance-matrix-async-api}
+
+Чтобы проверить работу сервиса Distance Matrix Async API:
+
+1. Сгенерируйте API-ключ в сервисе API-ключей. Подробнее см. в разделе [Ключи и токены](/on-premise-api-platform/overview/api-keys).
+
+2. Создайте файл `data.json` с телом запроса (приведён пример для Москвы):
+
+   ```json
+   {
+       "points": [
+           {
+               "lon": 37.573289,
+               "lat": 55.699926
+           },
+           {
+               "lon": 37.614402,
+               "lat": 55.706847
+           },
+           {
+               "lon": 37.552182,
+               "lat": 55.675928
+           },
+           {
+               "lon": 37.620315,
+               "lat": 55.669625
+           }
+       ],
+       "sources": [0, 1],
+       "targets": [2, 3]
+   }
+   ```
+
+3. Отправьте запрос с использованием cURL или аналогичного инструмента:
+
+   ```bash
+   curl -Lv 'https://navi-async-matrix.example.com/create_task/get_dist_matrix?key=API_KEY' --header 'Content-Type: application/json' -d @data.json
+   ```
+
+   Где `API_KEY` — API-ключ для доступа к сервисам навигации.
+
+   Вы должны получить ответ со следующей структурой:
+
+   ```json
+   {
+       "task_id": "{TASK_ID}",
+       "message": "success add task",
+       "status ": "success"
+   }
+   ```
+
+4. Выполните запрос статуса задачи, подставив в URL параметр `TASK_ID`, полученный в ответе на предыдущем шаге:
+
+   ```bash
+   curl -Lv 'https://navi-async-matrix.example.com/result/get_dist_matrix/{TASK_ID}'
+   ```
+
+   При необходимости выполните запрос несколько раз, пока задача будет выполняться. Спустя какое-то время в ответ на очередной запрос вы должны получить ответ со следующей структурой:
+
+   ```json
+   {
+       "task_id": "{TASK_ID}",
+       "status": "TASK_DONE",
+       "code": 200,
+       "message": "1670066296399691644\ncalc_time_ms=485\nattract_time=21\nbuild_time=58\npoints_count=4\nsource_count=2\ntarget_count=2",
+       "result_link": "http://artifacts.example.com/navi-async-matrix/{TASK_ID}.response.json"
+   }
+   ```
+
+5. Скачайте результат вычислений по URL, полученному в поле `result_link` на предыдущем шаге. Убедитесь, что результат представляет собой валидный JSON-файл. Пример:
+
+   ```json
+   {
+       "generation_time": 94.0,
+       "routes": [
+       {
+       "status": "OK",
+       "source_id": 0,
+       "target_id": 2,
+       "distance": 7996,
+       "duration": 728,
+       "reliability": 1.0
+       },
+       ...
+       ],
+       "attract_time": 21.0,
+       "build_matrix_time": 58.0
+   }
+   ```
+
+#### Проверьте сервис Restrictions API {#test-restrictions-api}
+
+Чтобы проверить работу сервиса Restrictions API:
+
+1. Создайте файл `data.json` с телом запроса (приведён пример для Москвы):
+
+   ```json
+   {
+       "start_time": "2022-07-03T20:30:00.000Z",
+       "end_time": "2029-08-28T23:59:00.000Z",
+       "lat": 55.75291,
+       "lon": 37.6113,
+       "is_whole_road": false
+   }
+   ```
+
+2. Отправьте запрос с использованием cURL или аналогичного инструмента:
+
+   ```bash
+   curl -Lv 'http://navi-restrictions:7777/points/' --header 'Content-Type: application/json' -d @data.json
+   ```
+
+   Вы должны получить ответ со следующей структурой:
+
+   ```json
+   [
+       {
+           "edge_geometry": "LINESTRING(37.610827 55.752269, 37.610958 55.752424, 37.611215 55.752690, 37.611287 55.752790, 37.611356
+           55.752894, 37.611798 55.753816)",
+           "restriction_id": "{RESTRICTION_ID}",
+           "start_time": "2022-07-05T14:13:35.936000+00:00",
+           "end_time": "2029-08-28T23:59:00+00:00",
+           "is_2gis": false
+       }
+   ]
+   ```
+
+3. Проверьте, что перекрытие появилось в системе:
+
+   ```bash
+   curl -Lv 'http://navi-restrictions:7777/restrictions/'
+   ```
+
+4. Удалите перекрытие:
+
+   ```bash
+   curl --request DELETE 'http://navi-restrictions:7777/restrictions/{RESTRICTION_ID}'
+   ```
+
+   Где `{RESTRICTION_ID}` — значение поля `restriction_id` в ответе на запрос в шаге 2.

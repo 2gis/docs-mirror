@@ -1,0 +1,203 @@
+
+Установка прокси для API пробок необязательна, если вы не собираетесь получать данные о пробках в реальном времени. Для этого сервиса также нужен постоянный доступ в интернет.
+
+### 5.1. Перед установкой {#before-installing-traffic}
+
+1. Ознакомьтесь с:
+
+   * [документацией прокси для API пробок](/on-premise-api-platform/architecture/trafficproxy);
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture).
+
+2. Убедитесь, что выполнены предварительные шаги:
+
+   1. [Подготовка к установке](#preparation).
+   2. [Установка сервиса лицензий](#install-license).
+   3. [Установка сервиса API-ключей](#install-keys).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                                                 | Пример значения                     | Как получить значение                                                     |
+   | ------------------------------------------------------ | ----------------------------------- | ------------------------------------------------------------------------- |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](#artifacts) |
+   | Секрет Kubernetes для доступа к реестру Docker | `onpremise-registry-creds`                 | См. [Получение артефактов установки](#artifacts)        |
+   | Ключ лицензии на программный комплекс <Brand />        | `DEMO-KEY-DGCTL-AAAAAA-BBBBBB`      | См. [Получение лицензии на программный комплекс <Brand />](/on-premise-api-platform/installation#get-license)           |
+
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/traffic-proxy/values.yaml). Подробнее о том, как это сделать, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
+
+   :::note[Используйте подходящий чарт]
+
+   Содержание Helm-чарта, описанное в данном разделе, актуально для последней версии API-платформы (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)). Чтобы изучить параметры для предыдущих версий, откройте [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/traffic-proxy/values.yaml) и в списке тегов слева выберите тег `Platform-<версия>`.
+
+   :::
+
+### 5.2. Установите прокси для API пробок {#install-traffic-proxy}
+
+#### Для использования сервисами навигации {#install-for-navigation-services}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/traffic-proxy/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-traffic-proxy-navi.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   replicaCount: 1
+
+   proxy:
+     host: https://datagateway.api.2gis.com
+     locationDG: true
+     licenseKey: DEMO-KEY-DGCTL-AAAAAA-BBBBBB
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+   * `replicaCount`: число реплик сервиса nginx.
+   * `proxy`: настройки прокси-сервера.
+     * `host`: доменное имя, IP-адрес или URL публичного сервера обновлений для пробок <Brand />. Список доступных серверов приведен в разделе [Архитектура](/on-premise-api-platform/architecture/trafficproxy#architecture).
+     * `locationDG`: включает дополнительные контексты для работы с `datagateway.api.2gis.com`.
+     * `licenseKey`: ключ лицензии на программный комплекс <Brand />. Требуется, если `locationDG` имеет значение `true`.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-traffic-proxy-navi.yaml`:
+
+   ```bash
+   helm upgrade --install --atomic --wait-for-jobs --values ./values-traffic-proxy-navi.yaml traffic-proxy-navi 2gis-on-premise/traffic-proxy
+   ```
+
+#### Для использования сервисами карт {#install-for-map-services}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/traffic-proxy/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-traffic-proxy-map.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   replicaCount: 1
+
+   proxy:
+     host: https://jam.api.2gis.com
+     locationDG: false
+
+   ingress:
+     enabled: true
+     className: nginx
+     hosts:
+       - host: traffic-proxy-map.example.com
+         paths:
+           - path: /
+             pathType: Prefix
+     tls: []
+     # - hosts:
+     #   - traffic-proxy-map.example.com
+     #   secretName: secret.tls
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+   * `replicaCount`: число реплик сервиса nginx.
+   * `proxy`: настройки прокси-сервера.
+     * `host`: доменное имя, IP-адрес или URL публичного сервера обновлений для пробок <Brand />. Список доступных серверов приведен в разделе [Архитектура](/on-premise-api-platform/architecture/trafficproxy#architecture).
+     * `locationDG`: включает дополнительные контексты для работы с `datagateway.api.2gis.com`.
+     * `licenseKey`: ключ лицензии на программный комплекс <Brand />. Требуется, если `locationDG` имеет значение `true`.
+   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведённую конфигурацию для соответствия используемому вами Ingress. Обратите внимание, что путь для хоста должен указывать на `/`.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-traffic-proxy-map.yaml`:
+
+   ```bash
+   helm upgrade --install --atomic --wait-for-jobs --values ./values-traffic-proxy-map.yaml traffic-proxy-map 2gis-on-premise/traffic-proxy
+   ```
+
+### 5.3. Проверьте работоспособность прокси для API пробок {#test-traffic-proxy}
+
+#### Для использования сервисами навигации {#test-for-navigation-services}
+
+##### 1. Проверьте работу прокси для API пробок
+
+Выполните следующие запросы к адресу, указанному в параметре `ingress.hosts[0].host` [конфигурационного файла для установки прокси API пробок для сервисов навигации](#install-for-navigation-services):
+
+```bash
+curl -X GET 'https://traffic-proxy-navi.example.com/eca/traffic/moses/speeds5.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/forecast/index.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/long-forecast/index.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/eta/eta-predictions/index.json'
+curl -X GET 'https://traffic-proxy-navi.example.com/navi-castle/restrictions_index.json.zip' --output restrictions_index.json.zip
+curl -X GET 'https://traffic-proxy-navi.example.com/navi-castle/restricted_transport.json.zip' --output restricted_transport.json.zip
+```
+
+В ответе вы должны получить JSON-объекты и валидные архивы.
+
+##### 2. Проверьте получение данных пробок сервисом навигации
+
+Чтобы проверить, что сервис Navi-Back получает данные пробок через прокси:
+
+1. Выполните любой из подготовительных шагов:
+
+   * Убедитесь, что в [конфигурационном файле для установки сервиса Navi-Back](/on-premise-api-platform/installation#install-navi-back) задан параметр `ingress.enabled: "true"`. В следующих шагах используйте адрес, который указан в параметре `ingress.hosts[0].host` конфигурационного файла Navi-Back (например, `https://navi-back-ingress.example.com`).
+   * Пробросьте HTTP-порт контейнера Navi-Back на уровень хост-сети для обращения к сервисным endpoint-ам. В следующих шагах используйте IP-адрес и порт хоста.
+
+2. Проверьте время последнего получения данных о пробках одним из способов:
+
+   * Получите значения метрик Navi-Back в формате Prometheus через endpoint `/metrics`. Добавьте к адресу из подготовительного шага путь `/metrics` и отправьте GET-запрос. Пример:
+
+     ```bash
+     curl -X GET 'https://navi-back-ingress.example.com/metrics'
+     ```
+
+     Ответ должен содержать метрики `mosesd_jams` (временную метку последнего получения данных пробок в формате `UNIX timestamp`) и `mosesd_jams_delay` (время, прошедшее с последнего момента получения данных). Если эти метрики отсутствуют, сервис не смог получить данные о пробках через прокси.
+
+   * В браузере перейдите по адресу из подготовительного шага и добавьте к нему путь `/city`. Например, `navi-back-ingress.example.com/city?type=json`.
+
+     Вы должны получить HTML-страницу со столбцом `пробки` и временем последнего получения данных.
+
+   * Отправьте GET-запрос по адресу из подготовительного шага и добавьте к нему путь `/city`. Например:
+
+     ```bash
+     curl -X GET 'https://navi-back-ingress.example.com/city?type=json'
+     ```
+
+     В ответе вы должны получить JSON-объект с полем `пробки` и временем последнего получения данных.
+
+#### Для использования сервисами карт {#test-for-map-services}
+
+##### 1. Проверьте работу прокси для API пробок
+
+Выполните один из шагов:
+
+* В браузере перейдите по адресу, который указан в параметре `ingress.hosts[0].host` [конфигурационного файла для установки прокси API пробок для сервисов карт](#install-for-map-services), и укажите путь `/meta?reg=65536,108&time&score`. Например, `traffic-proxy-map.example.com/meta?reg=65536,108&time&score`.
+
+* Выполните GET-запрос к аналогичному адресу:
+
+    ```bash
+    curl -X GET 'https://traffic-proxy-map.example.com/meta?reg=65536,108&time&score'
+    ```
+
+    Запрос должен выполниться успешно и вернуть результат в виде списка.
+
+##### 2. Проверьте получение данных пробок сервисом MapGL JS API
+
+Чтобы проверить, что сервис MapGL JS API получает данные о пробках через прокси:
+
+1. Выполните любой из подготовительных шагов:
+
+   * Убедитесь, что в [конфигурационном файле для установки сервиса MapGL JS API](/on-premise-api-platform/installation#install-mapgl-js-api) задан параметр `ingress.enabled: "true"`. В следующих шагах используйте адрес, который указан в параметре `ingress.hosts[0].host` конфигурационного файла MapGL JS API (например, `https://mapgl-js-api.example.com`).
+   * Пробросьте HTTP-порт контейнера MapGL JS API на уровень хост-сети для обращения к сервисным endpoint-ам. В следующих шагах используйте IP-адрес и порт хоста.
+
+2. Нажмите на иконку пробок в верхнем правом углу карты. На карте отобразятся пробки, а на кнопке будет указан текущий уровень пробок и соответствующий цвет.

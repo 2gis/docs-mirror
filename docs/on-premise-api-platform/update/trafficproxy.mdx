@@ -1,0 +1,33 @@
+---
+sidebar: on-premise-api-platform
+---
+# Обновление прокси для API пробок
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационных файлах `values-traffic-proxy-map.yaml` и `values-traffic-proxy-navi.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-traffic-proxy).
+
+3. Выполните команду для обновления сервиса:
+
+    * для использования сервисами навигации:
+
+   ```bash
+    helm upgrade --atomic --wait-for-jobs --values ./values-traffic-proxy-navi.yaml traffic-proxy-navi 2gis-on-premise/traffic-proxy
+   ```
+
+    * для использования сервисами карт:
+
+   ```bash
+    helm upgrade --atomic --wait-for-jobs --values ./values-traffic-proxy-map.yaml traffic-proxy-map 2gis-on-premise/traffic-proxy
+   ```
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-traffic-proxy).

@@ -1,0 +1,23 @@
+# Обновление сервиса лицензий
+
+1. Получите новые артефакты для установки.
+
+   Для этого укажите в конфигурационном файле 2GIS CLI новую версию компонента `core` (см. [Релизы базовых сервисов](/on-premise-api-platform/releases/core)) и [выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+   См. [справку по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/core). Если необходимо, обновите настройки в конфигурационном файле `values-license.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-license).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --wait-for-jobs --values ./values-license.yaml license 2gis-on-premise/license
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `core`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::

@@ -1,0 +1,154 @@
+---
+sidebar: on-premise-api-platform
+---
+# Обновление API карт
+
+## Обновление сервиса MapGL JS API {#update-mapgl-js-api}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-mapgl.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-mapgl-js-api).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-mapgl.yaml mapgl-js-api 2gis-on-premise/mapgl-js-api
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-mapgl-js-api).
+
+## Обновление сервиса Tiles API {#update-tiles-api}
+
+Вы можете обновить сервис Tiles API как вместе с его данными (самими тайлами), так и без их обновления.
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts). Дополнительно вы можете указать следующие флаги:
+
+      * Чтобы обновить только образ сервиса, добавьте флаг `--only-apps` после команды `pull`.
+      * Чтобы обновить только данные, добавьте флаг `--only-data` после команды `pull`.
+      * Чтобы обновить и сервис, и данные, выполните команду без добавления флагов выше.
+
+   Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Скопируйте путь к новому файлу манифеста из консольного вывода команды и подставьте его в параметр `dgctlStorage.manifest` в конфигурационном файле `values-tiles.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-tiles-api).
+
+   :::note[Настройка импорта данных]
+
+   Вы можете настроить процесс [импорта новых данных](/on-premise-api-platform/overview/lifecycle#importing-data) для Tiles API. За это отвечают настройки группы `importer` конфигурационного файла.
+   Если при очередном обновлении сервиса Tiles API вы не хотите импортировать новые данные, используйте тот же манифест, что и в предыдущем импорте. В остальных случаях рекомендуется использовать новый манифест.
+
+   :::
+
+3. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите другие настройки в конфигурационном файле `values-tiles.yaml`.
+
+4. Выполните команду для обновления сервиса.
+
+   * Чтобы обновить только сервис:
+
+      ```bash
+      helm upgrade --version=VERSION --atomic --wait --timeout 7200s --values ./values-tiles.yaml tiles-api 2gis-on-premise/tiles-api --set importer.enabled=false
+      ```
+
+      В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   * Чтобы обновить только данные:
+
+      ```bash
+      helm upgrade --version=VERSION --atomic --wait --timeout 7200s --values ./values-tiles.yaml tiles-api 2gis-on-premise/tiles-api
+      ```
+
+      В параметр `--version` подставьте текущую установленную версию компонента `api-platform`.
+
+   * Чтобы обновить сервис и данные:
+
+      ```bash
+      helm upgrade --version=VERSION --atomic --wait --timeout 7200s --values ./values-tiles.yaml tiles-api 2gis-on-premise/tiles-api
+      ```
+
+      В параметр `--version` подставьте новую версию компонента `api-platform`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+5. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-tiles-api).
+
+## Обновление сервиса Static API {#update-static-api}
+
+1. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI:
+
+      * Новую версию компонента `api-platform` (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)).
+      * Версию компонента `core`, которая требуется для установки новой версии API-платформы (см. подраздел **Зависимости** в описании релизов API-платформы).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+2. Ознакомьтесь сo [списком критических изменений](/on-premise-api-platform/releases/api-platform). Если необходимо, обновите настройки в конфигурационном файле `values-staticmaps.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-static-api).
+
+3. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-staticmaps.yaml staticmaps 2gis-on-premise/staticmaps
+   ```
+
+   В параметр `--version` подставьте текущую установленную версию компонента `api-platform`.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+4. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-static-api).
+
+## Обновление сервиса Floors API {#update-floors-api}
+
+Удалите сервис Floors API. Начиная с версии 1.37.1, данные этажных планов поставляются в составе векторных тайлов, отдельный сервис устанавливать не нужно.
+
+## Автоматическое удаление старых данных {#data-cleanup}
+
+Для хранения данных о тайлах сервис использует пространства ключей ([keyspace](https://cassandra.apache.org/doc/latest/cassandra/architecture/overview.html)) в Cassandra.
+
+Если настройки безопасности позволяют автоматическое создание пространств ключей, то при обновлении сервиса будет создано новое пространство, а затем сервис переключится на него.
+
+После переключения все данные в прежнем пространстве ключей становятся ненужными. Часть предыдущих пространств можно хранить в качестве резерва, а остальные удалять для экономии места на диске.
+
+Чтобы автоматически удалять старые данные:
+
+1. В настройке `importer.cleaner.enabled` укажите значение `true`.
+
+2. В настройке `importer.cleaner.limit` укажите количество предыдущих пространств ключей, которые нужно хранить. Например, `1` означает, что будет оставлено всего одно предыдущее пространство, а все более старые будут удалены. При этом на диске нужно будет зарезервировать как минимум троекратный запас свободного места под пространства ключей (временное, текущее и N предыдущих).
+
+3. По умолчанию удалённые данные всё ещё будут занимать дисковое пространство в виде [снимков (snapshots)](https://cassandra.apache.org/doc/latest/cassandra/operating/backups.html#types-of-backups) в Cassandra. Удалить устаревшие снимки можно вручную с помощью [nodetool clearsnapshot](https://cassandra.apache.org/doc/latest/cassandra/tools/nodetool/clearsnapshot.html), или можно настроить автоматическое удаление через JMX:
+
+   1. Убедитесь, что в вашей конфигурации Cassandra включён удалённый доступ по JMX.
+   2. Задайте настройки `cassandra.credentials.jmxUser` и `cassandra.credentials.jmxPassword`.
+   3. В настройке `importer.clearSnapshots` укажите значение `true`.

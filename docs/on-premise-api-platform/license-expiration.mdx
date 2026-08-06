@@ -1,0 +1,200 @@
+﻿# Истечение лицензии
+
+Лицензионный ключ действует ограниченное время, в течение которого доступны сервисы On-Premise. При приближении срока истечения лицензии сервисы переходят в состояние предупреждения, а после истечения срока — блокируются.
+
+## Состояния сервиса лицензий
+
+Предупреждение (soft block) — состояние сервиса лицензий, при котором вы получаете предупреждения о скором истечении лицензии. Сервисы продолжают работать без ограничений. Срок начала показа предупреждения можно указать в днях или неделях с помощью параметра `license.softBlockPeriod` при [установке сервиса лицензий](/on-premise-api-platform/installation#install-license). Также вы можете посмотреть список лицензий и сроки их действия в Менеджере Платформы: см. раздел [Просмотр лицензий](/on-premise-api-platform/user-guide/platform-manager#viewing-licenses).
+
+Блокировка (hard block) — состояние полной блокировки сервиса лицензий, при котором использование программного комплекса On-Premise ограничивается. Полная блокировка начинается сразу после окончания действия лицензии.
+
+## Поведение сервисов при истечении лицензии
+
+### API карт
+
+#### Предупреждение
+
+* При запросе тайлов в логах появляются сообщения:
+
+    ```
+    # предупреждение при запросе растровых тайлов
+    {"error":"request blocked: license warning","http_method":"GET","http_proto":"HTTP/1.1","http_scheme":"http","level":"info","msg":"forbidden","remote_addr":"example_ip","req_id":"b31efee1e07a03e8c236c657a73a8cbf","time":"2025-09-29T15:26:12.031120159Z","uri":"http://tiles-api.example.com/v2/tiles?x=2642\u0026y=1296\u0026z=12\u0026ts=raster","user_agent":"curl/8.5.0"}
+
+    # предупреждение при запросе векторных тайлов
+    {"error":"request blocked: license warning","http_method":"GET","http_proto":"HTTP/1.1","http_scheme":"http","level":"info","msg":"forbidden","remote_addr":"example_ip","req_id":"8d0c2b795965fd63223776257c2e67c9","time":"2025-09-29T15:26:13.772172578Z","uri":"http://tiles-api.example.com/vt?r=CgoIk6UBEPWuARgP\u0026ts=web\u0026key=<api-key>\u0026appId=empty\u0026lang=en\u0026s=api-key","user_agent":"curl/8.5.0"}
+
+    # предупреждение при запросе тайлов в формате MVT
+    {"error":"request blocked: license warning","http_method":"GET","http_proto":"HTTP/1.1","http_scheme":"http","level":"info","msg":"forbidden","remote_addr":"example_ip","req_id":"a6c143cc9a989c69cf2258001e7b2966","time":"2025-10-09T05:04:10.766329112Z","uri":"http://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt","user_agent":"curl/8.5.0"}
+    ```
+
+* Запросы тайлов возвращают HTTP-код `200`, но в заголовке `x-blocked-reason` указывается `request blocked: license warning`:
+
+    <details>
+    <summary>Пример ответа на запрос растровых тайлов</summary>
+
+    ```bash
+    curl -i 'http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster'
+    HTTP/2 200
+    ...
+    x-blocked-reason: request blocked: license warning
+    ...
+    ```
+    </details>
+
+    <details>
+    <summary>Пример ответа на запрос векторных тайлов</summary>
+
+    ```bash
+        curl -i 'http://tiles-api.example.com/vt?r=CgoIk6UBEPWuARgP&ts=web&key=<api-key>&appId=empty&lang=en&s=api-key'
+        HTTP/2 200
+        ...
+        x-blocked-reason: request blocked: license warning
+        ...
+        ```
+    </details>
+
+    <details>
+    <summary>Пример ответа на запрос тайлов в формате MVT</summary>
+
+    ```bash
+    curl -i 'https://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt'
+    HTTP/2 200
+    ...
+    x-blocked-reason: request blocked: license warning
+    ...
+    ```
+
+    </details>
+
+#### Блокировка
+
+* При запросе тайлов в логах появляются сообщения об ошибке проверки сертификата и блокировке лицензии:
+
+    ```
+    # ошибка проверки сертификата от сервиса лицензий
+    {"context":"license.Client","level":"warning","msg":"Get \"http://license:443/api/v2/authority/check\": tls: failed to verify certificate: x509: certificate has expired or is not yet valid: current time 2025-10-03T13:34:57Z is after 2025-10-02T21:00:00Z","time":"2025-10-03T13:34:57.93270351Z"}
+
+    # ошибка при запросе растровых тайлов
+    {"error":"request blocked: license error","http_method":"GET","http_proto":"HTTP/1.1","http_scheme":"http","level":"info","msg":"forbidden","remote_addr":"example_ip","req_id":"ac1ab31a62b21301acd4c6d2ea2666e2","time":"2025-09-29T14:52:56.073737281Z","uri":"http://tiles-api.example.com/v2/tiles?x=1326\u0026y=649\u0026z=11\u0026ts=raster\u0026layerType=normal\u0026key=<api-key>\u0026rs=phu6md1q4b\u0026layerType=nc","user_agent":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0"}
+
+    # ошибка при запросе векторных тайлов
+    {"error":"request blocked: license error","http_method":"GET","http_proto":"HTTP/1.1","http_scheme":"http","level":"info","msg":"forbidden","remote_addr":"example_ip","req_id":"cb43f97adc5a44a7ae51ab087fa93e40","time":"2025-09-29T14:44:31.320018612Z","uri":"http://tiles-api.example.com/vt?r=CgoIlaUBEPSuARgP\u0026ts=web\u0026key=<api-key>\u0026appId=empty\u0026lang=en\u0026s=c4666957-5639-4ac6-ac4a-b141e23c953a","user_agent":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0"}
+
+    # ошибка при запросе тайлов в формате MVT
+    {"error":"request blocked: license error","http_method":"GET","http_proto":"HTTP/1.1","http_scheme":"http","level":"info","msg":"forbidden","remote_addr":"example_ip","req_id":"c9cb6e04016c6d19600d6b1043eb0832","time":"2025-10-09T05:45:52.794240524Z","uri":"http://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt","user_agent":"curl/8.5.0"}
+    ```
+
+* Запросы тайлов возвращают HTTP-код `403`, в заголовке `x-blocked-reason` указывается `request blocked: license error`:
+
+    <details>
+    <summary>Пример ответа на запрос растровых тайлов</summary>
+
+    ```bash
+    curl -i 'http://tiles-api.example.com/v2/tiles\?x\=2642\&y\=1296\&z\=12\&ts\=raster'
+    HTTP/2 403
+    ...
+    x-blocked-reason: request blocked: license error
+    ...
+    ```
+    </details>
+
+    <details>
+    <summary>Пример ответа на запрос векторных тайлов</summary>
+
+    ```bash
+    curl -i 'http://tiles-api.example.com/vt?r=CgoIk6UBEPWuARgP&ts=web&key=<api-key>&appId=empty&lang=en&s=<api-key>'
+    HTTP/2 403
+    ...
+    x-blocked-reason: request blocked: license error
+    ...
+    ```
+
+    </details>
+
+    <details>
+    <summary>Пример ответа на запрос тайлов в формате MVT</summary>
+
+    ```
+    curl -i 'https://tiles-api.example.com/mapbox/mapbox/11/1326/1397.mvt'
+    HTTP/2 403
+    ...
+    x-blocked-reason: request blocked: license error
+    ...
+    ```
+
+    </details>
+
+* На растровых тайлах отображается водяной знак с текстом, указанным в параметре `errorText` в [конфигурационном файле Tiles API](/on-premise-api-platform/installation#install-tiles-api).
+
+* На векторных тайлах отображается водяной знак с текстом, указанным в параметре `MAPGL_INVALID_KEY_MESSAGE` в [конфигурационном файле MapGL JS API](/on-premise-api-platform/installation#install-mapgl-js-api).
+
+### API поиска
+
+#### Предупреждение
+
+В логах появляется сообщение о скором истечении лицензии:
+
+```
+{"time":"2025-09-29T15:46:47.704+00:00","message":"License expires in 14 days","level":"WARN"}
+```
+
+#### Блокировка
+
+При истечении лицензии:
+
+* В логах появляется сообщение об отклонении запроса:
+
+    ```
+    {"time":"2025-10-03T13:25:15.772+00:00","message":"License server rejection: untrusted server response","level":"ERROR"}
+    ```
+* Запросы к API возвращают HTTP-код `200`, но в заголовке `x-real-status` указывается код `403`, а в теле ответа — сообщение об ошибке:
+
+    <details>
+    <summary>Пример ответа</summary>
+
+   ```bash
+        curl -i 'http://catalog-api.example.com/2.0/catalog/rubric/search?key=<api-key>&q=City&region_id=108'
+        HTTP/2 200
+        ...
+        x-real-status: 403
+        x-ipa-http-code: 403
+        ...
+
+        {"meta":{"api_version":"3.0.18718","code":403,"error":{"message":"The license to use the service has expired","type":"licenseExpired"},"issue_date":"20250930"}}
+
+   ```
+
+    </details>
+
+### API навигации
+
+#### Предупреждение
+
+В логах появляется сообщение о скором истечении лицензии:
+
+```
+{"time":"2025-09-30T17:56:22.145+00:00","pid":"7","custom.navi_msg":{"thread_id" : "134958354007616", "thread_name" : "mosesd", "line" : "178", "path" : "/data/libraries/traffic-software/Projects/PasportoolClient/src/PasportoolClientV2.cpp", "level" : "Warning", "tags" : "[PasportoolClientV2]", "message" : "402 code is received from Pasportool - license will expire soon"}}
+```
+
+#### Блокировка
+
+* В логах появляется сообщение об отклонении запроса:
+
+    ```
+    {"time":"2025-10-03T13:30:19.022+00:00","pid":"8","custom.navi_msg":{"thread_id" : "138723404547648", "thread_name" : "mosesd", "line" : "149", "path" : "/data/libraries/traffic-software/Projects/PasportoolClient/src/LicenseNetworkProviderV2.cpp", "level" : "Warning", "tags" : "[LicenseNetworkProviderV2]", "message" : "unexpected response code: 0 text: [] cpr-error message: [SSL certificate problem: certificate has expired] cpr-error code: 39"}}
+    {"time":"2025-10-03T13:30:19.023+00:00","pid":"8","custom.navi_msg":{"thread_id" : "138723404547648", "thread_name" : "mosesd", "line" : "227", "path" : "/data/libraries/traffic-software/Projects/PasportoolClient/src/PasportoolClientV2.cpp", "level" : "Warning", "tags" : "[PasportoolClientV2]", "message" : "Pasportool service is not reachable"}}
+    ```
+
+* Запросы к API возвращают сообщение об ошибке:
+
+    ```
+    {"message":"the license is either expired or unavailable","type":"forbidden"}
+    ```
+
+## Действия при истечении лицензии
+
+1. Обратитесь к менеджеру <Brand /> для продления лицензии.
+
+2. Повторно получите лицензию с помощью утилиты 2GIS CLI. Подробнее см. в разделе [Получение лицензии](/on-premise-api-platform/installation#get-license).
+
+3. Убедитесь, что лицензия активна. Подробнее см. в разделе [Проверка статуса лицензии](/on-premise-api-platform/installation#check-license-status).

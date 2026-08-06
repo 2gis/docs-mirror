@@ -1,0 +1,95 @@
+Перед запуском утилиты [2GIS CLI](./overview) создайте конфигурационный файл.
+
+Структура файла:
+
+```yaml
+key: <License key>
+log-format: <text | json>
+
+storage:
+    type: <s3 | fs>
+
+    # S3 storage settings
+    host: <Installation Artifacts Storage host name and port>
+    secure: <bool>
+    bucket: <Installation Artifacts Storage bucket name>
+    access-key: <Installation Artifacts Storage access key>
+    secret-key: <Installation Artifacts Storage secret key>
+
+    # FS (filesystem) storage settings
+    directory: <target directory on a filesystem>
+
+docker:
+    registry:
+        username: <Docker Registry username>
+        password: <Docker Registry password>
+        server-address: <Docker Registry URL>
+        image-prefix: <Additional prefix (optional)>
+
+# Для утилиты версии 3
+components:
+    core:
+        version: <core-version>
+    api-platform:
+        version: <api-platform-version>
+    pro:
+        version: <pro-version>
+    citylens:
+        version: <citylens-version>
+    gis-platform:
+        version: <gis-platform-version>
+```
+
+Где:
+
+* `key`: [лицензионный ключ для доступа к программному комплексу <Brand />](/on-premise-api-platform/overview/summary#start).
+
+* `log-format`: формат логов — `text` или `json`. Все логи выводятся в стандартный поток вывода (`stdout`).
+
+* `storage`: настройки для используемого [типа хранилища](../../architecture/solution-architecture#data-storage-for-services).
+
+   :::note[Требования к настройкам хранилищ]
+
+   Один конфигурационный файл может содержать настройки только для одного типа хранилища.
+   Если требуется запускать 2GIS CLI для разных типов хранилища, создайте для каждого из них отдельные конфигурационные файлы.
+
+   :::
+
+   * Для S3-совместимого хранилища:
+
+     * `type`: тип хранилища. Значение должно быть `s3`.
+     * `host`: FQDN endpoint-а S3-совместимого хранилища.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета для хранения артефактов установки.
+     * `access-key`: идентификатор ключа (S3 access key).
+     * `secret-key`: секретный ключ (S3 secret key).
+
+   * Для хранилища на файловой системе:
+
+     * `type`: тип хранилища. Значение должно быть `fs`.
+     * `directory`: целевая директория в файловой системе, куда будут загружаться артефакты установки.
+
+       Монтирование директории к Docker-контейнеру выполняется с помощью аргумента `-v <путь>:/dgctl-source` при запуске утилиты, см. [справку по командам и аргументам 2GIS CLI](./help).
+
+       Путь к директории следует указывать в том виде, в котором она доступна изнутри Docker-контейнера. Аргументы в [справке по командам и аргументам 2GIS CLI](./help) подобраны так, чтобы работать с путём `/dgctl-source` (для режима `pull`) или `/dgctl-target` (для режима `restore`).
+
+* `docker.registry`: настройки для доступа к реестру Docker. Если выбранный [cценарий использования](./usage) 2GIS CLI не предполагает использование реестра, эту секцию настроек конфигурационного файла можно опустить.
+
+  * `username`: имя пользователя.
+  * `password`: пароль.
+  * `server-address`: URL реестра.
+  * `image-prefix`: дополнительный префикс, под которым будут храниться образы сервисов программного комплекса <Brand />. Все образы сервисов, скачанные при помощи 2GIS CLI, имеют предустановленный префикс `2gis-on-premise`. Его не нужно указывать здесь.
+
+* `components`: список компонентов и их версий для установки.
+
+  * `core`: базовые сервисы — компонент для работы любых других компонентов программного комплекса On-Premise. Включает в себя сервис лицензий и сервис API-ключей. Номера версий компонента см. в разделе [Релизы базовых сервисов](/on-premise-api-platform/releases/core).
+  * `api-platform`: API-платформа, включает в себя API для работы с картами, поиском и навигацией, сервис сбора статистики, прокси для API пробок и Менеджер Платформы. Номера версий компонента см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+  * `pro`: <Brand /> Про, включает в себя сервисы Pro API и Pro UI. Номера версий компонента см. в разделе [Релизы <Brand /> Про](/on-premise-pro/releases).
+  * `citylens`: <Brand /> Ситискан, включает в себя сервисы CityLens API, CityLens Routing API и CityLens Routing UI. Номера версий компонента см. в разделе [Релизы <Brand /> Ситискан](/on-premise-citylens/releases).
+  * `gis-platform`: GIS-платформа. Номера версий компонента см. в разделе [Релизы GIS-платформы](/on-premise-gis-platform/releases).
+
+    :::warning
+
+    Для каждого компонента укажите номер версии в параметре `version`. Не указывайте номера сервисов, входящих в состав компонента. Список компонентов и ссылки на описание релизов см. выше.
+
+    :::

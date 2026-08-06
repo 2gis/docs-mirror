@@ -11,30 +11,30 @@ sidebar: on-premise-gis-platform
 
 ## 1. Перед установкой {#before-installing}
 
-1. По возможности познакомьтесь с:
+1. Ознакомьтесь с:
 
-   * [Документацией сервиса GIS-платформа](/on-premise-gis-platform/architecture/gis-platform-architecture)
-   * [Архитектурой программного комплекса <Brand />](/on-premise-gis-platform/architecture/solution-architecture)
+   * [документацией сервиса GIS-платформа](/on-premise-gis-platform/architecture/gis-platform-architecture);
+   * [архитектурой программного комплекса <Brand />](/on-premise-gis-platform/architecture/solution-architecture).
 
-2. Убедитесь, что выполнены необходимые предварительные шаги:
+2. Убедитесь, что выполнены предварительные шаги:
 
-   1. [Подготовка к установке](/on-premise-api-platform/preparation)
-   2. [Установка сервиса лицензий](/on-premise-api-platform/core/install/license)
-   3. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)
-   4. [Установка API для работы с картами](/on-premise-api-platform/api-platform/install/maps)
-   5. [Установка API для работы с поиском](/on-premise-api-platform/api-platform/install/search)
-   6. [Установка прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy)
+   1. [Подготовка к установке](/on-premise-api-platform/preparation).
+   2. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license).
+   3. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys).
+   4. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps).
+   5. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search).
+   6. [Установка прокси для API пробок](/on-premise-api-platform/installation#install-traffic-proxy).
 
-3. Соберите необходимые данные, заданные или полученные на предыдущих шагах:
+3. Соберите данные, заданные или полученные на предыдущих шагах:
 
    | Объект                          | Пример значения                     | Как получить значение                                                         |
    | ------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
-   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts) |
-   | Endpoint сервиса API-ключей     | `http://keys-service-api`                   | См. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)            |
-   | Endpoint Tiles API              | `http://tiles-api`                  | См. [Установка API для работы с картами](/on-premise-api-platform/api-platform/install/maps)      |
-   | Endpoint Catalog APIs           | `http://catalog-api`                | См. [Установка API для работы с поиском](/on-premise-api-platform/api-platform/install/search)    |
-   | Endpoint прокси для API пробок  | `http://traffic-proxy`              | См. [Установка прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy) |
-   | API-ключи                       | `CATALOG_KEY`                       | См. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)            |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts) |
+   | Endpoint сервиса API-ключей     | `http://keys-service-api`                   | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)            |
+   | Endpoint Tiles API              | `http://tiles-api`                  | См. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)      |
+   | Endpoint Catalog APIs           | `http://catalog-api`                | См. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search)    |
+   | Endpoint прокси для API пробок  | `http://traffic-proxy`              | См. [Установка прокси для API пробок](/on-premise-api-platform/installation#install-traffic-proxy) |
+   | API-ключи                       | `CATALOG_KEY`                       | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)            |
 
 4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/gis-platform/values.yaml). Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-gis-platform/requirements).
 
@@ -207,10 +207,10 @@ sidebar: on-premise-gis-platform
        * `email`: email администратора.
        * `password`: пароль администратора.
 
-     * `catalog`: настройки доступа к [сервису Catalog APIs](/on-premise-api-platform/architecture/api-platform/search). Этот сервис обеспечивает взаимодействие с Geocoder API и Suggest API.
+     * `catalog`: настройки доступа к [сервису Catalog APIs](/on-premise-api-platform/architecture/search). Этот сервис обеспечивает взаимодействие с Geocoder API и Suggest API.
 
        * `url`: FQDN endpoint Catalog APIs. Значение должно быть задано в формате `http://catalog-api`, без слэша `/` в конце. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
-       * `key`: отдельный сервисный токен для доступа к сервисам поиска. Подробнее см. в документации сервиса [API Keys](/on-premise-api-platform/architecture/core/keys).
+       * `key`: отдельный сервисный токен для доступа к сервисам поиска. Подробнее см. в документации сервиса [API Keys](/on-premise-api-platform/architecture/keys).
 
      * `jwt`: настройки генерации веб-токенов JSON (JSON Web Tokens, JWT).
 
@@ -300,7 +300,7 @@ sidebar: on-premise-gis-platform
 
       :::note[Пропуск проверки SSL]
 
-      Начиная с [версии 1.1.0](/on-premise-api-platform/previous-releases) программного комплекса <Brand />, можно передать скрипту `configure.sh` аргумент `-k`.
+      Начиная с [версии 1.1.0](/on-premise-api-platform/releases/previous-releases) программного комплекса <Brand />, можно передать скрипту `configure.sh` аргумент `-k`.
 
       Этот аргумент позволяет пропустить проверку безопасности соединения при подключении по HTTPS. Таким образом, любые возможные ошибки, связанные с использованием недоверенных SSL-сертификатов (например, самоподписанных сертификатов) сервисами GIS-платформы, будут проигнорированы.
 
@@ -339,7 +339,7 @@ sidebar: on-premise-gis-platform
 
   * [<Brand /> Про](/on-premise-pro/install/installation),
   * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
-  * [мобильный SDK](/on-premise-api-platform/api-platform/install/mobilesdk),
-  * [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform).
+  * [мобильный SDK](/on-premise-api-platform/installation#install-msdk),
+  * [Менеджер Платформы](/on-premise-api-platform/installation#install-pm).
 
 * Изучите рекомендации по [обслуживанию системы](/on-premise-gis-platform/administering).

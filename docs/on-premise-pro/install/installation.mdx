@@ -20,26 +20,26 @@ sidebar: on-premise-pro
 2. Выполните предварительные шаги:
 
    1. [Подготовка к установке](/on-premise-pro/preparation)
-   2. [Установка сервиса лицензий](/on-premise-api-platform/core/install/license)
-   3. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)
-   4. [Установка API для работы с картами](/on-premise-api-platform/api-platform/install/maps)
-   5. [Установка API для работы с поиском](/on-premise-api-platform/api-platform/install/search)
-   6. [Установка API для работы с навигацией](/on-premise-api-platform/api-platform/install/navigation)
+   2. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)
+   3. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)
+   4. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)
+   5. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search)
+   6. [Установка API для работы с навигацией](/on-premise-api-platform/installation#install-navi)
 
 3. Соберите необходимые данные, заданные или полученные на предыдущих шагах:
 
    | Объект                                                  | Пример значения                                | Как получить значение                                                             |
    | ------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------- |
-   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts) |
-   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                      | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)         |
-   | Имя бакета для хранения артефактов                      | `onpremise-artifacts`                          | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)         |
-   | Идентификатор ключа для доступа к артефактам установки  | `AKIAIOSFODNN7EXAMPLE`                         | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)         |
-   | Секрет ключа для доступа к артефактам установки         | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY`       | См. [Получение артефактов установки](/on-premise-api-platform/preparation#artifacts)         |
-   | Endpoint сервиса лицензий                               | `https://license`                              | См. [Установка сервиса лицензий](/on-premise-api-platform/core/install/license)               |
-   | Endpoint MapGL JS API                                   | `http://mapgl-js-api`                          | См. [Установка API для работы с картами](/on-premise-api-platform/api-platform/install/maps)          |
-   | Endpoint Catalog APIs                                   | `http://catalog-api`                           | См. [Установка API для работы с поиском](/on-premise-api-platform/api-platform/install/search)        |
-   | Endpoint API навигации                                  | `http://navi-front`                            | См. [Установка API для работы с навигацией](/on-premise-api-platform/api-platform/install/navigation) |
-   | API-ключи                                               | `MAPGL_KEY` <br /> `CATALOG_KEY` <br /> `NAVI_KEY` | См. [Установка сервиса API-ключей](/on-premise-api-platform/core/install/keys)                |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts) |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                      | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
+   | Имя бакета для хранения артефактов                      | `onpremise-artifacts`                          | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
+   | Идентификатор ключа для доступа к артефактам установки  | `AKIAIOSFODNN7EXAMPLE`                         | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
+   | Секрет ключа для доступа к артефактам установки         | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY`       | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
+   | Endpoint сервиса лицензий                               | `https://license`                              | См. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)               |
+   | Endpoint MapGL JS API                                   | `http://mapgl-js-api`                          | См. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)          |
+   | Endpoint Catalog APIs                                   | `http://catalog-api`                           | См. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search)        |
+   | Endpoint API навигации                                  | `http://navi-front`                            | См. [Установка API для работы с навигацией](/on-premise-api-platform/installation#install-navi) |
+   | API-ключи                                               | `MAPGL_KEY` <br /> `CATALOG_KEY` <br /> `NAVI_KEY` | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)                |
 
 4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в Helm-чартах:
 
@@ -507,19 +507,19 @@ sidebar: on-premise-pro
       * `host`: адрес хоста Redis. Пример: `HTTP(S)://HOST`.
       * `port`: номер порта.
 
-   * `catalog`: настройки доступа к [Catalog APIs](/on-premise-api-platform/architecture/api-platform/search).
+   * `catalog`: настройки доступа к [Catalog APIs](/on-premise-api-platform/architecture/search).
 
-      * `url`: URL-адрес [Catalog APIs](/on-premise-api-platform/architecture/api-platform/search). Пример: `HTTP(S)://HOST`.
-      * `key`: ключ доступа к [Catalog APIs](/on-premise-api-platform/architecture/api-platform/search).
+      * `url`: URL-адрес [Catalog APIs](/on-premise-api-platform/architecture/search). Пример: `HTTP(S)://HOST`.
+      * `key`: ключ доступа к [Catalog APIs](/on-premise-api-platform/architecture/search).
 
    * `navi`: настройки доступа к [Isochrone API](/api/navigation/isochrone/overview).
 
       * `url`: URL-адрес [Isochrone API](/api/navigation/isochrone/overview). Пример: `HTTP(S)://HOST`.
       * `key`: ключ доступа к [Isochrone API](/api/navigation/isochrone/overview).
 
-   * `search`: настройки доступа к [Search API](/on-premise-api-platform/architecture/api-platform/search).
+   * `search`: настройки доступа к [Search API](/on-premise-api-platform/architecture/search).
 
-      * `url`: URL-адрес [Search API](/on-premise-api-platform/architecture/api-platform/search). Пример: `HTTP(S)://HOST`.
+      * `url`: URL-адрес [Search API](/on-premise-api-platform/architecture/search). Пример: `HTTP(S)://HOST`.
 
    * `assetImporter`: настройки cron-задания для импорта данных.
 
@@ -654,7 +654,7 @@ sidebar: on-premise-pro
          * `configUrl`: URL конфигурационного файла для стилей. Пример: `https://artifacts.example.com/pro-ui-styles/config/production/styleConfig.json`.
 
       * `api.url`: базовый URL для Pro API со слэшем в конце. Пример: `HTTP(S)://HOST/`.
-      * `mapgl`: настройки сервиса [MapGL JS API](/on-premise-api-platform/architecture/api-platform/maps).
+      * `mapgl`: настройки сервиса [MapGL JS API](/on-premise-api-platform/architecture/maps).
 
          * `host`: хост сервиса MapGL JS API без протокола и без слэша в конце.
          * `key`: ключ доступа для сервиса MapGL JS API.
@@ -719,9 +719,9 @@ curl -X 'GET' \
 * Установите другие продукты программного комплекса <Brand />:
 
    * [<Brand /> Ситискан](/on-premise-citylens/install/installation),
-   * [мобильный SDK](/on-premise-api-platform/api-platform/install/mobilesdk),
+   * [мобильный SDK](/on-premise-api-platform/installation#install-msdk),
    * [GIS-платформа](/on-premise-gis-platform/installation),
-   * [прокси для API пробок](/on-premise-api-platform/api-platform/install/trafficproxy),
-   * [Менеджер Платформы](/on-premise-api-platform/api-platform/install/platform).
+   * [прокси для API пробок](/on-premise-api-platform/installation#install-traffic-proxy),
+   * [Менеджер Платформы](/on-premise-api-platform/installation#install-pm).
 
 * Изучите рекомендации по [обслуживанию системы](/on-premise-pro/administering).

@@ -1,0 +1,394 @@
+
+В этом разделе описана установка сервиса Search API. Инструкцию по установке обновлённой версии сервиса (Search API v8) см. в разделе [Установка обновлённой версии API поиска](/on-premise-api-platform/advanced/search-v8).
+
+### 7.1. Перед установкой {#before-installing-search}
+
+1. Ознакомьтесь с:
+
+   * [документацией сервисов поиска](/on-premise-api-platform/architecture/search);
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture).
+
+2. Убедитесь, что выполнены предварительные шаги:
+
+   1. [Подготовка к установке](#preparation).
+   2. [Установка сервиса лицензий](#install-license).
+   3. [Установка сервиса API-ключей](#install-keys).
+   4. [Установка сервиса сбора статистики](#install-stat).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                                                 | Пример значения                          | Как получить значение                                                         |
+   | ------------------------------------------------------ | ---------------------------------------- | ----------------------------------------------------------------------------- |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](#artifacts) |
+   | Секрет Kubernetes для доступа к реестру Docker | `onpremise-registry-creds`                 | См. [Получение артефактов установки](#artifacts)        |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                    | См. [Получение артефактов установки](#artifacts)        |
+   | Название бакета с артефактами установки                | `onpremise-artifacts`                    | См. [Получение артефактов установки](#artifacts)        |
+   | Идентификатор ключа для доступа к артефактам установки | `AKIAIOSFODNN7EXAMPLE`                   | См. [Получение артефактов установки](#artifacts)        |
+   | Секрет ключа для доступа к артефактам установки        | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY` | См. [Получение артефактов установки](#artifacts)        |
+   | Путь к файлу манифеста                                 | `manifests/api-platform/1640661259.json` | См. [Получение артефактов установки](#artifacts)        |
+   | Endpoint сервиса лицензий                              | `https://license`                        | См. [Установка сервиса лицензий](#install-license)              |
+   | Endpoint сервиса API-ключей                            | `http://keys-service-api`                | См. [Установка сервиса API-ключей](#install-keys)               |
+   | Endpoint сервиса сбора статистики                      | `http://stat-receiver`                   | См. [Установка сервиса сбора статистики](#install-stat) |
+   | Сервисный токен                                        | `CATALOG_APIS_TOKEN`                     | См. [Установка сервиса API-ключей](#install-keys)               |
+
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в Helm-чартах:
+
+   * [Search API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/search-api/values.yaml),
+   * [Catalog APIs](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/catalog-api/values.yaml).
+
+   Подробнее о том, как это сделать, см. в документе [Системные требования](/on-premise-api-platform/requirements#resources).
+
+   :::note[Используйте чарты, соответствующие версии API-платформы]
+
+   Содержание Helm-чартов, описанное в данном разделе, актуально для последней версии API-платформы (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)). Чтобы изучить параметры для предыдущих версий, откройте нужный [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts) и в списке тегов слева выберите тег `Platform-<версия>`.
+
+   :::
+
+5. Определите доменные имена для сервисов поиска.
+
+   **Пример:**
+
+   * Доменное имя для Search API: `search-api.example.com`.
+   * Доменное имя для Catalog APIs: `catalog-api.example.com`.
+
+### 7.2. Подготовьте инфраструктуру {#prepare-infrastructure-search}
+
+#### Настройте PostgreSQL {#configure-postgresql}
+
+:::note[Настройка аналога из реестра Минцифры]
+
+Если вместо PostgreSQL вы используете аналог из реестра Минцифры, для инструкции по его настройке обратитесь к официальной документации этого сервиса.
+
+:::
+
+1. Разместите кластер PostgreSQL с доменным именем `catalog-postgresql.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
+
+2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
+
+3. Создайте пользователя базы данных и установите пароль для него:
+
+   ```sql
+   create user dbuser_catalog password '650D7AmZjSR1dkNa';
+   ```
+
+4. Создайте базу данных, принадлежащую этому пользователю:
+
+   ```sql
+   create database onpremise_catalog owner dbuser_catalog;
+   ```
+
+5. Установите необходимое внешнее расширение [PostGIS](https://postgis.net/documentation/getting_started/#installing-postgis) для PostgreSQL.
+
+   Вы можете получить расширение из репозитория, в котором оно доступно в виде готовых пакетов. Например, для дистрибутивов на базе Debian/Ubuntu установка выполняется командами:
+
+   ```bash
+   sudo apt install postgresql-15-postgis-3
+   sudo apt install postgis
+   ```
+
+6. Включите требуемое расширение для базы данных:
+
+   ```sql
+   \c onpremise_catalog
+
+   create schema extensions;
+   grant usage on schema extensions to public;
+   grant execute on all functions in schema extensions to public;
+   alter default privileges in schema extensions grant execute on functions to public;
+   alter default privileges in schema extensions grant usage on types to public;
+   create extension if not exists plpgsql with schema pg_catalog;
+   create extension if not exists postgis with schema extensions;
+   ```
+
+#### Создайте API-ключ
+
+Наличие ключа проверяется перед установкой Catalog APIs.
+
+Добавьте первого партнёра и создайте для него API-ключ. В список доступных сервисов для ключа должны быть включены API поиска. См. инструкцию [Управление доступом к API](/on-premise-api-platform/keys).
+
+### 7.3. Установите сервисы поиска {#install-search-services}
+
+#### Установите сервис Search API {#install-search-api}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/search-api/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-search.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   dgctlStorage:
+     host: artifacts.example.com
+     secure: true
+     bucket: onpremise-artifacts
+     accessKey: AKIAIOSFODNN7EXAMPLE
+     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+     manifest: manifests/api-platform/1640661259.json
+     region: ''
+
+   api:
+     resources:
+       limits:
+         cpu: 1
+         memory: 3Gi
+       requests:
+         cpu: 100m
+         memory: 1Gi
+   nginx:
+     resources:
+       limits:
+         cpu: 1
+         memory: 1Gi
+       requests:
+         cpu: 100m
+         memory: 200Mi
+
+   customCAs:
+     bundle: ''
+     # bundle: |
+     #   -----BEGIN CERTIFICATE-----
+     #   ...
+     #   -----END CERTIFICATE-----
+     certsPath: ''
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки.
+
+     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `manifest`: путь до файла с манифестом в формате `manifests/api-platform/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, которые требуются сервисам для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
+     * `region`: регион S3-совместимого хранилища.
+
+   * `api.resources`: настройки вычислительных ресурсов для бэкенд-сервиса API. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `nginx.resources`: настройки вычислительных ресурсов для бэкенд-сервиса nginx. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-search.yaml search-api 2gis-on-premise/search-api
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+#### Установите сервис Catalog APIs {#install-catalog-apis}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/catalog-api/README.md).
+
+   :::note[Настройка импорта данных]
+
+   Вы можете настроить процесс [импорта новых данных](/on-premise-api-platform/overview/lifecycle#importing-data) для Catalog APIs. За это отвечают настройки группы `importer` конфигурационного файла (см. ниже).
+
+   :::
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+   <details>
+   <summary><code>values-catalog.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   dgctlStorage:
+     host: artifacts.example.com
+     secure: true
+     bucket: onpremise-artifacts
+     accessKey: AKIAIOSFODNN7EXAMPLE
+     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+     manifest: manifests/api-platform/1640661259.json
+     region: ''
+     verifySsl: true
+
+   api:
+     postgres:
+       host: catalog-postgresql.storage.example.local
+       port: 5432
+       name: onpremise_catalog
+       username: dbuser_catalog
+       password: 650D7AmZjSR1dkNa
+     ingress:
+       enabled: true
+       className: nginx
+       hosts:
+         - host: catalog-api.example.com
+           paths:
+             - path: /
+               pathType: Prefix
+       tls: []
+       # - hosts:
+       #   - catalog-api.example.com
+       #   secretName: secret.tls
+
+   search:
+     url: http://search-api
+
+   keys:
+     url: http://keys-service-api
+     token: CATALOG_APIS_TOKEN
+
+   stat:
+     url: 'http://stat-receiver'
+     enabled: false
+     request:
+       enabled: false
+     search:
+       enabled: false
+
+   importer:
+     postgres:
+       host: catalog-postgresql.storage.example.local
+       port: 5432
+       name: onpremise_catalog
+       username: dbuser_catalog
+       password: 650D7AmZjSR1dkNa
+       schemaSwitchEnabled: true
+     cleaner:
+       enabled: true
+       versionLimit: 2
+
+   license:
+     url: 'https://license'
+     requestTimeout: 1s
+
+   customCAs:
+     bundle: ''
+     # bundle: |
+     #   -----BEGIN CERTIFICATE-----
+     #   ...
+     #   -----END CERTIFICATE-----
+     certsPath: ''
+   ```
+
+   </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки.
+
+     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `manifest`: путь до файла с манифестом в формате `manifests/api-platform/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, которые требуются сервисам для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
+     * `region`: регион S3-совместимого хранилища.
+     * `verifySsl`: включить ли проверку SSL-сертификатов при подключении к `dgctlStorage.host` по HTTPS. Значение по умолчанию: `true`.
+
+   * `api.postgres`: настройки доступа к серверу PostgreSQL.
+
+     * `host`: имя хоста или IP-адрес сервера.
+     * `port`: порт, на котором слушает сервер.
+     * `name`: имя базы данных.
+     * `username`: имя пользователя.
+     * `password`: пароль пользователя.
+
+   * `api.ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+   * `search`: настройки доступа к сервису Search API.
+
+     * `url`: URL сервиса. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+
+   * `keys`: настройки сервиса ключей.
+
+     * `url`: URL сервиса. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+     * `token`: сервисный токен для сохранения статистики использования (см. [Установка сервиса API-ключей](#install-keys)).
+
+   * `stat`: настройки взаимодействия с сервисом сбора статистики.
+
+     * `url`: URL сервиса сбора статистики.
+     * `enabled`: включите, чтобы отправлять статистику использования ключей.
+     * `request.enabled`: включите, чтобы отправлять статистику по запросам к API.
+     * `search.enabled`: включите, чтобы отправлять данные по поисковым запросам.
+
+   * `importer`: настройки процесса [импорта](/on-premise-api-platform/overview/lifecycle#importing-data) (Kubernetes Importer job). Импорт новых наборов данных происходит, только если для указанного манифеста не происходил импорт ранее.
+
+     * `postgres`: настройки доступа к серверу PostgreSQL для импорта новых данных об объектах.
+
+       * `host`: имя хоста или IP-адрес сервера.
+       * `port`: порт, на котором слушает сервер.
+       * `name`: имя базы данных.
+       * `username`: имя пользователя.
+       * `password`: пароль пользователя.
+       * `schemaSwitchEnabled`: разрешить ли работу со схемами.
+         * `true`: каждый импорт данных происходит в новую схему, возможно переключение на старые схемы и их очистка.
+         * `false`: создание новых схем и очистка базы производятся администратором вручную.
+
+       Подробнее см. в разделе [Обновление сервиса Catalog APIs](/on-premise-api-platform/update/search#update-catalog-apis).
+
+     * `cleaner`: настройки автоматического удаления старых наборов данных.
+
+       * `enabled`: включено ли автоматическое удаление старых наборов данных. Подробнее см. в разделе [Обновление сервиса Catalog APIs](/on-premise-api-platform/update/search#update-catalog-apis).
+       * `versionLimit`: количество старых наборов данных, которые нужно хранить.
+
+       См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle) для получения дополнительной информации о работе процесса импорта.
+
+   * `license`: настройки [сервиса лицензий](/on-premise-api-platform/architecture/license).
+
+     * `url`: URL-адрес сервиса лицензий. Пример: `https://license`.
+     * `requestTimeout`: таймаут запросов к сервису лицензий.
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --wait --timeout 7200s --values ./values-catalog.yaml catalog-api 2gis-on-premise/catalog-api
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+   Если в конфигурационном файле были указаны настройки `importer`, то при установке сервиса проверяется наличие данных в базе и при необходимости происходит импорт этих данных в PostgreSQL. Затем Helm выполняет установку самого сервиса.
+
+### 7.4. Проверьте работоспособность сервисов поиска {#test-search}
+
+С хоста в приватной сети `example.com` выполните GET-запрос:
+
+```bash
+curl 'catalog-api.example.com/3.0/items/geocode?key=API_KEY&q=City'
+```
+
+Где:
+
+* `API_KEY` — значение созданного ключа.
+* `City` — имя города, о котором вы хотите найти информацию.
+
+При успешной установке сервис вернёт список результатов поиска в формате JSON.
+

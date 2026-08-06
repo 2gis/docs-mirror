@@ -1,0 +1,485 @@
+
+
+
+### 2.1. Перед установкой {#before-installing-license}
+
+1. Ознакомьтесь с:
+
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture);
+   * [системными требованиями](/on-premise-api-platform/requirements) к программному обеспечению и вычислительным ресурсам.
+
+2. Убедитесь, что выполнены [подготовительные шаги](#preparation).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                                                  | Значение                                 | Как получить значение                                                     |
+   | ------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+   | Ключ лицензии на программный комплекс <Brand />         | `DEMO-KEY-DGCTL-AAAAAA-BBBBBB`           | См. [Подготовка к установке](/on-premise-api-platform/preparation)                   |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                  | См. [Получение артефактов установки](#artifacts) |
+   | Инфраструктура доставки артефактов                      | `example.com` <br /> `example-external.com`<br /> `example-internal.com` | См. [Получение артефактов установки](#configure-host-dgctl) |
+   | Имя бакета для хранения артефактов                      | `onpremise-artifacts`                    | См. [Получение артефактов установки](#artifacts) |
+   | Идентификатор ключа для доступа к артефактам установки  | `AKIAIOSFODNN7EXAMPLE`                   | См. [Получение артефактов установки](#artifacts) |
+   | Секрет ключа для доступа к артефактам установки         | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY` | См. [Получение артефактов установки](#artifacts) |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](#artifacts) |
+   | Имя пользователя для реестра Docker                     | `registry`                               | См. [Получение артефактов установки](#artifacts) |
+   | Пароль для реестра Docker                               | `DOCKERregistryP@ssW0rd`                 | См. [Получение артефактов установки](#artifacts) |
+
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/license/values.yaml). Подробнее о том, как это сделать, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
+
+:::note[Используйте подходящий чарт]
+
+Содержание Helm-чарта, описанное в этом разделе, актуально для последней версии базовых сервисов (см. [Релизы базовых сервисов](/on-premise-api-platform/releases/core)). Чтобы изучить параметры для предыдущих версий, откройте [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/license/values.yaml) и в списке тегов слева выберите тег `Core-<версия>`.
+
+:::
+
+### 2.2. Установите сервис лицензий {#install-license-service}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/license/README.md). Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+   <details>
+   <summary><code>values-license.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   dgctlStorage:
+     host: artifacts.example.com
+     secure: true
+     bucket: onpremise-artifacts
+     accessKey: AKIAIOSFODNN7EXAMPLE
+     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+     region: ''
+
+   license:
+     type: ''
+     retryPeriod: 30s
+     softBlockPeriod: 2w
+
+   persistence:
+     host: artifacts.example.com
+     secure: true
+     region: ''
+     bucket: onpremise-artifacts
+     root: 'license_state'
+     accessKey: AKIAIOSFODNN7EXAMPLE
+     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+
+   tpm:
+     mountTPMDevice: false
+     pvcBind:
+       enable: false
+       storageClassName: ''
+
+   customCAs:
+     bundle: ''
+     # bundle: |
+     #   -----BEGIN CERTIFICATE-----
+     #   ...
+     #   -----END CERTIFICATE-----
+     certsPath: ''
+
+   affinity: {}
+   ```
+
+   </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки.
+
+     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `region`: регион S3-совместимого хранилища.
+
+   * `license`: настройки сервиса лицензий.
+
+     * `type`: тип лицензии (не версия). Скопируйте цифровое значение из файла `values/general.yaml`, который генерируется автоматически на этапе [загрузки артефактов установки](/on-premise-api-platform/installation#fetch-artifacts). Не изменяйте это значение вручную.
+     * `retryPeriod`: через какой период времени повторить проверку лицензии, если предыдущая проверка не удалась.
+     * `softBlockPeriod`: за какой период времени появляется уведомление об истечении срока лицензии. Поддерживаются дополнительные единицы измерения времени: `d` для дней и `w` для недель.
+
+   * `persistence`: настройки доступа к хранилищу для состояний сервиса лицензий.
+
+     * `host`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `region`: регион S3-совместимого хранилища.
+     * `bucket`: имя бакета S3.
+     * `root`: корневая директория бакета S3, в которой будут храниться файлы состояния.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+
+       :::warning
+
+       При потере указанных данных текущая лицензия перестанет работать. Для получения новой лицензии см. [Продвинутые способы получения лицензии](/on-premise-api-platform/advanced/license-advanced#persistence-lost).
+
+       :::
+
+   * `tpm`: настройки для доступа к [Trusted Platform Module (TPM)](https://ru.wikipedia.org/wiki/TPM_\(%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F\)). **Только для типа лицензии `2`** (`license.type: 2`). Тип лицензии — это цифровое значение из файла `values/general.yaml`, который генерируется автоматически на этапе [загрузки артефактов установки](/on-premise-api-platform/installation#fetch-artifacts).
+
+     * `mountTPMDevice`: способ предоставления доступа к TPM:
+
+       * `true`: монтировать TPM внутрь пода Kubernetes. **Включается привилегированный доступ к основному контейнеру.**
+
+       * `false`: использовать плагин для автоматического монтирования TPM-устройства внутрь пода Kubernetes. Вы можете использовать готовый [плагин от <Brand />](https://github.com/2gis/tpm-device-plugin) или собрать и установить свой плагин в кластере Kubernetes.
+
+     * `pvcBind`: создать [Persistent Volume Claim (PVC)](https://kubernetes.io/docs/concepts/storage/persistent-volumes/), чтобы привязать под сервиса лицензий к узлу кластера.
+
+       * `enable`: использовать ли PVC. Значение по умолчанию: `false`.
+       * `storageClassName`: имя класса хранения (StorageClass) в Kubernetes.
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+   * `affinity`: настройки [affinity-правил](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) для привязки подов сервиса лицензий к конкретным узлам кластера.
+
+   <details>
+   <summary>Примеры настройки affinity-правил:</summary>
+
+   * Для всех типов лицензий, кроме `1` (тип лицензии — это цифровое значение из файла `values/general.yaml`, который генерируется автоматически на этапе [загрузки артефактов установки](/on-premise-api-platform/installation#fetch-artifacts)), рекомендуется располагать поды сервиса лицензий на разных узлах кластера:
+
+      ```yaml
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - '' # значение этого параметра зависит от настроек вашего окружения
+      ```
+
+   * Для типа лицензии `2` рекомендуется ограничить набор узлов кластера, к которым получает доступ сервис лицензий:
+
+      ```yaml
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - node-1 # название узла кластера
+                      - node-2 # название узла кластера
+      ```
+
+   Подробное описание параметров affinity-правил см. в [документации Kubernetes](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+
+   </details>
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-license.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-license.yaml license 2gis-on-premise/license
+   ```
+
+   В параметре `--version` укажите нужную версию базовых сервисов. Список версий см. в разделе [Релизы базовых сервисов](/on-premise-api-platform/releases/core).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+   При первом запуске команда вернёт ошибку, что под сервиса лицензий не может быть запущен. Это ожидаемое поведение, переходите к следующим шагам.
+
+### 2.3. Получите лицензию {#get-license}
+
+:::note[Ниже описан стандартный способ получения лицензии]
+
+Чтобы получить лицензию после обновления сертификата сервера Kubernetes API, смены ключа, типа лицензирования или в других частных случаях, см. [Продвинутые способы получения лицензии](/on-premise-api-platform/advanced/license-advanced).
+
+:::
+
+Для операций с лицензиями используется конфигурационный файл утилиты [2GIS CLI](/on-premise-api-platform/overview/2gis-cli/overview). Подробнее о процессе получения лицензии см. в [описании режима утилиты `license`](/on-premise-api-platform/overview/2gis-cli/overview#license-mode).
+
+Процесс может быть запущен как на одном хосте с доступом к S3-совместимому хранилищу и интернету, так и на двух отдельных хостах с разными доступами. Выполните следующие действия в зависимости от выбранной конфигурации хостов.
+
+<Tabs>
+
+<TabItem value="one-host-scenario" label="Использование одного хоста" default>
+
+1. Зайдите по SSH на хост `example.com` и создайте конфигурационный файл `dgctl-config.yaml`. Подробнее о доступных параметрах см. в описании [конфигурационного файла 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/config).
+
+   <details>
+   <summary><code>dgctl-config.yaml</code></summary>
+
+   ```yaml
+   key: DEMO-KEY-DGCTL-AAAAAA-BBBBBB
+   log-format: json
+
+   storage:
+     type: s3
+     host: artifacts.example.com
+     bucket: onpremise-artifacts
+     access-key: AKIAIOSFODNN7EXAMPLE
+     secret-key: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+
+   docker:
+     registry:
+       username: registry
+       password: DOCKERregistryP@ssW0rd
+       server-address: https://docker.registry.example.com
+       image-prefix: /
+
+   # Для утилиты версии 3
+   components:
+     core:
+       version: <core-version>
+     api-platform:
+       version: <api-platform-version>
+   ```
+
+   </details>
+
+2. Запросите лицензию:
+
+   ```bash
+   docker run --rm \
+     -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
+     --user $(id -u):$(id -g) \
+     2gis/dgctl:3 \
+     license --config=/dgctl-config.yaml
+   ```
+
+   Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды.
+
+3. Снова установите сервис с помощью Helm:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-license.yaml license 2gis-on-premise/license
+   ```
+
+   В параметре `--version` укажите ту же версию базовых сервисов, что и при прошлом выполнении команды.
+
+</TabItem>
+
+<TabItem value="two-hosts" label="Использование двух хостов с разными доступами" default>
+
+Перед началом работы убедитесь, что у вас настроены два хоста:
+
+* `example-external.com` с доступом в публичную сеть или только к следующим адресам:
+  * `datagateway.api.2gis.com` — для получения файла лицензии и файла манифеста;
+  * `origin-disk.2gis.com` — для получения файлов приложений и данных.
+* `example-internal.com` с доступом к реестру Docker и S3-совместимому хранилищу.
+
+Подробнее см. в разделе [Настройка хостов](#configure-host-dgctl).
+
+При использовании двух хостов скопируйте файлы из S3-совместимого хранилища и в него. Для этого можно использовать утилиту 2GIS CLI (рекомендуется) или другой клиент для работы с S3.
+
+1. На обоих хостах создайте директорию для переноса файлов. Вы можете сохранить путь к директории в переменной окружения `COPY_DIR`. Например:
+
+   ```bash
+   COPY_DIR=/mnt/dgctl-source
+   ```
+
+2. Зайдите по SSH на хост `example-internal.com` и создайте конфигурационный файл `dgctl-config.yaml`. Подробнее о доступных параметрах см. в описании [конфигурационного файла 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/config).
+
+   <details>
+   <summary><code>dgctl-config.yaml</code></summary>
+
+   ```yaml
+   key: DEMO-KEY-DGCTL-AAAAAA-BBBBBB
+   log-format: json
+
+   storage:
+     type: s3
+     host: artifacts.example.com
+     bucket: onpremise-artifacts
+     access-key: AKIAIOSFODNN7EXAMPLE
+     secret-key: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+
+   docker:
+     registry:
+       username: registry
+       password: DOCKERregistryP@ssW0rd
+       server-address: https://docker.registry.example.com
+       image-prefix: /
+
+   # Для утилиты версии 3
+   components:
+     core:
+       version: <core-version>
+     api-platform:
+       version: <api-platform-version>
+   ```
+
+   </details>
+
+3. Сформируйте файлы для запроса лицензии на хосте `example-internal.com`:
+
+   1. Проверьте наличие всех необходимых файлов для запроса лицензии (если используете утилиту 2GIS CLI):
+
+      ```bash
+      docker run --rm \
+        -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
+        --user $(id -u):$(id -g) \
+        2gis/dgctl:3 \
+        license --config=/dgctl-config.yaml --dry-run
+      ```
+
+      Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды.
+
+   2. Скопируйте файлы для запроса лицензии из S3-совместимого хранилища в `COPY_DIR`:
+
+      * Если вы используете утилиту 2GIS CLI, выполните следующую команду:
+
+         ```bash
+         docker run --rm \
+            -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
+            -v $COPY_DIR:/data \
+            --user $(id -u):$(id -g) \
+            2gis/dgctl:3 \
+            save --config=/dgctl-config.yaml --to-dir /data --only-license
+         ```
+
+         Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды.
+
+      * Если вы используете сторонний клиент S3, скопируйте всё содержимое директории `license-dir` из S3 в `COPY_DIR`.
+
+4. Скопируйте содержимое директории `COPY_DIR` с `example-internal.com` на `example-external.com`.
+
+5. Зайдите по SSH на хост `example-external.com` и создайте конфигурационный файл `dgctl-config-fs.yaml`. Подробнее о доступных параметрах см. в описании [конфигурационного файла 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/config).
+
+   <details>
+   <summary><code>dgctl-config-fs.yaml</code></summary>
+
+   ```yaml
+   key: DEMO-KEY-DGCTL-AAAAAA-BBBBBB
+   log-format: json
+
+   storage:
+     type: fs
+     directory: /data
+
+   # Для утилиты версии 3
+   components:
+     core:
+       version: <core-version>
+     api-platform:
+       version: <api-platform-version>
+   ```
+
+   </details>
+
+6. Запросите лицензию на `example-external.com`:
+
+   ```bash
+   docker run --rm \
+     -v $(pwd)/dgctl-config-fs.yaml:/dgctl-config.yaml \
+     -v $COPY_DIR:/data \
+     --user $(id -u):$(id -g) \
+     2gis/dgctl:3 \
+     license --config=/dgctl-config.yaml
+   ```
+
+   Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды.
+
+7. Скопируйте содержимое директории `COPY_DIR` с `example-external.com` на `example-internal.com`.
+
+8. На хосте `example-internal.com` используйте конфигурационный файл `dgctl-config.yaml` из шага 2 или создайте такой же.
+
+9. Скопируйте файл с лицензией из `COPY_DIR` в S3-совместимое хранилище:
+
+   * Если вы используете утилиту 2GIS CLI, выполните команду:
+
+      ```bash
+      docker run --rm \
+         -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
+         -v $COPY_DIR:/data \
+         --user $(id -u):$(id -g) \
+         2gis/dgctl:3 \
+         restore --config=/dgctl-config.yaml --from-dir /data --only-license
+      ```
+
+      Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды.
+
+   * Если вы используете сторонний клиент S3, скопируйте всё содержимое директории `license-dir` из `COPY_DIR` в S3-совместимое хранилище.
+
+10. Снова установите сервис с помощью Helm:
+
+    ```bash
+    helm upgrade --install --version=VERSION --atomic --values ./values-license.yaml license 2gis-on-premise/license
+    ```
+
+    В параметре `--version` укажите ту же версию базовых сервисов, что и при прошлом выполнении команды.
+
+</TabItem>
+
+</Tabs>
+
+### 2.4. Проверьте статус лицензии {#check-license-status}
+
+1. Пробросьте порт сервиса с помощью `kubectl`:
+
+   ```bash
+   kubectl port-forward <namespace> license.svc 8080:80
+   ```
+
+2. Выполните запрос к endpoint-у `/status`:
+
+   ```curl
+   curl -v 'http://localhost:8080/status' -H "Accept: application/json" | jq
+   ```
+
+3. Проверьте ответ:
+
+   * Если лицензия действительна, ответ содержит HTTP-код `200` и информацию о статусе лицензии и сроке её действия в формате JSON.
+
+      <details>
+      <summary>Пример ответа</summary>
+
+      ```curl
+      curl -s 'http://localhost:8080/status' -H "Accept: application/json" | jq
+      {
+         "status": 200,
+         "issued-at": "2025-08-21T13:49:26Z",
+         "soft-block-at": "2026-01-17T21:00:00Z",
+         "hard-block-at": "2026-01-31T21:00:00Z",
+         "services": {
+         "pro": {
+               "status": 200,
+               "soft-block-at": "2026-01-17T21:00:00Z",
+               "hard-block-at": "2026-01-31T21:00:00Z"
+         }
+         }
+      }
+      ```
+
+      </details>
+
+   * Если лицензия скоро истечёт или уже истекла, в ответе указан код `402` (предупреждение) или `403` (блокировка).
+
+      <details>
+      <summary>Пример ответа</summary>
+
+      ```curl
+      curl -s 'http://localhost:8080/status' -H "Accept: application/json" | jq
+      {
+         "status": 402,
+         "issued-at": "2025-10-16T05:50:46Z",
+         "soft-block-at": "2026-01-17T21:00:00Z",
+         "hard-block-at": "2026-01-31T21:00:00Z",
+         "services": {
+         "pro": {
+               "status": 402,
+               "soft-block-at": "2026-01-17T21:00:00Z",
+               "hard-block-at": "2026-01-31T21:00:00Z"
+         }
+         }
+      }
+      ```
+
+      </details>

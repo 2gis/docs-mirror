@@ -1,0 +1,726 @@
+### 6.1. Перед установкой {#before-installing-maps}
+
+1. Ознакомьтесь с:
+
+   * [документацией сервисов карт](/on-premise-api-platform/architecture/maps);
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture).
+
+2. Убедитесь, что выполнены предварительные шаги:
+
+   1. [Подготовка к установке](#preparation).
+   2. [Установка сервиса лицензий](#install-license).
+   3. [Установка сервиса API-ключей](#install-keys).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                                                 | Пример значения                            | Как получить значение                                                         |
+   | ------------------------------------------------------ | ------------------------------------------ | ----------------------------------------------------------------------------- |
+   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](#artifacts) |
+   | Секрет Kubernetes для доступа к реестру Docker | `onpremise-registry-creds`                 | См. [Получение артефактов установки](#artifacts)        |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                    | См. [Получение артефактов установки](#artifacts)        |
+   | Название бакета с артефактами установки                | `onpremise-artifacts`                      | См. [Получение артефактов установки](#artifacts)        |
+   | Идентификатор ключа для доступа к артефактам установки | `AKIAIOSFODNN7EXAMPLE`                     | См. [Получение артефактов установки](#artifacts)        |
+   | Секрет ключа для доступа к артефактам установки        | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY`   | См. [Получение артефактов установки](#artifacts)        |
+   | Путь к файлу манифеста                                 | `manifests/api-platform/1640661259.json`   | См. [Получение артефактов установки](#artifacts)        |
+   | Endpoint сервиса лицензий                              | `https://license`                          | См. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)              |
+   | Endpoint сервиса API-ключей                            | `http://keys-service-api`                  | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)               |
+   | Endpoint сервиса сбора статистики                      | `http://stat-receiver`                     | См. [Установка сервиса сбора статистики](/on-premise-api-platform/installation#install-stat) |
+   | Endpoint прокси для API пробок                         | `http://traffic-proxy`                     | См. [Установка прокси для API пробок](/on-premise-api-platform/installation#install-traffic-proxy)    |
+   | Сервисные токены                                       | `TILES_VECTOR_TOKEN`, `TILES_RASTER_TOKEN` | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)               |
+
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в Helm-чартах:
+
+   * [MapGL JS API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/values.yaml),
+   * [Tiles API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/tiles-api/values.yaml),
+   * [Styles API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/styles-api/values.yaml).
+
+   Подробнее о том, как это сделать, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
+
+   :::note[Используйте чарты, соответствующие версии API-платформы]
+
+   Содержание Helm-чартов, описанное в данном разделе, актуально для последней версии API-платформы (см. [Релизы API-платформы](/on-premise-api-platform/releases/api-platform)). Чтобы изучить параметры для предыдущих версий, откройте нужный [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts) и в списке тегов слева выберите тег `Platform-<версия>`.
+
+   :::
+
+5. Определите доменные имена для сервисов карт.
+
+   **Пример:**
+
+   * Доменное имя для MapGL JS API: `mapgl-js-api.example.com`.
+   * Доменное имя для Tiles API: `tiles-api.example.com`.
+   * Доменное имя для Styles API: `styles.example.com`.
+
+### 6.2. Подготовьте инфраструктуру {#prepare-infrastructure-maps}
+
+:::note[Настройка аналогов из реестра Минцифры]
+
+Если вместо Apache Cassandra, PostgreSQL и Redis вы используете аналоги из реестра Минцифры, для инструкций по их настройке обратитесь к официальной документации этих сервисов.
+
+:::
+
+#### Для установки Tiles API {#for-tiles-api}
+
+Разместите один или несколько инстансов хранилища Apache Cassandra в приватной сети.
+
+Рекомендуется включить доступ к Apache Cassandra по протоколу JMX, чтобы разрешить очистку снимков хранилища (см. [Обновление сервиса Tiles API](/on-premise-api-platform/update/maps#update-tiles-api)).
+
+Если настройки безопасности не разрешают автоматическое создание пространств ключей ([keyspace](https://cassandra.apache.org/doc/latest/cassandra/architecture/overview.html)), то для хранения данных о тайлах [создайте пространство ключей вручную](/on-premise-api-platform/advanced/maps-advanced#keyspace).
+
+**Пример:**
+
+* Хосты:
+  * `tiles-cassandra-1.storage.example.local`.
+  * `tiles-cassandra-2.storage.example.local`.
+  * `tiles-cassandra-3.storage.example.local`.
+* Имя пользователя: `cassandrauser`.
+* Пароль: `CASSANDRAPASSWORD-DWTYB05URKZJEDDN`.
+* Имя пользователя для JMX: `jmxuser`.
+* Пароль для JMX: `JMXPASSWORD-MNZLQTFH0MDDHIX8`.
+
+#### Для установки Styles API {#for-styles-api}
+
+Сервис Styles API необходим для подключения пользовательских стилей карты. Styles API является опциональным сервисом и не обязателен для работы API-платформы.
+
+Если вы планируете устанавливать Styles API, выполните дополнительные шаги:
+
+1. Настройте доступ к S3-совместимому хранилищу:
+
+   1. Разместите S3-совместимое хранилище с доменным именем `s3.storage.example.local` в приватной сети. Предполагается, что хранилище работает на стандартном порту `80`.
+
+   2. Создайте ключи для подключения к сервису. Запомните реквизиты.
+
+      **Пример:**
+
+      * Ключ доступа: `PHEI4AHTHEETHAHXEEGE`.
+      * Секретный ключ: `aiw6ahlaeshahngaiJaebie6aeth0aiV2pucuey1`.
+
+   3. Определите название бакета, который будет использоваться для сервиса.
+
+      **Пример:** `styles`.
+
+      Бакет должен быть публичным и иметь настроенный [CORS](https://developer.mozilla.org/ru/docs/Web/HTTP/CORS), чтобы файлы из него были доступны для загрузки из браузера с произвольного хоста.
+
+2. Настройте PostgreSQL:
+
+   1. Разместите кластер PostgreSQL с доменным именем `styles-postgresql.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
+
+   2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
+
+   3. Создайте пользователя базы данных и установите пароль для него:
+
+      ```sql
+      create user dbuser_styles password 'wNgJamrIym8UAcdX';
+      ```
+
+   4. Создайте базу данных, принадлежащую этому пользователю:
+
+      ```sql
+      create database onpremise_styles owner dbuser_styles;
+      ```
+
+### 6.3. Установите сервисы карт {#install-map-services}
+
+#### Установите сервис Tiles API {#install-tiles-api}
+
+1. Выберите вариант Tiles API, который нужно установить: для векторных или растровых тайлов.
+
+2. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/tiles-api/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+   <details>
+   <summary><code>values-tiles.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   dgctlStorage:
+     host: artifacts.example.com
+     secure: true
+     bucket: onpremise-artifacts
+     accessKey: AKIAIOSFODNN7EXAMPLE
+     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+     manifest: manifests/api-platform/1640661259.json
+     region : ''
+
+   warningText: License expiring in %d days.\nPlease contact your account manager.\n%s
+   errorText: License expired.\nPlease contact your account manager.\n%s
+   emailManager: on-premise@2gis.com
+
+   types:
+       - kind: web
+       - kind: web
+         subtype: immersive
+       - kind: web
+         subtype: relief
+
+   cassandra:
+     environment: prod
+     hosts:
+         - tiles-cassandra-1.storage.example.local
+         - tiles-cassandra-2.storage.example.local
+         - tiles-cassandra-3.storage.example.local
+     replicaFactor: 3
+     consistencyLevelRead: LOCAL_ONE
+     consistencyLevelWrite: LOCAL_QUORUM
+     credentials:
+       user: cassandrauser
+       password: CASSANDRAPASSWORD-DWTYB05URKZJEDDN
+       jmxUser: jmxuser
+       jmxPassword: JMXPASSWORD-MNZLQTFH0MDDHIX8
+     tls:
+       enabled: false
+       enableHostVerification: false
+       deploySecret: false
+       ca: ''
+       # ca: |
+         # -----BEGIN CERTIFICATE-----
+         # ...
+         # -----END CERTIFICATE-----
+       cert: ''
+       # cert: |
+         # -----BEGIN CERTIFICATE-----
+         # ...
+         # -----END CERTIFICATE-----
+       key: ''
+       # key: |
+         # -----BEGIN PRIVATE KEY-----
+         # ...
+         # -----END PRIVATE KEY-----
+
+   importer:
+     enabled: true
+     workerNum: 4
+     writerNum: 8
+     workerResources:
+       requests:
+         cpu: 256m
+         memory: 512Mi
+       limits:
+         cpu: 2
+         memory: 2048Mi
+     cleaner:
+       enabled: true
+       limit: 3
+     clearSnapshots: true
+
+   api:
+     imagePullSecrets: [onpremise-registry-creds]
+     pdb:
+       enabled: false
+     ingress:
+       enabled: true
+       className: nginx
+       hosts:
+         - host: tiles-api.example.com
+           paths:
+             - path: /
+               pathType: Prefix
+       tls: []
+       # - hosts:
+       #   - tiles-api.example.com
+       #   secretName: secret.tls
+
+   proxy:
+     access:
+       enabled: true
+       url: http://keys-service-api
+       vector:
+         token: 'TILES_VECTOR_TOKEN'
+       raster:
+         token: 'TILES_RASTER_TOKEN'
+       stat:
+         enabled: false
+         url: 'http://stat-receiver/bss/3'
+
+   license:
+     url: 'https://license'
+     retryPeriod: 30s
+
+   customCAs:
+     bundle: ''
+     # bundle: |
+     #   -----BEGIN CERTIFICATE-----
+     #   ...
+     #   -----END CERTIFICATE-----
+     certsPath: ''
+   ```
+
+   </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки.
+
+     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `manifest`: путь до файла с манифестом в формате `manifests/api-platform/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, которые требуются сервисам для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
+     * `region`: регион S3-совместимого хранилища.
+
+   * `warningText`: предупреждающее сообщение о скорой блокировке при работе с растровыми тайлами. Должно содержать: `%d` — плейсхолдер для количества дней до полной блокировки, `%s` — плейсхолдер для контакта менеджера аккаунта.
+
+   * `errorText`: сообщение о полной блокировке при работе с растровыми тайлами. Должно содержать `%s` — плейсхолдер для контакта менеджера аккаунта.
+
+   * `emailManager`: контакт менеджера аккаунта, который используется в сообщениях при работе с растровыми тайлами.
+
+   * `types`: массив из одного и более типов тайлов, которые будет предоставлять сервис.
+
+     * `types[0].kind`: задаёт тип возвращаемых тайлов. Возможные значения:
+       * `web`: векторные тайлы для MapGL JS API.
+         * `subtype`: подтип векторных тайлов. Возможные значения: `immersive` для отображения 3D-моделей или `relief` для отображения трёхмерного рельефа местности и 3D-моделей.
+       * `raster`: растровые тайлы.
+       * `native`: векторные тайлы для версий Mobile SDK 12.10 и ниже.
+       * `native-v4`: векторные тайлы для версий Mobile SDK выше 12.10.
+       * `mapbox`: векторные тайлы в формате MVT для использования в сторонних ГИС-системах. Подробнее см. в разделе [Экспорт векторных тайлов](/on-premise-api-platform/user-guide/vector-tiles).
+
+   * `cassandra`: настройки хранилища данных Apache Cassandra.
+
+     * `environment`: имя окружения, не более 7 символов.
+     * `hosts`: массив из одного и более IP-адресов или имён хоста инсталляции Apache Cassandra.
+     * `replicaFactor`: фактор репликации. Задайте подходящее значение для этой настройки в соответствии с вашей инсталляцией Apache Cassandra.
+     * При необходимости [задайте подходящее значение](https://cassandra.apache.org/doc/latest/cassandra/architecture/dynamo.html) для настроек консистентности данных в соответствии с вашей инсталляцией Apache Cassandra.
+     * `credentials`: учётные данные для аутентификации. Значения `user` и `password` являются обязательными, а `jmxUser` и `jmxPassword` используются только для очистки снимков хранилища (см. [Обновление сервиса Tiles API](/on-premise-api-platform/update/maps#update-tiles-api)). Значение по умолчанию каждого из параметров — `cassandra`.
+     * `tls`: конфигурация TLS для доступа к Apache Cassandra.
+       * `enabled`: включите, если Apache Cassandra использует TLS для клиентских подключений. Значение по умолчанию: `false` (выключено).
+       * `enableHostVerification`: включите для проверки имени хоста во время TLS-соединения. Значение по умолчанию: `true` (включено).
+       * `deploySecret`: включите для создания секрета Kubernetes, в котором будут храниться сертификаты TLS для подключения к Apache Cassandra. Значение по умолчанию: `false` (выключено).
+       * `ca`: корневой сертификат.
+       * `cert`: клиентский сертификат.
+       * `key`: приватный клиентский ключ для установления защищённого соединения.
+   * `importer`: настройки воркеров процесса импорта (Kubernetes Importer job).
+
+     * `enabled`: включить ли процесс импорта данных.
+
+     * `workerNum`: число воркеров (параллельных процессов импорта).
+
+     * `writerNum`: число процессов-писателей на один воркер.
+
+       :::note[Рекомендуемые настройки]
+
+       При установке Tiles API с поддержкой растровых тайлов рекомендуется уменьшить значения настроек `workerNum` (по умолчанию: `20`) и `writerNum` (по умолчанию: `8`)
+
+       Импорт данных для растровых тайлов может занять длительное время. Использование относительно высоких значений по умолчанию может привести к преждевременному завершению задания из-за истечения таймаута.
+
+       :::
+
+     * `workerResources`: настройки вычислительных ресурсов для воркера. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+     * `cleaner` и `clearSnapshots`: настройки автоматического удаления старых данных. Подробнее см. в разделе [Обновление сервиса Tiles API](/on-premise-api-platform/update/maps#update-tiles-api).
+
+     См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle) для получения дополнительной информации о работе процесса импорта.
+
+   * `api`: Настройки бэкенд-сервиса API.
+
+     * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+     * `pdb.enabled`: включена ли защита сервиса с использованием [Pod Disruption Budget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/).
+     * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `api.ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+   * `proxy`: настройки [сервиса ключей](/on-premise-api-platform/architecture/keys). Используйте эти настройки, если вы хотите ограничить доступ к сервису Tiles API для конечных пользователей.
+
+     * `access.enabled`: флаг, определяющий, проверять ли действие ограничений для ключей доступа.
+     * `access.url`: URL API-endpoint сервиса ключей. **Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.**
+     * `access.vector.token`: отдельный сервисный токен для доступа к векторным данным Tiles API. Этот ключ можно получить с помощью утилиты `keysctl`.
+     * `access.raster.token`: отдельный сервисный токен для доступа к растровым данным Tiles Raster API. Этот ключ можно получить с помощью утилиты `keysctl`.
+     * `stat`: настройки взаимодействия с сервисом сбора статистики.
+
+       * `enabled`: включите, чтобы отправлять статистику использования ключей.
+       * `url`: URL сервиса сбора статистики.
+
+   * `license`: настройки [сервиса лицензий](/on-premise-api-platform/architecture/license).
+
+     * `url`: URL-адрес сервиса лицензий. Пример: `https://license`.
+     * `retryPeriod`: как часто Tiles API должен пытаться обновить статус лицензии, если ему не удается его получить.
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера.
+
+3. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-tiles.yaml`.
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --wait --timeout 7200s --values ./values-tiles.yaml tiles-api 2gis-on-premise/tiles-api
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+   Процесс импорта (Kubernetes Importer job) получит все необходимые данные из хранилища артефактов установки и далее импортирует эти данные в Apache Cassandra. Затем Helm выполнит установку самого сервиса.
+
+#### Установите сервис MapGL JS API {#install-mapgl-js-api}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+     <details>
+     <summary><code>values-mapgl.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   env:
+     MAPGL_DEMO_KEY: ''
+     MAPGL_HOST: https://mapgl-api.ingress.host
+     MAPGL_TILES_API: https://tiles-api.ingress.host
+     MAPGL_TILESET: web
+     MAPGL_IMMERSIVE_TILESET: web_immersive
+     MAPGL_TRAFFICSERVER: https://traffic-proxy.ingress.host
+     MAPGL_STYLESERVER: https://styles.ingress.host
+     MAPGL_ICONS_URL: https://s3.ingress.host/styles/icons
+     MAPGL_MODELS_URL: https://s3.ingress.host/styles/models
+     MAPGL_KEYSERVER: https://keys-api.example.com/public/v1/keys/{keyID}/services/mapgl-js-api
+     MAPGL_RTLPLUGIN: https://mapgl-api.ingress.host/api/js/plugins/rtl-v1.0.0.js
+     MAPGL_INVALID_KEY_MESSAGE: Your MapGL key is invalid.
+
+   resources:
+     requests:
+       cpu: 30m
+       memory: 32Mi
+     limits:
+       cpu: 100m
+       memory: 96Mi
+
+   ingress:
+     enabled: true
+     className: nginx
+     hosts:
+       - host: mapgl-js-api.example.com
+         paths:
+           - path: /
+             pathType: Prefix
+     tls: []
+     # - hosts:
+     #   - mapgl-js-api.example.com
+     #   secretName: secret.tls
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `env`: переменные окружения.
+
+     * `MAPGL_DEMO_KEY`: API-ключ для доступа к сервису. Должен быть сгенерирован с помощью [сервиса API-ключей](/on-premise-api-platform/installation#install-keys).
+     * `MAPGL_HOST`: URL сервиса, который ваши приложения должны использовать для коммуникаций с сервисами карт.
+     * `MAPGL_TILES_API`: URL [сервиса Tiles API](#install-tiles-api).
+     * `MAPGL_TILESET`: подложка сервиса Tiles API с векторными тайлами.
+     * `MAPGL_IMMERSIVE_TILESET`: подложка сервиса Tiles API с тайлами для отображения 3D-моделей.
+     * `MAPGL_TRAFFICSERVER`: URL [сервиса прокси для API пробок](/on-premise-api-platform/installation#install-traffic-proxy).
+     * `MAPGL_STYLESERVER`: URL [сервиса Styles API](#install-styles-api).
+     * `MAPGL_ICONS_URL`: URL директории с иконками для стилей. URL должен быть публично доступен.
+     * `MAPGL_MODELS_URL`: URL директории с моделями для стилей. URL должен быть публично доступен.
+     * `MAPGL_KEYSERVER`: URL [сервиса API-ключей](/on-premise-api-platform/installation#install-keys).
+     * `MAPGL_RTLPLUGIN`: URL плагина для поддержки языков с направлением письма справа налево (RTL).
+     * `MAPGL_INVALID_KEY_MESSAGE`: текст сообщения об ошибке при использовании невалидного ключа для MapGL JS API.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. Обратите внимание, что для использования TLS необходимо создать секрет, содержащий сертификат и приватный ключ.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-mapgl.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-mapgl.yaml mapgl-js-api 2gis-on-premise/mapgl-js-api
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+#### Установите сервис Static API (опционально) {#install-static-api}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/staticmaps/README.md).
+
+    Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+    <details>
+    <summary><code>values-staticmaps.yaml</code></summary>
+
+    ```yaml
+    app:
+      access:
+        enabled: true
+        stat:
+          enabled: true
+          url: http://stat-receiver-api/bss/3
+      log:
+        format: json
+        level: info 
+  
+    dgctlDockerRegistry: docker.registry.example.com
+  
+    ingress:
+      className: nginx
+      enabled: true
+      hosts:
+      - host: staticmaps.example.com
+        paths:
+        - path: /
+          pathType: Prefix
+      tls: []
+      # - hosts:
+      #   - staticmaps.example.com
+      #   secretName: secret.tls
+  
+    keys:
+      token: STATIC_API_TOKEN 
+      url: http://keys-service-api
+  
+    license:
+      url: https://license
+  
+    tiles:
+      key: TILES_KEY
+      url: http://tiles-api-raster
+    ``` 
+    </details>
+
+    Где:
+
+    * `app.access`: настройки доступа к сервису API-ключей.
+
+      * `enabled`: включить ли доступ к сервису API-ключей.
+      * `stat`: настройки взаимодействия с сервисом сбора статистики.
+
+        * `enabled`: отправлять ли статистику использования ключей.
+        * `url`: URL сервиса сбора статистики.
+      
+    * `app.log`: настройки логирования.
+
+      * `format`: формат логов.
+      * `level`: уровень логирования.
+
+    * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+    * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `api.ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+    * `keys`: настройки доступа к сервису API-ключей.
+
+      * `token`: сервисный токен (см. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)). Обязательный параметр, если для параметра `app.access.enabled` указано значение `true`.
+      * `url`: URL сервиса ключей. Этот URL должен быть доступен из всех подов вашего кластера Kubernetes. Обязательный параметр, если для параметра `app.access.enabled` указано значение `true`. 
+    
+    * `license.url`: URL [сервиса лицензий](/on-premise-api-platform/architecture/license).
+
+    * `tiles`: настройки доступа к сервису Tiles API.
+
+      * `key`: ключ доступа к Tiles API.
+      * `url`: URL сервиса Tiles API. Этот URL должен быть доступен из всех подов вашего кластера Kubernetes.
+
+  2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-staticmaps.yaml`.
+
+      ```bash
+      helm upgrade --install --version=VERSION --atomic --values ./values-staticmaps.yaml staticmaps 2gis-on-premise/staticmaps
+      ```
+
+      В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+      :::warning
+
+      Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+      :::
+
+#### Установите сервис Styles API (опционально) {#install-styles-api}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/styles-api/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+     <details>
+     <summary><code>values-styles.yaml</code></summary>
+
+   ```yaml
+
+   dgctlDockerRegistry: docker.registry.example.com
+
+   imagePullSecrets: [onpremise-registry-creds]
+
+   log:
+     level: info
+
+   postgres:
+     host: 'styles-postgresql.storage.example.local'
+     name: 'onpremise_styles'
+     username: ''
+     password: ''
+
+   s3:
+     host: 's3.storage.example.local:80'
+     secure: false
+     bucket: 'styles'
+     accessKey: ''
+     secretKey: ''
+     publicDomain: ''
+     region: ''
+     verifySsl: false
+
+   api:
+     resources:
+       requests:
+         cpu: 50m
+         memory: 128Mi
+       limits:
+         cpu: 1
+         memory: 256Mi
+
+     ingress:
+       enabled: true
+       className: nginx
+       hosts:
+         - host: styles.example.com
+         paths:
+           - path: /
+             pathType: Prefix
+       tls: []
+       # - hosts:
+       #   - styles-api.example.com
+       #   secretName: secret.tls
+   ```
+
+     </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `log.level`: уровень логирования.
+
+   * `postgres`: настройки доступа к серверу PostgreSQL.
+
+     * `host`: имя или IP-адрес хоста PostgreSQL.
+     * `name`: имя базы данных.
+     * `username`: имя пользователя базы данных PostgreSQL.
+     * `password`: пароль для подключения к базе данных PostgreSQL.
+
+   * `s3`: настройки доступа к S3-совместимому хранилищу.
+
+     * `host`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3 для хранения и публикации стилей.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `publicDomain`: домен для публичного доступа к S3-совместимому хранилищу по протоколу HTTPS.
+     * `region`: регион S3-совместимого хранилища.
+     * `verifySsl`: включить ли проверку SSL-сертификатов при подключении. Значение по умолчанию: `false`.
+
+   * `api.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `api.ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-styles.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-styles.yaml styles-api 2gis-on-premise/styles-api
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+### 6.4. Проверьте работоспособность установленных сервисов {#test-maps}
+
+#### Проверьте сервис Tiles API {#test-tiles-api}
+
+Чтобы проверить работу сервиса Tiles API:
+
+* Для растровых тайлов: перейдите в браузере по адресу (приведён пример для Москвы):
+
+   ```text
+   http://tiles-api.example.com/tiles?x=1237&y=640&z=11&v=1
+   ```
+
+   Должен отобразиться демонстрационный растровый тайл.
+
+* Для векторных тайлов в формате MVT: см. инструкцию в разделе [Экспорт векторных тайлов](/on-premise-api-platform/user-guide/vector-tiles).
+* Для других векторных тайлов: см. раздел [Тестирование MapGL JS API](#test-mapgl-js-api).
+
+#### Проверьте сервис MapGL JS API {#test-mapgl-js-api}
+
+Чтобы проверить работу сервиса MapGL JS API, используйте один из способов:
+
+* Перейдите в браузере по доменному имени или IP-адресу сервиса:
+
+  ```text
+  http://mapgl-js-api.example.com
+  ```
+
+* Если вы хотите поменять настройки инициализации карты, создайте файл `test.html` со следующим содержимым и запустите его в браузере:
+
+  ```html
+  <html>
+      <head>
+          <title>MapGL JS API. On-Premise</title>
+          <style>
+              #map {
+                  width: 100%;
+                  height: 100%;
+              }
+          </style>
+      </head>
+
+      <body>
+          <div id="map"></div>
+          <script src="//mapgl-js-api.example.com/api.js"></script>
+          <script>
+              const map = new mapgl.Map('map', {
+                  center: [55.31878, 25.23584],
+                  zoom: 13,
+                  useRtlTextPlugin: 'always-on', // отображение текстов на арабском языке справа налево
+              });
+          </script>
+      </body>
+  </html>
+  ```
+
+  Должна отобразиться демонстрационная векторная карта, которая использует векторные тайлы, получаемые от сервиса Tiles API.
+
+  В этом случае опции [style](/mapgl/reference/interface#map-options/style) и [styleOptions](/mapgl/reference/interface#style-options) не указываются, и их значения будут разрешены по умолчанию относительно [MAPGL\_HOST](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/README.md#environment-variables). Если вы планируете использовать собственные стили, см. [проверку Styles API](#test-styles-api).
+
+#### Проверьте сервис Static API {#test-static-api}
+
+1. Выберите произвольные координаты (широта, долгота) на доступной территории.
+ 
+2. Сформируйте ссылку:
+
+    ```
+    https://staticmaps.example.com/static/2.0?s=640x400&pt={lat,lon}&z=13&key=YOUR_KEY
+    ```
+
+    Где:
+    * `s` — размер изображения в пикселях.
+    * `pt` — координаты маркера (широта, долгота).
+    * `z` — уровень масштабирования (от 1 до 18). Чем больше число, тем подробнее карта.
+    * `key` — API-ключ для доступа к сервису (если для параметра `app.access.enabled` указано значение `true`).
+  
+3. Откройте сформированную ссылку в браузере. При успешном ответе вы получите изображение карты в формате PNG.
+
+#### Проверьте сервис Styles API {#test-styles-api}
+
+Чтобы подключить пользовательский стиль карты, установите [Менеджер Платформы](/on-premise-api-platform/installation#install-pm) и выполните шаги по [загрузке и применению стиля](/on-premise-api-platform/user-guide/platform-manager#adding-map-style).
