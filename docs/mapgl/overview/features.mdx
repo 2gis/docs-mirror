@@ -5,6 +5,10 @@ sidebar: mapgljsapi
 
 MapGL JS API — это JavaScript-библиотека, при помощи которой вы можете добавить карту <Brand /> в ваше веб-приложение или сайт.
 
+<CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_vector" target="_blank">
+   В кабинет
+</CtaButton>
+
 Библиотека позволяет:
 
 * Добавлять трехмерную карту, использующую технологию WebGL и картографические данные <Brand />, в веб-приложения и сайты.
@@ -20,18 +24,48 @@ MapGL JS API — это JavaScript-библиотека, при помощи к�
 
 Картографические данные поддерживают [стандарты OGC](https://ru.wikipedia.org/wiki/Open_Geospatial_Consortium).
 
-<CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_vector" target="_blank">
-   В кабинет
-</CtaButton>
+Попробуйте переместить центр карты ниже и изменить масштаб и наклон, чтобы оценить иммерсивный графический режим MapGL JS API:
 
-<br />
-<br />
-
-:::warning
-
-Используйте только описанные в документации поля и методы MapGL JS API. Обратная совместимость для недокументированных возможностей не гарантирована.
-
-:::
+<HtmlExampleWithSrcCode iframeStyles={{ height: '350px' }}>
+{`
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MapGL JS API</title>
+        <meta name="description" content="Карта MapGL JS API" />
+        <style>
+            html,
+            body,
+            #container {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="__MAPGL_API_URL__"></script>
+        <script>
+            const map = new mapgl.Map('container', {
+                center: [37.643659, 55.746647],
+                zoom: 17.5,
+                pitch: 45,
+                rotation: 1000,
+                key: 'Your API access key',
+                graphicsPreset: 'immersive',
+                style: '8780eed4-0428-4982-b615-aa6cf04d8f5f',
+                styleState: {
+                    immersiveRoadsOn: true,
+                },
+            });
+        </script>
+    </body>
+</html>
+`}
+</HtmlExampleWithSrcCode>
 
 ## Помощь {#support}
 
@@ -41,3 +75,9 @@ MapGL JS API — это JavaScript-библиотека, при помощи к�
    <CtaButton href="https://dev.2gis.ru/api/map-tiles" target="_blank" appearance="lightFill">
      Получить консультацию
    </CtaButton>
+
+:::warning
+
+Используйте только описанные в документации поля и методы MapGL JS API. Обратная совместимость для недокументированных возможностей не гарантирована.
+
+:::

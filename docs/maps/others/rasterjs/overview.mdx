@@ -5,19 +5,54 @@ sidebar: rasterjsapi
 
 RasterJS API — это JavaScript-библиотека, с помощью которой вы можете добавить двумерную карту <Brand /> на ваш сайт.
 
+<CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_raster" target="_blank">
+   В кабинет
+</CtaButton>
+
 Библиотека позволяет:
 
 * создавать интерактивные карты на веб-странице;
 * показывать на карте маркеры, попапы и геометрические объекты;
 * определять координаты геообъектов по их названиям и названия по координатам.
 
+<HtmlExampleWithSrcCode iframeStyles={{ height: '350px' }}>
+{`
+<html>
+
+<head>
+    <title>RasterJS API</title>
+    <meta name="description" content="Карта RasterJS API" />
+    <script src="https://maps.api.2gis.ru/2.0/loader.js"></script>
+    <style>
+        html,
+        body,
+        #map {
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        DG.then(function () {
+            DG.map('map', {
+                center: [55.768005, 37.615655],
+                zoom: 13,
+                key: 'Your API access key',
+            });
+        });
+    </script>
+</body>
+
+</html>
+`}
+</HtmlExampleWithSrcCode>
+
 Вы можете посмотреть примеры использования библиотеки в документации [RasterJS API](/maps/others/rasterjs/examples/base).
 
 Исходный код RasterJS API доступен на [GitHub](https://github.com/2gis/mapsapi), проект открыт к предложениям и пулл-реквестам.
-
-<CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=api_raster" target="_blank">
-   В кабинет
-</CtaButton>
 
 ## Тарифы и лимиты {#tariffs}
 

@@ -32,184 +32,474 @@ Routing API позволяет строить на карте маршруты �
 
 Используйте интерактивный пример ниже, чтобы построить маршрут на автомобиле. Максимальная длина маршрута в примере — 50 км.
 
-<HtmlExampleWithSrcCode iframeStyles={{ height: '350px' }}>
+<HtmlExampleWithSrcCode iframeStyles={{ height: '500px' }}>
 {`
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Routing API</title>
-    <meta name="description" content="Построение маршрутов через Routing API" />
-    <style>
-        html,
-        body,
-        #container {
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Routing API</title>
+  <meta name="description" content="Построение маршрутов с помощью Routing API" />
+  <style>
+    html,
+    body,
+    #container {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-        .controls {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
+    .start-banner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      background: #F2F2F2;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+      text-align: center;
+      z-index: 1000;
+    }
 
-        .controls button {
-            padding: 5px 10px;
-            font-size: 14px;
-            border: none;
-            border-radius: 5px;
-            background-color: #0078FF;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
+    .controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 240px;
+      border-color: #D7D7D7;
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 8px 8px;
+      z-index: 10;
+    }
 
-        .controls button:disabled {
-            background: #f2f2f2;
-            color: #6e6d6d;
-            cursor: not-allowed;
-        }
-    </style>
+    .select-group {
+      margin-top: 2px;
+      margin-bottom: 12px;
+    }
+
+    .select-group label {
+      font-family: 'Arial';
+      font-size: 14px;
+      color: #626262;
+      padding: 0px 24px 8px 0px;
+    }
+
+    .select-group select {
+      margin-top: 4px;
+      border-color: #D7D7D7;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 8px 24px 8px 8px;
+      background:
+        url("/img/drop-down.svg") no-repeat right 12px center,
+        #F2F2F2;
+      background-size: 14px 14px;
+      box-sizing: border-box;
+    }
+
+    .select:active {
+      background-color: #F2F2F2;
+      color: #262626;
+    }
+
+    .select:hover {
+      background-color: #F2F2F2;
+      color: #0041C3;
+    }
+
+    .select:disabled {
+      background-color: #F2F2F2;
+      color: #929292;
+      cursor: not-allowed;
+    }
+
+    .controls-button-calculate, .controls-button-reset {
+      border: none;
+      border-radius: 6px;
+      padding: 8px 8px;
+      font-family: 'Arial';
+      font-size: 16px;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .select-group + .controls-button-calculate {
+      margin-top: 20px;
+    }
+
+    .controls-button-calculate + .controls-button-reset {
+      margin-top: 8px;
+    }
+
+    .controls-button-calculate:active, .controls-button-calculate:enabled {
+      background-color: #0041C3;
+      color: #E5E5E5;
+    }
+
+    .controls-button-reset:active, .controls-button-reset:enabled {
+      background-color: #F2F2F2;
+      color: #262626;
+    }
+
+    .controls-button-calculate:hover {
+      background-color: #0028A6;
+      color: #F2F2F2;
+    }
+
+    .controls-button-reset:hover {
+      background-color: #E5E5E5;
+      color: #0041C3;
+    }
+
+    .controls-button-calculate:disabled, .controls-button-reset:disabled {
+      background-color: #E5E5E5;
+      color: #929292;
+      cursor: not-allowed;
+    }
+
+    .instructions-container {
+      position: absolute;
+      top: 80px;
+      right: 50px;
+      background: #FFFFFF;
+      padding: 12px 16px;
+      border-radius: 6px;
+      width: 250px;
+      height: 350px;
+      z-index: 10;
+      overflow-y: auto;
+    }
+
+    .instructions-container h3 {
+      margin: 0 0 10px 0;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+    }
+
+    .instructions-container p {
+      margin: 0 0 8px 0;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+      background: #F2F2F2;
+      padding: 12px 16px;
+      border-radius: 6px;
+    }
+
+    .route-info-container {
+      position: absolute;
+      top: 10px;
+      right: 50px;
+      width: 250px;
+      background: #FFFFFF;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+      text-align: left;
+      z-index: 10;
+      white-space: pre-line;
+    }
+  </style>
 </head>
 
 <body>
-    <div id="container"></div>
-    <div class="controls">
-        <button id="resetButton" disabled>Выберите две точки на карте</button>
+  <div id="container"></div>
+  <div class="controls">
+    <div class="select-group">
+      <label for="transportSelect">Транспорт</label>
+      <select id="transportSelect" name="transport">
+        <option value="driving" selected>Автомобиль</option>
+        <option value="taxi">Такси</option>
+        <option value="bicycle">Велосипед</option>
+        <option value="scooter">Самокат</option>
+        <option value="motorcycle">Мотоцикл</option>
+        <option value="truck">Грузовик</option>
+        <option value="walking">Пешком</option>
+      </select>
     </div>
-    <script src="__MAPGL_API_URL__"></script>
-    <script>
-        const reqUrl = \`https://routing.api.2gis.com/routing/7.0.0/global?key=Your directions API access key\`;
+    <button id="calculateButton" class="controls-button-calculate" disabled>Рассчитать маршрут</button>
+    <button id="resetButton" class="controls-button-reset">Сбросить точки</button>
+    <div class="tooltip" id="tooltip" style="display:none;"></div>
+  </div>
+  <div id="startBanner" class="start-banner">
+    Отметьте три точки на карте
+  </div>
+  <script src="__MAPGL_API_URL__"></script>
+  <script>
+    const reqUrl = "https://routing.api.2gis.com/routing/7.0.0/global?key=Your directions API access key";
 
-        const map = new mapgl.Map('container', {
-            center: [37.619655, 55.758005],
-            zoom: 13,
-            key: 'Your API access key',
-        });
+    const map = new mapgl.Map('container', {
+      center: [37.615655, 55.768005],
+      zoom: 11.5,
+      key: 'Your API access key',
+    });
 
-        const markers = [];
-        let firstPoint = null;
-        let secondPoint = null;
-        let routeLine = null;
-        let selecting = 'a';
-        const resetButton = document.getElementById('resetButton');
+    const startBanner = document.getElementById('startBanner');
+    map.on('click', () => {
+      if (startBanner) {
+        startBanner.style.display = 'none';
+      }
+    });
 
-        resetButton.addEventListener('click', () => {
-            selecting = 'a';
-            firstPoint = null;
-            secondPoint = null;
-            if (routeLine) routeLine.destroy();
-            markers.forEach((marker) => marker.destroy());
-            markers.length = 0;
-            resetButton.disabled = true;
-            resetButton.textContent = 'Выберите две точки на карте';
-        });
+    const markers = [];
+    let firstPoint = null;
+    let secondPoint = null;
+    let thirdPoint = null;
+    let routeLine = null;
+    let selecting = 'a';
 
-        map.on('click', (event) => {
-            if (!event || !event.lngLat || !Array.isArray(event.lngLat) || event.lngLat.length !== 2) {
-                console.error("Invalid click event: lngLat is undefined or invalid");
-                return;
-            }
+    const resetButton = document.getElementById('resetButton');
+    const transportSelect = document.getElementById('transportSelect');
+    const calculateButton = document.getElementById('calculateButton');
+    const transportControls = document.querySelector('.controls');
+    let transport = transportSelect.value;
+    const transportFilters = [
+      { id: 'btnDriving', transport: 'driving', filters: ["dirt_road", "toll_road", "ferry"] },
+      { id: 'btnTaxi', transport: 'taxi', filters: ["dirt_road", "toll_road", "ferry"] },
+      { id: 'btnBicycle', transport: 'bicycle', filters: ["ban_car_road", "ban_stairway"] },
+      { id: 'btnScooter', transport: 'scooter', filters: ["ban_car_road", "ban_stairway"] },
+      { id: 'btnMotorcycle', transport: 'motorcycle', filters: ["dirt_road", "toll_road", "ferry"] },
+      { id: 'btnTruck', transport: 'truck', filters: ["dirt_road", "toll_road"] },
+      { id: 'btnWalking', transport: 'walking', filters: ["dirt_road", "ferry", "highway"] },
+    ];
 
-            const [lng, lat] = event.lngLat;
+    function removeElements(selectors) {
+      selectors.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+          element.remove();
+        }
+      });
+    }
 
-            console.log(\`Координаты: \${lng}, \${lat}\`);
+    function clearRouteLine() {
+      if (routeLine) {
+        routeLine.destroy();
+        routeLine = null;
+      }
+    }
 
-            const dotIcon = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+bWlkZGxlYnVsbGV0PC90aXRsZT48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1IDUpIiBmaWxsPSJub25lIj48Y2lyY2xlIGZpbGw9IiMwMDAiIGN4PSI1IiBjeT0iNSIgcj0iNCIvPjxjaXJjbGUgc3Ryb2tlPSIjMDA4MUYyIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9IiNGRkYiIGN4PSI1IiBjeT0iNSIgcj0iNSIvPjwvZz48L3N2Zz4='
+    resetButton.addEventListener('click', () => {
+      selecting = 'a';
+      firstPoint = null;
+      secondPoint = null;
+      thirdPoint = null;
+      clearRouteLine();
+      markers.forEach(m => m.destroy());
+      markers.length = 0;
+      transportSelect.disabled = false;
+      calculateButton.disabled = true;
+      routeLine = null;
+      removeElements(['.instructions-container', '.route-info-container']);
+      if (startBanner) startBanner.style.display = 'block';
+    });
 
-            if (selecting !== 'end') {
-                const marker = new mapgl.Marker(map, {
-                    coordinates: [lng, lat],
-                    icon: dotIcon,
-                });
-                markers.push(marker);
-            }
+    map.on('click', (event) => {
+      if (!event?.lngLat) return;
+      const [lng, lat] = event.lngLat;
 
-            if (selecting === 'a') {
-                firstPoint = { lon: lng, lat: lat };
-                selecting = 'b';
-            } else if (selecting === 'b') {
-                secondPoint = { lon: lng, lat: lat };
-                selecting = 'end';
-            }
-
-            if (firstPoint && secondPoint) {
-                fetchRoute([firstPoint, secondPoint]);
-
-                resetButton.disabled = false;
-                resetButton.textContent = 'Сбросить точки';
-            }
-        });
-
-        function fetchRoute(points) {
-            fetch(reqUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    points,
-                    locale: "ru",
-                    transport: "driving",
-                    filters: ["dirt_road", "toll_road", "ferry"],
-                    output: "detailed"
-                })
-            })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(\`Ошибка HTTP! Статус: \${res.status}\`);
-                    }
-                    return res.json();
-                })
-                .then((parsed) => {
-                    if (parsed.result && parsed.result.length > 0) {
-                        const coordinates = parsed.result[0].maneuvers
-                            .flatMap((maneuver) => {
-                                if (
-                                    maneuver.outcoming_path &&
-                                    maneuver.outcoming_path.geometry &&
-                                    maneuver.outcoming_path.geometry.length > 0
-                                ) {
-                                    return maneuver.outcoming_path.geometry
-                                        .flatMap((geometry) => {
-                                            const selection = geometry.selection;
-                                            return selection
-                                                .replace("LINESTRING(", "")
-                                                .replace(")", "")
-                                                .split(",")
-                                                .map((point) => point.trim().split(" ").map(Number));
-                                        });
-                                }
-                                return [];
-                            });
-
-                        if (coordinates.length > 0) {
-                            renderRoute(coordinates);
-                        } else {
-                            console.error("Координаты не найдены в ответе");
-                        }
-                    } else {
-                        console.error("Маршрут не найден в ответе");
-                    }
-                })
-                .catch((err) => console.error("Ошибка при получении данных маршрута:", err.message || err));
+      if (selecting !== 'end') {
+        let iconUrl;
+        if (selecting === 'a') {
+          iconUrl = 'https://disk.2gis.com/styles/assets/icons/start-2ec1e40c6a9f2b81815b42a4932012e3d6eda12e44b8591415424847c0f35260.svg';
+        } else if (selecting === 'b') {
+          iconUrl = 'https://disk.2gis.com/styles/assets/icons/interim_bus-fd37296da07136cf6815877ce3e1632b91571a77431cd79dc2d05b1d87a736ef.svg';
+        } else if (selecting === 'c') {
+          iconUrl = 'https://disk.2gis.com/styles/assets/icons/finish-22966aee51020ebd9f1a6c0a4a5e4333cb5f8a18fbffeeee693b7e18e6e5df78.svg';
         }
 
-        function renderRoute(coordinates) {
-            if (routeLine) {
-                routeLine.destroy();
-            }
-            routeLine = new mapgl.Polyline(map, {
-                coordinates,
-                width: 6,
-                color: "#0078FF",
+        const marker = new mapgl.Marker(map, {
+          coordinates: [lng, lat],
+          icon: iconUrl,
+          zIndex: 1000,
+        });
+        markers.push(marker);
+      }
+
+      if (selecting === 'a') {
+        firstPoint = { lon: lng, lat: lat };
+        selecting = 'b';
+      } else if (selecting === 'b') {
+        secondPoint = { lon: lng, lat: lat };
+        selecting = 'c';
+      } else if (selecting === 'c') {
+        thirdPoint = { lon: lng, lat: lat };
+        selecting = 'end';
+      }
+
+      if (firstPoint && secondPoint && thirdPoint) {
+        transportSelect.disabled = false;
+        calculateButton.disabled = false;
+        if (startBanner) startBanner.style.display = 'none';
+      }
+    });
+
+    transportSelect.addEventListener('change', () => {
+      transport = transportSelect.value;
+    });
+
+    calculateButton.addEventListener('click', () => {
+      if (!(firstPoint && secondPoint && thirdPoint)) return;
+      const filters = transportFilters[transport] || [];
+      fetchRoute([firstPoint, secondPoint, thirdPoint], transport, filters);
+    });
+
+    transportFilters.forEach(({ id, transport, filters }) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        fetchRoute([firstPoint, secondPoint, thirdPoint], transport, filters);
+      });
+    });
+
+    function fetchRoute(points, transport, filters) {
+      const pointTypes = {
+        stop: ["driving", "taxi", "bicycle", "scooter", "motorcycle", "truck"],
+        walking: ["walking"],
+      };
+
+      const startPointType = pointTypes.stop.includes(transport) ? "stop" : "walking";
+      const endPointType = pointTypes.stop.includes(transport) ? "stop" : "walking";
+
+      const formattedPoints = [
+        { lon: points[0].lon, lat: points[0].lat, type: startPointType, start: true },
+        { lon: points[1].lon, lat: points[1].lat, type: "pref" },
+        { lon: points[2].lon, lat: points[2].lat, type: endPointType },
+      ];
+
+      const requestBody = {
+        points: formattedPoints,
+        locale: "ru",
+        transport,
+        filters,
+        output: "detailed",
+      };
+
+      if (transport === "walking") {
+        requestBody.params = {
+          pedestrian: {
+            use_instructions: true
+          }
+        };
+      }
+
+      fetch(reqUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('HTTP error! Status: ' + res.status);
+          }
+          return res.json();
+        })
+        .then((parsed) => {
+          if (parsed.result && parsed.result.length > 0) {
+            const totalDuration = parsed.result[0].ui_total_duration || 0;
+            const totalDistanceValue = parsed.result[0].ui_total_distance.value || 0;
+            const totalDistanceUnit = parsed.result[0].ui_total_distance.unit || 0;
+
+            showRouteInfo(totalDuration, totalDistanceValue, totalDistanceUnit);
+
+            const maneuvers = parsed.result[0].maneuvers;
+            const coordinates = maneuvers.flatMap((maneuver) => {
+              if (
+                maneuver.outcoming_path &&
+                maneuver.outcoming_path.geometry &&
+                maneuver.outcoming_path.geometry.length > 0
+              ) {
+                return maneuver.outcoming_path.geometry
+                  .flatMap((geometry) => {
+                    const selection = geometry.selection;
+                    return selection
+                      .replace("LINESTRING(", "")
+                      .replace(")", "")
+                      .split(",")
+                      .map((point) => point.trim().split(" ").map(Number));
+                  });
+              }
+              return [];
             });
-        }
-    </script>
+
+            if (coordinates.length > 0) {
+              renderRoute(coordinates);
+              renderManeuvers(maneuvers);
+            } else {
+              console.error("No coordinates found in response");
+            }
+          } else {
+            console.error("No route found in response");
+          }
+        });
+    }
+
+    function showRouteInfo(duration, distanceValue, distanceUnit) {
+      const routeInfoContainer = document.querySelector('.route-info-container') || document.createElement('div');
+      routeInfoContainer.className = 'route-info-container';
+      routeInfoContainer.innerHTML = 'Время в пути: ' + duration + '<br />Длина маршрута: ' + distanceValue + ' ' + distanceUnit;
+      if (!routeInfoContainer.parentNode) {
+        document.body.appendChild(routeInfoContainer);
+      }
+    }
+
+    function renderManeuvers(maneuvers) {
+      removeElements(['.instructions-container']);
+
+      const instructionsContainer = document.createElement('div');
+      instructionsContainer.className = 'instructions-container';
+
+      const title = document.createElement('h3');
+      title.textContent = 'Инструкции для маршрута';
+      instructionsContainer.appendChild(title);
+
+      maneuvers.forEach((maneuver, index) => {
+        const instruction = document.createElement('p');
+        let comment = maneuver.comment || '—';
+        const outcomingPathComment = maneuver.outcoming_path_comment || '';
+        if (comment === 'start') comment = 'Старт';
+        if (comment === 'finish') comment = 'Финиш';
+        instruction.textContent = (index + 1) + '. ' + comment + (outcomingPathComment ? ' (' + outcomingPathComment + ')' : '');
+        instructionsContainer.appendChild(instruction);
+      });
+
+      document.body.appendChild(instructionsContainer);
+
+      resetButton.onclick = () => {
+        clearRouteLine();
+        removeElements(['.instructions-container', '.route-info-container']);
+        resetButton.textContent = 'Сбросить точки';
+      };
+    }
+
+    function renderRoute(coordinates) {
+      if (routeLine) {
+        routeLine.destroy();
+      }
+      routeLine = new mapgl.Polyline(map, {
+        coordinates,
+        width: 6,
+        color: "#0041C3",
+      });
+    }
+  </script>
 </body>
 
 </html>`}

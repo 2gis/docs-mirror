@@ -13,6 +13,145 @@ sidebar: staticapi
 * в приложениях, где не нужна интерактивность;
 * на страницах, предназначенных для печати (например, листах доставки).
 
+Попробуйте изменить размер изображения, координаты центра карты и её масштаб, чтобы получить нужный фрагмент карты и готовый запрос к Static API:
+
+<HtmlExampleWithSrcCode iframeStyles={{ height: '630px' }}>
+{`
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static API</title>
+    <meta name="description" content="Карта Static API" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            margin: 0px 0px;
+        }
+
+        .controls label {
+            font-family: Arial;
+            font-size: 14px;
+            color: #6e6d6d;
+        }
+
+        .controls input {
+            border: 1px solid #ccc;
+            padding: 3px 7px;
+            font-family: Arial;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .controls button {
+            padding: 6px 10px;
+            font-family: Arial;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            background: #0078FF;
+            color: white;
+            cursor: pointer;
+            width: 180px;
+        }
+
+        .controls button:disabled {
+            background: #f2f2f2;
+            color: #6e6d6d;
+            cursor: not-allowed;
+        }
+
+        .code {
+            margin: 10px 0px;
+            padding: 16px 20px;
+            background: #fafafa;
+            border: 1px solid #fafafa;
+            border-radius: 0px;
+            font-family: ptmono, monospace;
+            font-size: 13px;
+            color: #262626;
+            max-width: 870px;
+        }
+
+        #map {
+            display: block;
+            margin: 0px 0px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <label>
+            Размер изображения:
+            <input type="text" id="size" value="880x360">
+        </label>
+        <label>
+            Координаты центра:
+            <input type="text" id="center" value="55.768005,37.615655">
+        </label>
+        <label>
+            Масштаб:
+            <input type="number" id="zoom" value="13" min="1" max="18">
+        </label>
+        <button id="updateButton">Обновить карту</button>
+    </div>
+    <div class="code" id="generatedLink"></div>
+    <img id="map" src="" alt="Карта Static API" crossorigin="anonymous">
+
+    <script>
+        const sizeInput = document.getElementById('size');
+        const centerInput = document.getElementById('center');
+        const zoomInput = document.getElementById('zoom');
+        const updateButton = document.getElementById('updateButton');
+        const mapImage = document.getElementById('map');
+        const generatedLink = document.getElementById('generatedLink');
+
+        const updateMap = () => {
+            const size = sizeInput.value.trim();
+            const center = centerInput.value.trim();
+            const zoom = zoomInput.value.trim();
+
+            if (!size || !center || !zoom) {
+                alert('Заполните все поля');
+                return;
+            }
+
+            const [width, height] = size.split('x').map(Number);
+
+            if (width < 120 || width > 1280 || height < 90 || height > 1280 || zoom < 1 || zoom > 18) {
+                alert('Проверьте значения: ширина 120-1280, высота 90-1280, масштаб 1-18');
+                return;
+            }
+
+            const key = 'Your API access key';
+
+            const mapUrl = \`https://static.maps.2gis.com/2.0?s=\${size}&c=\${center}&z=\${zoom}&key=\${key}\`;
+            mapImage.src = mapUrl;
+            generatedLink.textContent = \`https://static.maps.2gis.com/2.0?s=\${size}&c=\${center}&z=\${zoom}&key=API_KEY\`;
+        };
+
+        updateButton.addEventListener('click', updateMap);
+
+        updateMap();
+    </script>
+</body>
+
+</html>`}
+</HtmlExampleWithSrcCode>
+
 ## Начало работы {#getting-started}
 
 ### 1. Получите ключ доступа {#get-access-key}

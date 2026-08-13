@@ -19,7 +19,6 @@ Distance Matrix API поддерживает два режима работы:
 </CtaButton>
 
 <br />
-<br />
 
 :::tip
 
@@ -29,123 +28,522 @@ Distance Matrix API возвращает только краткую инфор�
 
 ## Пример работы {#example-usage}
 
-Наведите курсор на метку на карте, чтобы узнать расстояние и время езды до неё на автомобиле от точки отправления.
+Пример использования Distance Matrix API в синхронном режиме:
 
-<HtmlExampleWithSrcCode iframeStyles={{ height: '400px' }}>
+<HtmlExampleWithSrcCode iframeStyles={{ height: '500px' }}>
 {`
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Distance Matrix API</title>
-        <meta name="description" content="Вычисление матриц расстояний и времени в пути для нескольких точек назначения с помощью Distance Matrix API" />
-        <style>
-            html,
-            body,
-            #container {
-                margin: 0;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
-            #tooltip {
-                padding: 12px 16px;
-                background: #fff;
-                box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-                border-radius: 4px;
-                display: none;
-                position: fixed;
-                pointer-events: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="container"></div>
-        <div id="tooltip"></div>
-        <script src="__MAPGL_API_URL__"></script>
-        <script>
-            const reqUrl = \`https://routing.api.2gis.com/get_dist_matrix?key=Your directions API access key&version=2.0\`;
 
-            const map = new mapgl.Map('container', {
-                center: [37.615655, 55.768005],
-                zoom: 11,
-                key: 'Your API access key',
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distance Matrix API</title>
+  <meta name="description" content="Вычисление расстояний и времени в пути с помощью Distance Matrix API" />
+  <style>
+    html,
+    body,
+    #container {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .start-banner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      background: #F2F2F2;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 240px;
+      border-color: #D7D7D7;
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 8px 8px;
+      z-index: 10;
+    }
+
+    .select-group {
+      margin-top: 2px;
+      margin-bottom: 12px;
+    }
+
+    .select-group label {
+      font-family: 'Arial';
+      font-size: 14px;
+      color: #626262;
+      padding: 0px 24px 8px 0px;
+    }
+
+    .select-group select {
+      margin-top: 4px;
+      border-color: #D7D7D7;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 8px 24px 8px 8px;
+      background:
+        url("/img/drop-down.svg") no-repeat right 12px center,
+        #F2F2F2;
+      background-size: 14px 14px;
+      box-sizing: border-box;
+    }
+
+    .select:active {
+      background-color: #F2F2F2;
+      color: #262626;
+    }
+
+    .select:hover {
+      background-color: #F2F2F2;
+      color: #0041C3;
+    }
+
+    .select:disabled {
+      background-color: #F2F2F2;
+      color: #929292;
+      cursor: not-allowed;
+    }
+
+    .controls-button-calculate, .controls-button-reset {
+      border: none;
+      border-radius: 6px;
+      padding: 8px 8px;
+      font-family: 'Arial';
+      font-size: 16px;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .select-group + .controls-button-calculate {
+      margin-top: 20px;
+    }
+
+    .controls-button-calculate + .controls-button-reset {
+      margin-top: 8px;
+    }
+
+    .controls-button-calculate:active, .controls-button-calculate:enabled {
+      background-color: #0041C3;
+      color: #E5E5E5;
+    }
+
+    .controls-button-reset:active, .controls-button-reset:enabled {
+      background-color: #F2F2F2;
+      color: #262626;
+    }
+
+    .controls-button-calculate:hover {
+      background-color: #0028A6;
+      color: #F2F2F2;
+    }
+
+    .controls-button-reset:hover {
+      background-color: #E5E5E5;
+      color: #0041C3;
+    }
+
+    .controls-button-calculate:disabled, .controls-button-reset:disabled {
+      background-color: #E5E5E5;
+      color: #929292;
+      cursor: not-allowed;
+    }
+
+    .tooltip {
+      position: fixed;
+      background: #FFFFFF;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+      text-align: left;
+      z-index: 20;
+      display: none;
+      white-space: pre-line;
+    }
+
+    .matrix-table-container {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: #FFFFFF;
+      padding: 8px 8px;
+      border-radius: 6px;
+      z-index: 10;
+      max-width: 90%;
+    }
+
+    .matrix-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+    }
+
+    .matrix-table th,
+    .matrix-table td {
+      border: 1px solid #D7D7D7;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .matrix-table th {
+      background: #F2F2F2;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <div class="controls">
+    <div class="select-group">
+      <label for="transportSelect">Транспорт</label>
+      <select id="transportSelect" name="transport">
+        <option value="driving" selected>Автомобиль</option>
+        <option value="taxi">Такси</option>
+        <option value="bicycle">Велосипед</option>
+        <option value="scooter">Самокат</option>
+        <option value="motorcycle">Мотоцикл</option>
+        <option value="truck">Грузовик</option>
+        <option value="walking">Пешком</option>
+      </select>
+    </div>
+    <button id="calculateButton" class="controls-button-calculate" disabled>Рассчитать маршрут</button>
+    <button id="resetButton" class="controls-button-reset">Сбросить точки</button>
+    <div class="tooltip" id="tooltip" style="display:none;"></div>
+  </div>
+  <div id="startBanner" class="start-banner">
+    Отметьте на карте по порядку три точки отправления и три точки назначения
+  </div>
+  <script src="__MAPGL_API_URL__"></script>
+  <script>
+    const reqUrl = "https://routing.api.2gis.com/get_dist_matrix?key=Your directions API access key&version=2.0";
+
+    const map = new mapgl.Map('container', {
+      center: [37.615655, 55.768005],
+      zoom: 11.5,
+      key: 'Your API access key',
+    });
+
+    const startBanner = document.getElementById('startBanner');
+    map.on('click', () => {
+      if (startBanner) {
+        startBanner.style.display = 'none';
+      }
+    });
+
+    const startMarkers = [];
+    const finishMarkers = [];
+    let points = [];
+    let sources = [];
+    let targets = [];
+    let polylines = [];
+
+    const resetButton = document.getElementById('resetButton');
+    const transportSelect = document.getElementById('transportSelect');
+    const calculateButton = document.getElementById('calculateButton');
+    const tooltip = document.getElementById('tooltip');
+    let transport = transportSelect.value;
+
+    map.on('click', (event) => {
+      if (!event?.lngLat) return;
+      if (points.length >= 6) return;
+
+      const [lng, lat] = event.lngLat;
+      const markerOptions = {
+        coordinates: [lng, lat],
+        icon: points.length === 0
+          ? 'https://disk.2gis.com/styles/assets/icons/line10-dfd34cc8bb307bf445f15d2281ac18c17297d291e1db2cf95b4160615af8a7b8.svg'
+          : points.length === 1
+            ? 'https://disk.2gis.com/styles/assets/icons/line11-ec6b476db20af83278c478b487d14d2007f01bde48d7981c2899c96b848011e0.svg'
+            : points.length === 2
+              ? 'https://disk.2gis.com/styles/assets/icons/line13-a613ec85e32012d5f49ad26c03b218ca3e60799e6f62cc493b384df6ba15512f.svg'
+              : points.length === 3
+                ? 'https://disk.2gis.com/styles/assets/icons/line15-314f60e2c5fce3b433a7a300e46427449489e6aad0a63cce4087b8a907529feb.svg'
+                : points.length === 4
+                  ? 'https://disk.2gis.com/styles/assets/icons/line5-832d1c20c47476b223b472327df7bd60e8bfe37a5177194c76690d681bfd7dcf.svg'
+                  : 'https://disk.2gis.com/styles/assets/icons/line8-8603d8e18f2b318d029bca729fe262486f0bc3b897f21aa0725f1b834bcb0038.svg',
+        size: [25, 25],
+        zIndex: 1000,
+      };
+
+      const marker = new mapgl.Marker(map, markerOptions);
+      points.push({ lat, lon: lng });
+
+      if (points.length <= 3) {
+        startMarkers.push(marker);
+        sources.push(points.length - 1);
+      } else {
+        finishMarkers.push(marker);
+        targets.push(points.length - 1);
+      }
+
+      if (startBanner) {
+        startBanner.style.display = 'none';
+      }
+
+      if (points.length === 6) {
+        transportSelect.disabled = false;
+        calculateButton.disabled = false;
+
+        document.querySelectorAll('.controls-button[data-transport]').forEach(button => {
+          button.disabled = false;
+        });
+      }
+    });
+
+    document.querySelectorAll('.controls-button').forEach(button => {
+      button.addEventListener('click', function () {
+        document.querySelectorAll('.controls-button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        transport = this.dataset.transport;
+
+        if (points.length === 6) {
+          getDistanceMatrix();
+        }
+      });
+    });
+
+    calculateButton.addEventListener('click', () => {
+      if (points.length !== 6) return;
+      transport = transportSelect.value;
+      getDistanceMatrix();
+    });
+
+    resetButton.addEventListener('click', () => {
+      if (polylines.length > 0) {
+        polylines.forEach(polyline => polyline.destroy());
+        polylines.length = 0;
+      }
+
+      transportSelect.disabled = false;
+      calculateButton.disabled = true;
+      transportSelect.value = 'driving';
+      transport = transportSelect.value;
+
+      startMarkers.forEach(marker => marker.destroy());
+      finishMarkers.forEach(marker => marker.destroy());
+      startMarkers.length = 0;
+      finishMarkers.length = 0;
+
+      points = [];
+      sources = [];
+      targets = [];
+
+      const existingTable = document.getElementById('matrixTable');
+      if (existingTable) {
+        existingTable.remove();
+      }
+
+      document.querySelectorAll('.controls-button').forEach(button => {
+        if (button !== resetButton) {
+          button.disabled = true;
+          button.classList.remove('active');
+        }
+      });
+
+      if (startBanner) {
+        startBanner.style.display = 'block';
+      }
+    });
+
+    function displayMatrix(matrix) {
+      const existingTable = document.getElementById('matrixTable');
+      if (existingTable) {
+        existingTable.remove();
+      }
+
+      const tableContainer = document.createElement('div');
+      tableContainer.id = 'matrixTable';
+      tableContainer.className = 'matrix-table-container';
+
+      const table = document.createElement('table');
+      table.className = 'matrix-table';
+
+      const headerRow = document.createElement('tr');
+      const emptyHeader = document.createElement('th');
+      emptyHeader.textContent = '';
+      headerRow.appendChild(emptyHeader);
+
+      points.slice(0, 3).forEach((point, index) => {
+        const headerCell = document.createElement('th');
+        headerCell.textContent = String.fromCharCode(68 + index); // D, E, F
+        headerRow.appendChild(headerCell);
+      });
+
+      table.appendChild(headerRow);
+
+      matrix.forEach((row, rowIndex) => {
+        const tableRow = document.createElement('tr');
+
+        const rowHeader = document.createElement('th');
+        rowHeader.textContent = String.fromCharCode(65 + rowIndex); // A, B, C
+        tableRow.appendChild(rowHeader);
+
+        row.forEach((cell, colIndex) => {
+          const tableCell = document.createElement('td');
+          tableCell.innerHTML = 'Длина маршрута: ' + (cell.distance / 1000).toFixed(2) + ' км<br />' + 'Время в пути: ' + Math.round(cell.duration / 60) + ' мин';
+
+          tableCell.addEventListener('mouseover', () => {
+            const source = points[sources[rowIndex]];
+            const target = points[targets[colIndex]];
+
+            if (source && target) {
+              const polyline = new mapgl.Polyline(map, {
+                coordinates: [
+                  [source.lon, source.lat],
+                  [target.lon, target.lat]
+                ],
+                width: 8,
+                color: '#FFFFFF',
+                dashLength: 10,
+                gapLength: 10,
+                interactive: false
+              });
+
+              tableCell.polyline = polyline;
+            }
+          });
+
+          tableCell.addEventListener('mouseout', () => {
+            if (tableCell.polyline) {
+              tableCell.polyline.destroy();
+              tableCell.polyline = null;
+            }
+
+            tooltip.style.display = 'none';
+            map.off('mousemove');
+          });
+
+          tableRow.appendChild(tableCell);
+        });
+
+        table.appendChild(tableRow);
+      });
+
+      tableContainer.appendChild(table);
+      document.body.appendChild(tableContainer);
+    }
+
+    function getDistanceMatrix() {
+      polylines.forEach(l => l.destroy());
+      polylines.length = 0;
+      tooltip.style.display = 'none';
+      const body = {
+        points,
+        sources,
+        targets,
+        transport
+      };
+      fetch(reqUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('HTTP error! Status: ' + res.status);
+          }
+          return res.json();
+        })
+        .then(parsed => {
+          if (parsed.routes && parsed.routes.length > 0) {
+            drawRoutes(parsed.routes);
+
+            const matrix = [];
+            sources.forEach((sourceId, i) => {
+              const row = [];
+              targets.forEach((targetId, j) => {
+                const route = parsed.routes.find(r => r.source_id === sourceId && r.target_id === targetId);
+                if (route) {
+                  row.push({
+                    distance: route.distance,
+                    duration: route.duration
+                  });
+                } else {
+                  row.push({
+                    distance: 0,
+                    duration: 0
+                  });
+                }
+              });
+              matrix.push(row);
             });
 
-            function renderMarkersWithData(routes) {
-                function generateTooltipText(index) {
-                    const data = routes.find((item) => item.target_id === index);
-                    if (!data) return undefined;
-                    return 'Расстояние: ' + data.distance.toLocaleString() + ' м.<br>Время в пути: ' + Math.round(
-                        data.duration / 60,
-                    ) + ' мин.';
-                }
-                const tooltipEl = document.getElementById('tooltip');
+            displayMatrix(matrix);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
 
-                const startPoint = points.shift();
-                const marker = new mapgl.Marker(map, {
-                    coordinates: [startPoint.lon, startPoint.lat],
-                    label: {
-                        text: 'Точка отправления',
-                        fontSize: 13,
-                    },
-                });
+    function drawRoutes(routes) {
+      const colors = ["rgba(0, 65, 195, 0.5)", "rgba(28, 169, 30, 0.5)", "rgba(254, 185, 25, 0.5)"];
+      const sourceColors = {};
 
-                points.forEach((point, index) => {
-                    const marker = new mapgl.Marker(map, {
-                        coordinates: [point.lon, point.lat],
-                        icon: '__BASE_URL__/img/dotMarker.svg',
-                    });
-                    marker.on('mouseover', (event) => {
-                        const offset = 5;
-                        tooltipEl.style.top = \`\${event.point[1] + offset}px\`;
-                        tooltipEl.style.left = \`\${event.point[0] + offset}px\`;
-                        tooltipEl.innerHTML = generateTooltipText(index + 1);
-                        tooltipEl.style.display = 'block';
-                    });
-                    marker.on('mouseout', (e) => {
-                        tooltipEl.style.display = 'none';
-                    });
-                });
-            }
+      routes.forEach((route, idx) => {
+        const source = points[route.source_id];
+        const target = points[route.target_id];
 
-            const points = [
-                {
-                    lat: 55.716226,
-                    lon: 37.729171,
-                },
-                {
-                    lat: 55.723976,
-                    lon: 37.624403,
-                },
-                {
-                    lat: 55.71893,
-                    lon: 37.564967,
-                },
-                {
-                    lat: 55.730375,
-                    lon: 37.483024,
-                },
-            ];
+        if (!sourceColors[route.source_id]) {
+          sourceColors[route.source_id] = colors[Object.keys(sourceColors).length % colors.length];
+        }
 
-            fetch(reqUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    points,
-                    sources: [0],
-                    targets: [1, 2, 3],
-                    transport: 'driving',
-                    start_time: new Date().toISOString(),
-                }),
-            })
-                .then((res) => res.json())
-                .then((parsed) => renderMarkersWithData(parsed.routes))
-                .catch((err) => console.error('error', err));
-        </script>
-    </body>
-</html>
-`}
+        const polyline = new mapgl.Polyline(map, {
+          coordinates: [
+            [source.lon, source.lat],
+            [target.lon, target.lat]
+          ],
+          width: 5,
+          color: sourceColors[route.source_id],
+          interactive: true
+        });
+
+        polyline.on('mouseover', (event) => {
+          tooltip.innerHTML = 'Длина маршрута: ' + (route.distance / 1000).toFixed(2) + ' км<br />' + 'Время в пути: ' + Math.round(route.duration / 60) + ' мин';
+          tooltip.style.display = 'block';
+          const offset = 10;
+          tooltip.style.left = (event.point[0] + offset) + 'px';
+          tooltip.style.top = (event.point[1] + offset) + 'px';
+        });
+
+        polyline.on('mouseout', () => {
+          tooltip.style.display = 'none';
+        });
+
+        polylines.push(polyline);
+      });
+    }
+
+  </script>
+</body>
+
+</html>`}
 </HtmlExampleWithSrcCode>
+
+Чтобы отредактировать код примера, нажмите **Исходный код** и затем **Codepen**.
 
 ## Тарифы и лимиты {#tariffs}
 

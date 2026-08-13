@@ -30,146 +30,318 @@ Isochrone API позволяет строить на карте изохроны
 
 ## Пример работы {#example-usage}
 
-Чтобы построить зоны доступности на карте с помощью Isochrone API, воспользуйтесь интерактивным примером. Выберите направление движения, способ передвижения и время в пути.
-
-<HtmlExampleWithSrcCode iframeStyles={{ height: '400px' }}>
+<HtmlExampleWithSrcCode iframeStyles={{ height: '500px' }}>
 {`
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Isochrone API</title>
-    <meta name="description" content="Построение зон доступности с помощью Isochrone API" />
-    <style>
-        html,
-        body,
-        #container {
-            margin: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isochrone API</title>
+  <meta name="description" content="Построение зон доступности с помощью Isochrone API" />
+  <style>
+    html,
+    body,
+    #container {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-        select {
-            border: 0;
-            padding: 4px 10px;
-            font-size: 13px;
-            box-shadow: 0 1px 3px 0 rgba(38, 38, 38, 0.5);
-            border-radius: 4px;
-        }
-    </style>
+    .start-banner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      background: #F2F2F2;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      color: #262626;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 240px;
+      border-color: #D7D7D7;
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 8px 8px;
+      z-index: 10;
+    }
+
+    .select-group {
+      margin-top: 2px;
+      margin-bottom: 12px;
+    }
+
+    .select-group label {
+      font-family: 'Arial';
+      font-size: 14px;
+      color: #626262;
+      padding: 0px 24px 8px 0px;
+    }
+
+    .select-group select {
+      margin-top: 4px;
+      border-color: #D7D7D7;
+      border-radius: 6px;
+      font-family: 'Arial';
+      font-size: 16px;
+      display: block;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 8px 24px 8px 8px;
+      background:
+        url("/img/drop-down.svg") no-repeat right 12px center,
+        #F2F2F2;
+      background-size: 14px 14px;
+      box-sizing: border-box;
+    }
+
+    .select:active {
+      background-color: #F2F2F2;
+      color: #262626;
+    }
+
+    .select:hover {
+      background-color: #F2F2F2;
+      color: #0041C3;
+    }
+
+    .select:disabled {
+      background-color: #F2F2F2;
+      color: #929292;
+      cursor: not-allowed;
+    }
+
+  </style>
 </head>
 
 <body>
-    <div id="container"></div>
-    <div id="tooltip"></div>
-    <script src="__MAPGL_API_URL__"></script>
-    <script>
-        const reqUrl = \`https://routing.api.2gis.com/isochrone/2.0.0?key=Your directions API access key\`;
-        const start = {
-            lat: 55.762590,
-            lon: 37.668598,
-        };
+  <div id="container"></div>
+  <div class="controls">
+    <div class="select-group">
+      <label for="reverseSelect">Направление</label>
+      <select id="reverseSelect" name="reverse">
+        <option value="from" selected>От точки</option>
+        <option value="to">К точке</option>
+      </select>
+    </div>
+    <div class="select-group">
+      <label for="transportSelect">Транспорт</label>
+      <select id="transportSelect" name="transport">
+        <option value="driving" selected>Автомобиль</option>
+        <option value="walking">Пешком</option>
+        <option value="bicycle">Велосипед</option>
+        <option value="motorcycle">Мотоцикл</option>
+        <option value="public_transport">Общественный транспорт</option>
+      </select>
+    </div>
+    <div class="select-group" id="publicTransportGroup" style="display: none;">
+      <label for="publicTransportTypesSelect">Вид общественного транспорта</label>
+      <select id="publicTransportTypesSelect" name="publicTransportTypes">
+        <option value="bus" selected>Автобус</option>
+        <option value="metro">Метро</option>
+        <option value="tram">Трамвай</option>
+        <option value="trolleybus">Троллейбус</option>
+      </select>
+    </div>
+    <div class="select-group">
+      <label for="durationSelect">Время</label>
+      <select id="durationSelect" name="duration">
+        <option value="300">5 минут</option>
+        <option value="600" selected>10 минут</option>
+        <option value="900">15 минут</option>
+        <option value="1200">20 минут</option>
+      </select>
+    </div>
+  </div>
+  <div id="startBanner" class="start-banner">
+    Переставляйте точку на карте
+  </div>
+  <script src="__MAPGL_API_URL__"></script>
+  <script>
+    const reqUrl = "https://routing.api.2gis.com/isochrone/2.0.0?key=Your directions API access key";
+    let start = {
+      lat: 55.762590,
+      lon: 37.668598,
+    };
 
-        const map = new mapgl.Map('container', {
-            center: [start.lon, start.lat],
-            zoom: 12,
-            key: 'Your API access key',
-        });
+    const map = new mapgl.Map('container', {
+      center: [start.lon, start.lat],
+      zoom: 11.5,
+      key: 'Your API access key',
+    });
 
-        const controlsHtml = \`<div class="controls">
-                    <select name="reverse">
-                        <option value="to">К точке</option>
-                        <option value="from" selected>От точки</option>
-                    </select>
-                    <select name="transport">
-                        <option value="walking">Пешком</option>
-                        <option value="driving" selected>На автомобиле</option>
-                    </select>
-                    <select name="duration">
-                        <option value="600" selected>10 минут</option>
-                        <option value="1200">20 минут</option>
-                    </select>
-                </div>\`;
+    const startBanner = document.getElementById('startBanner');
+    map.on('click', () => {
+      if (startBanner) {
+        startBanner.style.display = 'none';
+      }
+    });
 
-        new mapgl.Control(map, controlsHtml, {
-            position: "topLeft"
-        });
+    const reverseSelectEl = document.getElementById('reverseSelect');
+    const transportSelectEl = document.getElementById('transportSelect');
+    const durationSelectEl = document.getElementById('durationSelect');
+    const publicTransportGroupEl = document.getElementById('publicTransportGroup');
+    const publicTransportTypesSelectEl = document.getElementById('publicTransportTypesSelect');
 
-        const reverseSelectEl = document.querySelector('select[name="reverse"]');
-        const transportSelectEl = document.querySelector('select[name="transport"]');
-        const durationSelectEl = document.querySelector('select[name="duration"]');
+    let startMarker = new mapgl.Marker(map, {
+      coordinates: [start.lon, start.lat],
+      zIndex: 1000,
+    });
 
-        const startMarker = new mapgl.Marker(map, {
-            coordinates: [start.lon, start.lat]
-        });
+    let polygonsOnMap = [];
 
-        let polygon;
-        function renderGeometries(geometry) {
-            if (polygon) {
-                polygon.destroy();
-            }
-            const coordinates = geometry
-                .replace("MULTIPOLYGON(((", "")
-                .replace(")))", "")
-                .split(",")
-                .map((point) => point.trim().split(" ").map(Number));
-            polygon = new mapgl.Polygon(map, {
-                coordinates: [coordinates],
-                strokeWidth: 3,
-                strokeColor: "#bb0000",
-                fillColor: "rgba(187, 0, 0, 0.3)"
-            });
+    function renderGeometries(geometry, transport) {
+      for (let polygon of polygonsOnMap) {
+        polygon.destroy();
+      }
+      polygonsOnMap = [];
+
+      if (transport === "public_transport") {
+        let polygon_groups = [];
+
+        const wkt_polygon_groups = geometry.replace("MULTIPOLYGON(((", "((").replace(")))", "))").split(")), ");
+        for (let wkt_polygon_group_str of wkt_polygon_groups) {
+          wkt_polygon_group_str = wkt_polygon_group_str.indexOf("))") == -1 ? wkt_polygon_group_str + "))" : wkt_polygon_group_str;
+          const wkt_polygon_group = wkt_polygon_group_str.replace("((", "(").replace("))", ")").split("), ");
+
+          let polygon_group = [];
+          for (let wkt_polygon_str of wkt_polygon_group) {
+            wkt_polygon_str = wkt_polygon_str.indexOf(")") == -1 ? wkt_polygon_str + ")" : wkt_polygon_str;
+            let polygon = wkt_polygon_str.replace("(", "").replace(")", "").split(",").map((point) => point.trim().split(" ").map(Number));
+
+            polygon_group.push(polygon);
+          }
+
+          polygon_groups.push(polygon_group);
         }
 
-        window.addEventListener("change", (evt) => {
-            if (
-                evt.target.name === "reverse" ||
-                evt.target.name === "transport" ||
-                evt.target.name === "duration"
-            ) {
-                updateGeometries();
-            }
+        for (let polygon_group of polygon_groups) {
+          polygon = new mapgl.Polygon(map, {
+            coordinates: polygon_group,
+            strokeWidth: 3,
+            strokeColor: '#B20709',
+            color: 'rgba(28, 169, 30, 0.25)'
+          });
+
+          polygonsOnMap.push(polygon);
+        }
+      } else {
+        const coordinates = geometry
+          .replace("MULTIPOLYGON(((", "")
+          .replace(")))", "")
+          .split(",")
+          .map((point) => point.trim().split(" ").map(Number));
+
+        const polygon = new mapgl.Polygon(map, {
+          coordinates: [coordinates],
+          strokeWidth: 3,
+          strokeColor: '#B20709',
+          color: 'rgba(28, 169, 30, 0.25)'
         });
+        polygonsOnMap.push(polygon);
+      }
+    }
+
+    window.addEventListener("change", (evt) => {
+      if (
+        evt.target.name === "reverse" ||
+        evt.target.name === "transport" ||
+        evt.target.name === "duration" ||
+        evt.target.name === "publicTransportTypes"
+      ) {
         updateGeometries();
+      }
+    });
 
-        function updateGeometries() {
-            const reverse = reverseSelectEl.value === "to";
-            const transport = transportSelectEl.value;
-            const duration = Number(durationSelectEl.value);
+    transportSelectEl.addEventListener("change", () => {
+      if (transportSelectEl.value === "public_transport") {
+        publicTransportGroupEl.style.display = "block";
+        reverseSelectEl.disabled = true;
+      } else {
+        publicTransportGroupEl.style.display = "none";
+        reverseSelectEl.disabled = false;
+      }
+    });
 
-            fetch(reqUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    start,
-                    durations: [duration],
-                    transport,
-                    reverse,
-                    format: "wkt",
-                    start_time: new Date().toISOString()
-                })
-            })
-                .then((res) => res.json())
-                .then((parsed) => {
-                    if (parsed.isochrones && parsed.isochrones.length > 0) {
-                        renderGeometries(parsed.isochrones[0].geometry);
-                    } else {
-                        console.error("Изохроны не найдены в ответе");
-                    }
-                })
-                .catch((err) => console.error("Ошибка при получении данных изохронов:", err));
-        }
-    </script>
+    map.on('click', (event) => {
+      if (!event?.lngLat) return;
+      const [lon, lat] = event.lngLat;
+      start = { lat, lon };
+      startMarker.setCoordinates([lon, lat]);
+      updateGeometries();
+
+      if (startBanner) {
+        startBanner.style.display = 'none';
+      }
+
+    });
+
+    updateGeometries();
+
+    function updateGeometries() {
+      for (let polygon of polygonsOnMap) {
+        polygon.destroy();
+      }
+      polygonsOnMap = [];
+
+      const transport = transportSelectEl.value;
+      const duration = Number(durationSelectEl.value);
+      const body = {
+        start,
+        durations: [duration],
+        transport,
+        format: "wkt",
+        start_time: new Date().toISOString()
+      };
+
+      if (transport === "public_transport") {
+        body.public_transport_types = [publicTransportTypesSelectEl.value];
+        delete body.reverse;
+      } else {
+        body.reverse = reverseSelectEl.value === "to";
+      }
+
+      fetch(reqUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('HTTP error! Status: ' + res.status);
+          }
+          return res.json();
+        })
+        .then((parsed) => {
+          if (parsed.isochrones && parsed.isochrones.length > 0) {
+            renderGeometries(parsed.isochrones[0].geometry, transport);
+          } else {
+            console.error("No isochrones found in response");
+          }
+        })
+        .catch((err) => console.error("Error fetching isochrone data:", err));
+    }
+  </script>
 </body>
 
 </html>`}
 </HtmlExampleWithSrcCode>
 
-Чтобы отредактировать код примера, нажмите **Source code** и далее **Edit on Codepen**.
+Чтобы отредактировать код примера, нажмите **Source code** и далее **Codepen**.
 
 ## Начало работы {#getting-started}
 
