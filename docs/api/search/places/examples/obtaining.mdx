@@ -1,0 +1,792 @@
+---
+sidebar: placesAPI
+---
+# Получение ID объектов
+
+В зависимости от задачи в некоторые запросы нужно передать ID объекта: здания, организации, города и т. д. Чтобы получить ID объекта, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) и укажите тип объекта в параметре `type`. Полный список типов см. в [Справочнике API](/api/search/places/reference/3.0/items).
+
+Ниже приведены примеры запросов для получения ID различных объектов.
+
+## ID категории {#rubric-id}
+
+ID категорий различаются в регионах. Чтобы найти организации в нужной категории, сначала получите ID региона, затем ID категории и отфильтруйте результаты поиска по категории организации. Для выполнения запроса ключу необходим доступ к [Regions API](/api/search/regions/overview) и [Categories API](/api/search/categories/overview).
+
+Чтобы получить ID категории, отправьте GET-запрос к [Categories API](/api/search/categories/overview) на [/2.0/catalog/rubric/search](/api/search/categories/reference/2.0/catalog/rubric/search) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например `q=кафе`.
+* `region_id` — ID региона, например `region_id=32`. Подробнее о получении ID см. в разделе [ID региона](#region-id).
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "2.0.21070",
+        "code": 200,
+        "issue_date": "20260730"
+    },
+    "result": {
+        "items": [
+            {
+                "alias": "kafe",
+                "branch_count": 6624,
+                "caption": "Кафе",
+                "id": "161",
+                "keyword": "Кафе",
+                "name": "Кафе",
+                "org_count": 5321,
+                "parent_id": "2",
+                "title": "Кафе",
+                "type": "rubric"
+            },
+            {
+                "alias": "bystroe_pitanie",
+                "branch_count": 14324,
+                "caption": "Быстрое питание",
+                "id": "165",
+                "keyword": "Быстрое питание",
+                "name": "Быстрое питание",
+                "org_count": 8323,
+                "parent_id": "2",
+                "seo_name": "Кафе / рестораны быстрого питания (фаст-фуды)",
+                "title": "Быстрое питание",
+                "type": "rubric"
+            },
+            {
+                "alias": "kofejjni",
+                "branch_count": 3624,
+                "caption": "Кофейни",
+                "id": "162",
+                "keyword": "Кофейни",
+                "name": "Кофейни",
+                "org_count": 2143,
+                "parent_id": "2",
+                "title": "Кофейни",
+                "type": "rubric"
+            },
+            {
+                "alias": "kafe_konditerskie",
+                "branch_count": 485,
+                "caption": "Кафе-кондитерские",
+                "id": "112658",
+                "keyword": "Кафе-кондитерские",
+                "name": "Кафе-кондитерские",
+                "org_count": 189,
+                "parent_id": "2",
+                "title": "Кафе-кондитерские",
+                "type": "rubric"
+            },
+            {
+                "alias": "zookafe",
+                "branch_count": 38,
+                "caption": "Зоокафе",
+                "id": "113573",
+                "keyword": "Зоокафе",
+                "name": "Зоокафе",
+                "org_count": 32,
+                "parent_id": "2",
+                "title": "Зоокафе",
+                "type": "rubric"
+            },
+            {
+                "alias": "keramicheskaya_plitka",
+                "branch_count": 1310,
+                "caption": "Керамическая плитка",
+                "id": "538",
+                "keyword": "Керамическая плитка",
+                "name": "Керамическая плитка",
+                "org_count": 972,
+                "parent_id": "42867",
+                "seo_name": "Керамическая / кафельная плитка",
+                "title": "Керамическая плитка",
+                "type": "rubric"
+            },
+            {
+                "alias": "kompyuternye_kluby",
+                "branch_count": 810,
+                "caption": "Компьютерные клубы",
+                "id": "178",
+                "keyword": "Компьютерные клубы",
+                "name": "Компьютерные клубы",
+                "org_count": 372,
+                "parent_id": "19532",
+                "seo_name": "Интернет-кафе / Игровые, компьютерные клубы",
+                "title": "Компьютерные клубы",
+                "type": "rubric"
+            },
+            {
+                "alias": "karaoke_zaly",
+                "branch_count": 513,
+                "caption": "Караоке",
+                "id": "21387",
+                "keyword": "Караоке-залы",
+                "name": "Караоке-залы",
+                "org_count": 468,
+                "parent_id": "2",
+                "seo_name": "Караоке-клубы / бары",
+                "title": "Караоке",
+                "type": "rubric"
+            },
+            {
+                "alias": "centry_parovykh_koktejjlejj",
+                "branch_count": 1144,
+                "caption": "Паровые коктейли",
+                "id": "110357",
+                "keyword": "Центры паровых коктейлей",
+                "name": "Центры паровых коктейлей",
+                "org_count": 785,
+                "parent_id": "2",
+                "title": "Паровые коктейли",
+                "type": "rubric"
+            }
+        ],
+        "total": 9
+    }
+}
+```
+
+</details>
+
+Скопируйте ID категории из поля `result.items.id`.
+
+## ID организации {#org-id}
+
+Чтобы получить ID организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «почта россии».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `fields=items.org` — включает в ответ поле с ID организации.
+* `type=branch` — поиск объектов с типом «организация».
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=почта россии&location=37.630866,55.752256&fields=items.org&type=branch&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260730"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "Ильинка улица, 9 ст1",
+                "id": "4504127908543317",
+                "name": "Почта России, отделение №103132",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж; получение посылок со двора",
+                "address_name": "Никольская улица, 7-9 ст4",
+                "id": "4504127910758626",
+                "name": "Почта России, отделение №109012",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Кадашёвская набережная, 36 ст1",
+                "id": "4504127908559993",
+                "name": "Почта России, отделение №115035",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Котельническая набережная, 1/15 к В",
+                "id": "4504127908550456",
+                "name": "Почта России, отделение №109240",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Мясницкая улица, 26а ст1",
+                "id": "4504127908535215",
+                "name": "Почта России, отделение №101000",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Варсонофьевский переулок, 4 ст1",
+                "id": "4504127908535893",
+                "name": "Почта России, отделение №107045",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Мясницкая улица, 26а ст1",
+                "id": "70000001077144940",
+                "name": "Почта России, отделение №101000",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Озерковский переулок, 13/19 ст1",
+                "id": "4504127908560137",
+                "name": "Почта России, отделение №115184",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Берсеневская набережная, 20/2",
+                "id": "4504127908575769",
+                "name": "Почта России, отделение №119072",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Большая Полянка, 3/9",
+                "id": "4504127908575819",
+                "name": "Почта России, отделение №119180",
+                "org": {
+                    "branch_count": 1208,
+                    "id": "70000001087490185",
+                    "name": "Почта России",
+                    "primary": "Почта России"
+                },
+                "type": "branch"
+            }
+        ],
+        "total": 88
+    }
+}
+```
+
+</details>
+
+Скопируйте ID организации из поля `result.items.org.id`.
+
+## ID бренда {#brand-id}
+
+Чтобы получить ID бренда, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кинотеатр каро».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `fields=items.brand` — включает в ответ поле с ID бренда.
+* `type=branch` — поиск объектов с типом «организация».
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кинотеатр каро&location=37.630866,55.752256&fields=items.brand&type=branch&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260730"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "улица Новый Арбат, 24",
+                "brand": {
+                    "branch_count": 14,
+                    "extension": "кинотеатр",
+                    "id": "70000001103777439",
+                    "name": "Каро"
+                },
+                "building_name": "Октябрь, кинотеатр",
+                "full_name": "Москва, Октябрь, кинотеатр",
+                "id": "4504127908582010",
+                "name": "Каро 11 Октябрь, кинотеатр",
+                "purpose_name": "Культурно-развлекательный комплекс",
+                "type": "branch"
+            },
+            {
+                "address_comment": "4 этаж",
+                "address_name": "улица Земляной Вал, 33",
+                "brand": {
+                    "branch_count": 14,
+                    "extension": "кинотеатр",
+                    "id": "70000001103777439",
+                    "name": "Каро"
+                },
+                "id": "70000001007350119",
+                "name": "Каро 7, кинотеатр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "4 этаж",
+                "address_name": "Ходынский бульвар, 4",
+                "brand": {
+                    "branch_count": 14,
+                    "extension": "кинотеатр",
+                    "id": "70000001103777439",
+                    "name": "Каро"
+                },
+                "id": "70000001006919822",
+                "name": "Каро Sky 17, кинотеатр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "3 этаж",
+                "address_name": "улица Юных Ленинцев, 52",
+                "brand": {
+                    "branch_count": 14,
+                    "extension": "кинотеатр",
+                    "id": "70000001103777439",
+                    "name": "Каро"
+                },
+                "id": "70000001059093722",
+                "name": "Каро 4 Высота, кинотеатр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "4 этаж",
+                "address_name": "Сиреневый бульвар, 31",
+                "brand": {
+                    "branch_count": 14,
+                    "extension": "кинотеатр",
+                    "id": "70000001103777439",
+                    "name": "Каро"
+                },
+                "id": "70000001059093655",
+                "name": "Каро 10 София, кинотеатр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "4 этаж",
+                "address_name": "Зелёный проспект, 81",
+                "brand": {
+                    "branch_count": 14,
+                    "extension": "кинотеатр",
+                    "id": "70000001103777439",
+                    "name": "Каро"
+                },
+                "id": "4504127908988906",
+                "name": "Каро, кинотеатр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "6 этаж",
+                "address_name": "Щукинская улица, 42",
+                "brand": {
+                    "branch_count": 14,
+                    "extension": "кинотеатр",
+                    "id": "70000001103777439",
+                    "name": "Каро"
+                },
+                "id": "4504127908988914",
+                "name": "Каро 6, кинотеатр",
+                "type": "branch"
+            }
+        ],
+        "total": 7
+    }
+}
+```
+
+</details>
+
+Скопируйте ID бренда из поля `result.items.brand.id`.
+
+## ID здания {#building-id}
+
+Чтобы получить ID здания, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос с геоограничением](/api/search/places/examples/objects#text), например «кадашевская набережная 12 москва». Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `type=building` — поиск объектов с типом «здание».
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кадашевская набережная 12 москва&type=building&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260730"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "Кадашёвская набережная, 12",
+                "full_name": "Москва, Кадашёвская набережная, 12",
+                "id": "4504235299048514",
+                "name": "Кадашёвская набережная, 12",
+                "purpose_name": "Музей",
+                "type": "building"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+Скопируйте ID здания из поля `result.items.id`.
+
+## ID парковки {#parking-id}
+
+Чтобы получить ID парковки, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос с геоограничением](/api/search/places/examples/objects#text), например «охотный ряд москва». Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `type=parking` — поиск объектов с типом «парковка».
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=охотный ряд москва&type=parking&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260730"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "площадь Революции, 3",
+                "full_name": "Москва, Парковка ТЦ Охотный ряд",
+                "id": "4504656201068202",
+                "name": "Парковка ТЦ Охотный ряд",
+                "subtype": "underground",
+                "type": "parking"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+Скопируйте ID парковки из поля `result.items.id`.
+
+## ID станции метро {#subway-id}
+
+Чтобы получить ID станции метро, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «университет».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `type=station.metro` — поиск объектов с типом «станция метро».
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=университет&location=37.630866,55.752256&type=station.metro&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260730"
+    },
+    "result": {
+        "items": [
+            {
+                "color": "#E90101",
+                "full_name": "Москва, Университет",
+                "id": "4504385606390686",
+                "name": "Университет",
+                "route_type": "metro",
+                "subtype": "metro",
+                "type": "station"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+Скопируйте ID станции метро из поля `result.items.id`.
+
+## ID территории {#place-id}
+
+Территории — это площадные объекты: парки, пляжи, территории баз отдыха, озёра и прочие места.
+
+Чтобы получить ID территории, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
+
+* укажите название территории, например `q=вднх москва`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?q=вднх москва&type=adm_div.place&key=API_KEY
+   ```
+
+* укажите долготу и широту точки, например `lon=37.637635&lat=55.826241`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?lon=37.637635&lat=55.826241&type=adm_div.place&key=API_KEY
+   ```
+
+В запросе укажите `type=adm_div.place` для поиска объектов с типом «территория».
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+   "meta": {
+      "api_version": "3.0.20949",
+      "code": 200,
+      "issue_date": "20260716"
+   },
+   "result": {
+      "items": [
+            {
+               "full_name": "Москва, Выставка достижений народного хозяйства",
+               "id": "4504286822138302",
+               "name": "Выставка достижений народного хозяйства",
+               "subtype": "place",
+               "type": "adm_div"
+            }
+      ],
+      "total": 1
+   }
+}
+```
+
+</details>
+
+Скопируйте ID территории из поля `result.items.id`.
+
+## ID района {#district-id}
+
+Чтобы получить ID административного района, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
+
+* укажите название города и района, например `q=москва якиманка`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?q=москва якиманка&type=adm_div.district&key=API_KEY
+   ```
+
+* укажите долготу и широту точки, например `lon=37.606357&lat=55.735467`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?lon=37.606357&lat=55.735467&type=adm_div.district&key=API_KEY
+   ```
+
+В запросе укажите `type=adm_div.district` для поиска объектов с типом «район».
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+   "meta": {
+      "api_version": "3.0.20926",
+      "code": 200,
+      "issue_date": "20260701"
+   },
+   "result": {
+      "items": [
+            {
+               "full_name": "Москва, Якиманка",
+               "id": "4504209512726534",
+               "name": "Якиманка",
+               "subtype": "district",
+               "type": "adm_div"
+            }
+      ],
+      "total": 1
+   }
+}
+```
+
+</details>
+
+Скопируйте ID района из поля `result.items.id`.
+
+## ID города {#city-id}
+
+Чтобы получить ID города, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
+
+* укажите название города, например `q=Москва`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?q=Москва&type=adm_div.city&key=API_KEY
+   ```
+
+* укажите долготу и широту точки, например `lon=37.630866&lat=55.752256`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?lon=37.630866&lat=55.752256&type=adm_div.city&key=API_KEY
+   ```
+
+В запросе укажите `type=adm_div.city` для поиска объектов с типом «город».
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+   "meta": {
+      "api_version": "3.0.20926",
+      "code": 200,
+      "issue_date": "20260701"
+   },
+   "result": {
+      "items": [
+            {
+               "full_name": "Москва",
+               "id": "4504222397630173",
+               "name": "Москва",
+               "subtype": "city",
+               "type": "adm_div"
+            }
+      ],
+      "total": 1
+   }
+}
+```
+
+</details>
+
+Скопируйте ID города из поля `result.items.id`.
+
+## ID региона {#region-id}
+
+Для выполнения запроса ключу необходим доступ к [Regions API](/api/search/regions/overview).
+
+Чтобы получить ID региона (области, края, республики и т. д.), отправьте GET-запрос к [Regions API](/api/search/regions/overview) на [/2.0/region/search](/api/search/regions/reference/2.0/region/search) одним из способов:
+
+* укажите название региона, например `q=Москва`:
+
+   ```bash
+   https://catalog.api.2gis.com/2.0/region/search?q=Москва&key=API_KEY
+   ```
+
+* укажите координаты точки, например `q=37.630866,55.752256`:
+
+   ```bash
+   https://catalog.api.2gis.com/2.0/region/search?q=37.630866,55.752256&key=API_KEY
+   ```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+   "meta": {
+      "api_version": "2.0.20926",
+      "code": 200,
+      "issue_date": "20260630"
+   },
+   "result": {
+      "items": [
+            {
+               "id": "32",
+               "name": "Москва",
+               "type": "region"
+            }
+      ],
+      "total": 1
+   }
+}
+```
+
+</details>
+
+Скопируйте ID региона из поля `result.items.id`.

@@ -1,0 +1,530 @@
+---
+sidebar: placesAPI
+---
+# Дополнительная информация об объектах
+
+С помощью параметра `fields` вы можете получить дополнительную информацию об объектах в ответе: адрес объекта, его геометрию, контактную информацию и другие данные.
+
+Получение некоторых полей доступно только по запросу и за дополнительную плату. См. список полей в разделе [Дополнительная информация по запросу](/api/search/places/overview#info-on-demand).
+
+Параметр `fields` можно указать для всех актуальных endpoint-ов Places API. Ниже приведены примеры запросов для получения информации об объектах с помощью параметра `fields`. Полный список полей см. в [Справочнике API](/api/search/places/reference/3.0/items).
+
+## Получение информации о здании {#building}
+
+Чтобы получить информацию о здании, отправьте GET-запрос на [/3.0/items/byid](/api/search/places/reference/3.0/items/byid) со следующими параметрами:
+
+* `id` — ID здания, например `id=4504235299048514`. Подробнее о получении ID см. в разделе [ID здания](/api/search/places/examples/obtaining#building-id).
+* `fields` — список полей, которые нужно вернуть в ответе. Можно использовать несколько полей, разделённых запятыми, например:
+
+   * `items.address` — адрес здания. 
+   * `items.adm_div` — административная территория, к которой относится здание.
+   * `items.point` — координаты здания.
+   * `items.links` — связанные объекты (ближайшие парковки, остановки, станции метро и другие).
+   * `items.floors` — количество этажей здания (требуется [дополнительное разрешение ключа](/api/search/places/overview#info-on-demand)).
+   * `items.structure_info.material` — материал здания (требуется [дополнительное разрешение ключа](/api/search/places/overview#info-on-demand)).
+   * `items.structure_info.floor_type` — тип перекрытий здания (требуется [дополнительное разрешение ключа](/api/search/places/overview#info-on-demand)).
+   * `items.structure_info.year_of_construction` — год постройки здания (требуется [дополнительное разрешение ключа](/api/search/places/overview#info-on-demand)).
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items/byid?id=4504235299048514&fields=items.address,items.adm_div,items.point,items.links,items.floors,items.structure_info.material,items.structure_info.floor_type,items.structure_info.year_of_construction&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260730"
+    },
+    "result": {
+        "items": [
+            {
+                "address": {
+                    "building_id": "4504235299048514",
+                    "components": [
+                        {
+                            "number": "12",
+                            "street": "Кадашёвская набережная",
+                            "street_id": "4504338361755723",
+                            "type": "street_number"
+                        }
+                    ],
+                    "postcode": "119017"
+                },
+                "address_name": "Кадашёвская набережная, 12",
+                "adm_div": [
+                    {
+                        "id": "1",
+                        "name": "Россия",
+                        "type": "country"
+                    },
+                    {
+                        "id": "5349042514588558",
+                        "name": "Москва",
+                        "type": "region"
+                    },
+                    {
+                        "city_alias": "moscow",
+                        "flags": {
+                            "is_default": true,
+                            "is_region_center": true
+                        },
+                        "id": "4504222397630173",
+                        "is_default": true,
+                        "name": "Москва",
+                        "type": "city"
+                    },
+                    {
+                        "id": "4504209512726534",
+                        "name": "Якиманка",
+                        "type": "district"
+                    }
+                ],
+                "floors": {
+                   "ground_count": 5,
+                   "underground_count": 0
+                },
+                "full_name": "Москва, Кадашёвская набережная, 12",
+                "id": "4504235299048514",
+                "links": {
+                    "attractions": [
+                        {
+                            "description": "Концепция создания стены с разноразмерными окнами, в которых находятся картины, отсылает к образу и структуре коллекций художественных искусств конца XIX века, когда ценились не только изображаемые на полотнах произведения искусства, но и роскошные массивные рамы, в которых они размещались.<br>\n<br>Рамы окон выполнены из мраморизованного известняка. Произведения искусства нанесены на внешний слой остекления с помощью цифровой печати.",
+                            "id": "70030076925652730",
+                            "name": "Стена с окнами-картинами",
+                            "subtype_name": "стрит-арт"
+                        },
+                        {
+                            "description": "Концепция создания стены с разноразмерными окнами, в которых находятся картины, отсылает к образу и структуре коллекций художественных искусств конца XIX века, когда ценились не только изображаемые на полотнах произведения искусства, но и роскошные массивные рамы, в которых они размещались.<br>\n<br>Рамы окон выполнены из мраморизованного известняка. Произведения искусства нанесены на внешний слой остекления с помощью цифровой печати.",
+                            "id": "70030076814479595",
+                            "name": "Стена с окнами-картинами",
+                            "subtype_name": "стрит-арт"
+                        }
+                    ],
+                    "branches": {
+                        "count": 4
+                    },
+                    "entrances": [
+                        {
+                            "geometry": {
+                                "normals": [
+                                    "LINESTRING(37.466208 56.732023,37.619066 55.743775)"
+                                ],
+                                "points": [
+                                    "POINT(37.619065988873906 55.743775215098729)"
+                                ],
+                                "vectors": [
+                                    "LINESTRING(37.619052 55.743865,37.619066 55.743775)"
+                                ]
+                            },
+                            "id": "70030076839249258",
+                            "is_primary": true,
+                            "is_visible_on_map": true
+                        }
+                    ],
+                    "nearest_metro": [
+                        {
+                            "distance": 700,
+                            "id": "4504385606391044"
+                        },
+                        {
+                            "distance": 700,
+                            "id": "4504385606385753"
+                        },
+                        {
+                            "distance": 950,
+                            "id": "4504385606390696"
+                        },
+                        {
+                            "distance": 950,
+                            "id": "4504385606385767"
+                        },
+                        {
+                            "distance": 1400,
+                            "id": "4504385606385675"
+                        },
+                        {
+                            "distance": 1400,
+                            "id": "4504385606388241"
+                        },
+                        {
+                            "distance": 1400,
+                            "id": "4504385606388498"
+                        },
+                        {
+                            "distance": 1600,
+                            "id": "4504385606385818"
+                        },
+                        {
+                            "distance": 1600,
+                            "id": "4504385606385667"
+                        },
+                        {
+                            "distance": 1800,
+                            "id": "4504385606391049"
+                        },
+                        {
+                            "distance": 1800,
+                            "id": "4504385606385733"
+                        },
+                        {
+                            "distance": 1800,
+                            "id": "4504385606391057"
+                        },
+                        {
+                            "distance": 1800,
+                            "id": "4504385606385704"
+                        },
+                        {
+                            "distance": 1900,
+                            "id": "4504385606389140"
+                        },
+                        {
+                            "distance": 1900,
+                            "id": "4504385606389139"
+                        },
+                        {
+                            "distance": 1900,
+                            "id": "4504385606388294"
+                        },
+                        {
+                            "distance": 2000,
+                            "id": "4504385606385779"
+                        },
+                        {
+                            "distance": 2000,
+                            "id": "4504385606391042"
+                        }
+                    ],
+                    "nearest_parking": [
+                        {
+                            "id": "70030076990983885"
+                        },
+                        {
+                            "id": "70030077073807032"
+                        },
+                        {
+                            "id": "70030077073802885"
+                        },
+                        {
+                            "id": "70030076990984309"
+                        },
+                        {
+                            "id": "70030077126714948"
+                        },
+                        {
+                            "id": "70030076996775411"
+                        },
+                        {
+                            "id": "70030077063656803"
+                        },
+                        {
+                            "id": "70030077073802519"
+                        },
+                        {
+                            "id": "70030076514195960"
+                        },
+                        {
+                            "id": "70030077073809493"
+                        },
+                        {
+                            "id": "70030076352870287"
+                        },
+                        {
+                            "id": "70030076443710476"
+                        },
+                        {
+                            "id": "70030076323300649"
+                        },
+                        {
+                            "id": "70030076158514901"
+                        },
+                        {
+                            "id": "70030076129033271"
+                        },
+                        {
+                            "id": "70030076158514956"
+                        },
+                        {
+                            "id": "70030076795826052"
+                        }
+                    ],
+                    "nearest_stations": [
+                        {
+                            "color": "#FFDF05",
+                            "comment": "Калининская линия",
+                            "distance": 700,
+                            "id": "4504385606391044",
+                            "name": "Третьяковская",
+                            "route_logo": "metro_moscow_8",
+                            "route_types": [
+                                "metro"
+                            ]
+                        },
+                        {
+                            "color": "#EA6A00",
+                            "comment": "Калужско-Рижская линия",
+                            "distance": 700,
+                            "id": "4504385606385753",
+                            "name": "Третьяковская",
+                            "route_logo": "metro_moscow_6",
+                            "route_types": [
+                                "metro"
+                            ]
+                        },
+                        {
+                            "color": "#758190",
+                            "comment": "Серпуховско-Тимирязевская линия",
+                            "distance": 950,
+                            "id": "4504385606390696",
+                            "name": "Полянка",
+                            "route_logo": "metro_moscow_9",
+                            "route_types": [
+                                "metro"
+                            ]
+                        }
+                    ]
+                },
+                "name": "Кадашёвская набережная, 12",
+                "point": {
+                    "lat": 55.743142,
+                    "lon": 37.618706
+                },
+                "purpose_name": "Музей",
+                "structure_info": {
+                    "floor_type": "Железобетонные",
+                    "material": "Кирпичный",
+                    "year_of_construction": 2024
+                },
+                "type": "building"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+## Получение информации об организации {#organization}
+
+Чтобы получить информацию об организации, отправьте GET-запрос на [/3.0/items/byid](/api/search/places/reference/3.0/items/byid) со следующими параметрами:
+
+* `id` — ID организации, например `id=70000001018276833`. Подробнее о получении ID см. в разделе [ID организации](/api/search/places/examples/obtaining#org-id).
+* `fields` — список полей, которые нужно вернуть в ответе. Можно использовать несколько полей, разделённых запятыми, например:
+
+   * `items.rubrics` — категории организации.
+   * `items.brand` — бренд, к которому относится организация.
+   * `items.contact_groups` — контакты организации (требуется [дополнительное разрешение ключа](/api/search/places/overview#info-on-demand)). 
+   * `items.schedule,items.schedule_special` — расписание работы организации.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items/byid?id=70000001018276833&fields=items.rubrics,items.brand,items.contact_groups,items.schedule,items.schedule_special&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20949",
+        "code": 200,
+        "issue_date": "20260714"
+    },
+    "result": {
+        "items": [
+            {
+                "address_comment": "6 этаж",
+                "address_name": "Театральный проезд, 5 ст1",
+                "brand": {
+                    "branch_count": 5,
+                    "extension": "кинотеатр",
+                    "id": "70000001024532101",
+                    "name": "Формула Кино"
+                },
+                "contact_groups": [
+                    {
+                        "contacts": [
+                            {
+                                "type": "phone",
+                                "text": "+7 (495) 795-37-95",
+                                "value": "+74957953795"
+                            },
+                            {
+                                "type": "website",
+                                "text": "formulakino.ru",
+                                "url": "https://formulakino.ru",
+                                "value": "https://formulakino.ru"
+                            },
+                            {
+                                "type": "email",
+                                "text": "info@formulakino.ru",
+                                "value": "info@formulakino.ru"
+                            }
+                        ]
+                    }
+                ],
+                "id": "70000001018276833",
+                "name": "Формула Кино, кинотеатр",
+                "rubrics": [
+                    {
+                        "alias": "kinoteatry",
+                        "id": "192",
+                        "kind": "primary",
+                        "name": "Кинотеатры",
+                        "parent_id": "2",
+                        "short_id": 192
+                    }
+                ],
+                "schedule": {
+                    "Fri": {
+                        "working_hours": [
+                            {
+                                "from": "10:00",
+                                "to": "03:30"
+                            }
+                        ]
+                    },
+                    "Mon": {
+                        "working_hours": [
+                            {
+                                "from": "10:00",
+                                "to": "02:30"
+                            }
+                        ]
+                    },
+                    "Sat": {
+                        "working_hours": [
+                            {
+                                "from": "10:00",
+                                "to": "03:30"
+                            }
+                        ]
+                    },
+                    "Sun": {
+                        "working_hours": [
+                            {
+                                "from": "10:00",
+                                "to": "02:30"
+                            }
+                        ]
+                    },
+                    "Thu": {
+                        "working_hours": [
+                            {
+                                "from": "10:00",
+                                "to": "03:30"
+                            }
+                        ]
+                    },
+                    "Tue": {
+                        "working_hours": [
+                            {
+                                "from": "10:00",
+                                "to": "02:30"
+                            }
+                        ]
+                    },
+                    "Wed": {
+                        "working_hours": [
+                            {
+                                "from": "10:00",
+                                "to": "02:30"
+                            }
+                        ]
+                    }
+                },
+                "schedule_special": [
+                    {
+                        "date": "2026-07-20",
+                        "working_hours": [
+                            {
+                                "from": "12:00",
+                                "to": "22:00"
+                            }
+                        ]
+                    }
+                ],
+                "type": "branch"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+## Получение информации о парковке {#parking}
+
+Чтобы получить информацию о парковке, отправьте GET-запрос на [/3.0/items/byid](/api/search/places/reference/3.0/items/byid) со следующими параметрами:
+
+* `id` — ID парковки, например `id=4504127908682102`. Подробнее о получении ID см. в разделе [ID парковки](/api/search/places/examples/obtaining#parking-id).
+* `fields` — список полей, которые нужно вернуть в ответе. Можно использовать несколько полей, разделённых запятыми, например:
+
+   * `items.is_paid` — является ли парковка платной.
+   * `items.paving_type` — тип покрытия парковки.
+   * `items.level_count` — количество уровней парковки.
+   * `items.capacity` — вместимость парковки.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items/byid?id=4504127908682102&fields=items.is_paid,items.paving_type,items.level_count,items.capacity&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20949",
+        "code": 200,
+        "issue_date": "20260714"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "площадь Революции, 3",
+                "building_name": "Парковка ТЦ Охотный ряд",
+                "capacity": {
+                    "special_spaces": [
+                        {
+                            "count": "12",
+                            "name": "Для инвалидов",
+                            "type": "handicapped"
+                        }
+                    ],
+                    "total": "140"
+                },
+                "full_name": "Москва, Парковка ТЦ Охотный ряд",
+                "id": "4504127908682102",
+                "is_paid": true,
+                "level_count": 4,
+                "name": "Парковка ТЦ Охотный ряд",
+                "paving_type": "asphalt",
+                "purpose_name": "Подземное сооружение",
+                "type": "branch"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>

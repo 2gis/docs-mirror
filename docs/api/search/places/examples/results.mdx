@@ -1,0 +1,303 @@
+---
+sidebar: placesAPI
+---
+# Обработка результатов поиска
+
+Вы можете обрабатывать результаты поиска:
+
+* [сортировать их](#sort) по параметрам;
+* [получать определённую страницу результатов поиска](#page);
+* [ограничивать количество результатов на странице](#page-size).
+
+## Сортировка результатов {#sort}
+
+С помощью параметра `sort` вы можете сортировать результаты поиска: по удалённости от пользователя, рейтингу объекта и другим параметрам. По умолчанию результаты сортируются по убыванию релевантности. Полный список параметров сортировки см. в [справочнике API](/api/search/places/reference/3.0/items).
+
+Чтобы сортировать результаты поиска, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос с геоограничением](/api/search/places/examples/objects#text), например «кафе пятницкая улица москва». Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `sort` — параметр сортировки, например `sort=name` для сортировки по названию объекта.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе пятницкая улица москва&sort=name&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20949",
+        "code": 200,
+        "issue_date": "20260716"
+    },
+    "result": {
+        "items": [
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Серпуховская площадь, 36/71",
+                "id": "70000001104901511",
+                "name": "Cazaban bistro&bakery",
+                "type": "branch"
+            },
+            {
+                "address_comment": "2 этаж",
+                "address_name": "Большой Овчинниковский переулок, 16",
+                "id": "70000001105596086",
+                "name": "Cheese&macaroni",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Пятницкая улица, 11/23 ст1",
+                "id": "70000001066052537",
+                "name": "Chiho, китайская закусочная",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Пятницкая улица, 2",
+                "id": "70000001078904355",
+                "name": "Cider, кафе-бар",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Садовническая улица, 8",
+                "id": "70000001038242964",
+                "name": "Coffee inn, кафе",
+                "type": "branch"
+            },
+            {
+                "address_name": "Большая Серпуховская улица, 8/7 ст2",
+                "id": "70000001066136730",
+                "name": "Curry, ресторан индийской кухни",
+                "type": "branch"
+            },
+            {
+                "address_comment": "2 этаж",
+                "address_name": "Большой Овчинниковский переулок, 16",
+                "id": "70000001103931318",
+                "name": "Golden monkey, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Малая Ордынка, 19",
+                "id": "70000001066325543",
+                "name": "Holi yoga&cafe, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Пятницкая улица, 6/1 ст1",
+                "id": "70000001084006818",
+                "name": "J`pan, японское кафе",
+                "type": "branch"
+            },
+            {
+                "address_name": "Новокузнецкая улица, 1 ст2",
+                "id": "70000001089184727",
+                "name": "Joja coffee, кафе",
+                "type": "branch"
+            }
+        ],
+        "total": 79
+    }
+}
+```
+
+</details>
+
+## Получение результатов по страницам {#page}
+
+В ответе на запрос к API результаты поиска выводятся постранично. По умолчанию каждая страница содержит 20 результатов для основного [ключа в подписке](/platform-manager/subscription/keys#production) и 10 результатов для [демо-ключа](/platform-manager/subscription/keys#demo).
+
+По умолчанию выводится первая страница. С помощью параметра `page` вы можете получить определённую страницу результатов поиска. Параметр `page` можно указать для endpoint-ов:
+
+* [/3.0/items](/api/search/places/reference/3.0/items),
+* [/3.0/items/byservicing](/api/search/places/reference/3.0/items/byservicing),
+* [/3.0/items/bysite](/api/search/places/reference/3.0/items/bysite),
+* [/3.0/items/byphone](/api/search/places/reference/3.0/items/byphone),
+* [/3.0/items/byitin](/api/search/places/reference/3.0/items/byitin),
+* [/3.0/items/bytradelicense](/api/search/places/reference/3.0/items/bytradelicense),
+* [/3.0/items/byfias](/api/search/places/reference/3.0/items/byfias).
+
+Чтобы получить определённую страницу результатов поиска, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос с геоограничением](/api/search/places/examples/objects#text), например «кафе пятницкая улица москва». Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `page` — номер страницы с результатами, например `page=5` для получения пятой страницы. Если вы используете [демо-ключ](/platform-manager/subscription/keys#demo) для доступа к API, максимальное значение — 5.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе пятницкая улица москва&page=5&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20949",
+        "code": 200,
+        "issue_date": "20260716"
+    },
+    "result": {
+        "items": [
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Пятницкая улица, 82/34 ст1",
+                "id": "70000001019207730",
+                "name": "Питчер паб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Новокузнецкая улица, 13 ст1",
+                "id": "70000001059349913",
+                "name": "Шербет, ресторан",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1-2 этаж",
+                "address_name": "Климентовский переулок, 10 ст2",
+                "id": "70000001083732657",
+                "name": "Реберная №1, гриль-бар",
+                "type": "branch"
+            },
+            {
+                "address_name": "2-й Новокузнецкий переулок, 14 ст1",
+                "id": "70000001095304138",
+                "name": "Архив, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Малая Ордынка, 19",
+                "id": "70000001066325543",
+                "name": "Holi yoga&cafe, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Пятницкая улица, 6/1 ст1",
+                "id": "70000001026501242",
+                "name": "Есть хинкали&пить вино, ресторан",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Пятницкая улица, 82/34 ст1",
+                "id": "70000001030989592",
+                "name": "Рамен-клаб, раменная",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Средний Овчинниковский переулок, 3",
+                "id": "70000001047508784",
+                "name": "Буду поздно, бар",
+                "type": "branch"
+            },
+            {
+                "full_name": "Москва, Кафе, бар",
+                "id": "70000001102399315",
+                "name": "Ускюдар Донер",
+                "purpose_name": "Кафе, бар",
+                "type": "branch"
+            },
+            {
+                "address_name": "Большая Серпуховская улица, 8/7 ст2",
+                "id": "70000001066136730",
+                "name": "Curry, ресторан индийской кухни",
+                "type": "branch"
+            }
+        ],
+        "total": 79
+    }
+}
+```
+
+</details>
+
+## Ограничение количества результатов на странице {#page-size}
+
+В ответе на запрос к API результаты поиска выводятся постранично. По умолчанию каждая страница содержит 20 результатов для основного [ключа в подписке](/platform-manager/subscription/keys#production) и 10 результатов для [демо-ключа](/platform-manager/subscription/keys#demo).
+
+С помощью параметра `page_size` вы можете изменить количество результатов на странице — от 1 до 50. Например, вы можете:
+
+* сократить количество результатов при поиске на карте, чтобы показать ближайшие места без перегрузки интерфейса;
+* увеличить количество результатов, чтобы получить больше результатов за один запрос.
+
+Параметр `page_size` можно указать для endpoint-ов:
+
+* [/3.0/items](/api/search/places/reference/3.0/items),
+* [/3.0/items/byservicing](/api/search/places/reference/3.0/items/byservicing),
+* [/3.0/items/bysite](/api/search/places/reference/3.0/items/bysite),
+* [/3.0/items/byphone](/api/search/places/reference/3.0/items/byphone),
+* [/3.0/items/byitin](/api/search/places/reference/3.0/items/byitin),
+* [/3.0/items/bytradelicense](/api/search/places/reference/3.0/items/bytradelicense),
+* [/3.0/items/byfias](/api/search/places/reference/3.0/items/byfias).
+
+Чтобы ограничить количество результатов поиска на странице, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос с геоограничением](/api/search/places/examples/objects#text), например «кафе пятницкая улица москва». Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `page_size` — количество результатов на странице, например `page_size=3` для получения трёх результатов на странице. Если вы используете [демо-ключ](/platform-manager/subscription/keys#demo) для доступа к API, максимальное значение — 10.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе пятницкая улица москва&page_size=3&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20949",
+        "code": 200,
+        "issue_date": "20260716"
+    },
+    "result": {
+        "items": [
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Пятницкая улица, 3/4 ст1",
+                "id": "70000001059479230",
+                "name": "Хачапури и вино, кафе грузинской кухни",
+                "type": "branch"
+            },
+            {
+                "address_comment": "-1, 1 этаж",
+                "address_name": "Пятницкая улица, 54 ст2",
+                "id": "70000001048389948",
+                "name": "Nicepricecafe, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "3 этаж",
+                "address_name": "Пятницкая улица, 29",
+                "id": "70000001089085648",
+                "name": "True Cost, рестобар",
+                "type": "branch"
+            }
+        ],
+        "total": 79
+    }
+}
+```
+
+</details>

@@ -1,0 +1,1237 @@
+---
+sidebar: placesAPI
+---
+# Фильтрация по атрибутам
+
+Вы можете фильтровать результаты поиска и получать списки организаций:
+
+* [По времени работы](#work-time).
+* [По дате открытия](#opened-after-date).
+* По наличию или отсутствию данных: [ИНН](#has-itin), [торговой лицензии](#has-trade-license), [фотографий](#has-photos), [рейтинга](#has-rating), [отзывов](#has-reviews) и [сайта](#has-site).
+* [По дополнительным атрибутам](#additional-attributes).
+
+## По времени работы {#work-time}
+
+С помощью параметра `work_time` вы можете получить список организаций, работающих в определённое время, например, только круглосуточно работающие филиалы.
+
+Чтобы отфильтровать результаты поиска по времени работы организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `work_time` — фильтр по времени работы, например `work_time=today,09:00` для получения организаций, работающих сегодня в 09:00.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&work_time=today,09:00&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20926",
+        "code": 200,
+        "issue_date": "20260630"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001104075510",
+                "name": "Пио Розелло, бар-ресторан",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001033268818",
+                "name": "Моя Вивьен, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Большой Спасоглинищевский переулок, 9/1 ст16",
+                "id": "70000001026155685",
+                "name": "Шоколадница, кофейня",
+                "type": "branch"
+            },
+            {
+                "address_comment": "-2 этаж; Средний уровень",
+                "address_name": "Манежная площадь, 1 ст2",
+                "id": "70000001007179642",
+                "name": "Му-Му, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Маросейка, 3/13 ст1",
+                "id": "4504127908427099",
+                "name": "Шоколадница, кофейня",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Садовническая улица, 8",
+                "id": "70000001038242964",
+                "name": "Coffee inn, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "-1 этаж",
+                "address_name": "Никольская улица, 10",
+                "id": "70000001063453523",
+                "name": "Beverly hills diner, семейный ресторан",
+                "type": "branch"
+            },
+            {
+                "address_comment": "3 этаж",
+                "address_name": "улица Маросейка, 2/15 ст1",
+                "id": "70000001067561966",
+                "name": "2/15, кафе-бар",
+                "type": "branch"
+            },
+            {
+                "address_comment": "2 этаж",
+                "address_name": "улица Покровка, 2",
+                "id": "4504127908550760",
+                "name": "Золотая вобла, народный бар",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Петровка, 12 ст1",
+                "id": "70000001082567555",
+                "name": "Miss you cafe, кафе",
+                "type": "branch"
+            }
+        ],
+        "total": 406
+    }
+}
+```
+
+</details>
+
+## По дате открытия {#opened-after-date}
+
+С помощью параметра `opened_after_date` вы можете получить список организаций, открытых после определённой даты.
+
+Чтобы отфильтровать результаты поиска по дате открытия организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `opened_after_date` — фильтр по дате открытия, например `opened_after_date=2026-06-01` для получения организаций, открытых после 1 июня 2026 года.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&opened_after_date=2026-06-01&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20926",
+        "code": 200,
+        "issue_date": "20260630"
+    },
+    "result": {
+        "items": [
+            {
+                "address_comment": "3 этаж",
+                "address_name": "Большой Спасоглинищевский переулок, 2",
+                "id": "70000001115242382",
+                "name": "Про Рёбра, кафе",
+                "type": "branch"
+            },
+            {
+                "address_name": "Лубянский проезд, 25 ст1",
+                "id": "70000001115212911",
+                "name": "Метрамен",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Рождественка, 12/1 ст1",
+                "id": "70000001115237712",
+                "name": "Музей советских игровых автоматов, Кафе",
+                "type": "branch"
+            }
+        ],
+        "total": 3
+    }
+}
+```
+
+</details>
+
+## По наличию ИНН {#has-itin}
+
+Чтобы отфильтровать результаты поиска по наличию ИНН у организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `has_itin=true` — фильтр по наличию ИНН.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&has_itin=true&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20926",
+        "code": 200,
+        "issue_date": "20260630"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "улица Варварка, 6 ст3",
+                "id": "70000001029535674",
+                "name": "Зарядье, гастрономический центр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001032763462",
+                "name": "The Black Swan Pub",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001093401978",
+                "name": "Senti Menti",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Славянская площадь, 2/5/4 ст3",
+                "id": "70000001007260074",
+                "name": "Либерти, ночной клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Лубянский проезд, 25 ст1",
+                "id": "4504127908781677",
+                "name": "Китайский Лётчик Джао Да, кафе-клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001047225231",
+                "name": "Хачапури и вино, кафе грузинской кухни",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Славянская площадь, 2/5",
+                "id": "4504128908449647",
+                "name": "True Cost, прожектор",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001082439498",
+                "name": "Chang, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "2 этаж",
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001036209541",
+                "name": "Старый Сычуань, ресторан азиатской и восточной кухни",
+                "type": "branch"
+            },
+            {
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001104075510",
+                "name": "Пио Розелло, бар-ресторан",
+                "type": "branch"
+            }
+        ],
+        "total": 1180
+    }
+}
+```
+
+</details>
+
+## По наличию торговой лицензии {#has-trade-license}
+
+Чтобы отфильтровать результаты поиска по наличию торговой лицензии у организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=55.250708,25.134877`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `has_trade_license=true` — фильтр по наличию торговой лицензии.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=55.250708,25.134877&has_trade_license=true&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20949",
+        "code": 200,
+        "issue_date": "20260707"
+    },
+    "result": {
+        "items": [
+            {
+                "address_comment": "G Floor",
+                "address_name": "Al Ghurair Industries Labour Camp, 37, 28 street",
+                "id": "70000001067897394",
+                "name": "Cook Book, restaurant",
+                "type": "branch"
+            },
+            {
+                "address_comment": "G Floor",
+                "address_name": "Arabian Master Of Waste Staff Accommodation, 46, Al Zumorrod Street street",
+                "id": "70000001067897451",
+                "name": "Chik Baik, restaurant",
+                "type": "branch"
+            },
+            {
+                "address_name": "51a, Al Zumorrod Street street",
+                "id": "70000001036077037",
+                "name": "Lahori Darbar, restaurant",
+                "type": "branch"
+            },
+            {
+                "address_name": "Super Bonanza Hypermarket, 68, 22 street",
+                "building_name": "Super Bonanza Hypermarket",
+                "full_name": "Dubai, Super Bonanza Hypermarket",
+                "id": "70000001006476170",
+                "name": "Super Bonanza, hypermarket",
+                "purpose_name": "Hypermarket",
+                "type": "branch"
+            },
+            {
+                "address_comment": "G Floor",
+                "address_name": "Epsco Staff Accomodation, 25/1, Al Zumorrod Street street",
+                "id": "70000001060057959",
+                "name": "Sarab Al Madina, restaurant",
+                "type": "branch"
+            },
+            {
+                "address_comment": "Ground Floor",
+                "address_name": "Almarai Emirates Company, 36, Al Zumorrod Street street",
+                "id": "70000001036075376",
+                "name": "Chimney Light, restaurant",
+                "type": "branch"
+            },
+            {
+                "address_comment": "G Floor",
+                "address_name": "Top Form Restaurant, 31a1, Al Zumorrod Street street",
+                "building_name": "Top Form Restaurant",
+                "full_name": "Dubai, Top Form Restaurant",
+                "id": "70000001047115180",
+                "name": "Top Form 2, restaurant",
+                "purpose_name": "Restaurant",
+                "type": "branch"
+            },
+            {
+                "address_name": "64, Al Zumorrod Street street",
+                "id": "70000001006449199",
+                "name": "Green Pepper, restaurant",
+                "type": "branch"
+            },
+            {
+                "address_comment": "G Floor",
+                "address_name": "Al Shafar National Contracting Labour Accomodation, 20, 28 street",
+                "id": "70000001006473665",
+                "name": "Food Point, restaurant",
+                "type": "branch"
+            },
+            {
+                "address_comment": "G Floor",
+                "address_name": "Vikas Building Contracting Labour Accomodation, 50c, 28 street",
+                "id": "70000001092828231",
+                "name": "Kana Ram, vegetarian restaurant",
+                "type": "branch"
+            }
+        ],
+        "total": 982
+    }
+}
+```
+
+</details>
+
+## По наличию фотографий {#has-photos}
+
+С помощью параметра `has_photos` вы можете получить список организаций, в карточку которых добавлены фотографии. Получение самих фотографий недоступно.
+
+Чтобы отфильтровать результаты поиска по наличию фотографий у организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `has_photos=true` — фильтр по наличию фотографий.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&has_photos=true&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20926",
+        "code": 200,
+        "issue_date": "20260630"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "улица Варварка, 6 ст3",
+                "id": "70000001029535674",
+                "name": "Зарядье, гастрономический центр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001032763462",
+                "name": "The Black Swan Pub",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001093401978",
+                "name": "Senti Menti",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Славянская площадь, 2/5/4 ст3",
+                "id": "70000001007260074",
+                "name": "Либерти, ночной клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Лубянский проезд, 25 ст1",
+                "id": "4504127908781677",
+                "name": "Китайский Лётчик Джао Да, кафе-клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001047225231",
+                "name": "Хачапури и вино, кафе грузинской кухни",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Новая площадь, 14",
+                "id": "70000001109804763",
+                "name": "Rusty Rat&Pizza",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Славянская площадь, 2/5",
+                "id": "4504128908449647",
+                "name": "True Cost, прожектор",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001082439498",
+                "name": "Chang, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "2 этаж",
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001036209541",
+                "name": "Старый Сычуань, ресторан азиатской и восточной кухни",
+                "type": "branch"
+            }
+        ],
+        "total": 1251
+    }
+}
+```
+
+</details>
+
+## По наличию рейтинга {#has-rating}
+
+С помощью параметра `has_rating` вы можете получить список организаций, у которых есть рейтинг на [2gis.ru](https://2gis.ru/). Получение значения рейтинга недоступно.
+
+Чтобы отфильтровать результаты поиска по наличию рейтинга у организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `has_rating=true` — фильтр по наличию рейтинга.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&has_rating=true&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20926",
+        "code": 200,
+        "issue_date": "20260630"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "улица Варварка, 6 ст3",
+                "id": "70000001029535674",
+                "name": "Зарядье, гастрономический центр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001032763462",
+                "name": "The Black Swan Pub",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Славянская площадь, 2/5/4 ст3",
+                "id": "70000001007260074",
+                "name": "Либерти, ночной клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Лубянский проезд, 25 ст1",
+                "id": "4504127908781677",
+                "name": "Китайский Лётчик Джао Да, кафе-клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Славянская площадь, 2/5",
+                "id": "4504128908449647",
+                "name": "True Cost, прожектор",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1",
+                "id": "70000001032240412",
+                "name": "22 сантиметра, пиццерия",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001033268818",
+                "name": "Моя Вивьен, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Большой Спасоглинищевский переулок, 3 ст5",
+                "id": "70000001046746120",
+                "name": "Пестики-тычинки, бар",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Лубянский проезд, 15 ст2",
+                "id": "70000001007210203",
+                "name": "Casa Leone, итальянское кафе-джелатерия",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Маросейка, 6/8 ст1",
+                "id": "4504127918793096",
+                "name": "Бардак, кафе турецкой кухни",
+                "type": "branch"
+            }
+        ],
+        "total": 486
+    }
+}
+```
+
+</details>
+
+## По наличию отзывов {#has-reviews}
+
+С помощью параметра `has_reviews` вы можете получить список организаций, у которых есть отзывы на [2gis.ru](https://2gis.ru/). Получение отзывов недоступно.
+
+Чтобы отфильтровать результаты поиска по наличию отзывов у организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `has_reviews=true` — фильтр по наличию отзывов.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&has_reviews=true&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20926",
+        "code": 200,
+        "issue_date": "20260630"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "улица Варварка, 6 ст3",
+                "id": "70000001029535674",
+                "name": "Зарядье, гастрономический центр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001032763462",
+                "name": "The Black Swan Pub",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001093401978",
+                "name": "Senti Menti",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Славянская площадь, 2/5/4 ст3",
+                "id": "70000001007260074",
+                "name": "Либерти, ночной клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Лубянский проезд, 25 ст1",
+                "id": "4504127908781677",
+                "name": "Китайский Лётчик Джао Да, кафе-клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001047225231",
+                "name": "Хачапури и вино, кафе грузинской кухни",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Новая площадь, 14",
+                "id": "70000001109804763",
+                "name": "Rusty Rat&Pizza",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Славянская площадь, 2/5",
+                "id": "4504128908449647",
+                "name": "True Cost, прожектор",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001082439498",
+                "name": "Chang, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "2 этаж",
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001036209541",
+                "name": "Старый Сычуань, ресторан азиатской и восточной кухни",
+                "type": "branch"
+            }
+        ],
+        "total": 1215
+    }
+}
+```
+
+</details>
+
+## По наличию сайта {#has-site}
+
+Чтобы отфильтровать результаты поиска по наличию сайта у организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `has_site=true` — фильтр по наличию сайта.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&has_site=true&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.20926",
+        "code": 200,
+        "issue_date": "20260630"
+    },
+    "result": {
+        "items": [
+            {
+                "address_name": "улица Варварка, 6 ст3",
+                "id": "70000001029535674",
+                "name": "Зарядье, гастрономический центр",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001032763462",
+                "name": "The Black Swan Pub",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001093401978",
+                "name": "Senti Menti",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Славянская площадь, 2/5/4 ст3",
+                "id": "70000001007260074",
+                "name": "Либерти, ночной клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "цокольный этаж",
+                "address_name": "Лубянский проезд, 25 ст1",
+                "id": "4504127908781677",
+                "name": "Китайский Лётчик Джао Да, кафе-клуб",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2",
+                "id": "70000001047225231",
+                "name": "Хачапури и вино, кафе грузинской кухни",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Новая площадь, 14",
+                "id": "70000001109804763",
+                "name": "Rusty Rat&Pizza",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "Славянская площадь, 2/5",
+                "id": "4504128908449647",
+                "name": "True Cost, прожектор",
+                "type": "branch"
+            },
+            {
+                "address_comment": "1 этаж",
+                "address_name": "улица Солянка, 1/2 ст1",
+                "id": "70000001082439498",
+                "name": "Chang, кафе",
+                "type": "branch"
+            },
+            {
+                "address_comment": "2 этаж",
+                "address_name": "Лубянский проезд, 25 ст2",
+                "id": "70000001036209541",
+                "name": "Старый Сычуань, ресторан азиатской и восточной кухни",
+                "type": "branch"
+            }
+        ],
+        "total": 973
+    }
+}
+```
+
+</details>
+
+## По дополнительным атрибутам {#additional-attributes}
+
+С помощью параметра `attr` вы можете получить список организаций по дополнительным атрибутам, которые содержат справочную информацию об организациях:
+
+* есть ли Wi-Fi или доставка;
+* какой средний чек, ассортимент и виды услуг;
+* можно ли взять кофе с собой и т. д.
+
+:::warning
+
+Список дополнительных атрибутов может меняться и зависит от региона и запроса. Гарантируется только структура ответа, но не его содержимое.
+
+:::
+
+1. Чтобы посмотреть список дополнительных атрибутов, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+   * `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+   * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+   * `fields=filters` — включает в ответ список доступных фильтров для поиска.
+
+   **Пример запроса:**
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&fields=filters&key=API_KEY
+   ```
+
+   **Пример ответа:**
+
+   <details>
+   <summary><code>response.json</code></summary>
+
+   ```json
+   {
+      "meta": {
+         "api_version": "3.0.20926",
+         "code": 200,
+         "issue_date": "20260630"
+      },
+      "result": {
+         "filters": {
+               "attributes": [
+                  {
+                     "tag": "rating",
+                     "type": "sort"
+                  },
+                  {
+                     "tag": "opened_time",
+                     "type": "sort"
+                  },
+                  {
+                     "tag": "name",
+                     "type": "sort"
+                  },
+                  {
+                     "tag": "bound",
+                     "type": "filter"
+                  },
+                  {
+                     "tag": "district"
+                  },
+                  {
+                     "tag": "worktime"
+                  },
+                  {
+                     "tag": "has_site",
+                     "type": "filter"
+                  },
+                  {
+                     "tag": "subway"
+                  },
+                  {
+                     "tag": "has_photos",
+                     "type": "filter"
+                  },
+                  {
+                     "tag": "food_service_type_of_breakfast_english_breakfast",
+                     "label": "Английский завтрак",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_assortment_assortment_cheese_sticks",
+                     "label": "Сырные палочки",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_assortment_assortment_pyanse",
+                     "label": "Пянсе",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_bar_type_blinye",
+                     "label": "Блинные",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_assortment_assortment_soups",
+                     "label": "Супы",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_assortment_assortment_crumpet",
+                     "label": "Пышки",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_assortment_assortment_burrito",
+                     "label": "Буррито",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "atmosphere_place_features_healthy_food",
+                     "label": "Здоровое меню",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_food_korean",
+                     "label": "Корейская кухня",
+                     "type": "flag"
+                  },
+                  {
+                     "tag": "food_service_lunch_cost",
+                     "label": "Стоимость бизнес-ланча",
+                     "type": "range",
+                     "range": {
+                         "max": 2000.0,
+                         "min": 150.0
+                     }
+                  },
+                  ...
+               ],
+               "rubrics": [
+                  {
+                     "count": 99,
+                     "id": "161",
+                     "name": "Кафе"
+                  },
+                  {
+                     "count": 47,
+                     "id": "159",
+                     "name": "Бары"
+                  },
+                  {
+                     "count": 46,
+                     "id": "1203",
+                     "name": "Доставка еды"
+                  },
+                  {
+                     "count": 6,
+                     "id": "164",
+                     "name": "Рестораны"
+                  },
+                  {
+                     "count": 4,
+                     "id": "51459",
+                     "name": "Пиццерии"
+                  },
+                  {
+                     "count": 3,
+                     "id": "173",
+                     "name": "Ночные клубы"
+                  },
+                  {
+                     "count": 3,
+                     "id": "165",
+                     "name": "Быстрое питание"
+                  },
+                  {
+                     "count": 2,
+                     "id": "363",
+                     "name": "Кондитерские изделия"
+                  },
+                  {
+                     "count": 2,
+                     "id": "162",
+                     "name": "Кофейни"
+                  },
+                  {
+                     "count": 2,
+                     "id": "112670",
+                     "name": "Интересные здания"
+                  },
+                  {
+                     "count": 2,
+                     "id": "21387",
+                     "name": "Караоке-залы"
+                  },
+                  {
+                     "count": 2,
+                     "id": "10803",
+                     "name": "Банкетные залы"
+                  },
+                  {
+                     "count": 1,
+                     "id": "111506",
+                     "name": "Аренда концертных площадок"
+                  },
+                  {
+                     "count": 1,
+                     "id": "16677",
+                     "name": "Кулинарии"
+                  },
+                  {
+                     "count": 1,
+                     "id": "58871",
+                     "name": "Точки кофе"
+                  },
+                  {
+                     "count": 1,
+                     "id": "469",
+                     "name": "Мороженое"
+                  },
+                  {
+                     "count": 1,
+                     "id": "110357",
+                     "name": "Центры паровых коктейлей"
+                  },
+                  {
+                     "count": 1,
+                     "id": "112617",
+                     "name": "Стендап-клубы"
+                  },
+                  {
+                     "count": 1,
+                     "id": "9786",
+                     "name": "Кейтеринг"
+                  },
+                  {
+                     "count": 1,
+                     "id": "360",
+                     "name": "Алкогольные напитки"
+                  },
+                  {
+                     "count": 1,
+                     "id": "166",
+                     "name": "Столовые"
+                  }
+               ],
+               "spatial": {
+                  "cities": [
+                     {
+                           "count": 100,
+                           "id": "4504222397630173",
+                           "name": "Москва г. (Москва город фед. значения, Россия)"
+                     }
+                  ],
+                  "districts": [
+                     {
+                           "city_id": "4504222397630173",
+                           "id": "4504209512726540",
+                           "name": "Красносельский"
+                     },
+                     {
+                           "city_id": "4504222397630173",
+                           "id": "4504209512726536",
+                           "name": "Тверской"
+                     },
+                     {
+                           "city_id": "4504222397630173",
+                           "id": "4504209512726531",
+                           "name": "Басманный"
+                     },
+                     {
+                           "city_id": "4504222397630173",
+                           "id": "4504209512726535",
+                           "name": "Мещанский"
+                     },
+                     {
+                           "city_id": "4504222397630173",
+                           "id": "4504209512726538",
+                           "name": "Таганский"
+                     },
+                     {
+                           "city_id": "4504222397630173",
+                           "id": "4504209512726532",
+                           "name": "Замоскворечье"
+                     }
+                  ]
+               }
+         },
+         "items": [
+               {
+                  "address_name": "улица Варварка, 6 ст3",
+                  "id": "70000001029535674",
+                  "name": "Зарядье, гастрономический центр",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "1 этаж",
+                  "address_name": "улица Солянка, 1/2",
+                  "id": "70000001032763462",
+                  "name": "The Black Swan Pub",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "1 этаж",
+                  "address_name": "улица Солянка, 1/2 ст1",
+                  "id": "70000001093401978",
+                  "name": "Senti Menti",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "цокольный этаж",
+                  "address_name": "Славянская площадь, 2/5/4 ст3",
+                  "id": "70000001007260074",
+                  "name": "Либерти, ночной клуб",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "цокольный этаж",
+                  "address_name": "Лубянский проезд, 25 ст1",
+                  "id": "4504127908781677",
+                  "name": "Китайский Лётчик Джао Да, кафе-клуб",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "1 этаж",
+                  "address_name": "улица Солянка, 1/2",
+                  "id": "70000001047225231",
+                  "name": "Хачапури и вино, кафе грузинской кухни",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "1 этаж",
+                  "address_name": "Новая площадь, 14",
+                  "id": "70000001109804763",
+                  "name": "Rusty Rat&Pizza",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "1 этаж",
+                  "address_name": "Славянская площадь, 2/5",
+                  "id": "4504128908449647",
+                  "name": "True Cost, прожектор",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "1 этаж",
+                  "address_name": "улица Солянка, 1/2 ст1",
+                  "id": "70000001082439498",
+                  "name": "Chang, кафе",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "2 этаж",
+                  "address_name": "Лубянский проезд, 25 ст2",
+                  "id": "70000001036209541",
+                  "name": "Старый Сычуань, ресторан азиатской и восточной кухни",
+                  "type": "branch"
+               }
+         ],
+         "total": 1289
+      }
+   }
+
+   ```
+
+   </details>
+
+   Дополнительные атрибуты перечислены в поле `result.filters.attributes`.
+
+2. Чтобы отфильтровать результаты поиска по дополнительным атрибутам, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+   * `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кафе».
+   * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+   * `attr[<code>]=<value>` — фильтр по дополнительному атрибуту. Если вы укажете несколько атрибутов, в ответ попадут только объекты, которые удовлетворяют всем условиям. Для каждого атрибута укажите:
+   
+      * `<code>` — код дополнительного атрибута из поля `result.filters.attributes.tag`.
+      * `<value>` — значение дополнительного атрибута, зависит от типа атрибута из поля `result.filters.attributes.type`:
+
+         | Тип атрибута | Тип значения | Пример |
+         | ------------ | ------------ | ------ |
+         | `flag`       | Булево значение | `attr[food_service_business_lunch]=true` |
+         | `range`      | Диапазон из двух чисел, перечисленных через запятую | `attr[food_service_capacity]=10,30` |
+
+   **Пример запроса:**
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items?q=кафе&location=37.630866,55.752256&attr[food_service_food_korean]=true&attr[food_service_lunch_cost]=0,1500&key=API_KEY
+   ```
+
+   **Пример ответа:**
+
+   <details>
+   <summary><code>response.json</code></summary>
+
+   ```json
+   {
+      "meta": {
+         "api_version": "3.0.20926",
+         "code": 200,
+         "issue_date": "20260630"
+      },
+      "result": {
+         "items": [
+               {
+                  "address_comment": "цокольный, 1 этаж",
+                  "address_name": "Петровский бульвар, 15 ст1",
+                  "id": "70000001066422742",
+                  "name": "Kook, бистро корейской кухни",
+                  "type": "branch"
+               },
+               {
+                  "address_comment": "цокольный этаж; правый торец",
+                  "address_name": "Новослободская улица, 26 ст1",
+                  "id": "70000001046256911",
+                  "name": "Korean Grill BBQ Tokpokki, кафе",
+                  "type": "branch"
+               },
+               {
+                  "address_name": "улица Шаболовка, 24 ст1",
+                  "id": "70000001105112966",
+                  "name": "Рамен бульон",
+                  "type": "branch"
+               }
+         ],
+         "total": 3
+      }
+   }
+   ```
+
+   </details>
