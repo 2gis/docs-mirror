@@ -28,13 +28,13 @@
    | Endpoint сервиса API-ключей                            | `http://keys-service-api`                                                                                                                                                                                                                                                    | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)            |
    | Endpoint сервиса сбора статистики                      | `http://stat-receiver`                                                                                                                                                                                                                                               | См. [Установка сервиса сбора статистики](/on-premise-api-platform/installation#install-stat) |
    | Endpoint прокси для API пробок                         | `http://traffic-proxy`                                                                                                                                                                                                                                               | См. [Установка прокси для API пробок](/on-premise-api-platform/installation#install-traffic-proxy) |
-   | Сервисные токены<sup>\*</sup>                          | `DIRECTIONS_TOKEN` <br /> `TRUCK_DIRECTIONS_TOKEN` <br /> `PAIRS_DIRECTIONS_TOKEN` <br /> `PUBLIC_TRANSPORT_TOKEN` <br /> `DISTANCE_MATRIX_TOKEN` <br /> `ISOCHRONE_TOKEN` <br /> `MAP_MATCHING_TOKEN` <br /> `TSP_TOKEN` <br /> `ROUTES_PLANNER_TOKEN` (для работы с <Brand /> Ситискан) | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)            |
+   | Сервисные токены<sup>\*</sup>                          | `PUBLIC_TRANSPORT_TOKEN` <br /> `DISTANCE_MATRIX_TOKEN` <br /> `ISOCHRONE_TOKEN` <br /> `MAP_MATCHING_TOKEN` <br /> `TSP_TOKEN` <br />`DIRECTIONS_TOKEN` <br /> `TRUCK_DIRECTIONS_TOKEN` <br /> `PAIRS_DIRECTIONS_TOKEN` <br /> `ROUTES_PLANNER_TOKEN` (для работы с <Brand /> Ситискан) | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)            |
 
-   \* В иллюстративных целях предполагается, что сервисные токены доступны для всех продуктов навигации.
+   \* В иллюстративных целях предполагается, что сервисные токены доступны для всех продуктов навигации. Токены `DIRECTIONS_TOKEN`, `TRUCK_DIRECTIONS_TOKEN` и `PAIRS_DIRECTIONS_TOKEN` нужны для служебных Directions API, Truck Directions API и Pairs Directions API. 
 
 4. Определите, какие API вам необходимо установить:
 
-   * Базовые API навигации: Routing API, Directions API, Truck Directions API, Pairs Directions API, Distance Matrix API, Map Matching API и Isochrone API. Подробнее о сервисах см. в [обзоре](/on-premise-api-platform/overview/summary#navigation).
+   * Базовые API навигации: Routing API, Directions API, Distance Matrix API, Map Matching API и Isochrone API. Подробнее о сервисах см. в [обзоре](/on-premise-api-platform/overview/summary#navigation).
    * Distance Matrix Async API для расчёта матрицы расстояний для большого количества точек. Может быть установлен отдельно или в сочетании с другими API. Подробнее о сервисе см. на [странице архитектуры](/on-premise-api-platform/architecture/navigation#async-distance-matrix-api).
    * TSP API для решения задачи коммивояжёра (построить кратчайший маршрут обхода точек). Подробнее о сервисе см. на [странице архитектуры](/on-premise-api-platform/architecture/navigation#tsp-api).
    * Restrictions API для управления собственной информацией о дорожных перекрытиях. Устанавливается в сочетании с другими API. Подробнее о сервисе см. на [странице архитектуры](/on-premise-api-platform/architecture/navigation#restrictions-api).
@@ -211,9 +211,9 @@ Navi-Router использует файл правил, чтобы опреде�
 | Тип запросов (`queries`) | Назначение | Каким сервисом используется |
 | --- | --- | --- |
 | `free_roam` | Свободная навигация без маршрута. | Mobile SDK |
-| `routing` | Маршруты для транспорта, кроме общественного. | [Directions API](/api/navigation/directions/overview), [Truck Directions API](/api/navigation/truck-directions/overview), [Routing API](/api/navigation/routing/overview) |
+| `routing` | Маршруты для транспорта, кроме общественного. | [Routing API](/api/navigation/routing/overview), [Directions API](/api/navigation/directions/overview) |
 | `ctx`, `public_transport` | Маршруты для общественного транспорта. | [Routing API](/api/navigation/routing/overview) |
-| `get_pairs` | Построение нескольких маршрутов одновременно. | [Pairs Directions API](/api/navigation/pairs/overview) |
+| `get_pairs` | Построение нескольких маршрутов одновременно, кроме маршрутов для общественного транспорта. | [Routing API](/api/navigation/routing/overview) |
 | `get_hull` | Построение зон доступности. | [Isochrone API](/api/navigation/isochrone/overview) |
 | `map_matching` | Восстановление маршрута по точкам. | [Map Matching API](/api/navigation/map-matching/overview) |
 | `get_dist_matrix`  | Синхронная и асинхронная матрица расстояний. | [Distance Matrix API](/api/navigation/distance-matrix/start) |
@@ -1881,9 +1881,8 @@ rules:
 
 2. Создайте файл `data.json` с телом запроса к API навигации. Примеры запросов вы можете найти в документации сервисов навигации:
 
-   * [Directions API](/api/navigation/directions/examples): маршруты для автомобилей, такси, велосипедов, самокатов, мотоциклов, экстренных служб и пешеходов.
-   * [Truck Directions API](/api/navigation/truck-directions/overview#request-example): маршруты для грузового транспорта.
-   * [Routing API](/api/navigation/routing/overview): маршруты для общественного транспорта.
+   * [Routing API](/api/navigation/routing/overview): маршруты для общественного транспорта, автомобилей, такси, велосипедов, самокатов, мотоциклов, экстренных служб, грузового транспорта и пешеходов.
+   * [Directions API](/api/navigation/directions/examples): маршруты для автомобилей, такси, велосипедов, самокатов, мотоциклов, экстренных служб и пешеходов (для использования мобильным SDK).
    * [Isochrone API](/api/navigation/isochrone/overview): достижимые области на автомобиле.
    * [Distance Matrix API](/api/navigation/distance-matrix/overview): матрицы расстояний.
 
