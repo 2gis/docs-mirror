@@ -231,7 +231,7 @@ TSP API предлагает наиболее оптимальный *поряд
   <script src="__MAPGL_API_URL__"></script>
   <script>
     const apiKey = 'Your directions API access key';
-    const reqTaskUrl = 'https://routing.api.2gis.com/logistics/vrp/1.1.0/create?key=' + apiKey;
+    const reqTaskUrl = 'https://routing.api.2gis.com/logistics/vrp/2.0/create?key=' + apiKey;
     const map = new mapgl.Map('container', {
       center: [37.615655, 55.768005],
       zoom: 11.5,
@@ -350,42 +350,48 @@ TSP API предлагает наиболее оптимальный *поряд
     }
 
     function getPollUrl(taskId) {
-      return 'https://routing.api.2gis.com/logistics/vrp/1.1.0/status?task_id=' + taskId + '&key=' + apiKey;
+      return 'https://routing.api.2gis.com/logistics/vrp/2.0/status?task_id=' + taskId + '&key=' + apiKey;
     }
 
     function createTSPTask(transportType, courierCount) {
       const tspRequest = {
-        waypoints: [
-          {
-            waypoint_id: 0,
-            point: { lat: warehouse.lat, lon: warehouse.lon },
-          },
-          ...deliveryPoints.map((point, index) => {
-            const waypoint = {
-              waypoint_id: index + 1,
-              point: { lat: point.lat, lon: point.lon },
-              service_time: 600,
-              delivery_value: 10,
-            };
-
-            if (waypoint.waypoint_id === 1) {
-              waypoint.time_windows = [{ start: 32400, end: 48600 }];
-            }
-
-            return waypoint;
-          }),
-        ],
+        waypoints: deliveryPoints.map((point, index) => {
+          const wp = {
+            id: String(index + 1),
+            point: { lat: point.lat, lon: point.lon, type: "stop" },
+            type: "delivery",
+            service_duration_s: 600,
+            depot_ids: ["0"],
+            shipment_size: { weight_kg: 10 },
+          };
+          if (index === 0) {
+            wp.time_windows = [{ time_window: "08:00-18:00", hard_time_window: "08:00-18:00" }];
+          }
+          return wp;
+        }),
         agents: Array.from({ length: courierCount }, (_, i) => ({
-          agent_id: i,
-          start_waypoint_id: 0,
-          work_time_window: { start: 28800, end: 64800 },
-          capacity: 500,
+          id: String(i + 1),
+          capacity: { weight_kg: 500 },
+          start_at: "0",
+          finish_at: "0",
         })),
-        routing_options: { transport: transportType },
-        start_time: "2025-09-17T08:00:00Z",
+        depots: [{
+          id: "0",
+          point: { lat: warehouse.lat, lon: warehouse.lon, type: "stop" },
+          service_duration_s: 0,
+          time_window: {
+            time_window: "08:00-18:00",
+            hard_time_window: "08:00-18:00",
+          },
+        }],
+        options: {
+          routing_type: transportType,
+          route_type: "jam",
+          date: "2025-09-17",
+          time_zone: "Europe/Moscow",
+          solver_time_limit_s: 60,
+        },
       };
-
-      console.log("API request:", tspRequest);
 
       return fetch(reqTaskUrl, {
         method: "POST",
@@ -401,7 +407,6 @@ TSP API предлагает наиболее оптимальный *поряд
           return res.json();
         })
         .then((data) => {
-          console.log("API response:", data);
           const taskId = data.task_id;
           if (!taskId) {
             throw new Error("No task_id in response");
@@ -425,10 +430,14 @@ TSP API предлагает наиболее оптимальный *поряд
         })
           .then((res) => res.json())
           .then((data) => {
-            if (data.status === 'Done' || data.status === 'Partial') {
+            const status = data.status && data.status.status;
+            if (status === 'Done' || status === 'Partial') {
               clearInterval(interval);
-              fetchSolution(data.urls.url_vrp_solution);
-            } else if (data.status === 'Fail') {
+              const result = data.result;
+              renderRoutes(result.routes);
+              showRouteInfo(result.metrics.total_duration_s, result.metrics.total_distance_m);
+              hideLoadingBanner();
+            } else if (status === 'Fail') {
               clearInterval(interval);
               hideLoadingBanner();
             }
@@ -440,46 +449,42 @@ TSP API предлагает наиболее оптимальный *поряд
       }, 5000);
     }
 
-    function fetchSolution(solutionUrl) {
-
-      fetch(solutionUrl)
-        .then((res) => res.json())
-        .then((data) => {
-          renderRoutes(data.routes);
-          showRouteInfo(data.summary_duration, data.summary_distance);
-          hideLoadingBanner();
-        })
-        .catch((error) => {
-          hideLoadingBanner();
-        });
-    }
-
     function renderRoutes(routes) {
       routeLines.forEach((polyline) => polyline.destroy());
       routeLines = [];
 
       const tooltip = document.getElementById('tooltip');
-      const colors = ["rgba(0, 65, 195)", "rgba(28, 169, 30)"];
+      const colors = ["#0041C3", "#1CA91E"];
       let colorIndex = 0;
 
       routes.forEach((route) => {
-        const coordinates = route.points.map((pointId) => {
-          if (pointId === 0) {
-            return [warehouse.lon, warehouse.lat];
-          } else {
-            const point = deliveryPoints[pointId - 1];
-            return [point.lon, point.lat];
-          }
-        });
+        const coordinates = route.route
+          .map((step) => {
+            const node = step.node;
+            if (node.type === 'depot' || node.type === 'agent') {
+              return [warehouse.lon, warehouse.lat];
+            }
+            const wpId = parseInt(node.value.waypoint_id, 10);
+            const point = deliveryPoints[wpId - 1];
+            return point ? [point.lon, point.lat] : null;
+          })
+          .filter(Boolean);
+
+        const dedupedCoords = coordinates.filter((coord, i) =>
+          i === 0 || coord[0] !== coordinates[i - 1][0] || coord[1] !== coordinates[i - 1][1]
+        );
+
+        if (dedupedCoords.length < 2) return;
 
         const polyline = new mapgl.Polyline(map, {
-          coordinates,
+          coordinates: dedupedCoords,
           color: colors[colorIndex % colors.length],
           width: 7,
         });
 
         polyline.on('mouseover', (event) => {
-          tooltip.innerHTML = 'ID курьера: ' + route.agent_id + '<br />Время в пути: ' + Math.round(route.duration / 60) + ' мин<br />' + ' Длина маршрута: ' + (route.distance / 1000).toFixed(2) + ' км';
+          tooltip.innerHTML = 'ID курьера: ' + route.agent_id + '<br />Время в пути: ' + Math.round(route.duration_s / 60) + ' мин<br />' + 'Длина маршрута: ' + (route.distance_m / 1000).toFixed(2) + ' км';
+          tooltip.style.display = 'block';
           tooltip.style.left = (event.point[0] + 10) + 'px';
           tooltip.style.top = (event.point[1] + 10) + 'px';
         });
@@ -497,7 +502,7 @@ TSP API предлагает наиболее оптимальный *поряд
         const point = index === 0 ? warehouse : deliveryPoints[index - 1];
 
         marker.on('mouseover', (event) => {
-          tooltip.innerHtml = 'ID точки: ' + pointId + '<br />Координаты: [' + point.lon.toFixed(5) + ', ' + point.lat.toFixed(5) + ']';
+          tooltip.innerHTML = 'ID точки: ' + pointId + '<br />Координаты: [' + point.lon.toFixed(5) + ', ' + point.lat.toFixed(5) + ']';
           tooltip.style.display = 'block';
           tooltip.style.left = (event.point[0] + 10) + 'px';
           tooltip.style.top = (event.point[1] + 10) + 'px';
