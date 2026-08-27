@@ -1,0 +1,228 @@
+---
+sidebar: aiapi
+---
+# MCP-сервер
+
+MCP-сервер <Brand /> предоставляет ИИ-агентам доступ к геоданным <Brand />: картам, адресам, маршрутам и данным об организациях. Он использует открытый протокол [Model Context Protocol](https://modelcontextprotocol.io/), направляет запросы от ИИ-агентов к API <Brand /> и возвращает результаты в подходящем для обработки формате. ИИ-ассистенты используют эти данные, чтобы отвечать на вопросы пользователей о местах, адресах, организациях и маршрутах, а также анализировать и визуализировать данные.
+
+Схема работы:
+
+1. Пользователь отправляет запрос ИИ-агенту (например, `Найти все круглосуточные аптеки`).
+2. Агент определяет, какие геоданные и сервисы нужны (карты, поиск объектов по критерию и т. д.), и обращается к MCP-серверу.
+3. MCP-сервер отправляет запросы к соответствующим API <Brand /> (например, Static API для получения изображения карты, Places API для поиска объектов и получения данных о них).
+4. Агент получает результат и формирует ответ для пользователя.
+
+При использовании MCP-сервера и при прямом обращении к API доступны одни и те же данные и действуют одинаковые тарифы и лимиты.
+
+## Доступные инструменты и API {#available-apis}
+
+MCP-сервер предоставляет следующие инструменты для работы:
+
+| Инструмент | Функция | <div style={{"width":"200px"}}>Используемое API <Brand /></div> |
+|------------|---------| -------------------|
+| `search_poi` | Поиск мест и организаций по запросу и координатам | [Places API](/api/search/places/overview), [Geocoder API](/api/search/geocoder/overview) |
+| `calculate_route` | Построение маршрутов на разных видах транспорта, расчёт времени в пути и расстояния. | [Routing API](/api/navigation/routing/overview) |
+| `geocode` | Прямое геокодирование: преобразование адреса в координаты | [Geocoder API](/api/search/geocoder/overview) |
+| `reverse_geocode` | Обратное геокодирование: преобразование координат в адрес | [Geocoder API](/api/search/geocoder/overview) |
+| `create_map_view` | Создание статической карты с маркерами в формате PNG | [Static API](/maps/others/static/overview) |
+| `calculate_isochrone` | Построение областей, которые достижимы от начальной точки за определённое время (изохрон). | [Isochrone API](/api/navigation/isochrone/overview) |
+
+## 1. Получите ключ доступа {#get-access-key}
+
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=ai_docs" target="_blank">
+      В кабинет
+   </CtaButton>
+
+2. Получите ключ для доступа к нужным API:
+
+   - Оформите бесплатный [демо-ключ](/platform-manager/subscription/keys#demo) (действует 30 дней, есть [ограничения по количеству запросов](/platform-manager/subscription/pricing#demo-limits)). В демо-ключе автоматически подключены все нужные API для работы с MCP-сервером.
+   - Купите [подписку](/platform-manager/subscription/purchase) и создайте ключи для доступа к API. Рекомендуется создать два ключа для работы с MCP-сервером, чтобы отдельно контролировать использование API карт и поиска и API навигации. Количество ключей не влияет на стоимость подписки. Рекомендуемое распределение API по ключам:
+
+      - Ключ для работы с картами и поиском: Static API, Geocoder API, Places API.
+      - Ключ для работы с навигацией: Routing API, Isochrone API.
+
+   Если вы создаёте только один ключ, убедитесь, что в нём подключены все нужные API для работы с MCP-сервером. Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
+
+Подробнее о стоимости сервисов см. в разделе [Тарифы](/platform-manager/subscription/pricing).
+
+## 2. Установите и настройте MCP-сервер {#install}
+
+1. Клонируйте [репозиторий MCP-сервера](https://github.com/2gis/2gis-mcp).
+2. Установите зависимости:
+
+   ```bash
+   npm install
+   ```
+
+3. Запустите сборку MCP-сервера:
+
+   ```bash
+   npm run build
+   ```
+
+   После сборки в корне репозитория будет создан файл `dist/index.js`, путь до которого нужно указать в конфигурации запуска на следующем шаге.
+
+## 3. Подключите MCP-сервер к приложению {#connect}
+
+<Tabs>
+<TabItem value="claude-desktop" label="Claude Desktop" default>
+
+1. Скачайте и установите [Claude Desktop](https://claude.ai/download).
+2. В файл настроек `claude_desktop_config.json` добавьте конфигурацию MCP-сервера <Brand />:
+
+   ```json
+   {
+     "mcpServers": {
+       "2gis": {
+         "command": "node",
+         "args": ["PATH_TO_REPO/dist/index.js"],
+         "env": {
+           "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+           "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+         }
+       }
+     }
+   }
+   ```
+
+   Где:
+
+   - `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится файл `dist/index.js`.
+   - `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+   - `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+   Если сервер развёрнут удалённо (с доступом по HTTP), используйте Supergateway:
+
+   ```json
+   {
+     "mcpServers": {
+       "2gis": {
+         "command": "npx",
+         "args": [
+           "-y",
+           "supergateway",
+           "--streamableHttp",
+           "https://YOUR_HOST/mcp"
+         ]
+       }
+     }
+   }
+   ```
+
+</TabItem>
+<TabItem value="lm-studio" label="LM Studio">
+
+LM Studio позволяет работать с MCP-сервером полностью локально: без облачных LLM-провайдеров. Модель работает на вашем компьютере, а MCP-сервер обращается только к API <Brand />.
+
+1. Скачайте и установите [LM Studio](https://lmstudio.ai/docs/app).
+2. Подключите MCP-сервер по [инструкции](https://lmstudio.ai/docs/app/mcp). В файл настроек `mcp.json` добавьте конфигурацию MCP-сервера <Brand />:
+
+   ```json
+   {
+     "mcpServers": {
+       "2gis": {
+         "command": "node",
+         "args": ["PATH_TO_REPO/dist/index.js"],
+         "env": {
+           "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+           "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+         }
+       }
+     }
+   }
+   ```
+
+   Где:
+
+   - `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится собранный файл `dist/index.js`.
+   - `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+   - `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+</TabItem>
+<TabItem value="cursor" label="Cursor">
+
+1. Скачайте и установите [Cursor](https://www.cursor.com/).
+2. В файл настроек `.cursor/mcp.json` добавьте конфигурацию MCP-сервера <Brand />:
+
+   ```json
+   {
+     "mcpServers": {
+       "2gis": {
+         "command": "node",
+         "args": ["PATH_TO_REPO/dist/index.js"],
+         "env": {
+           "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+           "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+         }
+       }
+     }
+   }
+   ```
+
+   Где:
+
+   - `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится собранный файл `dist/index.js`.
+   - `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+   - `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+</TabItem>
+<TabItem value="vscode" label="VS Code (GitHub Copilot)">
+
+1. Скачайте и установите [VS Code](https://code.visualstudio.com/).
+2. Создайте файл `.vscode/mcp.json` в корне рабочей директории и добавьте конфигурацию MCP-сервера <Brand />:
+
+   ```json
+   {
+     "servers": {
+       "2gis": {
+         "command": "node",
+         "args": ["PATH_TO_REPO/dist/index.js"],
+         "env": {
+           "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+           "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+         }
+       }
+     }
+   }
+   ```
+
+   Где:
+
+   - `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится собранный файл `dist/index.js`.
+   - `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+   - `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+</TabItem>
+<TabItem value="stdio" label="Любой MCP-совместимый клиент">
+
+MCP-сервер <Brand /> работает по стандартному MCP-протоколу через `stdio`. Любое приложение, поддерживающее протокол MCP, может подключиться к серверу, указав команду запуска:
+
+```bash
+MAPGL_API_KEY=YOUR_MAPS_API_KEY ROUTING_API_KEY=YOUR_ROUTING_API_KEY node dist/index.js
+```
+
+Где:
+
+- `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+- `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+</TabItem>
+</Tabs>
+
+## Пример работы {#example}
+
+Изображения ниже показывают примеры использования MCP-сервера <Brand /> в диалоге пользователя с ИИ-ассистентом:
+
+- Поиск объектов по критериям:
+
+    <img src="/img/ai/find-restaurants.png" alt="Диалог для поиска объектов" width="550" />
+
+- Отображение объекта на карте:
+
+    <img src="/img/ai/show-on-map.png" alt="Диалог для отображения объекта на карте" width="550" />
+
+- Расчёт маршрута:
+
+    <img src="/img/ai/routing.png" alt="Диалог для построения маршрута" width="550" />
