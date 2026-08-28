@@ -1,22 +1,16 @@
 ---
 sidebar: mapgljsapi
 ---
-# Релизы MapGL API
+# Релизы
 
-There are two ways to choose MapGL version:
+Доступны две версии MapGL JS API:
 
-1. (**recommended**) major version: https://mapgl.2gis.com/api/js/v1
-2. fixed version: https://mapgl.2gis.com/api/js/v1.76.1
+* (Рекомендуется) Мажорная версия: https://mapgl.2gis.com/api/js/v1
+* Фиксированная версия: https://mapgl.2gis.com/api/js/v1.76.1
 
-Major version guarantees to have stable API (breaking changes will land into the next major version).
-It is updated regularly with new features, bug fixes and performance improvements.
+Мажорная версия гарантирует стабильный API (критические изменения вводятся в следующей мажорной версии). Она регулярно обновляется: добавляются новые возможности, исправляются ошибки и улучшается производительность.
 
-Fixed version does not have any updates.
-That's why it has a short **support period of 3 months** after a new version is released.
-We guarantee that the version will be working during the support period.
-**The only reason to choose fixed version** is when you need
-[Subresource Integrity (SRI)](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
-Because of short support period you have to update the version regularly.
+Фиксированная версия не обновляется, поэтому срок поддержки составляет три месяца после выхода новой версии. В течение срока поддержки гарантируется работоспособность версии. Используйте фиксированную версию только при необходимости проверки [целостности подресурсов (SRI)](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) и регулярно её обновляйте.
 
 ## v1.76.1
 
@@ -24,9 +18,9 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-Z70wHqGKzQl9fbMPeDHSxUhmcW9kLwP0Zv6WNWkwRZRDzz0rPk8hJe9Bib7/tn06Po2sSnGXo1zDbwGjj5BWiQ==
 
-**Release Date:** 14.08.2026
+**Дата релиза:** 14.08.2026
 
-- Updated default graphics presets: disable models and shadows in light one and shadows in normal one
+* Обновлены графические режимы по умолчанию: отключены модели и тени в режиме `light` и тени в режиме `normal`.
 
 ## v1.76.0
 
@@ -34,12 +28,10 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-mFf2sak98AbbJECjxBuCoe3uGzCZj9rKIUjz0oPDObsWAebNPATkjeMm44hmJeCKHRy/QfKN6ITOVSXOa2O8Pw==
 
-**Release Date:** 29.07.2026
+**Дата релиза:** 29.07.2026
 
-**Support End Date:** 14.11.2026
-
-- Labels now accept any font name and gracefully fall back to Noto_Sans when the font is missing
-- Improved rendering loop reliability, generating log events when performance degrades and critical errors occur
+* Теперь текстовые метки принимают любое название шрифта и корректно переключаются на шрифт Noto Sans, если шрифт не указан.
+* Улучшена надежность цикла отрисовки: генерируются события журнала при снижении производительности и возникновении критических ошибок.
 
 ## v1.75.2
 
@@ -47,14 +39,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-+7DNY5CzbQvX5uFtZkU55hc6iYJ0QDJOM7l/Rfhme6qLoECnKktiL1VRrJIMdfUpaEV647PdNxSx8HjFQxyRlA==
 
-**Release Date:** 16.07.2026
+**Дата релиза:** 16.07.2026
 
-**Support End Date:** 29.10.2026
+**Дата окончания поддержки:** 29.10.2026
 
-- Added shadow rendering for DEM terrain
-- 3D terrain is now disabled outside DEM tile coverage
-- Improved rendering responsiveness by avoiding render-thread stalls during shader program linking when `KHR_parallel_shader_compile` is available
-- Fixed markers and point labels disappearing on terrain while elevation tiles are partially loaded
+* Добавлена отрисовка теней для 3D-рельефа.
+* Отключена отрисовка 3D-рельефа за пределами зоны покрытия тайлами.
+* Исправлена ​ошибка, приводившая к зависанию потока отрисовки из-за блокирующей компиляции шейдеров. Теперь используется расширение `KHR_parallel_shader_compile`, если оно доступно.
+* Исправлена ошибка, из-за которой маркеры и точечные текстовые метки исчезали на 3D-рельефе при частичной загрузке тайлов высот.
 
 ## v1.75.1
 
@@ -62,11 +54,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-I780CPZKCf2OLKSg6Q7ZTlwmuUauaHn2Cj3TumsGQqCYEcFMW7z0RFQAy7teRuT+hE9Fe8iXsXzfonWsiTgsBA==
 
-**Release Date:** 03.07.2026
+**Дата релиза:** 03.07.2026
 
-**Support End Date:** 16.10.2026
+**Дата окончания поддержки:** 16.10.2026
 
-- Fixed duplicate models rendering and improved performance for models with identical IDs at different positions
+* Исправлена отрисовка дублирующихся моделей и улучшена производительность отрисовки моделей с одинаковым ID в разных позициях.
 
 ## v1.75.0
 
@@ -74,15 +66,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-5zhreVw5yzo1jdG1s5eXhVa5BzijYH6gM9ITF0rlTjxSBQYSFJcADZZZp845BkFIR7+2ymBZtZyiYHOdbhT7NA==
 
-**Release Date:** 26.06.2026
+**Дата релиза:** 26.06.2026
 
-**Support End Date:** 03.10.2026
+**Дата окончания поддержки:** 03.10.2026
 
-- Fixed identify cache invalidation after tile mod changes, so hover now works for newly loaded custom source tiles
-- Added support for the format expression in style expressions, for example, for textField formatting
-- Fixed 3D line rendering
-- Added terrain contour line and contour label rendering, configurable via DEM style contour settings
-- Fixed tile visibility at the antimeridian when globe rendering is enabled and loopWorld is disabled
+* Исправлена работа кеша идентификации после изменений стиля тайлов: теперь наведение курсора корректно работает для заново загруженных тайлов из пользовательских источников.
+* Добавлена поддержка выражения `format` в стилевых выражениях, например для форматирования поля `textField`.
+* Исправлена отрисовка 3D-линий.
+* Добавлена отрисовка линий рельефа и текстовых меток линий, настраиваемая через параметры контуров стиля DEM (цифровой модели высот).
+* Исправлена видимость тайлов на антимеридиане при включённой отрисовке глобуса и отключённом параметре `loopWorld`.
 
 ## v1.74.0
 
@@ -90,15 +82,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-9yGkKBonvUFs/6zaNnk41GhluZa+rKXrP6QWmCvpHLuJd3W9oFBZnQof0I4MvZlsS77N02ryW/oEWuV8r3cOyA==
 
-**Release Date:** 09.06.2026
+**Дата релиза:** 09.06.2026
 
-**Support End Date:** 26.09.2026
+**Дата окончания поддержки:** 26.09.2026
 
-- Add touchmove event for map and dynamic objects on touch devices
-- Universe tiles are no longer filtered out based on regional coverage data
-- Update FPS stats accumulation and performance caveat detection
-- Improve tiered mesh rendering by skipping redundant tier framebuffer redraws
-- Fix mobile rendering of point, circle marker and dashed line symbols
+* Добавлено событие `touchmove` для карты и динамических объектов на устройствах с сенсорным экраном.
+* Отключена фильтрация universe-тайлов (отображаемых на уровне масштабирования 8 и выше) на основе данных о региональном покрытии.
+* Обновлено накопление статистики FPS и обнаружение проблем с производительностью.
+* Улучшена отрисовка многоуровневых мешей: исключены лишние перерисовки фреймбуфера.
+* Исправлена отрисовка точечных объектов, круговых маркеров и пунктирных линий на мобильных устройствах.
 
 ## v1.73.0
 
@@ -106,13 +98,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-3ySr4ArzEvQ/YwvXD4uoR2m3XowpdZEKnBADLL3OdllBW0adZNcb+zFwLERrhnMjVQqaP7cJJv+kvmKP2qg3Zw==
 
-**Release Date:** 26.05.2026
+**Дата релиза:** 26.05.2026
 
-**Support End Date:** 09.09.2026
+**Дата окончания поддержки:** 09.09.2026
 
-- Allowed expression values for PointStyleLayer iconPriority/textPriority and LabelLineStyleLayer textPriority in type declarations
-- Removed commercial POI layer injection into styles
-- Fixed a blinking frame when repeating GLTF model animations
+* Добавлена поддержка значений выражений для `iconPriority` и `textPriority` в `PointStyleLayer`, а также для `textPriority` в `LabelLineStyleLayer`.
+* Удалены слои рекламных POI из стилей.
+* Исправлено мигание кадров при зацикленных анимациях glTF-моделей.
 
 ## v1.72.3
 
@@ -120,22 +112,22 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-Bs1FNW6l3HhIEjgdeI6b3T/IuYxOouAn01VPM46zXcG1bf/cGSbt3/z7FcJmzkPevEWRLqI+nScMR0voF76tmw==
 
-**Release Date:** 08.05.2026
+**Дата релиза:** 08.05.2026
 
-**Support End Date:** 26.08.2026
+**Дата окончания поддержки:** 26.08.2026
 
-- Metrics are now submitted when the graphics preset changes
-- Raster tile source URL function now processes map key when available
-- POI icon data is now included in the click event's targetData
-- Improved dashed line identify behavior by disabling depth testing for 2D striped lines
-- Fixed dashed polylines disappearing and distorted rendering at low zoom levels, including identify passes
-- Drawing of universe tiles is skipped when they are covered by regional tiles starting at zoom level 10 to improve performance
-- Improved globe rendering performance and smoothness by switching to direct rendering with subdivision
-- WebGL state now resets when rendering customLayers. It improves compatibility with thirdparty WebGL libraries (e.g. deck.gl)
-- Added stretchable icon config type (StyleStretchableIconConfig) and split StyleIconConfig into simple/stretchable variants
-- Style expressions now use kebab-case as the primary naming and still accept camelCase aliases for backward compatibility
-- Added elevated wall segments (arches)
-- Fixed GLTF material animation target resolution for pointer paths
+* Добавлена отправка метрик при изменении графического режима.
+* Добавлена возможность использовать ключ карты в URL `RasterTileSource`.
+* Добавлены данные иконок POI в поле `targetData` события клика.
+* Улучшена идентификация пунктирных линий: для 2D-линий отключена проверка глубины.
+* Исправлено исчезновение и некорректная отрисовка пунктирных линий на малых уровнях масштабирования, в том числе при идентификации.
+* Улучшена производительность отрисовки: пропускаются universe-тайлы (отображаемые на уровне масштабирования 8 и выше), перекрытые региональными тайлами (отображаемые на уровне масштабирования 10 и выше).
+* Улучшены производительность и плавность отрисовки глобуса: выполнен переход на прямую отрисовку с сабдивиженом геометрии.
+* Добавлен сброс состояния WebGL при отрисовке пользовательских слоёв для улучшения совместимости со сторонними библиотеками WebGL, такими как deck.gl.
+* Добавлен тип [StyleStretchableIconConfig](/mapgl/reference/interface#style-stretchable-icon-config) для растягиваемых иконок. Разделён тип `StyleIconConfig` на простой и растягиваемый варианты.
+* Обновлены стилевые выражения: теперь по умолчанию используется kebab-case. Поддержка camelCase сохраняется для обратной совместимости.
+* Добавлена поддержка приподнятых сегментов стен (арок).
+* Исправлена анимация текстуры материалов для glTF-моделей.
 
 ## v1.72.0
 
@@ -143,14 +135,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-x85xBizQZwnFKVsj/oj1MG0rR9BywXT1eRRXgg/M046otP/Zine22ILdHHc5i8WvMjd/gJi41YkcqVlIt4j5Uw==
 
-**Release Date:** 02.04.2026
+**Дата релиза:** 02.04.2026
 
-**Support End Date:** 08.08.2026
+**Дата окончания поддержки:** 08.08.2026
 
--   Added the public [Arrow](/mapgl/reference/class#arrow) object for rendering arrows on the map
--   Fixed [markers](/mapgl/objects/markers) disappearing when panning across the antimeridian in loopWorld mode
--   Fixed lighting of transparent objects in models
--   Fixed several rendering issues in Firefox affecting globe rendering and dynamic objects
+* Добавлен публичный объект [Arrow](/mapgl/reference/class#arrow) для отрисовки стрелок на карте.
+* Исправлено исчезновение [маркеров](/mapgl/objects/markers) при перемещении через антимеридиан в режиме `loopWorld`.
+* Исправлено освещение прозрачных объектов в 3D-моделях.
+* Исправлены ошибки отрисовки в браузере Firefox, влиявшие на отрисовку глобуса и динамических объектов.
 
 ## v1.71.0
 
@@ -158,14 +150,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-bzLE2+6sF6Apxq4MlS99iDQ55wmHPdmAiswK2FlT/IJ9Z4bRAk121nHFC3McyU3l/cBr8f5vGHEf/+Hrv31jcQ==
 
-**Release Date:** 10.03.2026
+**Дата релиза:** 10.03.2026
 
-**Support End Date:** 02.07.2026
+**Дата окончания поддержки:** 02.07.2026
 
--   Improved descriptions for the public style layer types
--   Updated UBO processing
--   Fixed road identification on terrain
--   Added the `forceSyncIdentify` flag that forces the map to use synchronous objects picking
+* Обновлены описания публичных типов стилевых слоёв.
+* Обновлена обработка UBO (Uniform Buffer Object).
+* Исправлена идентификация дорог в 3D-рельефе.
+* Добавлен флаг `forceSyncIdentify` для включения синхронной идентификации объектов на карте.
 
 ## v1.70.1
 
@@ -173,11 +165,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-P9RRcFklI/9RIlgZjHPbsxCyoj9tRmUsiToos6JOXBZfxQdE2EPKMSSbe1qrDOSFj5N9e2OEdIvymWW+jeokhg==
 
-**Release Date:** 12.02.2026
+**Дата релиза:** 12.02.2026
 
-**Support End Date:** 10.06.2026
+**Дата окончания поддержки:** 10.06.2026
 
--   Fixed [globe](/mapgl/map-style/immersive/globe) rotation with the [loopWorld: false](/mapgl/map/configuration/loopedmap) option
+* Исправлена ошибка вращения [глобуса](/mapgl/map-style/immersive/globe), возникавшая, если параметр `loopWorld` имел значение `false`.
 
 ## v1.69.1
 
@@ -185,17 +177,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-+dcmrruTpD1EXtvjourezNCQ7TGJ5s2Eh23oSxy9IVvMG8QUKK+QoTNv4hFlMxxw3HcL0Zj/dgG+qNQAlBaqAw==
 
-**Release Date:** 19.01.2026
+**Дата релиза:** 19.01.2026
 
-**Support End Date:** 12.05.2026
+**Дата окончания поддержки:** 12.05.2026
 
--   Fixed a bug with model transformation on the initial animation frame
--   Improved the public style types
--   Fixed a bug that caused overpasses to unexpectedly appear at non-integer zoom levels
--   Fixed a bug with map loading in about:blank
--   Improved identify mechanism in the case of infinitely animated objects
--   Fixed a bug when the identify scene contains hidden objects
--   Added support for the WASM version of the Draco decoder, faster decoding and generation of glTF models
+* Исправлена ошибка преобразования модели на первом кадре анимации.
+* Обновлены публичные типы стилей.
+* Исправлено неожиданное появление путепроводов на уровнях масштабирования с нецелыми значениями.
+* Исправлена загрузка карты в `about:blank`.
+* Улучшен механизм идентификации объектов с бесконечными анимациями.
+* Исправлена ошибка механизма идентификации, возникавшая, когда сцена содержала скрытые объекты.
+* Добавлена поддержка WASM-версии декодера Draco для ускоренного декодирования и генерации glTF-моделей.
 
 <!-- ## v1.69.0
 
@@ -203,14 +195,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-wVKUZ95+0JsyYfR/oen+R6ihA+RaQmoK4/F9osNnCKaQFnN2vOaQ0a9pFlEqqdclJP48ADNjPILA2oCDzPLfYw==
 
-**Release Date:** 26.12.2025
+**Дата релиза:** 26.12.2025
 
--   Fixed a bug that caused overpasses to unexpectedly appear at non-integer zoom levels
--   Fixed a bug with map loading in about:blank
--   Improved identify mechanism in the case of infinitely animated objects
--   Fixed a bug when the identify scene contains hidden objects
--   Models can now be rendered along a line, required for rendering the territory fences
--   Added support for the WASM version of the Draco decoder, faster decoding and generation of glTF models -->
+* Исправлена ошибка, из-за которой путепроводы появлялись на уровнях масштабирования с нецелыми значениями.
+* Исправлена ошибка загрузки карты в `about:blank`.
+* Улучшен механизм идентификации объектов с бесконечными анимациями.
+* Исправлена ошибка механизма идентификации, возникавшая, когда сцена содержала скрытые объекты.
+* Добавлена поддержка отрисовки моделей вдоль линии для отрисовки заборов территорий.
+* Добавлена поддержка WASM-версии декодера Draco для ускоренного декодирования и генерации glTF-моделей. -->
 
 <!-- ## v1.68.0
 
@@ -218,12 +210,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-7NGdb+i8FYZIvoiSqK72hz3iOSWkHUhkjvZhgwynD9UqZVtGi/JFw5O2uoalGx+VaPrvvkXhJPGacjyI1YWODQ==
 
-**Release Date:** 10.12.2025
+**Дата релиза:** 10.12.2025
 
--   Improved identify mechanism in the case of infinitely animated objects
--   Fixed a bug when the identify scene contains hidden objects
--   Models can now be rendered along a line, required for rendering the territory fences
--   Added support for the WASM version of the Draco decoder, faster decoding and generation of glTF models -->
+* Улучшен механизм идентификации объектов с бесконечными анимациями.
+* Исправлена ошибка механизма идентификации, возникавшая, когда сцена содержала скрытые объекты.
+* Добавлена поддержка отрисовки моделей вдоль линии для отрисовки заборов территорий.
+* Добавлена поддержка WASM-версии декодера Draco для ускоренного декодирования и генерации glTF-моделей. -->
 
 ## v1.67.0
 
@@ -231,17 +223,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-TcdTh0KWQhBRrhEvZgIlGqrzQ6U/SZH5chQBv0WI+R4GHK4Ai38XpjxT6f2xgP4157C3GBnvApb3RPEvy16z1g==
 
-**Release Date:** 20.11.2025
+**Дата релиза:** 20.11.2025
 
-**Support End Date:** 19.04.2026
+**Дата окончания поддержки:** 19.04.2026
 
--   Increased view distance at high map pitches
--   Render cache disabled for some problematic cases
--   Fixed [terrain](/mapgl/map-style/immersive/terrain) rendering during map initialization
--   Fixed WebGL 1 errors related to the `EXT_frag_depth extension`
--   Fixed tunnel rendering on [terrain](/mapgl/map-style/immersive/terrain)
--   Fixed issue where a patterned line sometimes failed to render completely
--   Fixed calculation of models show ratio when zoom level passes 18
+* Увеличена дальность обзора при больших углах наклона карты.
+* Отключено использование кеша отрисовки для отдельных случаев.
+* Исправлена отрисовка [3D-рельефа](/mapgl/map-style/immersive/terrain) при инициализации карты.
+* Исправлены ошибки WebGL 1, связанные с расширением `EXT_frag_depth`.
+* Исправлена отрисовка туннелей в [3D-рельефе](/mapgl/map-style/immersive/terrain).
+* Исправлена неполная отрисовка линий с паттерном.
+* Исправлено вычисление коэффициента отображения модели при уровне масштабирования выше 18.
 
 ## v1.66.0
 
@@ -249,14 +241,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-RsAUO9bc7cxeKDN/XuyOhH0+mE26TbgxdVPbKzV5eceJU9/crcZsbj+lIStCC2cggbj+uamqNCN1oVPj+XBaXg==
 
-**Release Date:** 06.10.2025
+**Дата релиза:** 06.10.2025
 
-**Support End Date:** 20.02.2026
+**Дата окончания поддержки:** 20.02.2026
 
-* Improved [3D Terrain](/mapgl/map-style/immersive/terrain)
-* Recently selected floor is remembered within floor complex
-* Fixed visibility of commercial POI inside floor plans
-* Fixed lighting of [textured polygon](/mapgl/map-style/examples/texturedpolygon)
+* Улучшена отрисовка [3D-рельефа](/mapgl/map-style/immersive/terrain).
+* Добавлено запоминание последнего выбранного этажа в комплексе зданий.
+* Исправлена видимость рекламных POI на планах этажей.
+* Исправлено освещение [полигонов с текстурой](/mapgl/map-style/examples/texturedpolygon).
 
 ## v1.65.0
 
@@ -264,15 +256,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-6xxd6KVBOcze7loe8Y9lJs+RMx7Pz+Mrib9TVw0PZ8QsauHIzMZ/ZFfPMcD2bsoLefE0zy1dq2CSE1YUZtnNOw==
 
-**Release Date:** 18.09.2025
+**Дата релиза:** 18.09.2025
 
-**Support End Date:** 06.01.2026
+**Дата окончания поддержки:** 06.01.2026
 
-* Added a new map option `iconIdentifyOpacity` to control how icons are rendered in the identify scene. Pixels with alpha less than this value won't be drawn in the identify scene. Default value is 0.3
-* Optimized map rendering with the `light` graphics preset
-* Added the group case to the `showLayers` and `hideLayers` methods
-* Adjusted the boundaries for automatic selection of graphic presets — the immersive preset is now selected more frequently
-* Fixed font resolve expression for the second label of the point
+* Добавлен параметр карты [iconIdentifyOpacity](/mapgl/reference/interface#map-options/icon-identify-opacity) для управления отрисовкой иконок в сцене. Пиксели с альфа-значением ниже указанного порога не отрисовываются. Значение по умолчанию — `0.3`.
+* Улучшена производительность отрисовки карты с графическим режимом `light`.
+* Добавлена поддержка групп в методах `showLayers()` и `hideLayers()`.
+* Изменены пороговые значения для автоматического выбора графического режима: иммерсивный режим теперь выбирается чаще.
+* Исправлено выражение выбора шрифта для второй текстовой метки точечного объекта.
 
 ## v1.64.0
 
@@ -280,19 +272,19 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-zshtsngCKYHZQbQZXKXtxUKyvCnWZEuVgZEqsfzLSFRCNge+Cz2RSU8c9F3lS3UEA8hvPhOKQXjimenhmXiOMA==
 
-**Release Date:** 05.09.2025
+**Дата релиза:** 05.09.2025
 
-**Support End Date:** 18.12.2025
+**Дата окончания поддержки:** 18.12.2025
 
-* For complexes that don't have floor plans buildings remain visible
-* Added Linear and Step interpolation to gltf-model animation
-* Floor plans are now selected more reliably as camera moves
-* Dictionaries in metatiles are now supported for tourist routes
-* Rendering cache disabled on WebGL1. It fixed some visual artifacts
-* Fixed coordinates parsing in GeoJSON
-* Fixed problems with click and hover over models in Firefox
-* Fixed globe antimeridian rendering
-* Fixed broken objects identification in Globe-mode
+* Исправлена видимость зданий в комплексах без планов этажей.
+* Добавлены линейная и пошаговая интерполяции для анимации glTF-моделей.
+* Улучшена надёжность выбора плана этажа при движении камеры.
+* Добавлена поддержка словарей в метатайлах для туристических маршрутов.
+* Отключен кеш отрисовки в WebGL 1 для устранения визуальных артефактов.
+* Исправлена обработка координат в GeoJSON.
+* Исправлена обработка кликов и наведения курсора для 3D-моделей в браузере Firefox.
+* Исправлена отрисовка глобуса на антимеридиане.
+* Исправлена идентификация объектов в режиме глобуса.
 
 ## v1.63.0
 
@@ -300,14 +292,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-HbxMmNbeuokJCJQowai2Crg2bl+sZuDPf+tPRNSPViK9BpkIsv8VKAHWfjyZYNIjHASXkAVz4JiJwrvMwMSg/w==
 
-**Release Date:** 07.08.2025
+**Дата релиза:** 07.08.2025
 
-**Support End Date:** 05.12.2025
+**Дата окончания поддержки:** 05.12.2025
 
-* Added a hide button to Floor control for displaying the building without floor plans
-* Fixed errors on D3D9 systems in some specific cases
-* Fixed texture pixelation effect on some mobile devices
-* Optimized map updating logic during movement
+* Добавлена возможность отключать показ планов этажей через UI-элемент.
+* Исправлены ошибки на системах с DirectX 9.
+* Исправлена пикселизация текстур на некоторых мобильных устройствах.
+* Улучшена производительность обновления карты при перемещении.
 
 ## v1.62.0
 
@@ -315,17 +307,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-CpAJKhirnHI0KKfSsQsOGQr1jL0bw6aN+z715dRO4wWkm2I1wAKrc/1yPORx0I1XuYKNR3WTHYQD87Cyey+zfA==
 
-**Release Date:** 11.07.2025
+**Дата релиза:** 11.07.2025
 
-**Support End Date:** 07.11.2025
+**Дата окончания поддержки:** 07.11.2025
 
-* Added the trafficOn option to map initialization settings.
-* Enhanced traffic-related methods in the map instance.
-* Optimized map styles storage.
-* Fixed z-fighting issues between extruded polygons with zero height and polylines.
-* Fixed a bug with 3D model rendering on devices with Mali GPUs.
-* Fixed the behavior of the copyright control.
-* Fixed WebGL 1 errors related to EXT\_frag\_depth extension issues on certain devices.
+* Добавлен параметр `trafficOn` в настройки инициализации карты [MapOptions](/mapgl/reference/interface#map-options).
+* Обновлены методы управления пробками в экземпляре карты.
+* Оптимизировано хранение стилей карты.
+* Исправлен визуальный дефект z-fighting между экструдированными полигонами с нулевой высотой и линиями.
+* Исправлена отрисовка 3D-моделей на устройствах с GPU Mali.
+* Исправлено поведение UI-элемента для управления копирайтом.
+* Исправлены ошибки WebGL 1, связанные с расширением `EXT_frag_depth`, на некоторых устройствах.
 
 ## v1.61.0
 
@@ -333,21 +325,21 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-yyAgla7ThMFTUyOKRk7shNxSgq1rtUIi1AwNnab1V7JyPAV/aex/AFs1R8RVZhn7xJRV3RR3G8Ocazngb5/uMw==
 
-**Release Date:** 11.06.2025
+**Дата релиза:** 11.06.2025
 
-**Support End Date:** 11.10.2025
+**Дата окончания поддержки:** 11.10.2025
 
-* Fixed a bug with rendering of text on intersecting substrates
-* Fixed incorrect map behavior when changing the browser zoom level
-* More accurate height positioning of glTF models + support for negative height values
-* Fixed the GeoJsonSource destroy error
-* Always pass the internal generated ID in the events of GeoJSON features
-* Optimized map performance when zooming and moving
-* Extended the error event: added handling for webglcontextlost, invalidtilekey, and styleloaderror
-* Fixed map flickering when selecting features after switching styles
-* Slightly improved rendering performance
-* Fixed model rendering on Android devices with Mali GPUs
-* Fixed disappearance of animated models
+* Исправлена отрисовка текста на пересекающихся подложках.
+* Исправлено некорректное поведение карты при изменении уровня масштабирования браузера.
+* Улучшена точность позиционирования по высоте для glTF-моделей и добавлена поддержка отрицательных значений высоты.
+* Исправлена ошибка, возникавшая при удалении GeoJsonSource.
+* Добавлена передача внутреннего сгенерированного ID в события объектов GeoJSON.
+* Улучшена производительность карты при масштабировании и перемещении.
+* Добавлена возможность обрабатывать ошибки типов `webglcontextlost`, `invalidtilekey` и `styleloaderror`.
+* Исправлено мигание карты при выборе объектов после переключения стиля.
+* Улучшена производительность отрисовки.
+* Исправлена отрисовка 3D-моделей на устройствах с Android и GPU Mali.
+* Исправлено исчезновение анимированных моделей.
 
 ## v1.60.0
 
@@ -355,11 +347,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-8Sd8fRKpKXVUxQ1jiL1Pvtlo3jtwJK1hZV0jedHK0cRa6Rg4wC+7+Z0EXx+14/msRBnft2J2aDb2IxOhFKaMIQ==
 
-**Release Date:** 28.04.2025
+**Дата релиза:** 28.04.2025
 
-**Support End Date:** 11.09.2025
+**Дата окончания поддержки:** 11.09.2025
 
-* Added [minZoom](/mapgl/reference/interface#zenith-source-options/min-zoom) and [maxZoom](/mapgl/reference/interface#zenith-source-options/max-zoom) options to [ZenithSource](/mapgl/reference/class#zenith-source)
+* Добавлены параметры [minZoom](/mapgl/reference/interface#zenith-source-options/min-zoom) и [maxZoom](/mapgl/reference/interface#zenith-source-options/max-zoom) для [ZenithSource](/mapgl/reference/class#zenith-source).
 
 ## v1.59.0
 
@@ -367,15 +359,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-EFaRLQlcLcuBI9+Ptqdqo6pNiZMUfSeYgpUciwkFrW7k6I/ZUUNFYWOO6WWaI9iVCheJQCi3T69rknBXFhrTAg==
 
-**Release Date:** 28.04.2025
+**Дата релиза:** 28.04.2025
 
-**Support End Date:** 28.07.2025
+**Дата окончания поддержки:** 28.07.2025
 
-* Style groups now can have a common defaults (can be set through [style editor](/maps/styles/overview))
-* Various fixes in gltf-models rendering
-* Fixed rendering artifacts of the overpass border
-* Fixed incorrect labelLine layer display in floors mode
-* Improvements in instanced models rendering
+* Добавлена поддержка общих значений по умолчанию в группах стилей, настраиваемых через [Редактор стилей](/maps/styles/overview).
+* Исправлены ошибки отрисовки glTF-моделей.
+* Исправлены артефакты отрисовки на границах путепроводов.
+* Исправлено некорректное отображение слоя `labelLine` в режиме этажных планов.
+* Улучшена отрисовка моделей.
 
 ## v1.58.1
 
@@ -383,12 +375,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-bwC4kJmmB/O5XlHnagXKC/v+Cd91OzK/vRrIsshK+cyYPYjeYMHLzRznw3Ijr7Ewst830JBJZI37w+OJu9m4fA==
 
-**Release Date:** 25.03.2025
+**Дата релиза:** 25.03.2025
 
-**Support End Date:** 28.07.2025
+**Дата окончания поддержки:** 28.07.2025
 
-* Fixed map crash after multiple reloads on iOS devices
-* Improved accuracy of [Polyline](/mapgl/reference/class#polyline) object
+* Исправлен сбой карты при многократных перезагрузках на устройствах с iOS.
+* Улучшена точность отрисовки линий (объекта [Polyline](/mapgl/reference/class#polyline)).
 
 ## v1.58.0
 
@@ -396,14 +388,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-1ZbHAg0b3kIQc9vTo3Sfkt+zx/fjd1uJ4spIeXlZAuZGU5lbOLLeoQ13x9nqPpniYlPaPJ7Jkavvai3wvoMiBA==
 
-**Release Date:** 21.03.2025
+**Дата релиза:** 21.03.2025
 
-**Support End Date:** 25.06.2025
+**Дата окончания поддержки:** 25.06.2025
 
-* Improved globe rendering in dark mode, the intensity of the halo can now be adjusted via the color's alpha channel.
-* Fixed a bug related to HtmlMarker in globe mode.
-* Fixed processing of point objects for floors, transitions in metro stations are now visible on floors.
-* Fixed the logic of lowZoomMaxPitch in globe mode, empty tiles no longer fall within the visible area.
+* Улучшена отрисовка глобуса в тёмном режиме: интенсивность гало теперь регулируется через альфа-канал цвета.
+* Исправлено поведение [HtmlMarker](/mapgl/reference/class#html-marker) в режиме глобуса.
+* Исправлена обработка точечных объектов для этажей: переходы между станциями метро теперь отображаются на планах этажей.
+* Исправлена работа параметра [lowZoomMaxPitch](/mapgl/reference/interface#map-options/low-zoom-max-pitch) в режиме глобуса: пустые тайлы не появляются в видимой области.
 
 ## v1.57.0
 
@@ -411,14 +403,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-r04yjbUQX+eqmORerLRS4gJLXqSnrhnvFb3YP1/iuIf3ncBI3l2cg0L5E6ryNWH1sBQ4pv7IRSAZ8x/cl1D2Uw==
 
-**Release Date:** 26.02.2025
+**Дата релиза:** 26.02.2025
 
-**Support End Date:** 21.06.2025
+**Дата окончания поддержки:** 21.06.2025
 
-* Fixed a bug related to `styleload` event emitter behaviour in some cases
-* Fixed a bug related to models position on Android devices
-* Fixed a bug related to tiles displacement in some cases
-* Implemented the ability to disable models in the [graphics presets](/mapgl/map/configuration/graphics-presets)
+* Исправлено поведение генератора события `styleload`.
+* Исправлено позиционирование 3D-моделей на устройствах с Android.
+* Исправлено смещение тайлов.
+* Добавлена возможность управлять отображением 3D-моделей в [графических режимах](/mapgl/map/configuration/graphics-presets).
 
 ## v1.56.0
 
@@ -426,15 +418,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-Z8csu1vPzDUceoCXeHVyZy7zHL/P+s2QUz3iU0KxAuXzsEv3/+XiyYJCmCnFhwbxYyYWnaegwsmC8cwZWdIp/g==
 
-**Release Date:** 03.02.2025
+**Дата релиза:** 03.02.2025
 
-**Support End Date:** 26.05.2025
+**Дата окончания поддержки:** 26.05.2025
 
-* Added the `enableTwoFingerDragging` [map option](/mapgl/reference/interface#map-options) to enable two-finger dragging gestures
-* Fixed an issue where dashed lines disappeared at low zoom levels
-* Added the `globeOff` flag for controlling globe mode in [graphics presets](/mapgl/reference/interface#graphics-preset)
-* Fixed bugs on systems using DirectX9 as the graphics backend
-* Fixed polyline identification at low zoom levels and when overlapping 3D objects
+* Добавлен параметр карты [enableTwoFingerDragging](/mapgl/reference/interface#map-options/enable-two-finger-dragging) для включения жестов перетаскивания двумя пальцами.
+* Исправлено исчезновение пунктирных линий на малых уровнях масштабирования.
+* Добавлен флаг `globeOff` для управления режимом глобуса в [графических режимах](/mapgl/reference/interface#graphics-preset).
+* Исправлены ошибки на системах с DirectX 9.
+* Исправлена идентификация линий на малых уровнях масштабирования и при перекрытии 3D-объектами.
 
 ## v1.55.0
 
@@ -442,16 +434,16 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-DjgDZRgbjNFjD7GS+e5OXSUJP+iSpGGffsvSktmPrNL1KIFLV0trBUA5a7hTsvjK0z2vTwI8c99WEXGu5M//2w==
 
-**Release Date:** 25.12.2024
+**Дата релиза:** 25.12.2024
 
-**Support End Date:** 03.05.2025
+**Дата окончания поддержки:** 03.05.2025
 
-* Added the `HtmlMarkerOptions.lableing` option to [HtmlMarker](/mapgl/reference/class#html-marker)
-* Added the graphics presets functionality
-* Added new [LngLatBoundsClass](/mapgl/reference/class#lng-lat-bounds-class) methods: `getCenter`, `containsPoint`, `containsBounds` and `intersects`
-* Added a new data source: [GeoJsonViewportSource](/mapgl/geodata/geojson-viewport)
-* Fixed a bug related to the display of markers on some Android devices
-* Improved performance related to glTF models drawing
+* Добавлен параметр [labeling](/mapgl/reference/interface#html-marker-options/labeling) в `HtmlMarkerOptions`.
+* Добавлены [графические режимы](/mapgl/map/configuration/graphics-presets).
+* Добавлены методы для класса [LngLatBoundsClass](/mapgl/reference/class#lng-lat-bounds-class): `getCenter()`, `containsPoint()`, `containsBounds()` и `intersects()`.
+* Добавлен источник данных [GeoJsonViewportSource](/mapgl/geodata/geojson-viewport).
+* Исправлено отображение маркеров на некоторых устройствах с Android.
+* Улучшена производительность отрисовки glTF-моделей.
 
 ## v1.54.1
 
@@ -459,13 +451,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-LE96WllmU9YC48MDF3bhdfOsvJ1YUpPho6N3qnV/+nOEKLWCr3L6v6nx4u0guppQ1tHm/NyUWdmv1ucS8A4bWw==
 
-**Release Date:** 10.12.2024
+**Дата релиза:** 10.12.2024
 
-**Support End Date:** 25.03.2025
+**Дата окончания поддержки:** 25.03.2025
 
-* Optimized glTF models animation when the camera is static
-* Improved dashed line rendering
-* Fixed a bug with uniforms binding in some rare cases
+* Улучшена производительность анимации glTF-моделей при неподвижной камере.
+* Улучшена отрисовка пунктирных линий.
+* Исправлена привязка uniform-переменных.
 
 ## v1.54.0
 
@@ -473,15 +465,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-9+vHPwIK4MNsAcrgj7SYCOEoP/v1e5GUhfrnlqpqI89dXk6Uc3NLAcqWpVKuSOUxqc3QmKmA3RkAULThyVgI+w==
 
-**Release Date:** 05.12.2024
+**Дата релиза:** 05.12.2024
 
-**Support End Date:** 10.03.2025
+**Дата окончания поддержки:** 10.03.2025
 
-* Added height in meters to the third coordinate component in [CircleMarker](/mapgl/reference/class#circle-marker)
-* Added support of glTF models without textures. The baseColorFactor is now taken into account when calculating color according to the glTF specification
-* Fixed a bug with incorrect viewport calculation for 3D terrain
-* Fixed a bug with tunnels rendering on Windows with Intel GPU
-* Optimized tile selection algorithm
+* Добавлена поддержка высоты в метрах в качестве третьей координаты в [CircleMarker](/mapgl/reference/class#circle-marker).
+* Добавлена поддержка glTF-моделей без текстур: для вычисления цвета используется параметр `baseColorFactor` согласно спецификации glTF.
+* Исправлено вычисление области видимости для 3D-рельефа.
+* Исправлена отрисовка туннелей на устройствах с Windows и GPU Intel.
+* Улучшен алгоритм выбора тайлов.
 
 ## v1.53.0
 
@@ -489,13 +481,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-h4DhIF0P7Yg4+AO8q9rjbWav4BT24bp1vSgdzJDNALlmYbHq8ztE/zYaWvTYUqBwo7rJdpKO/D3Hp7FMEDnFvA==
 
-**Release Date:** 05.11.2024
+**Дата релиза:** 05.11.2024
 
-**Support End Date:** 05.03.2025
+**Дата окончания поддержки:** 05.03.2025
 
-* Fixed a bug that broke rotation on iPad
-* Fixed a bug with identification of overlapping dynamic objects
-* Added support for the next major version of ZenithSource tiles format
+* Исправлено вращение карты на iPad.
+* Исправлена идентификация перекрывающихся динамических объектов.
+* Добавлена поддержка следующей мажорной версии формата тайлов ZenithSource.
 
 ## v1.52.0
 
@@ -503,20 +495,20 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-YbkONEIEUmPX0wzc61pvjG+4dGO3j+ptaHGW6+dw/RKpBIYSKPZZ+9rRx2nP9kj1jI3gePbMWXzSvTMOvyltUA==
 
-**Release Date:** 21.10.2024
+**Дата релиза:** 21.10.2024
 
-**Support End Date:** 05.02.2025
+**Дата окончания поддержки:** 05.02.2025
 
-* Fixed an issue where clicking on one POI would select a different one
-* Added the `layerId` property to the `targetData` field of the map event
-* Fixed a bug where warnings were logged to the console and models disappeared when switching styles
-* Reduced artifacts related to shadows appearing at a distance from objects
-* Added support for height in meters for marker, with the height specified as the third component of the coordinates
-* Fixed a rendering cache issue on certain devices
-* Added an option to disable rendering cache
-* Fixed an issue with buildings floating in the air on DirectX 9
-* Now polygons on floors can be rendered by `polygonExtrusion` style layer
-* Added support for the `tolerance` option in the GeoJsonSource data source
+* Исправлена ошибка, при которой при клике на один POI выбирался другой.
+* Добавлено свойство [layerId](/mapgl/reference/interface#default-event-target-data/layer-id) в поле `targetData` событий карты.
+* Исправлены предупреждения в консоли и исчезновение моделей при переключении стилей.
+* Уменьшены артефакты теней, появлявшиеся на расстоянии от объектов.
+* Добавлена поддержка высоты в метрах для маркеров в качестве третьей координаты.
+* Исправлена ошибка кеша отрисовки на некоторых устройствах.
+* Добавлена поддержка отключения кеша отрисовки.
+* Исправлено некорректное отображение высотного положения зданий на системах с DirectX 9.
+* Добавлена поддержка отрисовки полигонов этажей с помощью стилевого слоя `polygonExtrusion`.
+* Добавлен параметр [tolerance](/mapgl/reference/interface#geo-json-source-options/tolerance) в `GeoJsonSourceOptions`.
 
 ## v1.51.1
 
@@ -524,11 +516,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-IwmLD71Yr6ykwHdB1feTiEzbAymg+el6KCq76UZyiUA2J5tDZwqaxyehrNzmZJb84g1S5zMf3FiC7F1NPyVxkA==
 
-**Release Date:** 20.09.2024
+**Дата релиза:** 20.09.2024
 
-**Support End Date:** 21.01.2025
+**Дата окончания поддержки:** 21.01.2025
 
-* Fixed a bug with rendering of text on intersecting substrates
+* Исправлена отрисовка текста на пересекающихся подложках.
 
 ## v1.51.0
 
@@ -536,15 +528,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-jqmwyq7o9p8tRznMn4GTrXdYmT0ivo2CmwM0dzMDY55fMqPrfDhhvmV0IBRprhgBLnQasJywe/zE0ZmuJIjuig==
 
-**Release Date:** 13.09.2024
+**Дата релиза:** 13.09.2024
 
-**Support End Date:** 20.12.2024
+**Дата окончания поддержки:** 20.12.2024
 
-* Fixed rendering of text on intersecting substrates
-* Fixed some memory leaks
-* Fixed `showLayers`/`hideLayers` functionality by `id`
-* Added `styleloaderror` event
-* Made some [Polyline](/mapgl/reference/class#polyline) options public: `renderingMode`, `hiddenPartColor` and `hiddenPartGapColor`
+* Исправлена отрисовка текста на пересекающихся иконках.
+* Исправлены утечки памяти.
+* Исправлена работа методов `showLayers()` и `hideLayers()` при фильтрации по `id`.
+* Добавлено событие `styleloaderror`.
+* Добавлены параметры для [Polyline](/mapgl/reference/class#polyline): `renderingMode`, `hiddenPartColor` и `hiddenPartGapColor`.
 
 ## v1.50.1
 
@@ -552,11 +544,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-8wYWf8VcHOyGVLZ9R1TzsCuipxr9pM8I3sszN+8EnQLhQla1i7LWWT0DE7kvtbuu2zQf4G6i4i5HW3Zsel2c/g==
 
-**Release Date:** 23.08.2024
+**Дата релиза:** 23.08.2024
 
-**Support End Date:** 13.12.2024
+**Дата окончания поддержки:** 13.12.2024
 
-* Fixed a bug with icons being transparent at low zoom levels
+* Исправлена прозрачность иконок на малых уровнях масштабирования.
 
 ## v1.50.0
 
@@ -564,17 +556,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-UpeJha7+sJsAl9pwAOaoTjPz/d16MJBXVx1oqRTVVRX4Ja1BYQPvOdEiIPOf3y6sJL7Uu7rNyeLED8UM6IzNqA==
 
-**Release Date:** 19.08.2024
+**Дата релиза:** 19.08.2024
 
-**Support End Date:** 23.11.2024
+**Дата окончания поддержки:** 23.11.2024
 
-* Added support for arbitrary string IDs
-* Added the `opacity` and `hoverOpacity` options to [Marker](/mapgl/reference/class#marker)
-* `promoteId` and `idScope` options are added to [GeoJsonSource](/mapgl/reference/class#geo-json-source)
-* Fixed a performance issue related to [RasterTileSource](/mapgl/reference/class#raster-tile-source) (Retina devices case)
-* Fixed shadow issues on specific models
-* Improved performance on slow CPU devices
-* Optimized the same input parameter case in the following [Marker](/mapgl/reference/class#marker) methods: `setIcon`, `setHoverIcon` and `setRotation`
+* Добавлена поддержка использования произвольных строк в качестве ID.
+* Добавлены параметры `opacity` и `hoverOpacity` в [Marker](/mapgl/reference/class#marker).
+* Добавлены параметры `promoteId` и `idScope` в [GeoJsonSource](/mapgl/reference/class#geo-json-source).
+* Исправлена проблема производительности [RasterTileSource](/mapgl/reference/class#raster-tile-source) на устройствах с дисплеями Retina.
+* Исправлена отрисовка теней для отдельных 3D-моделей.
+* Улучшена производительность на устройствах с маломощными процессорами.
+* Оптимизированы методы `setIcon()`, `setHoverIcon()` и `setRotation()` объекта [Marker](/mapgl/reference/class#marker) при вызове с одинаковыми параметрами.
 
 ## v1.49.0
 
@@ -582,17 +574,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-UJSlwASCc8ZUaznYBIzhy1rOpH7x6tNH0bQXOM06YVPm3e5D52njA0z6mTxat1W8It4b1L3pgJcQbkVLQEXwSw==
 
-**Release Date:** 22.07.2024
+**Дата релиза:** 22.07.2024
 
-**Support End Date:** 19.11.2024
+**Дата окончания поддержки:** 19.11.2024
 
-* Added shadows rendering
-* Added an opportunity to hide layers by type (`showLayers` and `hideLayers` methods)
-* Improved dashed polylines appearance at small angles between segments
-* Fixed a bug when interaction with map controls causes parent form element submit
-* Fixed a bug related to errors while loading SVG files with Unicode symbols beyond Latin-1 range
-* Fixed a bug with loading icons from Data URL
-* Fixed a bug related to multiple requests for traffic metadata
+* Добавлена отрисовка теней.
+* Добавлена возможность скрывать слои по типу с помощью методов `showLayers()` и `hideLayers()`.
+* Улучшен внешний вид пунктирных линий при малых углах между сегментами.
+* Исправлена ошибка, при которой взаимодействие с UI-элементами карты вызывало отправку формы.
+* Исправлены ошибки загрузки SVG-файлов с символами Unicode за пределами диапазона Latin-1.
+* Исправлена загрузка иконок через data URL.
+* Исправлены множественные запросы метаданных пробок.
 
 ## v1.48.0
 
@@ -600,17 +592,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-90FUY1z5cb/cDXCj/R1I9UCfH2ZRZe3SS7s6kxfhWCLtP8riZNzv4EpRDkHNOSqut0plt6gHQhVWj125cQYrig==
 
-**Release Date:** 25.06.2024
+**Дата релиза:** 25.06.2024
 
-**Support End Date:** 22.10.2024
+**Дата окончания поддержки:** 22.10.2024
 
-* Added a new map method `hasLayer`
-* Added support for Georgian language
-* Fixed a bug related to broken sorting inside raster layers group
-* Fixed a bug related to map crash on invalid center argument passed
-* Fixed a bug related to ScaleControl not being updated on map move
-* Fixed a bug related to black screen issue on some older systems and mobile devices in desktop mode
-* Fixed a bug related to the functionality of some shaders on DirectX9
+* Добавлен метод карты `hasLayer()`.
+* Добавлена поддержка грузинского языка.
+* Исправлена сортировка внутри групп растровых слоёв.
+* Исправлен сбой карты при передаче некорректного аргумента центра карты.
+* Исправлена ошибка, при которой UI-элемент для управления масштабом карты `ScaleControl` не обновлялся при перемещении карты.
+* Исправлено появление чёрного экрана на старых системах и мобильных устройствах в режиме рабочего стола.
+* Исправлена работа шейдеров на системах с DirectX 9.
 
 ## v1.47.1
 
@@ -618,16 +610,16 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-vSLNOWM/3apNkb/R/zvXBGw/tZn6pzTM85fPGtzfzPqibXHBqoGQw7lrsyvMIbmuG3HhlR8hxSqGM8Y8sRbveA==
 
-**Release Date:** 13.05.2024
+**Дата релиза:** 13.05.2024
 
-**Support End Date:** 25.09.2024
+**Дата окончания поддержки:** 25.09.2024
 
-* Fixed a bug related to 3D-models appearing. Objects linked with 3D-model were hidden even if downloading/parsing of the 3D-model had failed
-* Fixed a bug related to labelLine style layer. Labels were broken in cases where `textLabelingSideMargin` was smaller than `lineEndingOffsets`
-* Fixed a bug related to Label dynamic object in looped map
-* Fixed a bug related to 3D-models appearing. Objects linked with 3D-model might not be hidden in case several objects are linked with a 3D-model
-* Added support for Armenian language. Since all the fonts have been rebuilt, you may encounter slight differences in screenshot fonts tests. In this case, we recommend updating your reference screenshots
-* Added method `setZIndex` for HTML Marker
+* Исправлена ошибка, при которой объекты, связанные с 3D-моделью, скрывались даже в случае сбоя загрузки модели.
+* Исправлена ошибка в стилевом слое `labelLine`, когда текстовые метки отображались некорректно при значении `textLabelingSideMargin` меньше, чем `lineEndingOffsets`.
+* Исправлена ошибка в работе динамического объекта `Label` в режиме зацикленной карты.
+* Исправлена ошибка, при которой объекты, связанные с 3D-моделью, могли не скрываться, если одна модель используется для нескольких объектов.
+* Добавлена поддержка армянского языка. В скриншот-тестах шрифтов могут наблюдаться незначительные отличия. Рекомендуется обновить эталонные скриншоты.
+* Добавлен метод `setZIndex()` для `HtmlMarker`.
 
 ## v1.47.0
 
@@ -635,14 +627,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-rPwclEfHMQpmbj8wclml5yT2Xx5287HyGrn14AHO2Tz9/JyQ9/buWjk2QOO4+p0HKx2694SAsrHgQEciPp+VvA==
 
-**Release Date:** 15.04.2024
+**Дата релиза:** 15.04.2024
 
-**Support End Date:** 13.08.2024
+**Дата окончания поддержки:** 13.08.2024
 
-* Added the Looped map mode
-* Fixed a bug where [fog](/mapgl/map-style/immersive/sky) wasn't applied to [heatmap](/mapgl/map-style/examples/heatmap)
-* Fixed a caching bug related to adding a new [GeoJsonSource](/mapgl/reference/class#geo-json-source)
-* Added new [Label](/mapgl/reference/interface#label-options) options: `interactive` and `labeling`
+* Добавлен режим зацикленной карты.
+* Исправлена ошибка, при которой [туман](/mapgl/map-style/immersive/sky) не применялся к [тепловым картам](/mapgl/map-style/examples/heatmap).
+* Исправлена ошибка кеширования при добавлении [GeoJsonSource](/mapgl/reference/class#geo-json-source).
+* Добавлены параметры `interactive` и `labeling` для [Label](/mapgl/reference/interface#label-options).
 
 ## v1.46.0
 
@@ -650,12 +642,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-rncqjHZLBpQ+ryDSqhk3YocpwDn2/XjU4W5KuRrCO1yPqueSikr8jpGvsGvaXP8UgxZQbs7cRWS4BXCPQ6pBeQ==
 
-**Release Date:** 27.03.2024
+**Дата релиза:** 27.03.2024
 
-**Support End Date:** 15.07.2024
+**Дата окончания поддержки:** 15.07.2024
 
-* Added `disableRounding` option for [HtmlMarker](/mapgl/reference/class#html-marker)
-* Fixed a bug causing labels to flicker on mobile devices
+* Добавлен параметр [disableRounding](/mapgl/reference/interface#html-marker-options/disable-rounding) в `HtmlMarkerOptions` для отключения округления координат.
+* Исправлено мерцание текстовых меток на мобильных устройствах.
 
 ## v1.45.2
 
@@ -663,12 +655,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-5kwPuvjt/ElOt/KPsraRJBGXFJaXPLnrF3yDE8G9GGnxkktyVuMZUivEb/fRDNbDlgOB9VAM4MW+kMu1YoMx+g==
 
-**Release Date:** 28.02.2024
+**Дата релиза:** 28.02.2024
 
-**Support End Date:** 27.06.2024
+**Дата окончания поддержки:** 27.06.2024
 
-* Fixed bug when labels disappear after fog turning off
-* Optimized tile generation process
+* Исправлено исчезновение текстовых меток после отключения тумана.
+* Оптимизирован процесс генерации тайлов.
 
 ## v1.45.1
 
@@ -676,11 +668,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-42TqTf1P9hFV2z8Heg85bSkJvOMjdO+mOScUBe6Gkg+Eo/ANGV/S+Zdx4C6sfL93WB09YTRTKqlB7i7egE0YxA==
 
-**Release Date:** 13.02.2024
+**Дата релиза:** 13.02.2024
 
-**Support End Date:** 28.05.2024
+**Дата окончания поддержки:** 28.05.2024
 
-* Fixed bug when fog was not applied to raster tiles
+* Добавлена поддержка тумана для растровых тайлов.
 
 ## v1.45.0
 
@@ -688,13 +680,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-kRIzzdchVN3RnvnHi0zhavjtO0ZmEvJeNV/CPKyPZSt+wrLh8KT5MUSpEjTvfps1nBJh/r+JeTSBYIJlKxX1Sw==
 
-**Release Date:** 02.02.2024
+**Дата релиза:** 02.02.2024
 
-**Support End Date:** 13.05.2024
+**Дата окончания поддержки:** 13.05.2024
 
-* Added `lowZoomMaxPitch` option and `setLowZoomMaxPitch` method to the map
-* Added the ability to enable/customize sky and fog using the style editor
-* Fixed bug with zoom/rotation when map option `disableRotationByUserInteraction` is `true`
+* Добавлены параметр `lowZoomMaxPitch` и метод `setLowZoomMaxPitch()` для карты.
+* Добавлена возможность настраивать небо и туман в Редакторе стилей.
+* Исправлена ошибка масштабирования и вращения карты, возникавшая, если значение параметра `disableRotationByUserInteraction` было равно `true`.
 
 ## v1.44.0
 
@@ -702,11 +694,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-jK0DkSp5sydUL8m4SIK3WGoTP3yHFY/ch/JvrAD8lb+7gP4b67mE7sxcCyz/EkyaFcJNFGR8j9BkILt5nRF5KA==
 
-**Release Date:** 19.01.2024
+**Дата релиза:** 19.01.2024
 
-**Support End Date:** 02.05.2024
+**Дата окончания поддержки:** 02.05.2024
 
-* Little improvements in a polygon side stroke rendering
+* Улучшена отрисовка боковых обводок полигонов.
 
 ## v1.43.0
 
@@ -714,15 +706,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-hpmXNqXbFJoXfnn1BniqaPzJ7XD/BNci2oy+X0gWNxf+VxBy8mMVOWFbH1kHKDaTypFA7Zk6Un2ICGHTemtVtQ==
 
-**Release Date:** 12.01.2024
+**Дата релиза:** 12.01.2024
 
-**Support End Date:** 19.04.2024
+**Дата окончания поддержки:** 19.04.2024
 
-* Added `setStyleFromUrl` method to the Map class that allows to fetch a styles object from URL and apply it to the map
-* Fixed posteffects shifting on devices with a fractional pixel ratio
-* Fixed a reduction in performance after tile generating with a large number of buildings
-* Improved zooming in/out for trackpads
-* Added some rendering optimizations
+* Добавлен метод [setStyleFromUrl()](/mapgl/reference/class#map/set-style-from-url) в класс [Map](/mapgl/reference/class#map) для загрузки объекта стилей по URL и применения его к карте.
+* Исправлено смещение пост-эффектов на устройствах с дробным коэффициентом плотности пикселей.
+* Исправлено снижение производительности после генерации тайлов с большим количеством зданий.
+* Улучшено поведение масштабирования для трекпадов.
+* Улучшена производительность отрисовки.
 
 ## v1.42.0
 
@@ -730,17 +722,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-w0WQIsSX8a7wdP6I9DGTJUuuNlRckdtSHrh5/bkHiM86pvMUrv7YBR4qIelWl0cHQKcn/AS4dXp/QVW/qucQcA==
 
-**Release Date:** 07.12.2023
+**Дата релиза:** 07.12.2023
 
-**Support End Date:** 12.04.2024
+**Дата окончания поддержки:** 12.04.2024
 
-* Improved glTF-model appearance animation
-* Expanded the area 3D models are drawn within
-* Fixed shader accuracy bug in FireFox
-* Fixed a bug related to buildings visibility during their loading with visible floors
-* Fixed anti-aliasing after calling setViewport method
-* Fixed rendering artifacts in Chrome + Vulkan (Linux)
-* Accelerated map generation when buildings are replaced with models or floors
+* Улучшена анимация появления glTF-моделей.
+* Расширена область отрисовки 3D-моделей.
+* Исправлена ошибка точности шейдеров в браузере Firefox.
+* Исправлена видимость зданий при загрузке с видимыми планами этажей.
+* Исправлено сглаживание, возникающее при вызове метода `setViewport()`.
+* Исправлены артефакты отрисовки в браузере Chrome с Vulkan на Linux.
+* Ускорена генерация карты при замене зданий 3D-моделями или планами этажей.
 
 ## v1.41.1
 
@@ -748,11 +740,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-I8tuzesRKXBeFCeSttN99f45ztx4N+hE8GrdJRjoLeL+NAbgn6ifuv8oVRW9+YZELBCtvn9WfjnEKY6tVcF/yg==
 
-**Release Date:** 07.11.2023
+**Дата релиза:** 07.11.2023
 
-**Support End Date:** 07.03.2024
+**Дата окончания поддержки:** 07.03.2024
 
-* `disableAntiAliasing` map option is true by default now
+* Установлено значение `true` по умолчанию для параметра карты [disableAntiAliasing](/mapgl/reference/interface#map-options/disable-anti-aliasing).
 
 ## v1.41.0
 
@@ -760,17 +752,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-jZ32UcIX2ajjYAVm/SQDVl6pAwiHTiNBK6+2OuadCUWeWLG3Wl4TkB2bQcDDflQilfE5yIF/4sc52Eix5YQ1WQ==
 
-**Release Date:** 02.11.2023
+**Дата релиза:** 02.11.2023
 
-**Support End Date:** 07.02.2024
+**Дата окончания поддержки:** 07.02.2024
 
-* Supported `bbox` in `RasterTileSourceOptions.url` function for generating WMS(EPSG:3857) requests
-* Height in meters is supported as third coordinate in `HtmlMarkerOptions.coordinates`
-* Fixed a bug related to the incorrect position of `Marker`
-* Fixed the fog effect on `CircleMarker`
-* Improved the traffic tile generation speed
-* The WebGL2 is used by default now
-* Anti-aliasing is added as a default for static map scenes
+* Добавлена поддержка `bbox` в свойстве [RasterTileSourceOptions.url](/mapgl/reference/interface#raster-tile-source-options/url) для генерации запросов WMS (EPSG:3857).
+* Добавлена поддержка высоты в метрах в качестве третьей координаты в свойстве [HtmlMarkerOptions.coordinates](/mapgl/reference/interface#html-marker-options/coordinates).
+* Исправлено некорректное позиционирование [Marker](/mapgl/reference/class#marker).
+* Исправлена отрисовка тумана для [CircleMarker](/mapgl/reference/class#circle-marker).
+* Улучшена скорость генерации тайлов пробок.
+* Включено использование WebGL 2 по умолчанию.
+* Включено сглаживание по умолчанию для статичных сцен карты.
 
 ## v1.40.0
 
@@ -778,12 +770,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-r/OJEdpyfWM54LutP4CT2MTYNNkT15IXIikFbuo3kZB7m1cF+x5c6B3pywvPv340sv/px72UT9kAZCaoZEoOSA==
 
-**Release Date:** 28.09.2023
+**Дата релиза:** 28.09.2023
 
-**Support End Date:** 02.02.2024
+**Дата окончания поддержки:** 02.02.2024
 
-* Updated RTL-plugin inside on-premise image
-* Fixed a bug related to immersive models appearing
+* Обновлён RTL-плагин в образе для On-Premise.
+* Исправлено отображение иммерсивных моделей.
 
 ## v1.39.0
 
@@ -791,13 +783,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-o0GTlexWkchK7CDoCyV3SZp3GyLwFEUyfHZbK1dAG/bziXm1+9VVW8+w4YPUhYyfiCF1LU0FTbItY3yFjA69TA==
 
-**Release Date:** 17.08.2023
+**Дата релиза:** 17.08.2023
 
-**Support End Date:** 28.12.2023
+**Дата окончания поддержки:** 28.12.2023
 
-* Fixed a bug related to the `\uFDFD` ligature
-* Added the `MODELS_TILESET` on-premise option
-* Fixed a bug related to models on the edge of a tile
+* Добавлена переменная окружения `MODELS_TILESET` для On-Premise.
+* Исправлена отрисовка моделей на границах тайлов.
 
 ## v1.38.1
 
@@ -805,12 +796,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-ZI6DJ8Hheb/I2TPiV0Re4FqDxYu8Z+7gm5q5V857SxcSJ41fIBdcSZDmKgXAL9K9PvvwyRy4v2/IS/T3g7QkXQ==
 
-**Release Date:** 1.08.2023
+**Дата релиза:** 01.08.2023
 
-**Support End Date:** 17.11.2023
+**Дата окончания поддержки:** 17.11.2023
 
-* 3D terrain now supports WebGL2
-* Minor performance improvement
+* Добавлена поддержка WebGL 2 для 3D-рельефа.
+* Улучшена производительность.
 
 ## v1.38.0
 
@@ -818,15 +809,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-1MGyRisT/ONz76o2b+ZWobmoenz9F5JQJmXpcCakOTSpK3d/Fg//4NrlhaEJqg6QQ7HpigE/UVuAsnc2lnzUiA==
 
-**Release Date:** 20.07.2023
+**Дата релиза:** 20.07.2023
 
-**Support End Date:** 1.11.2023
+**Дата окончания поддержки:** 01.11.2023
 
-* Floor plans now appear from 18 style zoom level and above
-* Supported a new data type - multipoint - which is used for 3D model data from the default data source
-* Now you can use `'db_icon'` as an argument for the `get` expression against the default data source
-* Fixed a bug when building polygon did't appear after zoom out from GLTF model
-* Fixed a bug when floor plan objects became non-interactive after GLTF model disappearance
+* Теперь планы этажей отображаются начиная с уровня масштабирования стиля 18 и выше.
+* Добавлена поддержка типа данных `multipoint` для данных 3D-моделей из источника данных по умолчанию.
+* Добавлена возможность использовать `'db_icon'` в качестве аргумента выражения `get` для источника данных по умолчанию.
+* Исправлена ошибка, при которой полигон здания не отображался после уменьшения масштаба glTF-модели.
+* Исправлена ошибка, при которой объекты плана этажа становились неинтерактивными после скрытия glTF-модели.
 
 ## v1.37.2
 
@@ -834,12 +825,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-oPjl7LaNTqPDxqnCPAJ9etDEwuzR7pYAIwNcaZseA0q455Fu9WLXYgQKU4mt13/BrEpXyM40EFyuNgwOpT0bOw==
 
-**Release Date:** 26.06.2023
+**Дата релиза:** 26.06.2023
 
-**Support End Date:** 20.10.2023
+**Дата окончания поддержки:** 20.10.2023
 
-* Fixed models batching degradation
-* Fixed a bug related to model IDs
+* Исправлено снижение производительности батчинга моделей.
+* Исправлена ошибка, связанная с обработкой ID моделей.
 
 ## v1.37.1
 
@@ -847,11 +838,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-YBbAI5l5wsQZRSdBKOX2JMyU/Jiojkno6BYq5yQqvWPSzxX2JP4RHe/+ELArpCliAMTn4pDUeB3yg48hmAS5Lw==
 
-**Release Date:** 22.06.2023
+**Дата релиза:** 22.06.2023
 
-**Support End Date**: 26.09.2023
+**Дата окончания поддержки:** 26.09.2023
 
-* Fixed public types reference
+* Исправлены ссылки на публичные типы.
 
 ## v1.37.0
 
@@ -859,18 +850,18 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-YBbAI5l5wsQZRSdBKOX2JMyU/Jiojkno6BYq5yQqvWPSzxX2JP4RHe/+ELArpCliAMTn4pDUeB3yg48hmAS5Lw==
 
-**Release Date:** 22.06.2023
+**Дата релиза:** 22.06.2023
 
-**Support End Date**: 22.09.2023
+**Дата окончания поддержки:** 22.09.2023
 
-* Turned on GLTF models default source
-* Enabled anonymous statistics reporting
-* Fixed background color of the map on relief toggle
-* Fixed GLTF models rendering bug when on some platforms GLTF models partially turned black
-* Fixed a bug when map objects are painted with black until map style is ready
-* Fixed building's labels height
-* Fixed geojson null properties processing
-* Optimized tile loading process and floors cache management
+* Включён источник данных по умолчанию для glTF-моделей.
+* Включена отправка анонимной статистики.
+* Исправлен цвет фона карты при переключении рельефа.
+* Исправлена ошибка отрисовки, при которой glTF-модели частично отображались в чёрном цвете на некоторых платформах.
+* Исправлена ошибка, при которой объекты карты отображались в чёрном цвете до загрузки стиля карты.
+* Исправлена высота подписей зданий.
+* Исправлена обработка свойств `null` в GeoJSON.
+* Оптимизирована загрузка тайлов и управление кешем планов этажей.
 
 ## v1.36.0
 
@@ -878,14 +869,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-xXnVboB2zu22ckxAR5Gl1W6YtkXFTnwgw6BWEN+xDoL8jiXEDXx8MnpUkTr/X9M2eg5vzEVwnJKfoZCWB1092Q==
 
-**Release Date:** 24.04.2023
+**Дата релиза:** 24.04.2023
 
-**Support End Date**: 22.09.2023
+**Дата окончания поддержки:** 22.09.2023
 
-* Added an opportunity to cover `polygon` layer with a texture pattern
-* Added an opportunity to use gradient for sideColor attrs
-* Added an opportunity to render `.gltf`/`.glb` models
-* Fixed building's label height calculation bug
+* Добавлена возможность использовать текстурные паттерны для стилевого слоя `polygon`.
+* Добавлена возможность использовать градиент для атрибутов `sideColor`.
+* Добавлена возможность отрисовки моделей в формате `.gltf` и `.glb`.
+* Исправлена ошибка вычисления высоты подписей зданий.
 
 ## v1.35.1
 
@@ -893,13 +884,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-YA9PUiFN4s/AYd7HEOV9xBPbkFL3EKYujzr92C71x0iC47SuJkgo4kOPbLhXkqR4nKtasoHaQu0MH8W7HzCp/w==
 
-**Release Date:** 05.04.2023
+**Дата релиза:** 05.04.2023
 
-**Support End Date**: 24.07.2023
+**Дата окончания поддержки:** 24.07.2023
 
-* Restored handling of map click events, when adding Marker while terrain is enabled
-* Fixed infinite resizing of the map, when the option `enableTrackResize` is enabled
-* Added defaults for `style` and `styleOptions` (on-premise)
+* Восстановлена обработка событий клика на карте при добавлении маркера с включённым рельефом.
+* Исправлено бесконечное изменение размеров карты при включённой опции карты [enableTrackResize](/mapgl/reference/interface#map-options/enable-track-resize).
+* Добавлены значения по умолчанию для [style](/mapgl/reference/interface#style) и [styleOptions](/mapgl/reference/interface#style-options) в On-Premise.
 
 ## v1.35.0
 
@@ -907,12 +898,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-I95x74802tV3xu17WWqnJW4DQkk42bSUAFc94Vy568Gf3B5BqiZ1XUAlu8zm3e/v8M8bysMMXJXrqhPbQgUxGg==
 
-**Release Date:** 15.03.2023
+**Дата релиза:** 15.03.2023
 
-**Support End Date**: 05.07.2023
+**Дата окончания поддержки:** 05.07.2023
 
-* Added `enableTrackResize` option to automatically update the map when the HTML root container is resized
-* Broken glyphs are no longer displayed in RTL text
+* Добавлен параметр `enableTrackResize` для автоматического обновления карты при изменении размера HTML-контейнера.
+* Исправлено отображение некорректных глифов в RTL-плагине.
 
 ## v1.34.1
 
@@ -920,13 +911,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-fa19VYYu0LEST0tT277ZMSjJBAyEjmtFf2x8fu6sdq3JiLvkrHpoqfuD0iU5N0STBUSMSL+zyC56gX2ihCQ/tg==
 
-**Release Date:** 21.02.2023
+**Дата релиза:** 21.02.2023
 
-**Support End Date**: 15.06.2023
+**Дата окончания поддержки:** 15.06.2023
 
-* Returned behaviour of incremental rendering of the map at startup
-* Fixed wrong drawing order of markers with a hover icon
-* Fixed redundant refetching of 3D-models on a style change
+* Исправлено поведение инкрементной отрисовки карты при запуске.
+* Исправлен некорректный порядок отрисовки маркеров с иконкой при наведении курсора.
+* Исправлена избыточная повторная загрузка 3D-моделей при смене стиля.
 
 ## v1.34.0
 
@@ -934,12 +925,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-zpgmQsv2r+efNg3DU3Du2cWmrDvgTinOrUWOWB3+aLntJrSzHb5x38JF85snUmA5+xHELqV0FEb53Waez76AZg==
 
-**Release Date:** 26.01.2023
+**Дата релиза:** 26.01.2023
 
-**Support End Date**: 21.05.2023
+**Дата окончания поддержки:** 21.05.2023
 
-* Now you can use `'db_id'` as an argument for the `get` expression against the default data source
-* Fixed an issue with broken rendering of rasters and POI in Ubuntu Chrome on the systems with Intel UHD Graphics
+* Добавлена возможность использовать `'db_id'` в качестве аргумента выражения `get` в источнике данных по умолчанию.
+* Исправлена отрисовка растровых тайлов и POI в браузере Chrome на Ubuntu с Intel UHD Graphics.
 
 ## v1.33.1
 
@@ -947,11 +938,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-ecpxdRbZJWOQJDpv3ACErJz4VMEC0NeU2biwa1O7ZMnqCC/9KeUO8tBlI0Oh/06bg0zrW99NHTJO9UGlvvqqYg==
 
-**Release Date:** 21.12.2022
+**Дата релиза:** 21.12.2022
 
-**Support End Date**: 26.04.2023
+**Дата окончания поддержки:** 26.04.2023
 
-* Fixed path check in the on-premise Docker image
+* Исправлена проверка пути в Docker-образе для On-Premise.
 
 ## v1.33.0
 
@@ -959,14 +950,14 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-p6MxOVcMREpUCahQl4JzZmE9MJuHkeM9KNPuvg+XvNV10iL0gHYFe3Cw8r/dN1Dl5S7w4aF6zwD6OcmkYmcxFA==
 
-**Release Date:** 12.12.2022
+**Дата релиза:** 12.12.2022
 
-**Support End Date**: 21.03.2023
+**Дата окончания поддержки:** 21.03.2023
 
-* Added the maximum zoom limit option ([maxZoom](/mapgl/reference/interface#fit-bounds-options/max-zoom)) to the [fitBounds()](/mapgl/reference/class#map/fit-bounds) method.
-* Added `^` and `log10` style expressions.
-* Fixed the default marker anchor.
-* Fixed a wrong styling with the [setFeatureStateMap()](/mapgl/reference/class#default-source/set-feature-state-map) method in the case of `null` and empty feature values.
+* Добавлен параметр [maxZoom](/mapgl/reference/interface#fit-bounds-options/max-zoom) в метод [fitBounds()](/mapgl/reference/class#map/fit-bounds) для ограничения максимального уровня масштабирования.
+* Добавлены стилевые выражения `^` и `log10`.
+* Исправлена точка привязки маркера по умолчанию для иконки.
+* Исправлено некорректное применение стилей методом [setFeatureStateMap()](/mapgl/reference/class#default-source/set-feature-state-map) для значений `null` и пустых значений объектов.
 
 ## v1.32.1
 
@@ -974,13 +965,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-wX/mh3xvoNQpp5jrSyastruOZPoZ0WsbsM3RVeNoZzmsX+6gwe9t6mraa7Jtt/5QbzmcJQolVusl+VY5WJFdLA==
 
-**Release Date:** 15.11.2022
+**Дата релиза:** 15.11.2022
 
-**Support End Date**: 12.03.2023
+**Дата окончания поддержки:** 12.03.2023
 
-* Introduced support for WebGL2. WebGL2 will be enabled automatically, but you can fix version with [webglVersion](/mapgl/reference/interface#map-options/webgl-version) map option.
-* Fixed iconAnchor processing for landmark POI
-* Fixed city-scale POI display conditions
+* Добавлена поддержка WebGL 2. WebGL 2 включается автоматически, но вы можете использовать параметр карты [webglVersion](/mapgl/reference/interface#map-options/webgl-version) для явного указания версии.
+* Исправлена обработка `iconAnchor` для POI с достопримечательностями.
+* Улучшено отображение POI на масштабе города.
 
 ## v1.32.0
 
@@ -988,11 +979,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-X7aLkkpQ5kEYCi3XnOTjkBdjjNge9AhqiFqKNt9rEE+YWybqe6ShTTDWjj63Q+g6DCHVbvEc9ylskSmkkXgdfw==
 
-**Release Date:** 3.11.2022
+**Дата релиза:** 03.11.2022
 
-**Support End Date**: 15.02.2023
+**Дата окончания поддержки:** 15.02.2023
 
-* Added support for new version of tiles, that will be enabled by default in the future
+* Добавлена поддержка новой версии тайлов, которая будет включена по умолчанию в будущих релизах.
 
 ## v1.31.1
 
@@ -1000,11 +991,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-ZBhsKGFxlh1lz+QCz7CBnqIJiszWTdysr1KeYp3GaQxi4RVzcfQHUvVaCHtu64gsndzah/ghFn9BWGAs6r6VCg==
 
-**Release Date:** 31.10.2022
+**Дата релиза:** 31.10.2022
 
-**Support End Date**: 3.02.2023
+**Дата окончания поддержки:** 03.02.2023
 
-* Fixed a bug which broke the previous version of the npm package
+* Исправлена ошибка, нарушавшая работу предыдущей версии npm-пакета.
 
 ## v1.31.0
 
@@ -1012,17 +1003,17 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-ZBhsKGFxlh1lz+QCz7CBnqIJiszWTdysr1KeYp3GaQxi4RVzcfQHUvVaCHtu64gsndzah/ghFn9BWGAs6r6VCg==
 
-**Release Date:** 28.10.2022
+**Дата релиза:** 28.10.2022
 
-**Support End Date**: 31.01.2023
+**Дата окончания поддержки:** 31.01.2023
 
-* Changed a logo in the copyright
-* Fixed a bug with broken labels in cases when rtl-plugin was failed to load
-* Added a method `getStyleState()` to get the current map style variables
-* Added a new option `useHeightForAnimation` for method `setZoom()`. This option is needed for simultaneous smooth animation of map's center and zoom
-* Fixed a bug in method `addIcon()` when path to the icon includes protocol
-* Fixed a broken bundle for Edge 18 caused by `globalThis` in JavaScript-bundle
-* Fixed an error with incorrect order of rendering of selected object, which happened in the rare cases
+* Обновлён логотип в копирайте.
+* Исправлено некорректное отображение текстовых меток при сбое загрузки RTL-плагина.
+* Добавлен метод `getStyleState()` для получения текущих переменных стиля карты.
+* Добавлен параметр `useHeightForAnimation` в метод `setZoom()` для плавной одновременной анимации центра карты и уровня масштабирования.
+* Исправлена ошибка в методе `addIcon()`, возникавшая при указании пути к иконке с протоколом.
+* Исправлена некорректная сборка JavaScript для браузера Edge 18, вызванная параметром `globalThis`.
+* Исправлен некорректный порядок отрисовки выбранных объектов.
 
 ## v1.30.1
 
@@ -1030,12 +1021,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-UlnjOQ9o3i4uI7MCumlFFNtStFrjg0P6hW38lG6dOV8oZ3MN3ZtJ9RZSpQlP/adoXxnCeyWrQnuTOH7orPdmhg==
 
-**Release Date:** 12.09.2022
+**Дата релиза:** 12.09.2022
 
-**Support End Date**: 28.01.2023
+**Дата окончания поддержки:** 28.01.2023
 
-* Fixed a wrong styling with [setFeatureStateMap()](/mapgl/reference/class#default-source/set-feature-state-map) method when 0 passed as a feature value.
-* Fixed [fitBounds()](/mapgl/reference/class#map/fit-bounds) animation when zoom outruns pan.
+* Исправлено некорректное применение стилей методом [setFeatureStateMap()](/mapgl/reference/class#default-source/set-feature-state-map) при использовании значения `0`.
+* Исправлена ошибка анимации в методе [fitBounds()](/mapgl/reference/class#map/fit-bounds), возникавшая, если масштабирование карты опережает перемещение.
 
 ## v1.30.0
 
@@ -1043,13 +1034,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-16Btcu0P5rjeGYb7bXYb3wTL9a6yzMmsIb6zjwwnrV1YACt+cCFB9Im0JaUtqClnaV0zk3l2NMbNJQ1VfXO5Gg==
 
-**Release Date:** 02.09.2022
+**Дата релиза:** 02.09.2022
 
-**Support End Date**: 12.12.2022
+**Дата окончания поддержки:** 12.12.2022
 
-* Now non-stretchable icons grab sizing from style layer, not from `icons` style field
-* Added [addIcon()](/mapgl/reference/class#map/add-icon) method
-* Added new [floorId](/mapgl/reference/interface#default-event-target-data/floor-id) field to map events data.
+* Обновлено поведение нерастягиваемых иконок: теперь их размер определяется в стилевом слое вместо поля `icons`.
+* Добавлен метод [addIcon()](/mapgl/reference/class#map/add-icon).
+* Добавлено поле [floorId](/mapgl/reference/interface#default-event-target-data/floor-id) в данные событий карты.
 
 ## v1.29.0
 
@@ -1057,13 +1048,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-64sI8xrPZz6WTEag8ZrLBKATdvlomDhh2aXgOCW41G0a85Nfg9bE03X8CsCFljwJoVNEGzpqBj7rfI5wxW8feA==
 
-**Release Date:** 26.07.2022
+**Дата релиза:** 26.07.2022
 
-**Support End Date**: 02.12.2022
+**Дата окончания поддержки:** 02.12.2022
 
-* Added [setFeatureStateMap()](/mapgl/reference/class#default-source/set-feature-state-map) method.
-* Fixed a bug with broken zoom after an intensive interaction with map on Safari for iOS
-* Fixed a bug that was caused by subsequential removals of the layers
+* Добавлен метод [setFeatureStateMap()](/mapgl/reference/class#default-source/set-feature-state-map).
+* Исправлена ошибка масштабирования после интенсивного взаимодействия с картой в браузере Safari для iOS.
+* Исправлена ошибка, возникавшая при последовательном удалении слоёв.
 
 ## v1.28.0
 
@@ -1071,11 +1062,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-vfkLFA7TxzG/i8J74JtXtjSahwjcYNYErnFxw+YE95yeFHPg3STjlU+KHz3gAtzu3PDREeLOajAb8nm+UKGPLg==
 
-**Release Date:** 27.04.2022
+**Дата релиза:** 27.04.2022
 
-**Support End Date**: 26.10.2022
+**Дата окончания поддержки:** 26.10.2022
 
-* Added a new `Raster` class that allows to draw an arbitrary image on the map plane within the given geo-coordinates.
+* Добавлен класс `Raster` для отрисовки произвольных изображений на карте в заданных координатах.
 
 ## v1.27.0
 
@@ -1083,12 +1074,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-QEKWeB9ztMmEKV4z0+vdykUHXmsxctnXzaUE8uimJqaEheEWlqI1EycQrrx2h+kb53jcC2JVH+8DfdgcSEhIDQ==
 
-**Release Date:** 26.04.2022
+**Дата релиза:** 26.04.2022
 
-**Support End Date**: 27.07.2022
+**Дата окончания поддержки:** 27.07.2022
 
-* Added the ability to draw a point layer along linear objects from <Brand /> tiles.
-* Google Analytics disabled by default.
+* Добавлена возможность рисовать точечные объекты вдоль линейных объектов из тайлов карты <Brand />.
+* Отключен сбор статистики в Google Analytics по умолчанию.
 
 ## v1.26.0
 
@@ -1096,15 +1087,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-2mejYMySrrkqoSPSCbmE9Df7AukuaF6X35nm0Lh/CYmFvDRBJiobKGvvBZMYYURqmnjHT1LWg47qOl0mY9G6dQ==
 
-**Release Date:** 18.04.2022
+**Дата релиза:** 18.04.2022
 
-**Support End Date**: 26.07.2022
+**Дата окончания поддержки:** 26.07.2022
 
-* Fixed bug when map crashes in case of unknown style layer with absent fields (style, filter, etc).
-* Added [getRotation()](/mapgl/reference/class#map/get-rotation) method for [HtmlMarker](/mapgl/reference/class#html-marker).
-* Added scale control and map option [scaleControl](/mapgl/reference/interface#map-options/scale-control)
-* Smooth style change now supported in Models
-* Minimal zoom for commercial POI was set to 10
+* Исправлен сбой карты при загрузке неизвестного стилевого слоя с отсутствующими полями (`style`, `filter` и т. д.).
+* Добавлен метод [getRotation()](/mapgl/reference/class#map/get-rotation) для [HtmlMarker](/mapgl/reference/class#html-marker).
+* Добавлены UI-элемент для управления уровнем масштабирования и параметр карты [scaleControl](/mapgl/reference/interface#map-options/scale-control).
+* Добавлена поддержка плавной смены стилей в 3D-моделях.
+* Изменён минимальный уровень масштабирования для рекламных POI на `10`.
 
 ## v1.25.0
 
@@ -1112,13 +1103,13 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-dKEiOJWpm9mCf3Hs281OrRdLK4OHcF+15KJA/A2nnIC/7uUrFjUAGwGKFbDBXzf3M9PGC3OkRpTt8lWC2zNnPQ==
 
-**Release Date:** 28.03.2022
+**Дата релиза:** 28.03.2022
 
-**Support End Date**: 18.07.2022
+**Дата окончания поддержки:** 18.07.2022
 
-* Added `to-color` style expression.
-* Added `interactive` option for [HtmlMarker](/mapgl/reference/class#html-marker).
-* Now an exception is thrown when the `id` property of [Layer](/mapgl/styles-specification#layer) is `undefined`.
+* Добавлено стилевое выражение `to-color`.
+* Добавлен параметр `interactive` для [HtmlMarker](/mapgl/reference/class#html-marker).
+* Добавлено исключение, возникающее, когда свойство `id` объекта [Layer](/mapgl/styles-specification#layer) имеет значение `undefined`.
 
 ## v1.24.1
 
@@ -1126,12 +1117,12 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-UxI6nCSCH7V1283JR5fA6J2lFoNhWfb2Kr4y63+kGq4t2GpnhQpdrHQvK94DIpTTzCOAQli/VcnHtPGEZvgLWw==
 
-**Release Date:** 10.03.2022
+**Дата релиза:** 10.03.2022
 
-**Support End Date:** 28.06.2022
+**Дата окончания поддержки:** 28.06.2022
 
-* Fixed a bug when labels blink after `geoJsonSource.setData()` calling.
-* Fixed an exception throwing when map.removeLayer() method removes a non-existent style layer.
+* Исправлено мерцание текстовых меток после вызова метода `geoJsonSource.setData()`.
+* Исправлено исключение, возникавшее при вызове метода `map.removeLayer()` для несуществующего стилевого слоя.
 
 ## v1.24.0
 
@@ -1139,11 +1130,11 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-TA2asa83r/M6+8SXgNzE3JpTpE6nG++0FQ1yxb/iIMuR5B3brg5bFdEc/dM7wCAiyZj8VPESlPbaqutPwR9Z+A==
 
-**Release Date:** 02.03.2022
+**Дата релиза:** 02.03.2022
 
-**Support End Date:** 10.06.2022
+**Дата окончания поддержки:** 10.06.2022
 
-* Added `iconOffset` property to the `point` style layer
+* Добавлено свойство `iconOffset` для стилевого слоя `point`.
 
 ## v1.23.0
 
@@ -1151,21 +1142,21 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-9AnRVsj0ANvT2fdNqt1x4cl0wab2wqGiogTxhlE+LoeXhhjX/Lx0SaYImdo2RTlk2MzlajYCjR2UMyUZFqCnGw==
 
-**Release Date:** 17.02.2022
+**Дата релиза:** 17.02.2022
 
-**Support End Date:** 02.06.2022
+**Дата окончания поддержки:** 02.06.2022
 
-* Added `isUser` field to the moving event data. It helps to understand that the movement was made by a user gesture or by calling an API method.
-* Added the map option `keepCenterWhileUserZoomRotate`, which prevents the map center from changing after user gestures of zooming and rotating.
-* Added the ability to change `GeoJsonSource` data with the `setData()` method.
-* Added `in`, `any`, `==`, `!=`, `>`, `>=`, `<`, `<=`, `!`, `to-boolean` style expressions.
-* Added new reserved style state (global) variables `_activeFloorBuildingIds` and `_activeFloorIds`. They make it possible to stylize objects depending on the display of active floor plans on the map.
-* Clarified behaviour of `get`, `global`, and `sourceAttr` expressions. Now they return `null` if the attribute value doesn't exist.
-* Fixed a bug when a label background image doesn't hide after calling the `label.hide()` method.
-* Fixed a bug that caused the second label size to be incorrect for the labeling process.
-* Fixed a bug when a filter in a style layer works only with `match` and `all` expressions.
-* Fixed a bug when the map throws shader initialization exceptions right after self-destruct.
-* The `map.getProjectionMatrix()` method was marked as deprecated and is not recommended for use.
+* Добавлено поле `isUser` в данные события перемещения для указания, было ли движение вызвано жестом пользователя или вызовом метода API.
+* Добавлен параметр карты `keepCenterWhileUserZoomRotate` для предотвращения изменения центра карты при жестах масштабирования и вращения.
+* Добавлена возможность изменять данные [GeoJsonSource](/mapgl/reference/class#geo-json-source) с помощью метода `setData()`.
+* Добавлены стилевые выражения `in`, `any`, `==`, `!=`, `>`, `>=`, `<`, `<=`, `!`, `to-boolean`.
+* Добавлены зарезервированные глобальные переменные стиля `_activeFloorBuildingIds` и `_activeFloorIds` для стилизации объектов на основе отображения активных планов этажей.
+* Уточнено поведение выражений `get`, `global` и `sourceAttr`. Теперь они возвращают `null`, если значение атрибута отсутствует.
+* Исправлена ошибка, при которой фоновое изображение текстовой метки не скрывалось после вызова метода `label.hide()`.
+* Исправлена ошибка, при которой при расстановке текстовых меток появлялся некорректный размер второй текстовой метки.
+* Исправлена ошибка, при которой фильтр стилевого слоя работал только с выражениями `match` и `all`.
+* Исправлена ошибка, из-за которой карта выдавала исключения инициализации шейдеров после удаления экземпляра карты.
+* Объявлен устаревшим метод `map.getProjectionMatrix()` и не рекомендуется к использованию.
 
 ## v1.22.0
 
@@ -1173,15 +1164,15 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-rsmQRslZ64rAQirb3gjswyf/kXUM72jIzue1VXX5lyVrvoTJ3SgdLPtOj/YjtpbBc3XeMShzOuV77jBnQaxsGw==
 
-**Release Date:** 27.12.2021
+**Дата релиза:** 27.12.2021
 
-**Support End Date:** 17.05.2022
+**Дата окончания поддержки:** 17.05.2022
 
-* Added new `heatmap` style layer.
-* Added Arabic language support.
-* Fixed buildings flickering when switching to 3d.
-* Support for using get-expression as an interpolate-expression argument.
-* Changed the copyright appearance for new clients.
+* Добавлен стилевой слой `heatmap` для отображения тепловых карт.
+* Добавлена поддержка арабского языка.
+* Исправлено мигание зданий при переходе в 3D-режим.
+* Добавлена поддержка выражений `get` в качестве аргументов выражения `interpolate`.
+* Обновлено отображение копирайта для новых клиентов.
 
 ## v1.21.1
 
@@ -1189,375 +1180,375 @@ Because of short support period you have to update the version regularly.
 
 **SRI:** sha512-0xv+n0ij4KSJW5ZMWQyaKnC5PGyZ3ms6+/cOh9+sKhXkVxAAJspaS7GrP0+Uz2jltY4h5FhzQ0YG4jn5qW1uNw==
 
-**Release Date:** 02.12.2021
+**Дата релиза:** 02.12.2021
 
-**Support End Date:** 27.03.2022
+**Дата окончания поддержки:** 27.03.2022
 
-* Some internal bug fixes
+* Исправлены внутренние ошибки.
 
 ## v1.21.0
 
-**Release Date:** 26.11.2021
+**Дата релиза:** 26.11.2021
 
-**Support End Date:** 02.03.2022
+**Дата окончания поддержки:** 02.03.2022
 
-* Added the new userData field in all user object init options, for example [PolygonOptions](/mapgl/reference/interface#polygon-options). This field will be available on the user object instance as public userData field.
-* Added the new [DynamicObjectPointerEvent](/mapgl/reference/interface#dynamic-object-pointer-event) type, object with this type will be available in the object event listeners.
-* Added the new options minZoom and maxZoom in RasterTileSource init [options](/mapgl/reference/interface#raster-tile-source-options).
-* Added the new option maxZoom in GeoJsonSource init [options](/mapgl/reference/interface#geo-json-source-options).
-* Fixed bug with GeoJsonSource objects rendering when minzoom of object style layer exceeds 15 zoom level.
-* Fixed bug with polygon stroke and 3d-buildings. Now the stroke of the polygon will always be flush with the fill of the polygon.
-* Fixed bug with Raster tile layer blurring.
+* Добавлено поле `userData` в параметры инициализации всех пользовательских объектов, например [PolygonOptions](/mapgl/reference/interface#polygon-options). Поле доступно в экземплярах пользовательских объектов как публичное поле `userData`.
+* Добавлен тип [DynamicObjectPointerEvent](/mapgl/reference/interface#dynamic-object-pointer-event), доступный в обработчиках событий объектов.
+* Добавлены параметры `minZoom` и `maxZoom` в [RasterTileSource](/mapgl/reference/interface#raster-tile-source-options).
+* Добавлен параметр `maxZoom` в [GeoJsonSource](/mapgl/reference/interface#geo-json-source-options).
+* Исправлена ошибка отрисовки объектов [GeoJsonSource](/mapgl/reference/interface#geo-json-source-options), возникавшая, когда значение `minZoom` стилевого слоя объекта превышал уровень масштабирования 15.
+* Исправлено выравнивание обводки полигона с 3D-зданиями: теперь обводка полигона точно прилегает к границе заливки полигона.
+* Исправлено размытие слоя растровых тайлов.
 
 ## v1.20.1
 
-**Release Date:** 27.10.2021
+**Дата релиза:** 27.10.2021
 
-**Support End Date:** 26.02.2021
+**Дата окончания поддержки:** 26.02.2022
 
-* Fixed bug when fonts were not loaded for [Marker](/mapgl/reference/class#marker) and [Label](/mapgl/reference/class#label) objects when text contains glyphs from different font ranges.
+* Исправлена ошибка, при которой шрифты не загружались для объектов [Marker](/mapgl/reference/class#marker) и [Label](/mapgl/reference/class#label), если текст содержал глифы из разных диапазонов шрифта.
 
 ## v1.20.0
 
-**Release Date:** 27.10.2021
+**Дата релиза:** 27.10.2021
 
-**Support End Date:** 27.01.2022
+**Дата окончания поддержки:** 27.01.2022
 
-* Added the ability to display raster tiles. See [example](/mapgl/geodata/raster) for details.
-* Fixed bug when `styleload` event emits before a style load.
-* Fixed bug when fonts were not loaded for [Marker](/mapgl/reference/class#marker) and [Label](/mapgl/reference/class#label) objects.
+* Добавлена возможность отображать растровые тайлы. Подробнее см. в инструкции [Растровые источники WMS/WMTS](/mapgl/geodata/raster).
+* Исправлена ошибка, при которой событие `styleload` генерировалось до завершения загрузки стиля.
+* Исправлена ошибка, при которой шрифты не загружались для объектов [Marker](/mapgl/reference/class#marker) и [Label](/mapgl/reference/class#label).
 
 ## v1.19.1
 
-**Release Date:** 15.10.2021
+**Дата релиза:** 15.10.2021
 
-**Support End Date:** 27.01.2022
+**Дата окончания поддержки:** 27.01.2022
 
-* Added a component for sending statistics of showing commercial POI on the map.
-* Changed the format of the `sessionId` option to [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_\(random\)).
+* Добавлен компонент для отслеживания статистики отображения рекламных POI на карте.
+* Изменён формат параметра `sessionId` на [UUIDv4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_\(random\)).
 
 ## v1.19.0
 
-**Release Date:** 07.10.2021
+**Дата релиза:** 07.10.2021
 
-**Support End Date:** 15.01.2022
+**Дата окончания поддержки:** 15.01.2022
 
-* Now an unhandled promise rejection does not occur when a new style applies immediately after map initialization.
-* Now we add commercial POI to the map of clients, which use the free plan. This change affects only new clients but not current users.
+* Исправлена ошибка Unhandled Promise Rejection, возникавшая, если после инициализации карты применялся новый стиль.
+* Добавлено отображение рекламных POI на картах клиентов, использующих бесплатный тарифный план. Это изменение затрагивает только новых клиентов.
 
 ## v1.18.0
 
-**Release Date:** 01.10.2021
+**Дата релиза:** 01.10.2021
 
-**Support End Date:** 07.01.2022
+**Дата окончания поддержки:** 07.01.2022
 
-* Added the ability to control map style layers with [addLayer](/mapgl/reference/class#map/add-layer) and [removeLayer](/mapgl/reference/class#map/remove-layer) methods.
-* [setStyleById](/mapgl/reference/class#map/set-style-by-id) method now returns [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) with `styleId` value.
-* Added new event [styleload](/mapgl/reference/interface#map-event-table/styleload) which emits when a style is loaded.
+* Добавлена возможность управлять стилевыми слоями карты с помощью методов [addLayer()](/mapgl/reference/class#map/add-layer) и [removeLayer()](/mapgl/reference/class#map/remove-layer).
+* Обновлён метод [setStyleById()](/mapgl/reference/class#map/set-style-by-id): теперь он возвращает [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) со значением `styleId`.
+* Добавлено событие [styleload](/mapgl/reference/interface#map-event-table/styleload), которое генерируется после загрузки стиля.
 
 ## v1.17.0
 
-**Release Date:** 15.09.2021
+**Дата релиза:** 15.09.2021
 
-**Support End Date:** 01.01.2022
+**Дата окончания поддержки:** 01.01.2022
 
-* Fixed bug with incorrect rendering of multipolygons in [Floors](/mapgl/map/configuration/floors).
-* Added the ability to set the rotation of the [Marker](/mapgl/reference/class#marker) icon.
-* Fixed bug with incorrect anti-aliasing of polygons at map zoom 6 and less.
+* Исправлена некорректная отрисовка мультиполигонов в [планах этажей](/mapgl/map/configuration/floors).
+* Добавлена возможность задавать вращение иконки [Marker](/mapgl/reference/class#marker).
+* Исправлено некорректное сглаживание полигонов на уровнях масштабирования 6 и ниже.
 
 ## v1.16.0
 
-**Release Date:** 06.09.2021
+**Дата релиза:** 06.09.2021
 
-**Support End Date:** 15.12.2021
+**Дата окончания поддержки:** 15.12.2021
 
-* Added `topCenter`, `bottomCenter`, `centerLeft` and `centerRight` options to [ControlPosition](/mapgl/reference/typeAlias#control-position).
+* Добавлены значения `topCenter`, `bottomCenter`, `centerLeft` и `centerRight` в [ControlPosition](/mapgl/reference/typeAlias#control-position).
 
 ## v1.15.2
 
-**Release Date:** 25.08.2021
+**Дата релиза:** 25.08.2021
 
-**Support End Date:** 06.12.2021
+**Дата окончания поддержки:** 06.12.2021
 
-* Fixed bug where the map center was changed with the pinch-to-zoom gesture at map maximum zoom.
-* In case of the requested style is absent on the style server, fallback to the previous/default style will be used.
+* Исправлена ошибка, при которой центр карты смещался при использовании жеста масштабирования щипком на максимальном уровне масштабирования.
+* Добавлена возможность использовать предыдущий или стандартный стиль, если запрошенный стиль недоступен на сервере стилей.
 
 ## v1.15.1
 
-**Release Date:** 17.08.2021
+**Дата релиза:** 17.08.2021
 
-**Support End Date:** 25.11.2021
+**Дата окончания поддержки:** 25.11.2021
 
-* Fixed a bug when polygons became non-interactive after creating them in large quantities.
-* Fixed a bug with gaps in traffic lines.
-* Fixed a bug when labels from one GeoJsonSource remove labels from another forever.
+* Исправлена ошибка, при которой полигоны переставали быть интерактивными при создании в большом количестве.
+* Исправлены разрывы в линиях с пробками.
+* Исправлена ошибка, при которой текстовые метки из одного [GeoJsonSource](/mapgl/reference/class#geo-json-source) удаляли текстовые метки из другого.
 
 ## v1.15.0
 
-**Release Date:** 29.07.2021
+**Дата релиза:** 29.07.2021
 
-**Support End Date:** 17.11.2021
+**Дата окончания поддержки:** 17.11.2021
 
-* Added a new class [GeoJsonSource](/mapgl/reference/class#geo-json-source) to show GeoJSON data on the map.
+* Добавлен класс [GeoJsonSource](/mapgl/reference/class#geo-json-source) для отображения данных GeoJSON на карте.
 
 ## v1.14.1
 
-**Release Date:** 01.07.2021
+**Дата релиза:** 01.07.2021
 
-**Support End Date:** 29.10.2021
+**Дата окончания поддержки:** 29.10.2021
 
-* Fixed bug, when red lines appearing on map with empty or erroneous style.
-* Fixed incorrect drawing of traffic lines.
+* Исправлена ошибка, при которой на карте появлялись красные линии при пустом или некорректном стиле.
+* Исправлена некорректная отрисовка линий с пробками.
 
 ## v1.14.0
 
-**Release Date:** 23.06.2021
+**Дата релиза:** 23.06.2021
 
-**Support End Date:** 01.10.2021
+**Дата окончания поддержки:** 01.10.2021
 
-* Added [setIcon](/mapgl/reference/class#marker/set-icon), [setHoverIcon](/mapgl/reference/class#marker/set-hover-icon) and [setLabel](/mapgl/reference/class#marker/set-label) methods to Marker.
-* Added [preventMapInteractions](/mapgl/reference/interface#html-marker-options/prevent-map-interactions) option to HTMLMaker.
+* Добавлены методы [setIcon()](/mapgl/reference/class#marker/set-icon), [setHoverIcon()](/mapgl/reference/class#marker/set-hover-icon) и [setLabel()](/mapgl/reference/class#marker/set-label) в класс [Marker](/mapgl/reference/class#marker).
+* Добавлен параметр [preventMapInteractions](/mapgl/reference/interface#html-marker-options/prevent-map-interactions) в `HtmlMarkerOptions`.
 
 ## v1.13.0
 
-**Release Date:** 21.05.2021
+**Дата релиза:** 21.05.2021
 
-**Support End Date:** 23.09.2021
+**Дата окончания поддержки:** 23.09.2021
 
-* The options [stroke2Width](/mapgl/reference/interface#circle-marker-options/stroke2width) and [stroke2Color](/mapgl/reference/interface#circle-marker-options/stroke2color) for [CircleMarker](/mapgl/reference/class#circle-marker) are marked as **deprecated**.
-* Added [touchRotationThreshold](/mapgl/reference/interface#map-options/touch-rotation-threshold), to prevent occasional map rotation while zooming.
-* Added the [ability](/mapgl/map/configuration/controls) to set position of the controls during map initialization.
-* Added the [setControlsLayoutPadding](/mapgl/reference/class#map/set-controls-layout-padding), [getControlsLayoutPadding](/mapgl/reference/class#map/get-controls-layout-padding) and [controlsLayoutPadding](/mapgl/reference/interface#map-options/controls-layout-padding) map options to manage the padding of the controls container.
+* Объявлены устаревшими параметры [stroke2Width](/mapgl/reference/interface#circle-marker-options/stroke2width) и [stroke2Color](/mapgl/reference/interface#circle-marker-options/stroke2color) для [CircleMarker](/mapgl/reference/class#circle-marker).
+* Добавлен параметр [touchRotationThreshold](/mapgl/reference/interface#map-options/touch-rotation-threshold) для предотвращения случайного вращения карты при масштабировании.
+* Добавлена возможность задавать расположение [UI-элементов](/mapgl/map/configuration/controls) при инициализации карты.
+* Добавлены параметры карты [setControlsLayoutPadding](/mapgl/reference/class#map/set-controls-layout-padding), [getControlsLayoutPadding](/mapgl/reference/class#map/get-controls-layout-padding) и [controlsLayoutPadding](/mapgl/reference/interface#map-options/controls-layout-padding) для управления отступом контейнера UI-элементов.
 
 ## v1.12.1
 
-**Release Date:** 16.04.2021
+**Дата релиза:** 16.04.2021
 
-**Support End Date:** 21.08.2021
+**Дата окончания поддержки:** 21.08.2021
 
-* Fixed bug with traffic styles in editor.
+* Исправлены стили пробок в Редакторе стилей.
 
 ## v1.12.0
 
-**Release Date:** 09.04.2021
+**Дата релиза:** 09.04.2021
 
-**Support End Date:** 16.07.2021
+**Дата окончания поддержки:** 16.07.2021
 
-* Internal changes and bug fixes that do not affect the operation of the map engine.
+* Применены внутренние изменения и исправлены ошибки, не влияющие на движок карты.
 
 ## v1.11.0
 
-**Release Date:** 05.04.2021
+**Дата релиза:** 05.04.2021
 
-**Support End Date:** 09.07.2021
+**Дата окончания поддержки:** 09.07.2021
 
-* Added new options [dashLength](/mapgl/reference/interface#polyline-options/dash-length), [gapLength](/mapgl/reference/interface#polyline-options/gap-length) and [gapColor](/mapgl/reference/interface#polyline-options/gap-color) to [Polyline](/mapgl/reference/class#polyline) to draw dashed lines
+* Добавлены параметры [dashLength](/mapgl/reference/interface#polyline-options/dash-length), [gapLength](/mapgl/reference/interface#polyline-options/gap-length) и [gapColor](/mapgl/reference/interface#polyline-options/gap-color) в [PolylineOptions](/mapgl/reference/interface#polyline-options) для отрисовки пунктирных линий.
 
 ## v1.10.1
 
-**Release Date:** 29.03.2021
+**Дата релиза:** 29.03.2021
 
-**Support End Date:** 05.07.2021
+**Дата окончания поддержки:** 05.07.2021
 
-* [getContainer](/mapgl/reference/class#map/get-container) method now returns HTML Element provided by user.
+* Обновлён метод [getContainer()](/mapgl/reference/class#map/get-container): теперь он возвращает HTML-элемент, переданный пользователем.
 
 ## v1.10.0
 
-**Release Date:** 25.03.2021
+**Дата релиза:** 25.03.2021
 
-**Support End Date:** 29.06.2021
+**Дата окончания поддержки:** 29.06.2021
 
-* Added the [getContainer](/mapgl/reference/class#map/get-container) method.
-* Added more descriptions for types and interfaces in methods used to work with floors.
+* Добавлен метод [getContainer()](/mapgl/reference/class#map/get-container).
+* Добавлены описания типов и интерфейсов в методах для работы с планами этажей.
 
 ## v1.9.2
 
-**Release Date:** 22.03.2021
+**Дата релиза:** 22.03.2021
 
-**Support End Date:** 25.06.2021
+**Дата окончания поддержки:** 25.06.2021
 
-* Internal changes and bug fixes that do not affect the operation of the map engine.
-* Fixed a bug with the map container selection on long tap on iOS.
+* Применены внутренние изменения и исправлены ошибки, не влияющие на движок карты.
+* Исправлена ошибка выбора контейнера карты при долгом нажатии на устройствах с iOS.
 
 ## v1.9.1
 
-**Release Date:** 12.03.2021
+**Дата релиза:** 12.03.2021
 
-**Support End Date:** 22.06.2021
+**Дата окончания поддержки:** 22.06.2021
 
-* Internal changes that do not affect the operation of the map engine
+* Применены внутренние изменения, не влияющие на движок карты.
 
 ## v1.9.0
 
-**Release Date:** 03.03.2021
+**Дата релиза:** 03.03.2021
 
-**Support End Date:** 12.06.2021
+**Дата окончания поддержки:** 12.06.2021
 
-* You can pass InterpolateExpression to width, width2 and width3 params in [PolylineOptions](/mapgl/reference/interface#polyline-options)
-* Fixed a bug with road render in some rare cases.
+* Добавлена поддержка передачи `InterpolateExpression` в параметры `width`, `width2` и `width3` в [PolylineOptions](/mapgl/reference/interface#polyline-options).
+* Исправлена отрисовка дорог.
 
 ## v1.8.1
 
-**Release Date:** 01.03.2021
+**Дата релиза:** 01.03.2021
 
-**Support End Date:** 03.06.2021
+**Дата окончания поддержки:** 03.06.2021
 
-* Fixed bug in mapgl npm package
-* Added [setMaxBounds](/mapgl/reference/class#map/set-max-bounds) method
+* Исправлена ошибка в npm-пакете MapGL JS API.
+* Добавлен метод [setMaxBounds()](/mapgl/reference/class#map/set-max-bounds).
 
 ## v1.8.0
 
-**Release Date:** 24.02.2021
+**Дата релиза:** 24.02.2021
 
-**Support End Date:** 01.06.2021
+**Дата окончания поддержки:** 01.06.2021
 
-* Added floors control and map option [floorControl](/mapgl/reference/interface#map-options/floor-control)
-* Added new method [setFloorPlanLevel](/mapgl/reference/class#map/set-floor-plan-level) and [floorplanshow](/mapgl/reference/interface#map-event-table/floorplanshow), [floorplanhide](/mapgl/reference/interface#map-event-table/floorplanhide) and [floorlevelchange](/mapgl/reference/interface#map-event-table/floorlevelchange) events
-* Added style global variables and [setStyleState](/mapgl/reference/class#map/set-style-state) and [patchStyleState](/mapgl/reference/class#map/patch-style-state) methods to control it
-* Added [setPadding](/mapgl/reference/class#map/set-padding), [getPadding](/mapgl/reference/class#map/get-padding) methods
-* Added [LngLatBoundsClass](/mapgl/reference/class#lng-lat-bounds-class), which contains useful methods to work with LngLatBounds
-* Fixed hover event after marker size change
+* Добавлен UI-элемент для управления этажами и параметр карты [floorControl](/mapgl/reference/interface#map-options/floor-control).
+* Добавлены метод [setFloorPlanLevel()](/mapgl/reference/class#map/set-floor-plan-level) и события [floorplanshow](/mapgl/reference/interface#map-event-table/floorplanshow), [floorplanhide](/mapgl/reference/interface#map-event-table/floorplanhide) и [floorlevelchange](/mapgl/reference/interface#map-event-table/floorlevelchange).
+* Добавлены глобальные переменные стиля и методы [setStyleState()](/mapgl/reference/class#map/set-style-state) и [patchStyleState()](/mapgl/reference/class#map/patch-style-state) для управления ими.
+* Добавлены методы [setPadding()](/mapgl/reference/class#map/set-padding) и [getPadding()](/mapgl/reference/class#map/get-padding).
+* Добавлен класс [LngLatBoundsClass](/mapgl/reference/class#lng-lat-bounds-class), содержащий методы для работы с `LngLatBounds`.
+* Исправлена ошибка, возникавшая при событии наведения курсора после изменения размера маркера.
 
 ## v1.7.1
 
-**Release Date:** 02.02.2021
+**Дата релиза:** 02.02.2021
 
-**Support End Date:** 24.05.2021
+**Дата окончания поддержки:** 24.05.2021
 
-* Fixed a bug in the [fitBounds](/mapgl/reference/class#map/fit-bounds) method, when rotation has negative value or rotation has not be considered.
+* Исправлена ошибка в методе [fitBounds()](/mapgl/reference/class#map/fit-bounds), возникавшая при отрицательном или неуказанном значении вращения.
 
 ## v1.7.0
 
-**Release Date:** 29.01.2021
+**Дата релиза:** 29.01.2021
 
-**Support End Date:** 02.05.2021
+**Дата окончания поддержки:** 02.05.2021
 
-* Added a new method [fitBounds](/mapgl/reference/class#map/fit-bounds) to pan and zoom the map to contain its visible area within the specified geographical bounds.
-* Added a new method [isSupported](/mapgl/reference/method#is-supported) which checks whether the current browser supports MapGL.
-* Added a new method [notSupportedReason](/mapgl/reference/method#not-supported-reason) which checks whether the current browser supports MapGL and which returns the reason in a string.
+* Добавлен метод [fitBounds()](/mapgl/reference/class#map/fit-bounds) для перемещения и масштабирования карты по заданным географическим границам.
+* Добавлен метод [isSupported()](/mapgl/reference/method#is-supported) для проверки поддержки MapGL JS API текущим браузером.
+* Добавлен метод [notSupportedReason()](/mapgl/reference/method#not-supported-reason), возвращающий причину отсутствия поддержки MapGL JS API в текущем браузере.
 
 ## v1.6.2
 
-**Release Date:** 24.12.2020
+**Дата релиза:** 24.12.2020
 
-**Support End Date:** 29.04.2021
+**Дата окончания поддержки:** 29.04.2021
 
-* Fixed a bug where the inertia of the map doesn't work if a styleZoom was set
+* Исправлена ошибка, при которой инерция карты не работала при установленном параметре `styleZoom`.
 
 ## v1.6.1
 
-**Release Date:** 22.12.2020
+**Дата релиза:** 22.12.2020
 
-**Support End Date:** 24.03.2021
+**Дата окончания поддержки:** 24.03.2021
 
-* Fixed the map center changing behavior by setting different zoom types. If a styleZoom option was set, the map style zoom doesn't change while map dragging. Conversely, if a zoom option was set — the map zoom doesn't change, but the style zoom does.
+* Исправлено поведение центра карты при использовании разных типов масштабирования. Если задан `styleZoom`, уровень масштабирования стиля карты не изменяется при перетаскивании карты. Если задан `zoom`, уровень масштабирования карты не изменяется, но изменяется уровень масштабирования стиля.
 
 ## v1.6.0
 
-**Release Date:** 18.12.2020
+**Дата релиза:** 18.12.2020
 
-**Support End Date:** 22.03.2021
+**Дата окончания поддержки:** 22.03.2021
 
-* Added a new map option [styleZoom](/mapgl/reference/interface#map-options/style-zoom). This option allows you to set the same zoom that is used in the style settings. The styleZoom and zoom options set the same map scale but in different projections.
-* Added a new method [setLanguage](/mapgl/reference/class#map/set-language) to change the desired map language. The map will try to set the language if it possible.
-* Added a new method [getLanguage](/mapgl/reference/class#map/get-language), which returns the desired map language.
-* Fixed a bug with touch events that leads to the exception with undefined.
+* Добавлен параметр карты [styleZoom](/mapgl/reference/interface#map-options/style-zoom) для задания уровня масштабирования, используемого в настройках стиля. Параметры `styleZoom` и `zoom` задают один и тот же уровень масштабирования карты в разных проекциях.
+* Добавлен метод [setLanguage()](/mapgl/reference/class#map/set-language) для изменения языка карты.
+* Добавлен метод [getLanguage()](/mapgl/reference/class#map/get-language), возвращающий текущий язык карты.
+* Исправлена ошибка с событиями касания, вызывавшая исключение с `undefined`.
 
 ## v1.5.0
 
-**Release Date:** 10.12.2020
+**Дата релиза:** 10.12.2020
 
-**Support End Date:** 18.03.2021
+**Дата окончания поддержки:** 18.03.2021
 
-* Added a new method [setStyleById](/mapgl/reference/class#map/set-style-by-id) to change the map style by its ID. 🎉
-* Added a new map option [defaultBackgroundColor](/mapgl/reference/interface#map-options/default-background-color). This option allows you to set the default background color while style is loading.
-* Added a new map option [style](/mapgl/reference/interface#map-options/style) that takes a style ID. The map will be initialized with the specified style.
+* Добавлен метод [setStyleById()](/mapgl/reference/class#map/set-style-by-id) для изменения стиля карты по ID.
+* Добавлен параметр карты [defaultBackgroundColor](/mapgl/reference/interface#map-options/default-background-color) для задания цвета фона во время загрузки стиля.
+* Добавлен параметр карты [style](/mapgl/reference/interface#map-options/style) для инициализации карты с указанным ID стиля.
 
 ## v1.4.3
 
-**Release Date:** 1.12.2020
+**Дата релиза:** 01.12.2020
 
-**Support End Date:** 10.03.2021
+**Дата окончания поддержки:** 10.03.2021
 
-* Internal changes that do not affect the operation of the map engine
+* Применены внутренние изменения, не влияющие на движок карты.
 
 ## v1.4.2
 
-**Release Date:** 09.11.2020
+**Дата релиза:** 09.11.2020
 
-**Support End Date:** 1.03.2021
+**Дата окончания поддержки:** 01.03.2021
 
-* Internal changes that do not affect the operation of the map engine
+* Применены внутренние изменения, не влияющие на движок карты.
 
 ## v1.4.0
 
-**Release Date:** 22.10.2020
+**Дата релиза:** 22.10.2020
 
-**Support End Date:** 09.02.2021
+**Дата окончания поддержки:** 09.02.2021
 
-* Added a new method [setStyleZoom](/mapgl/reference/class#map/set-style-zoom). It sets the map style zoom.
-* Added a new map option [maxBounds](/mapgl/reference/interface#map-options/max-bounds). It restricts map to specified bounding box.
+* Добавлен метод [setStyleZoom()](/mapgl/reference/class#map/set-style-zoom) для задания уровня масштабирования стиля карты.
+* Добавлен параметр карты [maxBounds](/mapgl/reference/interface#map-options/max-bounds) для ограничения области отображения карты заданным ограничивающим прямоугольником.
 
 ## v1.3.2
 
-**Release Date:** 07.10.2020
+**Дата релиза:** 07.10.2020
 
-**Support End Date:** 22.01.2021
+**Дата окончания поддержки:** 22.01.2021
 
-* Added stable fix for missing rerender (IOS 14 and other)
+* Исправлена повторная отрисовка на устройствах с iOS 14 и других.
 
 ## v1.3.1
 
-**Release Date:** 22.09.2020
+**Дата релиза:** 22.09.2020
 
-**Support End Date:** 07.01.2021
+**Дата окончания поддержки:** 07.01.2021
 
-* Added patch for missing rerender on IOS 14
+* Исправлена повторная отрисовка на устройствах с iOS 14.
 
 ## v1.3.0
 
-**Release Date:** 18.09.2020
+**Дата релиза:** 18.09.2020
 
-**Support End Date:** 22.12.2020
+**Дата окончания поддержки:** 22.12.2020
 
-* Added `disableRotationByUserInteraction` and `disablePitchByUserInteraction` to the [MapOptions](/mapgl/reference/interface#map-options). [disableRotationByUserInteraction](/mapgl/reference/interface#map-options/disable-rotation-by-user-interaction) blocks rotation by any user interaction (from keyboard, mouse and etc). [disablePitchByUserInteraction](/mapgl/reference/interface#map-options/disable-pitch-by-user-interaction) prevents users from pitching the map by any interaction.
-* Added a new method [getStyleZoom](/mapgl/reference/class#map/get-style-zoom). It returns the current map style zoom.
-* Added a new method [getWebGLContext](/mapgl/reference/class#map/get-web-glcontext) which returns current WebGLRenderingContext of the map canvas.
-* Added a new method [getCanvas](/mapgl/reference/class#map/get-canvas) which returns HTMLCanvasElement of the map.
+* Добавлены параметры [disableRotationByUserInteraction](/mapgl/reference/interface#map-options/disable-rotation-by-user-interaction) и [disablePitchByUserInteraction](/mapgl/reference/interface#map-options/disable-pitch-by-user-interaction) в [MapOptions](/mapgl/reference/interface#map-options) для отключения вращения карты и наклона камеры любым пользовательским взаимодействием (клавиатура, мышь и т. д.).
+* Добавлен метод [getStyleZoom()](/mapgl/reference/class#map/get-style-zoom), возвращающий текущий уровень масштабирования стиля карты.
+* Добавлен метод [getWebGLContext()](/mapgl/reference/class#map/get-web-glcontext), возвращающий текущий `WebGLRenderingContext` карты.
+* Добавлен метод [getCanvas()](/mapgl/reference/class#map/get-canvas), возвращающий `HTMLCanvasElement` карты.
 
 ## v1.2.0
 
-**Release Date:** 26.08.2020
+**Дата релиза:** 26.08.2020
 
-**Support End Date:** 18.12.2020
+**Дата окончания поддержки:** 18.12.2020
 
-* Added the new `relativeAnchor` and `offset` options to the [LabelOptions](/mapgl/reference/interface#label-options). Use these options for the [Label placement](/mapgl/objects/labels) instead an `anchor` option, which is deprecated now.
-* Supported the new label placement options in the [Marker](/mapgl/objects/markers) object.
+* Добавлены параметры `relativeAnchor` и `offset` в [LabelOptions](/mapgl/reference/interface#label-options) для позиционирования [текстовых меток](/mapgl/objects/labels). Объявлен устаревшим параметр `anchor`.
+* Добавлена поддержка параметров позиционирования текстовых меток в объекте [Marker](/mapgl/objects/markers).
 
 ## v1.1.0
 
-**Release Date:** 04.08.2020
+**Дата релиза:** 04.08.2020
 
-**Support End Date:** 26.11.2020
+**Дата окончания поддержки:** 26.11.2020
 
-* Added the new map object [Label](/mapgl/objects/labels) for the independent text labels on the map.
-* Added the ability to use a [stretchable image as background for the marker label](/mapgl/objects/labels).
-* Added the option `autoHideOSMCopyright` to the [MapOptions](/mapgl/reference/interface#map-options). If true, the OSM copyright will be hidden after 5 seconds from the map initialization.
+* Добавлен объект карты [Label](/mapgl/objects/labels) для отображения независимых текстовых меток на карте.
+* Добавлена возможность использовать растягиваемое изображение в качестве фона для [текстовой метки маркера](/mapgl/objects/labels).
+* Добавлен параметр `autoHideOSMCopyright` в [MapOptions](/mapgl/reference/interface#map-options). При значении `true` копирайт OSM скрывается через пять секунд после инициализации карты.
 
 ## v1.0.0
 
-**Release Date:** 21.07.2020
+**Дата релиза:** 21.07.2020
 
-**Support End Date:** 04.11.2020
+**Дата окончания поддержки:** 04.11.2020
 
-There are no any release notes. This is the first release with a fixed version.
+Первый релиз с фиксированной версией.
 
-## Old releases
+## Старые релизы
 
 ### 05.06.2020
 
-* New option `disableZoomOnScroll` was added to the [Map options](/mapgl/reference/interface#map-options). This option disable zoom on scroll, when a mouse cursor is above the map container.
+* Добавлен параметр `disableZoomOnScroll` в [MapOptions](/mapgl/reference/interface#map-options) для отключения масштабирования при скролле, когда курсор находится над контейнером карты.
 
 ### 19.05.2020
 
-* New method `setSelectedObjects` was added to the [Map](/mapgl/reference/class#map). This method allows to select any object on the map.
+* Добавлен метод `setSelectedObjects()` в [Map](/mapgl/reference/class#map) для выбора любого объекта на карте.
