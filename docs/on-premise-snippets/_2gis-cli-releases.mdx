@@ -1,5 +1,9 @@
 import Link from '@docusaurus/Link';
 
+## 3.6.7 {#v3.6.7}
+
+* Исправлена ошибка, из-за которой при указании адреса в параметре `docker.registry.server-address` протокол `http` автоматически заменялся на `https`.
+
 ## 3.6 {#v3.6}
 
 * При использовании аргумента `--apps-to-registry` в режимах `pull` и `restore` больше не требуется передавать сокет Docker (`-v /var/run/docker.sock:/var/run/docker.sock`) в контейнер утилиты.
