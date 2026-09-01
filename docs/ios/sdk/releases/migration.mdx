@@ -3,6 +3,26 @@ sidebar: iossdk
 ---
 # Миграция с предыдущих мажорных версий SDK
 
+## С версий 13.х на 14.х {#from-13-to-14}
+
+### Для версий Full и Map
+
+* Повторно выгрузите стили: добавлены и обновлены стили для слоя `Работа`, лёгкого метро, адаптивных светофоров, GPX-треков и новых кастомных курсоров.
+* Удалён `MapOptions`. Начальные параметры карты разделены между [MapControllerOptions](/ios/sdk/reference/stable/struct#map-controller-options) и [MapViewOptions](/ios/sdk/reference/stable/struct#map-view-options). В [Container.makeMapFactory()](/ios/sdk/reference/stable/class#container/make-map-factory) используйте параметры `options` и `mapViewOptions`.
+* Удалены `IMapFactory.makeModernMapViewsFactory()` и `IMapFactory.makeModernMapUIControlsFactory()`, а также отдельные `IModernMapViewsFactory` и `IModernMapUIControlsFactory`. Обновлённый дизайн стал основным: используйте [IMapFactory.makeMapViewsFactory()](/ios/sdk/reference/stable/interface#imap-factory) и [IMapFactory.makeMapUIControlsFactory()](/ios/sdk/reference/stable/interface#imap-factory).
+* Удалены методы одиночного поиска `SearchManager.searchById()`, `SearchManager.searchByDirectoryObjectId()`, `SearchManager.searchByIdWithLocale()` и `SearchManager.searchByDirectoryObjectIdWithLocale()`. Используйте [SearchManager.searchByIds()](/ios/sdk/reference/stable/class#search-manager/search-by-ids) и [SearchManager.searchByDirectoryObjectIds()](/ios/sdk/reference/stable/class#search-manager/search-by-directory-object-ids).
+* Удалены статические методы `SearchQueryBuilder.fromQueryText()`, `SearchQueryBuilder.fromRubricIds()`, `SearchQueryBuilder.fromQueryTextAndRubricIds()`, `SearchQueryBuilder.fromOrgId()` и `SearchQueryBuilder.fromBuildingId()`. Используйте [SearchQueryBuilder.fromQuery()](/ios/sdk/reference/stable/class#search-query-builder/from-query) и методы [SearchQueryBuilder.setQueryText()](/ios/sdk/reference/stable/class#search-query-builder/set-query-text), [SearchQueryBuilder.setRubricIds()](/ios/sdk/reference/stable/class#search-query-builder/set-rubric-ids), [SearchQueryBuilder.setOrgId()](/ios/sdk/reference/stable/class#search-query-builder/set-org-id) и [SearchQueryBuilder.setBuildingIds()](/ios/sdk/reference/stable/class#search-query-builder/set-building-ids).
+* [SearchQueryBuilder.setOrgId()](/ios/sdk/reference/stable/class#search-query-builder/set-org-id) теперь принимает обязательный параметр `OrgId`, а `SearchQueryBuilder.setBuildingId()` заменён на [SearchQueryBuilder.setBuildingIds()](/ios/sdk/reference/stable/class#search-query-builder/set-building-ids).
+* Удалены `SearchQueryBuilder.setSpatialRestriction()` и `SearchQueryBuilder.setGeoPoint()`. Используйте [SearchQueryBuilder.setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и [SearchQueryBuilder.setTerritoryOfInterest()](/ios/sdk/reference/stable/class#search-query-builder/set-territory-of-interest).
+* В [PackedSearchQuery](/ios/sdk/reference/stable/class#packed-search-query) свойства `orgId`, `buildingId` и `spatialRestriction` заменены на [PackedSearchQuery.orgIds](/ios/sdk/reference/stable/class#packed-search-query/var-org-ids), [PackedSearchQuery.buildingIds](/ios/sdk/reference/stable/class#packed-search-query/var-building-ids), [PackedSearchQuery.geometryRestriction](/ios/sdk/reference/stable/class#packed-search-query/var-geometry-restriction), [PackedSearchQuery.areaOfInterest](/ios/sdk/reference/stable/class#packed-search-query/var-area-of-interest) и [PackedSearchQuery.territoryOfInterest](/ios/sdk/reference/stable/class#packed-search-query/var-territory-of-interest).
+* В [SuggestQueryBuilder](/ios/sdk/reference/stable/class#suggest-query-builder) удалены статические методы `fromQueryText()` и `fromQuery()`. Используйте [SuggestQueryBuilder.setRestrictionGeometry()](/ios/sdk/reference/stable/class#suggest-query-builder/set-restriction-geometry) и [SuggestQueryBuilder.setTerritoryOfInterest()](/ios/sdk/reference/stable/class#suggest-query-builder/set-territory-of-interest) для задания пространственных ограничений.
+* Из [WorkStatus](/ios/sdk/reference/stable/struct#work-status) удалены свойства `isOpen` и `description`. Используйте [WorkStatus.openStatus](/ios/sdk/reference/stable/struct#work-status/var-open-status), [WorkStatus.openStatusHint](/ios/sdk/reference/stable/struct#work-status/var-open-status-hint), [WorkStatus.scheduleHint](/ios/sdk/reference/stable/struct#work-status/var-schedule-hint) и [WorkStatus.breakHint](/ios/sdk/reference/stable/struct#work-status/var-break-hint).
+* В [MultiTouchRecognizeSettings](/ios/sdk/reference/stable/struct#multi-touch-recognize-settings) свойство `multitouchShiftThresholdMm` переименовано в [MultiTouchRecognizeSettings.multiTouchShiftThresholdMm](/ios/sdk/reference/stable/struct#multi-touch-recognize-settings/var-multi-touch-shift-threshold-mm).
+
+### Дополнительно для версии Full
+
+* Из [SoundCategory](/ios/sdk/reference/stable/enumeration#sound-category) удалено значение `humps`.
+
 ## С версий 12.x на 13.x {#from-12-to-13}
 
 ### Для версий Full и Map
