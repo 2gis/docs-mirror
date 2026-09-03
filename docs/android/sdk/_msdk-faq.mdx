@@ -1,0 +1,141 @@
+<Accordion bssProps={{uiElement: {name: "showAnswerButton", ownerName: "documentPageFrame"}}}>
+
+<AccordionItem title="Как начать работать с мобильным SDK и подключить его к проекту?">
+
+Чтобы работать с мобильным SDK, получите ключ доступа dgissdk.key:
+
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+    <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_faq" target="_blank">
+    В кабинет
+    </CtaButton>
+
+2. Купите подписку для доступа к необходимым API. Набор API зависит от нужных функциональностей и версии SDK — см. раздел **API для работы SDK** для [iOS](/ios/sdk/overview#api-list), [Android](/android/sdk/overview#api-list) или [Flutter](/flutter/sdk/overview#api-list).
+3. Создайте ключ доступа и скачайте файл ключа.
+
+После получения ключа доступа установите и инициализируйте SDK. Подробнее см. в разделе **Начало работы** для [iOS](/ios/sdk/start), [Android](/android/sdk/start) или [Flutter](/flutter/sdk/start).
+
+</AccordionItem>
+
+<AccordionItem title="Как получить демо-приложение с примерами?">
+
+Демонстрационные приложения с исходным кодом доступны в GitHub-репозиториях: [iOS](https://github.com/2gis/mobile-sdk-ios-demo/), [Android](https://github.com/2gis/mobile-sdk-android-demo/), [Flutter](https://github.com/2gis/dgis_mobile_sdk_full/tree/master/example).
+
+</AccordionItem>
+
+<AccordionItem title="Как рассчитывается стоимость использования SDK?">
+
+В зависимости от функциональностей для работы SDK требуются ключи доступа к API карт, поиска и навигации: оплачивается только доступ к используемым API. Полный список API и функциональностей, которые они обеспечивают, см. в разделе **API для работы SDK** для [iOS](/ios/sdk/overview#api-list), [Android](/android/sdk/overview#api-list) или [Flutter](/flutter/sdk/overview#api-list). Стоимость API см. в разделе [Тарифы](/platform-manager/subscription/pricing) в документации личного кабинета.
+
+</AccordionItem>
+
+<AccordionItem title="Что входит в поставку SDK?">
+
+Мобильный SDK представлен в двух версиях:
+
+* **Full** — карта, справочник, построение маршрутов и навигатор, а также офлайн-данные.
+* **Map** — облегчённая версия: только карта и справочник.
+
+Подробнее см. в разделе **Версии SDK** для [iOS](/ios/sdk/overview#sdk-versions), [Android](/android/sdk/overview#sdk-versions) или [Flutter](/flutter/sdk/overview#sdk-versions).
+
+</AccordionItem>
+
+<AccordionItem title="Нужно ли выпускать новые ключи при переходе с версии Full на версию Map?">
+
+Нет. Вы можете использовать один ключ доступа как для обеих версий SDK, если в нём настроены нужные функциональности, так и для разных платформ.
+
+</AccordionItem>
+
+<AccordionItem title="Как вычислить и оптимизировать размер SDK?">
+
+Размер зависит от версии SDK (**Full** или **Map**), используемых API и подключаемых ресурсов (стилей карты, иконок, шрифтов, 3D-моделей). Ориентировочный размер — от 20 до 100 МБ. Для уменьшения веса SDK:
+
+* используйте версию **Map**, если не нужны функции версии **Full**;
+* подключайте только необходимые стили карты, иконки, шрифты и 3D-модели.
+
+</AccordionItem>
+
+<AccordionItem title="Как оптимизировать производительность карты?">
+
+* Настройте графический режим карты с помощью `GraphicsPreset` (подробнее см. в справочнике для [iOS](/ios/sdk/reference/stable/enumeration#graphics-preset), [Android](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.map.graphics-preset) или [Flutter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GraphicsPreset.html)): 
+    * `LITE` — отключает по возможности тяжёлые графические эффекты;
+    * `NORMAL` — соблюдает баланс между качеством изображения и потребляемыми ресурсами;
+    * `IMMERSIVE` — включает все эффекты и может значительно снижать производительность на слабых устройствах.
+    
+    Для iOS и Android доступно свойство `Map.graphicsPresetHint` — рекомендуемый графический режим для конкретного устройства (см. справочник для [iOS](/ios/sdk/reference/stable/class#map/var-graphics-preset-hint) или [Android](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map/val-graphics-preset-hint)).
+
+* Если режима `LITE` недостаточно, используйте растровую карту вместо векторной: см. раздел **Подключение растровой карты** для [iOS](/ios/sdk/examples/map#add-raster-map), [Android](/android/sdk/examples/map#add-raster-map) или [Flutter](/flutter/sdk/examples/map#add-raster-map).
+* Для пользовательских динамических 3D-моделей уменьшите количество мешей и разрешение текстур: матричные анимации и PBR-освещение снижают производительность карты. Подробнее см. в разделе **3D-модели** для [iOS](/ios/sdk/examples/map#3d-models), [Android](/android/sdk/examples/map#3d-models) или [Flutter](/flutter/sdk/examples/map#3d-models).
+* Включите кеширование HTTP-запросов, чтобы уменьшить количество повторных загрузок данных.
+
+</AccordionItem>
+
+<AccordionItem title="Как настроить внешний вид карты?">
+
+* Измените стиль карты в Редакторе стилей: цвета объектов, иконки, подписи, видимость слоёв, цвет фона карты, освещение и отображение неба и тумана. Настроенный стиль подключается в SDK в виде набора слоёв, иконок и шрифтов при сборке приложения. Подробнее см. в разделе **Стили карты** для [iOS](/ios/sdk/examples/map_styles), [Android](/android/sdk/examples/map_styles) или [Flutter](/flutter/sdk/examples/map_styles).
+* Добавьте собственные объекты на карту: маркеры, геометрические фигуры, 3D-модели. Подробнее см. в разделе **Добавление объектов на карту** для [iOS](/ios/sdk/examples/map#add-objects), [Android](/android/sdk/examples/map#add-objects) или [Flutter](/flutter/sdk/examples/map#add-objects).
+* Настройте UI-элементы карты и навигатора — готовые элементы можно заменить на собственные. Подробнее см. в разделе **UI-элементы** для [iOS](/ios/sdk/examples/controls/uikit), [Android](/android/sdk/examples/controls/view) или [Flutter](/flutter/sdk/examples/controls).
+* Настройте поведение навигатора (звуковые оповещения, альтернативные маршруты) и справочника (структура выдачи поиска). Подробнее см. в разделе **Навигация** для [iOS](/ios/sdk/examples/navigation), [Android](/android/sdk/examples/navigation) или [Flutter](/flutter/sdk/examples/navigation) и **Справочник** для [iOS](/ios/sdk/examples/directory), [Android](/android/sdk/examples/directory) или [Flutter](/flutter/sdk/examples/directory).
+
+</AccordionItem>
+
+<AccordionItem title="Можно ли скрыть или перенести логотип и копирайт 2ГИС на карте?">
+
+Отображение копирайта (значка и текста об авторских правах) нельзя отключить — это требование [лицензионного соглашения](https://law.2gis.ru/licensing-agreement/) об использовании сервисов <Brand />. Вы можете настроить его положение и отступы от края карты:
+
+* iOS: [`copyrightAlignment()`](/ios/sdk/reference/stable/interface#imap-uiview/var-copyright-alignment) и [`copyrightInsets()`](/ios/sdk/reference/stable/interface#imap-uiview/var-copyright-insets) в `IMapUIView`.
+* Android: [`setCopyrightMargins()`](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view/set-copyright-margins) в `MapView`.
+* Flutter: [`copyrightAlignment`](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidgetController/copyrightAlignment.html) и [`copyrightEdgeInsets`](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidgetController/copyrightEdgeInsets.html) в `MapWidgetController`.
+
+</AccordionItem>
+
+<AccordionItem title="Поддерживает ли SDK работу в режиме офлайн?">
+
+Да, в версии **Full** можно настроить офлайн-режим для работы с картой, справочником и построением маршрутов из предварительно загруженных пакетов данных. Для этого получите права на использование офлайн-данных и загрузите данные территорий через `TerritoryManager`. Подробнее см. в разделе **Работа с офлайн-данными** для [iOS](/ios/sdk/start#offline-mode), [Android](/android/sdk/start#offline-mode) или [Flutter](/flutter/sdk/start#offline-mode).
+
+</AccordionItem>
+
+<AccordionItem title="Какие версии iOS и Android поддерживаются?">
+
+Посмотрите требования к устройствам для [iOS](/ios/sdk/overview#system-requirements) и [Android](/android/sdk/overview#system-requirements). Flutter SDK работает на устройствах iOS, Android и ОС Аврора и наследует требования базовой платформы.
+
+</AccordionItem>
+
+<AccordionItem title="Какие языки интерфейса поддерживаются?">
+
+В приложении поддерживаются русский, английский и арабский языки. Голосовые оповещения навигатора поддерживаются на русском, английском, арабском, армянском, киргизском, казахском, узбекском, грузинском, азербайджанском и таджикском языках. Чтобы изменить язык приложения, используйте `LocaleManager`: подробнее см. в разделе **Язык приложения** для [iOS](/ios/sdk/start#application-language), [Android](/android/sdk/start#application-language) или [Flutter](/flutter/sdk/start#application-language).
+
+</AccordionItem>
+
+<AccordionItem title="Как следить за обновлениями и новыми возможностями SDK?">
+
+Изучайте раздел **Релизы** в документации: [iOS](/ios/sdk/releases/latest), [Android](/android/sdk/releases/latest) или [Flutter](/flutter/sdk/releases/latest) — в нём перечислены новые возможности, исправления и изменения, влияющие на обратную совместимость.
+
+</AccordionItem>
+
+<AccordionItem title="Как обновить версию SDK?">
+
+Изучите последние релизы и установите обновлённую версию SDK по инструкции для [iOS](/ios/sdk/start#install), [Android](/android/sdk/start#install) или [Flutter](/flutter/sdk/start#install). Для миграции на мажорные версии могут потребоваться дополнительные шаги, см. инструкцию по миграции для [iOS](/ios/sdk/releases/migration), [Android](/android/sdk/releases/migration) или [Flutter](/flutter/sdk/releases/migration).
+
+</AccordionItem>
+
+<AccordionItem title="Как долго поддерживаются выпущенные версии?">
+
+Мажорные версии поддерживаются в течение года после даты релиза.
+
+</AccordionItem>
+
+<AccordionItem title="Нет ответа на мой вопрос">
+
+Используйте поиск по документации, задайте вопрос AI-ассистенту (в правом нижнем углу экрана) или отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+
+</AccordionItem>
+
+</Accordion>
+
+
+
+
+
+
+
