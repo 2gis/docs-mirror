@@ -39,11 +39,11 @@ sidebar: fluttersdk
     ```dart
     import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
 
-    // Создаём источник данных
+    // Создать источник данных
     final sdk.RouteMapObjectSource routeMapObjectSource = sdk.RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL)
     map.addSource(routeMapObjectSource)
 
-    // Добавляем созданный маршрут на карту
+    // Добавить созданный маршрут на карту
     final List<sdk.TrafficRoute> routes = await trafficRouter.findRoute(startSearchPoint, finishSearchPoint).value;
 
     int routeIdx = 0;
@@ -81,19 +81,49 @@ routeEditor.setRouteParams(
 
 Можно получить координаты объекта (здания, дороги), который находится в месте клика. Для этого понадобится метод [getRenderedObjects()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map/getRenderedObjects.html). В нем нужно получить объект класса [DgisMapObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisMapObject-class.html), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-map.getRenderedObjects(sdk.ScreenPoint()).then((List<sdk.RenderedObjectInfo> info) {
-  // Получим ближайший к месту нажатия объект внутри установленного радиуса
+map.getRenderedObjects(sdk.ScreenPoint()).then((List<sdk.RenderedObjectInfo> info) async {
+  // Получить ближайший к месту нажатия объект внутри установленного радиуса
   final sdk.RenderedObject obj = info.first.item;
 
-  // В этом примере мы хотим найти информацию о выбранном объекте в справочнике.
-  // Для этого мы должны убедиться, что тип этого объекта может быть найден
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
+  // Для этого нужно убедиться, что тип этого объекта может быть найден
   if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
     final source = obj.source as sdk.DgisSource;
 
-    // Произведем поиск
+    // Поиск
+    final foundObjects =
+        await sdk.SearchManager.createOnlineManager(sdkContext)
+            .searchByDirectoryObjectIds([(obj.item as sdk.DgisMapObject).id])
+            .value;
+    final foundObject = foundObjects.isEmpty ? null : foundObjects.first;
+
+    final sdk.GeoPoint? geoPoint = foundObject?.markerPosition?.point;
+  }
+});
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
+```dart
+import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+map.getRenderedObjects(sdk.ScreenPoint()).then((List<sdk.RenderedObjectInfo> info) async {
+  // Получить ближайший к месту нажатия объект внутри установленного радиуса
+  final sdk.RenderedObject obj = info.first.item;
+
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
+  // Для этого нужно убедиться, что тип этого объекта может быть найден
+  if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
+    final source = obj.source as sdk.DgisSource;
+
+    // Поиск
     final foundObject =
         await sdk.SearchManager.createOnlineManager(sdkContext)
             .searchByDirectoryObjectId((obj.item as sdk.DgisMapObject).id)
@@ -103,6 +133,9 @@ map.getRenderedObjects(sdk.ScreenPoint()).then((List<sdk.RenderedObjectInfo> inf
   }
 });
 ```
+
+</TabItem>
+</Tabs>
 
 :::note[Координаты больших объектов]
 
@@ -378,11 +411,11 @@ final polygonExcludedArea = sdk.ExcludedArea(
     ```dart
     import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
 
-    // Создаём источник данных
+    // Создать источник данных
     final sdk.RouteMapObjectSource routeMapObjectSource = sdk.RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL);
     map.addSource(routeMapObjectSource);
 
-    // Добавляем полученный маршрут на карту
+    // Добавить полученный маршрут на карту
     int routeIdx = 0;
     bool isActive = true;
     sharedRouteData.routes.forEach((sdk.TrafficRoute route) {
@@ -402,5 +435,3 @@ final polygonExcludedArea = sdk.ExcludedArea(
 
 * Построение маршрута для [грузового транспорта](#truck-routing).
 * [Использование готового маршрута](#using-ready-route), который был построен ранее с помощью Routing API.
-
-

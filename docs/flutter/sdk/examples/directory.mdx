@@ -51,6 +51,41 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
 
 Поисковый запрос должен состоять из трёх логических компонентов:
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+* Запрос для поиска объекта (что нужно искать?). Вы можете сформулировать запрос с помощью одного из методов ниже:
+
+  * Из текстовой строки с помощью метода [setQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setQueryText.html). Вы можете сформулировать текстовый запрос для поиска конкретного объекта (`храм Василия Блаженного`) или для получения списка множества объектов по критерию (`магазины музыкальных инструментов`).
+  * По идентификаторам рубрик с помощью метода [setRubricIds()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRubricIds.html). Этот способ полезен для создания выборки объектов определённого типа.
+  * По идентификатору:
+
+    * Организации с помощью метода [setOrgId()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setOrgId.html). Если у компании несколько филиалов, в ответе будут перечислены все точки.
+    * Зданий с помощью метода [setBuildingIds()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setBuildingIds.html).
+    * Любых объектов с помощью методов поискового движка [searchByIds()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchManager/searchByIds.html) и [searchByDirectoryObjectIds()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchManager/searchByDirectoryObjectIds.html).
+
+* Геоограничение поиска (где нужно искать?). Вы можете ограничить зону поиска с помощью одного из методов ниже:
+
+  * Поиск внутри полигона: задайте область поиска с помощью метода [setRestrictionGeometry()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRestrictionGeometry.html) и объекта [PolygonGeometry](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PolygonGeometry-class.html).
+
+  * Поиск в прямоугольной области интереса: задайте координаты с помощью метода [setAreaOfInterest()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setAreaOfInterest.html). Этот метод задаёт приоритетную зону поиска, но не ограничивает поиск строго: если внутри области интереса результаты не найдены, поиск продолжится за пределами области.
+
+  * Поиск в радиусе вокруг точки: задайте центр поиска с помощью метода [setRestrictionGeometry()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRestrictionGeometry.html) и объекта [PointGeometry](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PointGeometry-class.html), а радиус — с помощью метода [setRadius()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRadius.html).
+
+  * Произвольный запрос: если запрос для поиска объекта сформирован с помощью метода [setQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setQueryText.html), вы можете в этом же тексте указать и геоограничение (`цветы у Бауманской`).
+
+* (Необязательный компонент) Дополнительные ограничения результатов поиска с помощью одного или нескольких методов ниже:
+
+  * Поиск объектов только определённого типа: перечислите интересующие вас типы объектов с помощью метода [setAllowedResultTypes()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setAllowedResultTypes.html) (например, только здания).
+  * Фильтрация результатов: задайте критерий фильтрации с помощью метода [setDirectoryFilter()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setDirectoryFilter.html) (например, по времени работы).
+  * Сортировка результатов: задайте критерий сортировки с помощью метода [setSortingType()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setSortingType.html) (например, по рейтингу).
+  * Количество результатов на странице: задайте ограничение с помощью метода [setPageSize()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setPageSize.html).
+  * Номер страницы поисковой выдачи: по умолчанию возвращается первая страница. Чтобы получить следующие страницы, используйте метод [fetchNextPage()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Page/fetchNextPage.html).
+  * Локаль для поискового запроса: задайте язык и регион с помощью метода [setLocale()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setLocale.html).
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
 * Запрос для поиска объекта (что нужно искать?). Вы можете сформулировать запрос с помощью одного из методов ниже:
 
   * Из текстовой строки с помощью метода [fromQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromQueryText.html). Вы можете сформулировать текстовый запрос для поиска конкретного объекта (`храм Василия Блаженного`) или для получения списка множества объектов по критерию (`магазины музыкальных инструментов`).
@@ -82,16 +117,42 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
   * Номер страницы поисковой выдачи: по умолчанию возвращается первая страница. Чтобы получить следующие страницы, используйте метод [fetchNextPage()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Page/fetchNextPage.html). Если вы используете демо-ключ с доступом к Places API, максимально возможно загрузить до 5 страниц.
   * Локаль для поискового запроса: задайте язык и регион с помощью метода [setLocale()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setLocale.html).
 
+</TabItem>
+</Tabs>
+
 ### Примеры
 
 * Найти рестораны итальянской кухни в Пресненском районе Москвы, которые открыты сейчас, с сортировкой по рейтингу:
 
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
   ```dart
   import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-  // Создаём фильтр по времени работы
+  // Создать фильтр по времени работы
   final filter = sdk.DirectoryFilter(
       workTime: sdk.WorkTimeFilter.isOpenNow(const sdk.IsOpenNow()), // оставить только открытые сейчас объекты
+      dynamic_: [],
+  );
+
+  final searchQuery = sdk.SearchQueryBuilder()
+      .setQueryText("рестораны итальянской кухни в Пресненском районе Москвы")
+      .setDirectoryFilter(filter) // фильтрация по времени работы
+      .setSortingType(sdk.SortingType.byRating) // сортировка по рейтингу
+      .setPageSize(10) // максимум 10 объектов на странице результатов
+      .build();
+  ```
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
+
+  ```dart
+  import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+  // Создать фильтр по времени работы
+  final filter = sdk.DirectoryFilter(
+      workTime: sdk.WorkTimeFilter.openNow, // оставить только открытые сейчас объекты
       dynamic_: [],
   );
 
@@ -103,7 +164,30 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
       .build();
   ```
 
+  </TabItem>
+  </Tabs>
+
 * Найти все парковки в радиусе 1 км с сортировкой по удалённости:
+
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+  ```dart
+  import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+  final searchQuery = sdk.SearchQueryBuilder()
+      .setQueryText('Парковки')
+      .setAllowedResultTypes([sdk.ObjectType.parking]) // только парковки
+      .setRestrictionGeometry(
+        sdk.PointGeometry(const sdk.GeoPoint(latitude: sdk.Latitude(59.936), longitude: sdk.Longitude(30.351))),
+      ) // центр поиска
+      .setRadius(const sdk.Meter(1000)) // радиус поиска
+      .setSortingType(sdk.SortingType.byDistance) // сортировка по удалённости
+      .build();
+  ```
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
 
   ```dart
   import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
@@ -117,28 +201,70 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
       .build();
   ```
 
+  </TabItem>
+  </Tabs>
+
 * Найти все населённые пункты (города, деревни, посёлки и т.д.) внутри полигона:
+
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
   ```dart
   import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-  // Создаём область поиска в виде полигона
+  // Создать область поиска в виде полигона
   final polygon = [
     const sdk.GeoPoint(
       latitude: sdk.Latitude(55.751244),
       longitude: sdk.Longitude(37.618423),
     ),
     const sdk.GeoPoint(
-      latitude: sdk.Latitude(55.751244),
+      latitude: sdk.Latitude(55.84342),
       longitude: sdk.Longitude(37.618423),
     ),
+    const sdk.GeoPoint(
+      latitude: sdk.Latitude(55.84342),
+      longitude: sdk.Longitude(37.798751),
+    ),
+    const sdk.GeoPoint(
+      latitude: sdk.Latitude(55.751244),
+      longitude: sdk.Longitude(37.798751),
+    ),
+  ];
+
+  final searchQuery = sdk.SearchQueryBuilder()
+      .setQueryText('название города')
+      .setAllowedResultTypes([
+        sdk.ObjectType.admDivCity,
+        sdk.ObjectType.admDivSettlement,
+      ]) // только города и мелкие населённые пункты
+      .setRestrictionGeometry(sdk.PolygonGeometry([polygon])) // область поиска
+      .build();
+  ```
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
+
+  ```dart
+  import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+  // Создать область поиска в виде полигона
+  final polygon = [
     const sdk.GeoPoint(
       latitude: sdk.Latitude(55.751244),
       longitude: sdk.Longitude(37.618423),
     ),
     const sdk.GeoPoint(
-      latitude: sdk.Latitude(55.751244),
+      latitude: sdk.Latitude(55.84342),
       longitude: sdk.Longitude(37.618423),
+    ),
+    const sdk.GeoPoint(
+      latitude: sdk.Latitude(55.84342),
+      longitude: sdk.Longitude(37.798751),
+    ),
+    const sdk.GeoPoint(
+      latitude: sdk.Latitude(55.751244),
+      longitude: sdk.Longitude(37.798751),
     ),
   ];
 
@@ -151,12 +277,42 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
       .build();
   ```
 
+  </TabItem>
+  </Tabs>
+
 * Найти все объекты, которые оказывают услуги печати документов, в области интереса:
+
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
   ```dart
   import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-  // Создаём прямоугольную область интереса по координатам двух углов
+  // Создать прямоугольную область интереса по координатам двух углов
+  const areaOfInterest = sdk.GeoRect(
+    southWestPoint: sdk.GeoPoint(
+      latitude: sdk.Latitude(59.931),
+      longitude: sdk.Longitude(30.344),
+    ), // юго-западный угол
+    northEastPoint: sdk.GeoPoint(
+      latitude: sdk.Latitude(59.936),
+      longitude: sdk.Longitude(30.351),
+    ), // северо-восточный угол
+  );
+
+  final searchQuery = sdk.SearchQueryBuilder()
+      .setQueryText('печать документов')
+      .setAreaOfInterest(areaOfInterest)
+      .build();
+  ```
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
+
+  ```dart
+  import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+  // Создать прямоугольную область интереса по координатам двух углов
   const areaOfInterest = sdk.GeoRect(
     southWestPoint: sdk.GeoPoint(
       latitude: sdk.Latitude(59.931),
@@ -174,7 +330,26 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
           .build();
   ```
 
+  </TabItem>
+  </Tabs>
+
 * Найти все компании по адресу «Новосибирск, площадь Карла Маркса, 7»:
+
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+  ```dart
+  import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+  final searchQuery = sdk.SearchQueryBuilder()
+      .setQueryText('Новосибирск, площадь Карла Маркса, 7')
+      .setAllowedResultTypes([sdk.ObjectType.branch]) // только компании
+      .setPageSize(10) // максимум 10 объектов на странице результатов
+      .build();
+  ```
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
 
   ```dart
   import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
@@ -186,7 +361,26 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
       .build();
   ```
 
+  </TabItem>
+  </Tabs>
+
 * Найти все филиалы компании по известному идентификатору:
+
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+  ```dart
+  import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+  const id = 4504136498310300;
+
+  final searchQuery = sdk.SearchQueryBuilder()
+      .setOrgId(const sdk.OrgId(id))
+      .build();
+  ```
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
 
   ```dart
   import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
@@ -198,15 +392,36 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
       .build();
   ```
 
+  </TabItem>
+  </Tabs>
+
 * Найти конкретный объект по известному идентификатору:
+
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
   ```dart
   import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-  const id = 70000001035164789;
+  const id = '70000001035164789';
 
-  searchManager.searchById('id');
+  final objects = await searchManager.searchByIds([id]).value;
+  final object = objects.isEmpty ? null : objects.first;
   ```
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
+
+  ```dart
+  import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+  const id = '70000001035164789';
+
+  final object = await searchManager.searchById(id).value;
+  ```
+
+  </TabItem>
+  </Tabs>
 
 ### Геокодирование {#geocoding}
 
@@ -216,13 +431,41 @@ final SearchManager searchManager = sdk.SearchManager.createOnlineManager(contex
 
 Чтобы получить координаты объекта по его адресу, сформируйте поисковый запрос, указав следующие данные:
 
-* Адрес в текстовом запросе с помощью метода [fromQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromQueryText.html).
+* Адрес в текстовом запросе:
+
+  <Tabs>
+  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+  Используйте метод [setQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setQueryText.html).
+
+  </TabItem>
+  <TabItem value="sdk-13" label="Для версии 13.x">
+
+  Используйте метод [fromQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromQueryText.html).
+
+  </TabItem>
+  </Tabs>
 
   Для более точных результатов укажите в тексте город (посёлок, деревню), где выполняется поиск. Название небольшого населённого пункта (например, деревни) рекомендуется указывать вместе с названием области и другими объединениями, к которым он относится (например, сельским или городским поселением).
 
 * (Рекомендуется) Тип объекта, координаты которого нужно получить, с помощью метода [setAllowedResultTypes()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setAllowedResultTypes.html).
 
 Например, чтобы получить координаты здания по адресу «Москва, ул. Тверская 19а»:
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```dart
+import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+final searchQuery = sdk.SearchQueryBuilder()
+    .setQueryText('Москва, ул. Тверская 19а')
+    .setAllowedResultTypes([sdk.ObjectType.building])
+    .build();
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
 
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
@@ -232,6 +475,9 @@ final searchQuery = sdk.SearchQueryBuilder
     .setAllowedResultTypes([sdk.ObjectType.building])
     .build();
 ```
+
+</TabItem>
+</Tabs>
 
 В [результате поиска](#get-search-results) вы получите объект справочника [DirectoryObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject-class.html). Координаты объекта будут представлены в поле `markerPosition` в виде объекта [GeoPointWithElevation](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GeoPointWithElevation-class.html). Пример:
 
@@ -248,9 +494,38 @@ markerPosition:
 
 #### Обратное геокодирование {#reverse-geocoding}
 
-Чтобы получить адрес объекта по его координатам, сформируйте поисковый запрос, указав координаты объекта с помощью метода [fromGeoPoint()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromGeoPoint.html).
+Чтобы получить адрес объекта по его координатам, сформируйте поисковый запрос, указав координаты объекта:
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+Используйте метод [setRestrictionGeometry()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRestrictionGeometry.html) и объект [PointGeometry](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PointGeometry-class.html).
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
+Используйте метод [fromGeoPoint()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromGeoPoint.html).
+
+</TabItem>
+</Tabs>
 
 Например, найти адрес объекта по координатам `55.7659, 37.602827`:
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```dart
+import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+final searchQuery = sdk.SearchQueryBuilder()
+    .setRestrictionGeometry(
+      sdk.PointGeometry(const sdk.GeoPoint(latitude: sdk.Latitude(55.7659), longitude: sdk.Longitude(37.602827))),
+    )
+    .build();
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
 
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
@@ -259,6 +534,9 @@ final searchQuery = sdk.SearchQueryBuilder
     .fromGeoPoint(const sdk.GeoPoint(latitude: sdk.Latitude(55.7659), longitude: sdk.Longitude(37.602827)))
     .build();
 ```
+
+</TabItem>
+</Tabs>
 
 В [результате поиска](#get-search-results) вы получите объекты справочника [DirectoryObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject-class.html). Адрес каждого объекта будет представлен в поле `address` в виде объекта [Address](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Address-class.html). Пример:
 
@@ -295,10 +573,37 @@ address:
 
 Вы можете изменять или дополнять параметры уже созданного поискового запроса. Для этого создайте новый объект [SearchQuery](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQuery-class.html), укажите существующий запрос с помощью метода [fromQuery()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromQuery.html) и укажите параметры, которые нужно дополнительно применить. Например, изменить тип сортировки результатов при поиске парковок:
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-// Создаём изначальный запрос
+// Создать изначальный запрос
+final searchQuery = sdk.SearchQueryBuilder()
+    .setQueryText('Парковки')
+    .setAllowedResultTypes([sdk.ObjectType.parking])
+    .setRestrictionGeometry(
+      sdk.PointGeometry(const sdk.GeoPoint(latitude: sdk.Latitude(59.936), longitude: sdk.Longitude(30.351))),
+    ) // центр поиска
+    .setRadius(const sdk.Meter(1000))
+    .setSortingType(sdk.SortingType.byDistance) // сортировка по удалённости
+    .build();
+
+// Создать новый запрос с другим типом сортировки
+final searchQueryUpdated = sdk.SearchQueryBuilder
+    .fromQuery(searchQuery) // указание на изначальный запрос
+    .setSortingType(sdk.SortingType.byRating) // сортировка по рейтингу
+    .build();
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
+```dart
+import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+// Создать изначальный запрос
 final searchQuery = sdk.SearchQueryBuilder
     .fromQueryText('Парковки')
     .setAllowedResultTypes([sdk.ObjectType.parking])
@@ -307,13 +612,15 @@ final searchQuery = sdk.SearchQueryBuilder
     .setSortingType(sdk.SortingType.byDistance) // сортировка по удалённости
     .build();
 
-// Создаём новый запрос с другим типом сортировки
+// Создать новый запрос с другим типом сортировки
 final searchQueryUpdated = sdk.SearchQueryBuilder
     .fromQuery(searchQuery) // указание на изначальный запрос
     .setSortingType(sdk.SortingType.byRating) // сортировка по рейтингу
     .build();
 ```
 
+</TabItem>
+</Tabs>
 Остальные параметры изначального запроса сохраняются.
 
 ## Получение результатов поиска {#get-search-results}
@@ -347,15 +654,15 @@ final Page? nextPage = await searchPage?.fetchNextPage()?.value;
 import 'package:dgis_mobile_sdk/dgis.dart';
 
   Future<void> displaySearchResultMarkers(sdk.Map map, sdk.SearchResult searchResult) async {
-    // Получаем список маркеров из результатов поиска
+    // Получить список маркеров из результатов поиска
     final loader = sdk.ImageLoader(sdkContext);
     final markerInfos = await searchResult.itemMarkerInfos.value;
     if (markerInfos == null) return;
 
-   // Создаём менеджер объектов для добавления маркеров на карту
+   // Создать менеджер объектов для добавления маркеров на карту
     final mapObjectManager = sdk.MapObjectManager(map);
 
-    // Подготавливаем список маркеров
+    // Подготовить список маркеров
     final markers = markerInfos.map((itemMarkerInfo) async {
       final position = itemMarkerInfo.geoPoint;
 
@@ -367,7 +674,7 @@ import 'package:dgis_mobile_sdk/dgis.dart';
       );
     }).whereType<sdk.Marker>().toList();
 
-    // Добавляем маркеры на карту
+    // Добавить маркеры на карту
     mapObjectManager.addObjects(markers);
   }
 ```
@@ -405,8 +712,32 @@ import 'package:dgis_mobile_sdk/dgis.dart';
 * Время работы:
 
   * Смещение локального времени объекта от UTC в виде временной метки (`timeZoneOffset`). Например, `03:00:00` для часового пояса UTC+3.
-  * Время работы (`openingHours`) в виде списка временных промежутков или флага круглосуточной работы. Актуально для компаний.
-  * Текущий статус работы (`workStatus`).
+  * Время работы (`openingHours`) в виде списка временных промежутков или флага круглосуточной работы. Актуально для организаций.
+  * Расписание работы и текущий статус (`workStatus`). Актуально для организаций.
+
+    В зависимости от версии SDK наполнение `workStatus` может отличаться:
+
+    <Tabs>
+    <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+    ```dart
+    workStatus: WorkStatus(
+        openStatus: OpenStatus.opened(Opened(null)),
+        openStatusHint: 'Открыто до 23:00',
+        scheduleHint: 'Сегодня до 23:00',
+        breakHint: null,
+    ),
+    ```
+
+    </TabItem>
+    <TabItem value="sdk-13" label="Для версии 13.x">
+
+    ```dart
+    workStatus: WorkStatus(isOpen: true, description: 'Открыто до 23:00'),
+    ```
+
+    </TabItem>
+    </Tabs>
 
 * Прочие данные:
 
@@ -546,7 +877,12 @@ group: [
   reviews: Reviews(rating: 3.4, count: 85),
   parkingInfo: null,
   // В данный момент филиал открыт и работает до 23:00
-  workStatus: WorkStatus(isOpen: true, description: 'Открыто до 23:00'),
+  workStatus: WorkStatus(
+      openStatus: OpenStatus.opened(Opened(null)),
+      openStatusHint: 'Открыто до 23:00',
+      scheduleHint: 'Сегодня до 23:00',
+      breakHint: null,
+  ),
   levelId: null,
   buildingLevels: null,
   // У организации один вход
@@ -650,7 +986,7 @@ group: [
   // Нет отзывов об объекте для подсчёта рейтинга
   reviews: Reviews(rating: 0.0, count: 0),
   parkingInfo: null,
-  workStatus: WorkStatus(isOpen: false, description: ''),
+  workStatus: null,
   levelId: null,
   buildingLevels: null,
   // У жилого здания два входа
@@ -764,7 +1100,7 @@ group: [
   contactInfos: [],
   reviews: null,
   parkingInfo: null,
-  workStatus: WorkStatus(isOpen: false, description: ''),
+  workStatus: null,
   levelId: null,
   buildingLevels: null,
   entrances: [],
@@ -820,7 +1156,7 @@ group: [
   // Рейтинг 4.8 на основе 62 отзывов
   reviews: Reviews(rating: 4.8, count: 62),
   parkingInfo: null,
-  workStatus: WorkStatus(isOpen: false, description: ''),
+  workStatus: null,
   levelId: null,
   buildingLevels: null,
   entrances: [],
@@ -843,13 +1179,30 @@ group: [
 
 Вы можете формировать подсказки для пользователей при текстовом поиске объектов. Для этого создайте объект [SuggestQuery](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQuery-class.html) с помощью [SuggestQueryBuilder](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQueryBuilder-class.html) и передайте его в метод [suggest()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchManager/suggest.html):
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-final SuggestQuery suggestQuery = sdk.SuggestQueryBuilder.fromQueryText(query).build();
+final sdk.SuggestQuery suggestQuery = sdk.SuggestQueryBuilder(query).build();
 
-final SuggestQuery = await searchManager.suggest(suggestQuery).value;
+final suggestResult = await searchManager.suggest(suggestQuery).value;
 ```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
+```dart
+import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
+
+final sdk.SuggestQuery suggestQuery = sdk.SuggestQueryBuilder.fromQueryText(query).build();
+
+final suggestResult = await searchManager.suggest(suggestQuery).value;
+```
+
+</TabItem>
+</Tabs>
 
 Вызов вернёт отложенный результат [SuggestResult](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestResult-class.html), содержащий список подсказок ([Suggest](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Suggest-class.html)). Подробнее о формировании подсказок см. в документации [Suggest API](/api/search/suggest/overview).
 
@@ -857,7 +1210,7 @@ final SuggestQuery = await searchManager.suggest(suggestQuery).value;
 
 * [SuggestObjectHandler](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestObjectHandler-class.html) — возвращает объект справочника [DirectoryObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject-class.html).
 * [PerformSearchHandler](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PerformSearchHandler-class.html) — возвращает объект поискового запроса [SearchQuery](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQuery-class.html). Вы можете использовать этот объект для дальнейшего поиска: передайте его в метод [SearchManager.search()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchManager/search.html) или создайте на его основе новый [SearchQuery](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQuery-class.html) с дополнительными параметрами с помощью метода [fromQuery()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromQuery.html) (подробнее см. в разделе [Изменение параметров поиска](#modify-search-params)).
-* [IncompleteTextHandler](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/IncompleteTextHandler-class.html) — возвращает автоматически дополненный текст подсказки, который можно использовать для дальнейшего формирования поискового запроса с помощью метода [fromQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromQueryText.html).
+* [IncompleteTextHandler](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/IncompleteTextHandler-class.html) — возвращает автоматически дополненный текст подсказки, который можно использовать для дальнейшего формирования поискового запроса с помощью метода [setQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setQueryText.html) в SDK 14.0.0 и выше или [fromQueryText()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromQueryText.html) в SDK 13.x.
 
 Пример функции для применения всех типов обработчика:
 
@@ -892,11 +1245,11 @@ void handleSuggestHandler(sdk.SuggestHandler handler) {
    * Для поискового запроса: [SearchQueryWithInfo](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryWithInfo-class.html) с указанием нужного поискового запроса в параметре `searchQuery`. Дополнительно `SearchQueryWithInfo` может содержать заголовок и подзаголовок, которые отобразятся в выдаче истории поиска.
 
      ```dart
-     // Создаём объект SearchQueryWithInfo
+     // Создать объект SearchQueryWithInfo
      final searchQueryWithInfo = sdk.SearchQueryWithInfo(
          searchQuery, // готовый поисковый запрос
-         "Nearby Cafes",
-         "Restaurants and cafes nearby",
+         "Кафе рядом",
+         "Рестораны и кафе поблизости",
      );
 
      final searchHistoryItem = sdk.SearchHistoryItem.searchQuery(searchQueryWithInfo);
@@ -939,19 +1292,19 @@ void handleSuggestHandler(sdk.SuggestHandler handler) {
 * Отфильтровать список по типу элементов (параметр `filter`). Доступные фильтры перечислены в [SearchHistoryFilter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchHistoryFilter.html). Например, чтобы показывать в истории только поисковые запросы, используйте значение `searchQuery`. По умолчанию фильтрация отсутствует.
 
 ```dart
-// Создаём объект SearchHistory
+// Создать объект SearchHistory
 final searchHistory = SearchHistory(sdkContext);
 
-// Создаём страницу истории с лимитом 10 элементов и смещением 0
+// Создать страницу истории с лимитом 10 элементов и смещением 0
 final page = sdk.SearchHistoryPage(
     limit: 10,        // Максимум 10 элементов на странице
     filter: sdk.SearchHistoryFilterEnumSet(),    // Без фильтров
 );
 
-// Получаем элементы страницы истории
+// Получить элементы страницы истории
 searchHistory.items(page).then((result) {
     for (final item in result.items) {
-    // Логируем каждый элемент истории
+    // Логировать каждый элемент истории
     print('Элемент истории: $item');
     }
 });
@@ -1031,5 +1384,3 @@ sdk.GeoPoint? getMarkerPosition(sdk.DirectoryObject directoryObject) {
   return null;
 }
 ```
-
-

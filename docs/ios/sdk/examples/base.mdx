@@ -9,6 +9,37 @@ sidebar: iossdk
 
 Пример получения объекта из справочника:
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```swift
+// Создание объекта для поиска по справочнику.
+let searchManager = SearchManager.createOnlineManager(context: sdk.context)
+
+// Получение объекта из справочника по идентификатору.
+let future = searchManager.searchByDirectoryObjectIds(objectIds: [object.id])
+
+// Обработка результата поиска в главной очереди.
+// Сохранение результата вызова, так как его удаление отменяет обработку.
+self.searchDirectoryObjectCancellable = future.sink(
+	receiveValue: {
+		[weak self] directoryObjects in
+		guard let directoryObject = directoryObjects.first else { return }
+		DispatchQueue.main.async {
+			self.handle(directoryObject)
+		}
+	},
+	failure: { error in
+		DispatchQueue.main.async {
+			self.handle(error)
+		}
+	}
+	)
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
 ```swift
 // Создание объекта для поиска по справочнику.
 let searchManager = SearchManager.createOnlineManager(context: sdk.context)
@@ -17,7 +48,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
 let future = searchManager.searchByDirectoryObjectId(objectId: object.id)
 
 // Обработка результата поиска в главной очереди.
-// Сохраняем результат вызова, так как его удаление отменяет обработку.
+// Сохранение результата вызова, так как его удаление отменяет обработку.
 self.searchDirectoryObjectCancellable = future.sink(
 	receiveValue: {
 		[weak self] directoryObject in
@@ -33,6 +64,9 @@ self.searchDirectoryObjectCancellable = future.sink(
 	}
 )
 ```
+
+</TabItem>
+</Tabs>
 
 Для упрощения работы можно создать расширение:
 
@@ -87,7 +121,7 @@ self.searchDirectoryObjectCancellable = future.sinkOnMainThread(
 extension DGis.Future {
 	func asCombineFuture() -> Combine.Future<Value, Error> {
 		Combine.Future { [self] promise in
-			// Удерживаем ссылку на Cancellable, пока не будет вызван обработчик
+			// Удерживать ссылку на Cancellable, пока не будет вызван обработчик
 			// Combine.Future не позволяет конфигурировать отмену напрямую
 			var cancellable: DGis.Cancellable?
 			cancellable = self.sink {
@@ -126,10 +160,10 @@ combineFuture.receive(on: DispatchQueue.main).sink {
 Пример подписки на изменение видимой области карты (поток новых прямоугольных областей):
 
 ```swift
-// Выбираем канал (прямоугольники видимой области карты).
+// Выбрать канал (прямоугольники видимой области карты).
 let visibleRectChannel = map.camera.visibleRectChannel
 
-// Подписываемся и обрабатываем результаты в главной очереди.
+// Подписаться и обрабатывать результаты в главной очереди.
 // Значения будут присылаться при любом изменении видимой области до момента отписки.
 // Важно сохранить Cancellable, иначе подписка будет уничтожена.
 self.cancellable = visibleRectChannel.sink { [weak self] visibleRect in

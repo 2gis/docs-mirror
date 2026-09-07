@@ -388,16 +388,16 @@ navigationManager.start(routeBuildOptions)
 Дополнительно при вызове метода `start()` можно указать объект [TrafficRoute](/ios/sdk/reference/stable/class#traffic-route) — готовый маршрут для навигации (см. детали в разделе [Маршруты](/ios/sdk/examples/routing)). В таком случае навигатор не будет пытаться построить маршрут от текущего местоположения, а начнёт ведение по указанному маршруту.
 
 ```swift
-// Ищем маршрут.
+// Поиск маршрута
 self.routeSearchCancellable = routesFuture.sinkOnMainThread { routes in
     guard let route = routes.first else { return }
 
-    // Настройки маршрута.
+    // Настройки маршрута
     let routeBuildOptions = RouteBuildOptions(
         finishPoint: finishPoint,
         routeSearchOptions: routeSearchOptions
     )
-    // Запускаем навигатор.
+    // Запуск навигатора
     navigationManager.start(
         routeBuildOptions: routeBuildOptions,
         trafficRoute: route
@@ -446,7 +446,7 @@ SDK предоставляет возможность строить маршр�
 Создание маршрута происходит по принципам, описанным в разделе [Ведение по маршруту](#turn-by-turn-mode) с несколькими важными дополнениями. При создании конечной точки маршрута [RouteSearchPoint](/ios/sdk/reference/stable/struct#route-search-point) обязательно указывать параметры [objectId](/ios/sdk/reference/stable/struct#dgis-object-id) и [levelId](/ios/sdk/reference/stable/struct#level-id).
 
 ```swift
-// объект RouteBuildOptions также необходим
+// Объект RouteBuildOptions также необходим
 let routeBuildOptions = RouteBuildOptions(
     finishPoint: RouteSearchPoint(
         coordinates : GeoPoint(latitude: 55.752425, longitude: 37.613983),

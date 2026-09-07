@@ -9,15 +9,35 @@ sidebar: fluttersdk
 
 Пример получения объекта из справочника:
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```dart
 import 'package:dgis_mobile_sdk/dgis.dart' as sdk;
 
-// Создание объекта для поиска по справочнику
+// Создать объект для поиска по справочнику
 searchManager = sdk.SearchManager.createOnlineManager(context);
 
-// Получение объекта из справочника по идентификатору
+// Получить объект из справочника по идентификатору
+final objects = await searchManager.searchByDirectoryObjectIds([objectId]).value;
+final object = objects.isEmpty ? null : objects.first;
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
+```dart
+import 'package:dgis_mobile_sdk/dgis.dart' as sdk;
+
+// Создать объект для поиска по справочнику
+searchManager = sdk.SearchManager.createOnlineManager(context);
+
+// Получить объект из справочника по идентификатору
 searchManager.searchByDirectoryObjectId(objectId)
 ```
+
+</TabItem>
+</Tabs>
 
 Подробнее про работу со справочником можно посмотреть в разделе [Справочник объектов](/flutter/sdk/examples/directory).
 
@@ -28,6 +48,46 @@ searchManager.searchByDirectoryObjectId(objectId)
 Подписка на `Channel` возвращает [StreamSubscription](https://api.flutter.dev/flutter/dart-async/StreamSubscription-class.html).
 
 Пример подписки на изменение видимой области карты (поток новых прямоугольных областей):
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```dart
+import 'dart:async';
+
+import 'package:dgis_mobile_sdk/dgis.dart' as sdk;
+
+class SampleState extends State<Widget> {
+  late final sdk.Context sdkContext;
+  late final sdk.MapWidgetController mapWidgetController;
+  StreamSubscription<sdk.GeoRect>? visibleRectSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    sdkContext = sdk.DGis.initialize();
+    mapWidgetController = sdk.MapWidgetController(sdkContext);
+    _subscribeToVisibleRect();
+  }
+
+  Future<void> _subscribeToVisibleRect() async {
+    final map = await mapWidgetController.mapAsync;
+    visibleRectSubscription = map.camera.visibleRectChannel.listen((geoRect) {
+      debugPrint("Current rect: ${geoRect}");
+    });
+  }
+
+  @override
+  void dispose() {
+    visibleRectSubscription?.cancel();
+    super.dispose();
+  }
+...
+}
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
 
 ```dart
 import 'dart:async';
@@ -57,4 +117,5 @@ class SampleState extends State<Widget> {
 }
 ```
 
-
+</TabItem>
+</Tabs>

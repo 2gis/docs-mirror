@@ -549,7 +549,7 @@ model.size = sdk.ModelSize.logicalPixel(
 model.mapDirection = const sdk.MapDirection(0.5);
 
 // Изменение настроек анимации 3D-модели
-model.animationSettings = sdk.AnimationSettings(); // TBD
+model.animationSettings = sdk.AnimationSettings();
 ```
 
 ### Добавление нескольких объектов {#add-multiple-objects}
@@ -559,7 +559,7 @@ model.animationSettings = sdk.AnimationSettings(); // TBD
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-// Подготавливаем коллекцию объектов
+// Подготавка коллекции объектов
 final List<sdk.Marker> markers = [];
 final sdk.MarkerOptions markerOptions = sdk.MarkerOptions(
     <params>
@@ -567,7 +567,7 @@ final sdk.MarkerOptions markerOptions = sdk.MarkerOptions(
 
 markers.add(sdk.Marker(markerOptions));
 
-// Добавляем коллекцию объектов на карту
+// Добавление коллекции объектов на карту
 mapObjectManager.addObjects(markers)
 ```
 
@@ -803,18 +803,55 @@ mapObjectManager = sdk.MapObjectManager.withGeneralization(
 
 Выделение объектов происходит с помощью вызова метода [setHighlighted()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSource/setHighlighted.html), который получает на вход список идентификаторов справочника изменяемых объектов [DgisObjectId](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSource-class.html). Внутри метода `getRenderedObjects()` можно получить все данные, необходимые для использования этого метода, например источник данных объектов и их идентификаторы:
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```dart
 mapWidgetController
     .addObjectTappedCallback((sdk.RenderedObjectInfo info) async {
-  // Получим ближайший к месту нажатия объект внутри установленного радиуса
+  // Получить ближайший к месту нажатия объект внутри установленного радиуса
   final sdk.RenderedObject obj = info.item;
 
-  // В этом примере мы хотим найти информацию о выбранном объекте в справочнике.
-  // Для этого мы должны убедиться, что тип этого объекта может быть найден
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
+  // Для этого нужно убедиться, что тип этого объекта может быть найден
   if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
     final source = obj.source as sdk.DgisSource;
 
-    // Произведем поиск
+    // Поиск
+    final foundObjects =
+        await sdk.SearchManager.createOnlineManager(sdkContext)
+            .searchByDirectoryObjectIds([(obj.item as sdk.DgisMapObject).id])
+            .value;
+    final foundObject = foundObjects.isEmpty ? null : foundObjects.first;
+
+    final entranceIds =
+        foundObject?.entrances.map((entrance) => entrance.id).toList() ??
+            List.empty();
+
+    // Снять выделение с выбранных ранее объектов
+    source
+      ..setHighlighted(source.highlightedObjects, false)
+      // Выделить полученный объект и входы
+      ..setHighlighted(entranceIds, true);
+  }
+});
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
+```dart
+mapWidgetController
+    .addObjectTappedCallback((sdk.RenderedObjectInfo info) async {
+  // Получить ближайший к месту нажатия объект внутри установленного радиуса
+  final sdk.RenderedObject obj = info.item;
+
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
+  // Для этого нужно убедиться, что тип этого объекта может быть найден
+  if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
+    final source = obj.source as sdk.DgisSource;
+
+    // Поиск
     final foundObject =
         await sdk.SearchManager.createOnlineManager(sdkContext)
             .searchByDirectoryObjectId((obj.item as sdk.DgisMapObject).id)
@@ -824,14 +861,17 @@ mapWidgetController
         foundObject?.entrances.map((entrance) => entrance.id).toList() ??
             List.empty();
 
-    // Снимаем выделение с выбранных ранее объектов
+    // Снять выделение с выбранных ранее объектов
     source
       ..setHighlighted(source.highlightedObjects, false)
-      // Выделяем полученный объект и входы
+      // Выделить полученный объект и входы
       ..setHighlighted(entranceIds, true);
   }
 });
 ```
+
+</TabItem>
+</Tabs>
 
 ## Управление камерой {#controlling-the-camera}
 
@@ -850,10 +890,8 @@ mapWidgetController
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-final sdk.Map map = mapWidgetController.getMapAsync((map) {
-  sdkMap = map;
-});
-final sdk.CameraPosition cameraPosition = const sdk.CameraPosition(
+mapWidgetController.getMapAsync((map) {
+  final sdk.CameraPosition cameraPosition = const sdk.CameraPosition(
     point: sdk.GeoPoint(
       latitude: sdk.Latitude(55.759909),
       longitude: sdk.Longitude(37.618806),
@@ -863,11 +901,12 @@ final sdk.CameraPosition cameraPosition = const sdk.CameraPosition(
     bearing: sdk.Bearing(115),
   );
 
-map.camera.moveToCameraPosition(
-    position,
+  map.camera.moveToCameraPosition(
+    cameraPosition,
     const Duration(seconds: 3),
     sdk.CameraAnimationType.linear,
   );
+});
 ```
 
 Для более точного контроля над анимацией перелёта можно использовать контроллер перелёта, который будет определять позицию камеры в каждый конкретный момент времени. Для этого нужно реализовать интерфейс [CameraMoveController](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/CameraMoveController-class.html) и передать созданный объект в метод `move()` вместо параметров перелёта.
@@ -919,12 +958,12 @@ import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
 // Чтобы «увидеть» два маркера на карте:
 
-// Создаём геометрию, которая охватывает оба объекта
+// Создать геометрию, которая охватывает оба объекта
 final List<sdk.SimpleMapObject> objects = [marker1, marker2, marker3];
-// Рассчитываем нужную позицию
+// Рассчитать нужную позицию
 final position = sdk.calcPositionForObjects(camera, objects, styleZoomToTiltRelation, screenArea, tilt, bearing, size)
 
-// Используем рассчитанную позицию
+// Использовать рассчитанную позицию
 map.camera.moveToCameraPosition(position)
 ```
 
@@ -937,9 +976,10 @@ map.camera.moveToCameraPosition(position)
 Например, задайте отступы сверху и снизу экрана:
 
 ```dart
-// Задаём отступы сверху и снизу, чтобы маркеры отображались полностью
+// Задать отступы сверху и снизу, чтобы маркеры отображались полностью
 sdkCamera.padding = sdk.Padding(top: 100, bottom: 100);
 
+// Рассчитать нужную позицию с учётом отступов
 final position = sdk.calcPositionForObjects(camera, objects, styleZoomToTiltRelation, screenArea, tilt, bearing, size);
 map.camera.moveToCameraPosition(position);
 ```
@@ -954,7 +994,7 @@ map.camera.moveToCameraPosition(position);
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
 final sdk.Geometry geometry = sdk.ComplexGeometry([sdk.PointGeometry(point1), sdk.PointGeometry(point2),])
-// Задаём активную область только для расчёта позиции
+// Задать активную область только для расчёта позиции
 val position = sdk.calcPositionForGeometry(map.camera, geometry, styleZoomToTiltRelation, sdk.Padding({top:100, bottom:100}), tilt, bearing, size,)
 map.camera.move(position)
 ```
@@ -1459,5 +1499,3 @@ mapWidgetController.getMapAsync((map) {
 Кроме настроек конкретного жеста, также существуют настройки поведения масштабирования и поворота карты. Можно настроить точку, относительно которой будут происходить операции поворота и масштабирования карты. По умолчанию эти операции работают относительно «центра масс» точек постановки пальцев. Это поведение можно сменить при помощи настройки [EventsProcessingSettings](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/EventsProcessingSettings-class.html). Настройку можно установить при помощи метода [setSettingsAboutMapPositionPoint()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GestureManager/setSettingsAboutMapPositionPoint.html).
 
 Для управления одновременным срабатыванием нескольких жестов используется метод `setMutuallyExclusiveGestures`.
-
-

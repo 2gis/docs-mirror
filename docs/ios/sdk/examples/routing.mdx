@@ -39,11 +39,11 @@ sidebar: iossdk
 2. Чтобы отобразить найденный маршрут на карте, создайте объекты [RouteMapObject](/ios/sdk/reference/stable/class#route-map-object) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](/ios/sdk/reference/stable/class#route-map-object-source).
 
     ```swift
-    // Создаём источник данных
+    // Создать источник данных
     let routeMapObjectSource = RouteMapObjectSource(context: sdk.context, routeVisualizationType: .normal)
     map.addSource(source: routeMapObjectSource)
 
-    // Добавляем созданный маршрут на карту
+    // Добавить созданный маршрут на карту
     self.routeSearchCancellable = routesFuture.sinkOnMainThread { routes in
         for (index, route) in routes.enumerated() {
             let routeMapObject = RouteMapObject(
@@ -90,15 +90,18 @@ func tap(location: CGPoint) {
 
 Можно получить координаты объекта (здания, дороги), который находится в месте клика. Для этого понадобится метод [getRenderedObjects()](/ios/sdk/reference/stable/class#map/get-rendered-objects). В нем нужно получить объект класса [DgisMapObject](/ios/sdk/reference/stable/class#dgis-map-object), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```swift
 private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 	let scale = UIScreen.main.nativeScale
 	let point = ScreenPoint(x: Float(location.x * scale), y: Float(location.y * scale))
 	self.getRenderedObjectsCancellable?.cancel()
 	let cancel = self.map.getRenderedObjects(centerPoint: point).sinkOnMainThread(
-		receiveValue: {
-			infos in
-			// Получим ближайший к месту нажатия объект класса DgisMapObject
+			receiveValue: {
+				infos in
+				// Получить ближайший к месту нажатия объект класса DgisMapObject
 				guard let info = infos.first(
 					where: {
 						$0.item.item is DgisMapObject
@@ -106,15 +109,15 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 				) else { return }
 				let mapObject = info.item.item as! DgisMapObject
 
-				// Создадим поисковый запрос по идентификатору этого объекта
+				// Создать поисковый запрос по идентификатору этого объекта
 				self.searchCancellable?.cancel()
-				self.searchCancellable = self.searchManager.searchByDirectoryObjectId(
-					objectId: mapObject.id
+				self.searchCancellable = self.searchManager.searchByDirectoryObjectIds(
+					objectIds: [mapObject.id]
 				)
-				// Получим объект из поискового запроса
-				.sinkOnMainThread(receiveValue: { [weak self] object in
-					self?.directoryObject = object
-					// Получим координаты объекта в виде GeoPoint
+				// Получить объект из поискового запроса
+				.sinkOnMainThread(receiveValue: { [weak self] objects in
+					self?.directoryObject = objects.first
+					// Получить координаты объекта в виде GeoPoint
 					let geoPoint = self?.directoryObject?.markerPosition?.point
 				},
 					failure: { .. }
@@ -126,6 +129,49 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 	...
 }
 ```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
+
+```swift
+private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
+	let scale = UIScreen.main.nativeScale
+	let point = ScreenPoint(x: Float(location.x * scale), y: Float(location.y * scale))
+	self.getRenderedObjectsCancellable?.cancel()
+	let cancel = self.map.getRenderedObjects(centerPoint: point).sinkOnMainThread(
+			receiveValue: {
+				infos in
+				// Получить ближайший к месту нажатия объект класса DgisMapObject
+				guard let info = infos.first(
+					where: {
+						$0.item.item is DgisMapObject
+					}
+				) else { return }
+				let mapObject = info.item.item as! DgisMapObject
+
+				// Создать поисковый запрос по идентификатору этого объекта
+				self.searchCancellable?.cancel()
+				self.searchCancellable = self.searchManager.searchByDirectoryObjectId(
+					objectId: mapObject.id
+				)
+				// Получить объект из поискового запроса
+				.sinkOnMainThread(receiveValue: { [weak self] object in
+					self?.directoryObject = object
+					// Получить координаты объекта в виде GeoPoint
+					let geoPoint = self?.directoryObject?.markerPosition?.point
+				},
+					failure: { .. }
+				)
+
+		},
+		failure: { ... }
+	)
+	...
+}
+```
+
+</TabItem>
+</Tabs>
 
 :::note[Координаты больших объектов]
 
@@ -377,11 +423,11 @@ let polygonExcludedArea = ExcludedArea(
 3. Чтобы отобразить маршрут на карте, создайте объекты [RouteMapObject](/ios/sdk/reference/stable/class#route-map-object) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](/ios/sdk/reference/stable/class#route-map-object-source).
 
     ```swift
-    // Создаём источник данных
+    // Создать источник данных
     let routeMapObjectSource = RouteMapObjectSource(context: sdk.context, routeVisualizationType: .normal)
     map.addSource(source: routeMapObjectSource)
 
-    // Добавляем полученный маршрут на карту
+    // Добавить полученный маршрут на карту
     self.sharedRouteCancellable = sharedRouteFuture.sinkOnMainThread { sharedRouteData in
         for (index, route) in sharedRouteData.routes.enumerated() {
             let routeMapObject = RouteMapObject(
@@ -407,5 +453,3 @@ let polygonExcludedArea = ExcludedArea(
 
 * Построение маршрута для [грузового транспорта](#truck-routing).
 * [Использование готового маршрута](#using-ready-route), который был построен ранее с помощью Routing API.
-
-

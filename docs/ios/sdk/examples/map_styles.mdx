@@ -21,7 +21,25 @@ sidebar: iossdk
 
 3. Переместите скачанный стиль в проект с мобильным приложением.
 
-4. Подключите стиль с помощью метода [loadResource()](/ios/sdk/reference/stable/IStyleFactory#nav-lvl1--loadResource) или [loadFile()](/ios/sdk/reference/stable/IStyleFactory#nav-lvl1--loadFile) и укажите объект стиля в качестве параметра `styleFuture`:
+4. Подключите стиль при создании карты:
+
+   <Tabs>
+   <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+   ```swift
+   // Файл стиля из проекта приложения
+   let styleFile = File(path: styleFileURL.standardized.path)
+
+   // Установка стиля в настройках контроллера карты
+   let mapControllerOptions = MapControllerOptions(styleFile: styleFile)
+
+   // Создание карты с указанными настройками
+   let mapFactory = try sdk.makeMapFactory(options: mapControllerOptions)
+   let map = mapFactory.map
+   ```
+
+   </TabItem>
+   <TabItem value="sdk-13" label="Для версии 13.x">
 
    ```swift
    // Получение фабрики стилей
@@ -36,6 +54,25 @@ sidebar: iossdk
    let map = mapFactory.map
    ```
 
+   </TabItem>
+   <TabItem value="sdk-12" label="Для версии SDK 12.x">
+
+   ```swift
+   // Получение фабрики стилей
+   let styleFactory = sdk.styleFactory
+
+   // Установка стиля в настройках карты
+   var mapOptions = MapOptions.default
+   mapOptions.styleFuture = styleFactory.loadResource(name: "styles.2gis", bundle: .main)
+
+   // Создание карты с указанными настройками
+   let mapFactory = sdk.makeMapFactory(options: mapOptions)
+   let map = mapFactory.map
+   ```
+
+   </TabItem>
+   </Tabs>
+
 5. Если вы установили проект с помощью `xcframework` и используете стиль из Редактора стилей в приложении, удалите следующие файлы:
 
    * `DGis.xcframework/ios-arm64/DGis.framework/Assets/ru.dgis.sdk/common-styles.2gis`,
@@ -45,12 +82,33 @@ sidebar: iossdk
 
 <br />
 
-Методы [loadResource()](/ios/sdk/reference/stable/IStyleFactory#nav-lvl1--loadResource) и [loadFile()](/ios/sdk/reference/stable/IStyleFactory#nav-lvl1--loadFile) возвращают отложенное значение ([Future](/ios/sdk/reference/stable/class#future)), чтобы не задерживать загрузку карты. Если стиль загружен, вы можете преобразовать его в объект `Future` с помощью метода [makeReadyValue()](/ios/sdk/reference/stable/class#future/make-ready-value):
+Методы [loadResource()](/ios/sdk/reference/stable/IStyleFactory#nav-lvl1--loadResource) и [loadFile()](/ios/sdk/reference/stable/IStyleFactory#nav-lvl1--loadFile) возвращают отложенное значение ([Future](/ios/sdk/reference/stable/class#future)), чтобы не задерживать загрузку карты. Если стиль уже загружен, его можно передать в настройки карты:
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```swift
+let mapControllerOptions = MapControllerOptions(style: style)
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
 
 ```swift
 var mapOptions = MapOptions.default
 mapOptions.styleFuture = Future.makeReadyValue(style)
 ```
+
+</TabItem>
+<TabItem value="sdk-12" label="Для версии SDK 12.x">
+
+```swift
+var mapOptions = MapOptions.default
+mapOptions.styleFuture = Future.makeReadyValue(style)
+```
+
+</TabItem>
+</Tabs>
 
 ## Изменение стиля карты {#change-style}
 
@@ -62,7 +120,26 @@ mapOptions.styleFuture = Future.makeReadyValue(style)
     В отличие от указания стиля при создании карты, `style` является не отложенным значением [Future](/ios/sdk/reference/stable/class#future), а загруженным стилем карты ([Style](/ios/sdk/reference/stable/class#style)). Установите значение `style` после завершения загрузки `Future`:
 
     <Tabs>
-    <TabItem value="sdk-13" label="Для версии SDK 13.0.0 и выше" default>
+    <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+    ```swift
+    // Получение фабрики стилей
+    let styleFactory = sdk.styleFactory
+
+    // Загрузка нового стиля карты
+    // Метод loadFile() принимает только локальные URL (file://)
+    self.cancellable = styleFactory.loadFile(url: styleFileURL).sinkOnMainThread(
+        receiveValue: { [map = self.map] style in
+            // Изменение стиля карты после загрузки
+            map.style = style
+        },
+        failure: { error in
+            print("Не удалось загрузить стиль из файла <\(fileURL)>. Ошибка: \(error)")
+        })
+    ```
+
+    </TabItem>
+    <TabItem value="sdk-13" label="Для версии 13.x">
 
     ```swift
     // Получение фабрики стилей
@@ -110,7 +187,22 @@ mapOptions.styleFuture = Future.makeReadyValue(style)
 
 ### При создании карты {#switch-theme-on-map-creation}
 
-Вы можете указать темы при создании карты с помощью параметра [appearance](/ios/sdk/reference/stable/struct#map-options/var-appearance) в `MapOptions`. В iOS 13 и выше можно использовать автоматическое переключение между светлой и тёмной темами (см. инструкцию [Dark Mode](https://developer.apple.com/design/human-interface-guidelines/dark-mode) в документации Apple):
+Вы можете указать темы при создании карты с помощью параметра [appearance](/ios/sdk/reference/stable/struct#map-view-options/var-appearance):
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```swift
+// Установка темы в настройках отображения карты
+var mapViewOptions = MapViewOptions.default
+mapViewOptions.appearance = .bySystem(.init(light: .defaultTheme, dark: .defaultDarkTheme))
+
+// Создание карты с указанными настройками
+let mapFactory = try sdk.makeMapFactory(mapViewOptions: mapViewOptions)
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
 
 ```swift
 // Установка стиля в настройках карты
@@ -134,9 +226,48 @@ if #available(iOS 13.0, *) {
 let mapFactory = sdk.makeMapFactory(options: mapOptions)
 ```
 
+</TabItem>
+<TabItem value="sdk-12" label="Для версии SDK 12.x">
+
+```swift
+// Установка стиля в настройках карты
+var mapOptions = MapOptions.default
+
+// Название светлой темы в используемом стиле
+let lightTheme: Theme = "day"
+
+// Название тёмной темы в используемом стиле
+let darkTheme: Theme = "night"
+
+if #available(iOS 13.0, *) {
+	// Автоматическое переключение между темами в iOS 13 и выше
+	mapOptions.appearance = .automatic(light: lightTheme, dark: darkTheme)
+} else {
+	// Использование светлой темы в остальных случаях
+	mapOptions.appearance = .universal(lightTheme)
+}
+
+// Создание карты с указанными настройками
+let mapFactory = sdk.makeMapFactory(options: mapOptions)
+```
+
+</TabItem>
+</Tabs>
+
 ### После создания карты {#switch-theme-after-map-creation}
 
-Изменить тему после создания карты вы можете с помощью параметра [appearance](/ios/sdk/reference/stable/interface#imap-uiview/var-appearance) в `MapView`:
+Изменить тему после создания карты можно через свойство [appearance](/ios/sdk/reference/stable/class#map/var-appearance):
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```swift
+// Изменение темы на тёмную
+map.appearance = .fixed(.init(theme: .defaultDarkTheme))
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии 13.x">
 
 ```swift
 // Слой карты
@@ -145,6 +276,20 @@ let mapView = mapFactory.mapView
 // Изменение темы на тёмную
 mapView.appearance = .universal(darkTheme)
 ```
+
+</TabItem>
+<TabItem value="sdk-12" label="Для версии SDK 12.x">
+
+```swift
+// Слой карты
+let mapView = mapFactory.mapView
+
+// Изменение темы на тёмную
+mapView.appearance = .universal(darkTheme)
+```
+
+</TabItem>
+</Tabs>
 
 ## Управление стилевыми слоями {#manage-style-layers}
 
