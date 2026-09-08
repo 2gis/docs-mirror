@@ -1,0 +1,198 @@
+---
+sidebar: geocoderAPI
+---
+# Получение ID объектов
+
+В зависимости от задачи в некоторые запросы нужно передать ID объекта: города, региона и т. д. Ниже приведены примеры запросов для получения ID различных объектов.
+
+## ID станции метро {#subway-id}
+
+Для выполнения запроса ключу необходим доступ к [Places API](/api/search/places/overview).
+
+Чтобы получить ID станции метро, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+
+* `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «пушкинская».
+* `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
+* `type=station.metro` — поиск объектов с типом «станция метро».
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/3.0/items?q=пушкинская&location=37.630866,55.752256&type=station.metro&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260805"
+    },
+    "result": {
+        "items": [
+            {
+                "color": "#9B007F",
+                "full_name": "Москва, Пушкинская",
+                "id": "4504385606388578",
+                "name": "Пушкинская",
+                "route_type": "metro",
+                "subtype": "metro",
+                "type": "station"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+Скопируйте ID станции метро из поля `result.items.id`.
+
+## ID территории {#place-id}
+
+Территории — это площадные объекты: парки, пляжи, базы отдыха, озёра и прочие места.
+
+Чтобы получить ID территории, отправьте GET-запрос к [/3.0/items/geocode](/api/search/geocoder/reference/3.0/items/geocode) одним из способов:
+
+* укажите название территории, например `q=ВДНХ Москва`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items/geocode?q=ВДНХ Москва&type=adm_div.place&key=API_KEY
+   ```
+
+* укажите долготу и широту точки, например `lon=37.637635&lat=55.826241`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items/geocode?lon=37.637635&lat=55.826241&type=adm_div.place&key=API_KEY
+   ```
+
+В запросе укажите `type=adm_div.place` для поиска объектов с типом «территория».
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260805"
+    },
+    "result": {
+        "items": [
+            {
+                "full_name": "Москва, Выставка достижений народного хозяйства",
+                "id": "4504286822138302",
+                "name": "Выставка достижений народного хозяйства",
+                "subtype": "place",
+                "type": "adm_div"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+Скопируйте ID территории из поля `result.items.id`.
+
+## ID города {#city-id}
+
+Чтобы получить ID города, отправьте GET-запрос к [/3.0/items/geocode](/api/search/geocoder/reference/3.0/items/geocode) одним из способов:
+
+* укажите название города, например `q=Москва`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items/geocode?q=Москва&type=adm_div.city&key=API_KEY
+   ```
+
+* укажите долготу и широту точки, например `lon=37.630866&lat=55.752256`:
+
+   ```bash
+   https://catalog.api.2gis.com/3.0/items/geocode?lon=37.630866&lat=55.752256&type=adm_div.city&key=API_KEY
+   ```
+
+В запросе укажите `type=adm_div.city` для поиска объектов с типом «город».
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "3.0.21070",
+        "code": 200,
+        "issue_date": "20260805"
+    },
+    "result": {
+        "items": [
+            {
+                "full_name": "Москва",
+                "id": "4504222397630173",
+                "name": "Москва",
+                "subtype": "city",
+                "type": "adm_div"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+Скопируйте ID города из поля `result.items.id`.
+
+## ID региона {#region-id}
+
+Для выполнения запроса ключу необходим доступ к [Regions API](/api/search/regions/overview).
+
+ID регионов не связаны с кодами субъектов РФ.
+
+Чтобы получить ID региона (области, края, республики и т. д.), отправьте GET-запрос к [/2.0/region/search](/api/search/regions/reference/2.0/region/search) и укажите название региона, например `q=Москва`.
+
+**Пример запроса:**
+
+```bash
+https://catalog.api.2gis.com/2.0/region/search?q=Москва&key=API_KEY
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+   "meta": {
+      "api_version": "2.0.20926",
+      "code": 200,
+      "issue_date": "20260630"
+   },
+   "result": {
+      "items": [
+            {
+               "id": "32",
+               "name": "Москва",
+               "type": "region"
+            }
+      ],
+      "total": 1
+   }
+}
+```
+
+</details>
+
+Скопируйте ID региона из поля `result.items.id`.

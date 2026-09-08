@@ -32,7 +32,7 @@ sidebar: placesAPI
 
 В параметре `q` можно одновременно указать и объект, и геоограничение, например `кафе в Тверском районе Москвы`. В запросе можно указать только один параметр `q`. Если вы не укажете геоограничение в параметре `q`, для повышения точности поиска передайте его другими способами, например, с помощью параметров `location`, `city_id`, `region_id` и других. Полный список см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
 
-Чтобы найти объект, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы найти объект, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — текстовый запрос, например «новая третьяковка».
 * `city_id` — ID города, например `city_id=4504222397630173` для Москвы. Подробнее о получении ID см. в разделе [ID города](/api/search/places/examples/obtaining#city-id). Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
@@ -97,7 +97,7 @@ https://catalog.api.2gis.com/3.0/items?q=новая третьяковка&city_
 
 Полный список типов объектов см. в справочнике API.
 
-Чтобы найти объекты определённого типа, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы найти объекты определённого типа, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — [текстовый запрос](#text), например «метро».
 * `point` — координаты центра точки поиска в формате `долгота,широта`, например `point=37.630866,55.752256`.
@@ -226,7 +226,7 @@ https://catalog.api.2gis.com/3.0/items?q=метро&point=37.630866,55.752256&ra
 
 Вы можете искать объекты по их уникальному идентификатору (ID).
 
-Чтобы найти объект по его ID, отправьте GET-запрос на [/3.0/items/byid](/api/search/places/reference/3.0/items/byid) с параметром `id` — ID объекта, например `id=70000001080081802`. Подробнее о получении ID см. в инструкции [Получение ID объектов](/api/search/places/examples/obtaining).
+Чтобы найти объект по его ID, отправьте GET-запрос к [/3.0/items/byid](/api/search/places/reference/3.0/items/byid) с параметром `id` — ID объекта, например `id=70000001080081802`. Подробнее о получении ID см. в инструкции [Получение ID объектов](/api/search/places/examples/obtaining).
 
 **Пример запроса:**
 
@@ -266,7 +266,7 @@ https://catalog.api.2gis.com/3.0/items/byid?id=70000001080081802&key=API_KEY
 
 С помощью параметра `rubric_id` вы можете получить список организаций определённой категории, например, только кафе или только продуктовые магазины.
 
-Чтобы отфильтровать результаты поиска по ID категории организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы отфильтровать результаты поиска по ID категории организации, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — [текстовый запрос](#text), например «кофе».
 * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
@@ -374,7 +374,7 @@ https://catalog.api.2gis.com/3.0/items?q=кофе&location=37.630866,55.752256&r
 
 С помощью параметра `org_id` вы можете получить список всех филиалов одной организации, например, только филиалы Почты России. ID организации различаются в зависимости от региона.
 
-Чтобы отфильтровать результаты поиска по ID организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы отфильтровать результаты поиска по ID организации, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `org_id` — ID организации, например `org_id=70000001087490185`. Подробнее о получении ID см. в разделе [ID организации](/api/search/places/examples/obtaining#org-id).
 * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
@@ -481,7 +481,7 @@ https://catalog.api.2gis.com/3.0/items?org_id=70000001087490185&location=37.6308
 
 С помощью параметра `brand_id` вы можете получить список всех филиалов одной организации, принадлежащих к определённому бренду, например, филиалы сети кинотеатров.
 
-Чтобы отфильтровать результаты поиска по ID бренда организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы отфильтровать результаты поиска по ID бренда организации, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `brand_id` — ID бренда, например `brand_id=70000001103777439`. Подробнее о получении ID см. в разделе [ID бренда](/api/search/places/examples/obtaining#brand-id).
 * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
@@ -574,7 +574,7 @@ https://catalog.api.2gis.com/3.0/items?brand_id=70000001103777439&location=37.63
 * Городских обслуживающих организаций: почта, поликлиника, ЖКХ.
 * Интернет-провайдеров.
 
-Чтобы получить список организаций, обслуживающих здание, отправьте GET-запрос на [/3.0/items/byservicing](/api/search/places/reference/3.0/items/byservicing) со следующими параметрами:
+Чтобы получить список организаций, обслуживающих здание, отправьте GET-запрос к [/3.0/items/byservicing](/api/search/places/reference/3.0/items/byservicing) со следующими параметрами:
 
 * `building_id` — ID здания, например `building_id=4504235282736775`. Подробнее о получении ID см. в разделе [ID здания](/api/search/places/examples/obtaining#building-id).
 * `servicing_group` — тип обслуживающей организации, например `servicing_group=internet` для поиска интернет-провайдеров. Полный список типов обслуживающих организаций см. в [Справочнике API](/api/search/places/reference/3.0/items/byservicing).
@@ -717,7 +717,7 @@ https://catalog.api.2gis.com/3.0/items/byservicing?building_id=4504235282736775&
 
 ### По сайту {#bysite}
 
-Чтобы найти организацию по адресу сайта, отправьте GET-запрос на [/3.0/items/bysite](/api/search/places/reference/3.0/items/bysite) с параметром `site` — адрес сайта организации, например `site=2gis.ru`.
+Чтобы найти организацию по адресу сайта, отправьте GET-запрос к [/3.0/items/bysite](/api/search/places/reference/3.0/items/bysite) с параметром `site` — адрес сайта организации, например `site=2gis.ru`.
 
 **Пример запроса:**
 
@@ -787,7 +787,7 @@ https://catalog.api.2gis.com/3.0/items/bysite?site=2gis.ru&key=API_KEY
 
 ### По номеру телефона {#byphone}
 
-Чтобы найти организацию по номеру телефона, отправьте GET-запрос на [/3.0/items/byphone](/api/search/places/reference/3.0/items/byphone) с параметром `phone` — номер телефона организации, например `phone=+7(495)1234567`.
+Чтобы найти организацию по номеру телефона, отправьте GET-запрос к [/3.0/items/byphone](/api/search/places/reference/3.0/items/byphone) с параметром `phone` — номер телефона организации, например `phone=+7(495)1234567`.
 
 **Пример запроса:**
 
@@ -858,7 +858,7 @@ https://catalog.api.2gis.com/3.0/items/byphone?phone=+7(495)1234567&key=API_KEY
 
 ### По ИНН {#byitin}
 
-Чтобы найти организацию по индивидуальному налоговому номеру (ИНН), отправьте GET-запрос на [/3.0/items/byitin](/api/search/places/reference/3.0/items/byitin) с параметром `itin` — ИНН организации, например `itin=123456789100`.
+Чтобы найти организацию по индивидуальному налоговому номеру (ИНН), отправьте GET-запрос к [/3.0/items/byitin](/api/search/places/reference/3.0/items/byitin) с параметром `itin` — ИНН организации, например `itin=123456789100`.
 
 **Пример запроса:**
 
@@ -925,7 +925,7 @@ https://catalog.api.2gis.com/3.0/items/byitin?itin=123456789100&key=API_KEY
 
 ### По торговой лицензии {#bytradelicense}
 
-Чтобы найти организацию по номеру торговой лицензии, отправьте GET-запрос на [/3.0/items/bytradelicense](/api/search/places/reference/3.0/items/bytradelicense) с параметром `trade_license` — номер торговой лицензии организации, например `trade_license=CN-1234567`.
+Чтобы найти организацию по номеру торговой лицензии, отправьте GET-запрос к [/3.0/items/bytradelicense](/api/search/places/reference/3.0/items/bytradelicense) с параметром `trade_license` — номер торговой лицензии организации, например `trade_license=CN-1234567`.
 
 **Пример запроса:**
 
@@ -1005,7 +1005,7 @@ https://catalog.api.2gis.com/3.0/items/bytradelicense?trade_license=CN-1234567&k
 
 ### По коду ФИАС {#byfias}
 
-Чтобы найти организацию по коду в Федеральной информационной адресной системе (ФИАС), отправьте GET-запрос на [/3.0/items/byfias](/api/search/places/reference/3.0/items/byfias) с параметром `fias_code` — код ФИАС объекта, например `fias_code=a7f3b2c1-4d5e-6f78-9a0b-1c2d3e4f5a6b`.
+Чтобы найти организацию по коду в Федеральной информационной адресной системе (ФИАС), отправьте GET-запрос к [/3.0/items/byfias](/api/search/places/reference/3.0/items/byfias) с параметром `fias_code` — код ФИАС объекта, например `fias_code=a7f3b2c1-4d5e-6f78-9a0b-1c2d3e4f5a6b`.
 
 **Пример запроса:**
 

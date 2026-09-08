@@ -3,7 +3,7 @@ sidebar: placesAPI
 ---
 # Получение ID объектов
 
-В зависимости от задачи в некоторые запросы нужно передать ID объекта: здания, организации, города и т. д. Чтобы получить ID объекта, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) и укажите тип объекта в параметре `type`. Полный список типов см. в [Справочнике API](/api/search/places/reference/3.0/items).
+В зависимости от задачи в некоторые запросы нужно передать ID объекта: здания, организации, города и т. д. Чтобы получить ID объекта, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) и укажите тип объекта в параметре `type`. Полный список типов см. в [Справочнике API](/api/search/places/reference/3.0/items).
 
 Ниже приведены примеры запросов для получения ID различных объектов.
 
@@ -14,7 +14,7 @@ ID категорий различаются в регионах. Чтобы н�
 Чтобы получить ID категории, отправьте GET-запрос к [Categories API](/api/search/categories/overview) на [/2.0/catalog/rubric/search](/api/search/categories/reference/2.0/catalog/rubric/search) со следующими параметрами:
 
 * `q` — [текстовый запрос](/api/search/places/examples/objects#text), например `q=кафе`.
-* `region_id` — ID региона, например `region_id=32`. Подробнее о получении ID см. в разделе [ID региона](#region-id).
+* `region_id` — ID региона, например `region_id=32`. ID регионов не связаны с кодами субъектов РФ. Подробнее о получении ID см. в разделе [ID региона](#region-id).
 
 **Пример запроса:**
 
@@ -160,7 +160,7 @@ https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&k
 
 ## ID организации {#org-id}
 
-Чтобы получить ID организации, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы получить ID организации, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «почта россии».
 * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
@@ -328,7 +328,7 @@ https://catalog.api.2gis.com/3.0/items?q=почта россии&location=37.630
 
 ## ID бренда {#brand-id}
 
-Чтобы получить ID бренда, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы получить ID бренда, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «кинотеатр каро».
 * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
@@ -460,7 +460,7 @@ https://catalog.api.2gis.com/3.0/items?q=кинотеатр каро&location=37
 
 ## ID здания {#building-id}
 
-Чтобы получить ID здания, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы получить ID здания, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — [текстовый запрос с геоограничением](/api/search/places/examples/objects#text), например «кадашевская набережная 12 москва». Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
 * `type=building` — поиск объектов с типом «здание».
@@ -505,7 +505,7 @@ https://catalog.api.2gis.com/3.0/items?q=кадашевская набережн
 
 ## ID парковки {#parking-id}
 
-Чтобы получить ID парковки, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы получить ID парковки, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — [текстовый запрос с геоограничением](/api/search/places/examples/objects#text), например «охотный ряд москва». Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
 * `type=parking` — поиск объектов с типом «парковка».
@@ -550,7 +550,7 @@ https://catalog.api.2gis.com/3.0/items?q=охотный ряд москва&type
 
 ## ID станции метро {#subway-id}
 
-Чтобы получить ID станции метро, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
+Чтобы получить ID станции метро, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) со следующими параметрами:
 
 * `q` — [текстовый запрос](/api/search/places/examples/objects#text), например «университет».
 * `location` — [координаты точки поиска](/api/search/places/examples/georestriction#location) в формате `долгота,широта`, например `location=37.630866,55.752256`. Вы можете указать геоограничение другим способом: подробнее см. в инструкции [Геоограничение поиска](/api/search/places/examples/georestriction).
@@ -597,9 +597,9 @@ https://catalog.api.2gis.com/3.0/items?q=университет&location=37.6308
 
 ## ID территории {#place-id}
 
-Территории — это площадные объекты: парки, пляжи, территории баз отдыха, озёра и прочие места.
+Территории — это площадные объекты: парки, пляжи, базы отдыха, озёра и прочие места.
 
-Чтобы получить ID территории, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
+Чтобы получить ID территории, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
 
 * укажите название территории, например `q=вднх москва`:
 
@@ -648,7 +648,7 @@ https://catalog.api.2gis.com/3.0/items?q=университет&location=37.6308
 
 ## ID района {#district-id}
 
-Чтобы получить ID административного района, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
+Чтобы получить ID административного района, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
 
 * укажите название города и района, например `q=москва якиманка`:
 
@@ -697,7 +697,7 @@ https://catalog.api.2gis.com/3.0/items?q=университет&location=37.6308
 
 ## ID города {#city-id}
 
-Чтобы получить ID города, отправьте GET-запрос на [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
+Чтобы получить ID города, отправьте GET-запрос к [/3.0/items](/api/search/places/reference/3.0/items) одним из способов:
 
 * укажите название города, например `q=Москва`:
 
@@ -748,19 +748,15 @@ https://catalog.api.2gis.com/3.0/items?q=университет&location=37.6308
 
 Для выполнения запроса ключу необходим доступ к [Regions API](/api/search/regions/overview).
 
-Чтобы получить ID региона (области, края, республики и т. д.), отправьте GET-запрос к [Regions API](/api/search/regions/overview) на [/2.0/region/search](/api/search/regions/reference/2.0/region/search) одним из способов:
+ID регионов не связаны с кодами субъектов РФ.
 
-* укажите название региона, например `q=Москва`:
+Чтобы получить ID региона (области, края, республики и т. д.), отправьте GET-запрос к [/2.0/region/search](/api/search/regions/reference/2.0/region/search) и укажите название региона, например `q=Москва`.
 
-   ```bash
-   https://catalog.api.2gis.com/2.0/region/search?q=Москва&key=API_KEY
-   ```
+**Пример запроса:**
 
-* укажите координаты точки, например `q=37.630866,55.752256`:
-
-   ```bash
-   https://catalog.api.2gis.com/2.0/region/search?q=37.630866,55.752256&key=API_KEY
-   ```
+```bash
+https://catalog.api.2gis.com/2.0/region/search?q=Москва&key=API_KEY
+```
 
 **Пример ответа:**
 
