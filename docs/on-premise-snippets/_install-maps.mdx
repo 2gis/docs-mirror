@@ -118,7 +118,7 @@
       create database onpremise_styles owner dbuser_styles;
       ```
 
-### 6.3. Установите сервисы карт {#install-map-services}
+### 6.3. Установите сервисы карт {#install-maps-services}
 
 #### Установите сервис Tiles API {#install-tiles-api}
 
@@ -448,6 +448,100 @@
 
    :::
 
+#### Установите сервис RasterJS API {#install-rasterjs-api}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/develop/charts/raster-js-api/README.md).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+     <details>
+     <summary><code>values-raster-js-api.yaml</code></summary>
+
+   ```yaml
+    dgctlDockerRegistry: docker.registry.example.com
+
+    imagePullSecrets: [onpremise-registry-creds]
+
+    api:
+      publicHost: raster-js-api.example.com
+      protocol: 'https:'
+      tileServerUrl: https://tiles-api.example.com
+      trafficTileServerUrl: https://traffic-proxy-map.example.com
+      trafficTimestampServerUrl: https://traffic-proxy-map.example.com
+      trafficScoreServerUrl: https://traffic-proxy-map.example.com
+      webApiServerUrl: https://catalog-api.example.com
+      webApiKey: CATALOG_KEY
+      key: TILES_RASTER_KEY
+      keyServerUrl: keys-api.example.com
+
+    ingress:
+      enabled: true
+      className: nginx
+      hosts:
+        - host: raster-js-api.example.com
+          paths:
+            - path: /
+              pathType: Prefix
+      tls: []
+      # - hosts:
+      #   - raster-js-api.example.com
+      #   secretName: secret.tls
+
+    customCAs:
+      bundle: ''
+      # bundle: |
+        # -----BEGIN CERTIFICATE-----
+        # ...
+        # -----END CERTIFICATE-----
+      certsPath: ''
+   ```
+
+    </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
+
+   * `api`: настройки сервиса RasterJS API.
+
+     * `publicHost`: хост, на котором будет доступен сервис.
+     * `protocol`: протокол для обращения к сервисам, используемым RasterJS API. Возможные значения: `http:`, `https:`.
+     * `tileServerUrl`: URL сервиса Tiles API.
+     * `webApiServerUrl`: URL сервиса Catalog API.
+     * `webApiKey`: API-ключ для доступа к сервису Catalog API. Хранится в [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) и монтируется в контейнер через `secretKeyRef`.
+     * `key`: необязательный API-ключ, который будет добавляться к запросам тайлов. Хранится в [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) и монтируется в контейнер через `secretKeyRef`.
+     * `keyServerUrl`: URL сервиса API-ключей.
+
+   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведённую конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts[0].host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+     * `enabled`: включить ли Ingress для сервиса.
+     * `className`: имя класса Ingress-контроллера.
+     * `hosts[0].host`: доменное имя для Ingress.
+     * `hosts[0].paths[0].path`: путь для Ingress.
+     * `hosts[0].paths[0].pathType`: тип пути для Ingress.
+     * `tls`: конфигурация TLS.
+
+   * `customCAs`: настройки пользовательских сертификатов.
+
+     * `bundle`: текстовое представление сертификата в формате [X.509 PEM public-key](https://www.rfc-editor.org/rfc/rfc7468#section-5.1).
+     * `certsPath`: директория для монтирования сертификата внутри контейнера. Если параметр не задан, используется значение по умолчанию `/usr/local/share/ca-certificates`.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-raster-js-api.yaml`:
+
+   ```bash
+   helm upgrade --install --version=VERSION --atomic --values ./values-raster-js-api.yaml raster-js-api 2gis-on-premise/raster-js-api
+   ```
+
+   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
 #### Установите сервис Static API (опционально) {#install-static-api}
 
 1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/staticmaps/README.md).
@@ -551,7 +645,6 @@
      <summary><code>values-styles.yaml</code></summary>
 
    ```yaml
-
    dgctlDockerRegistry: docker.registry.example.com
 
    imagePullSecrets: [onpremise-registry-creds]
@@ -596,6 +689,18 @@
        # - hosts:
        #   - styles-api.example.com
        #   secretName: secret.tls
+
+   dgctlStorage:
+     host: artifacts.example.com
+     secure: true
+     bucket: onpremise-artifacts
+     accessKey: AKIAIOSFODNN7EXAMPLE
+     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
+     region: ''
+     manifest: manifests/api-platform/1640661259.json
+
+   stylesImport:
+     startOnDeploy: true
    ```
 
      </details>
@@ -629,6 +734,18 @@
    * `api.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `api.ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+   
+   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки, из которого задание импорта стилей скачивает данные со стилями карты по умолчанию. Обязателен, если для параметра `stylesImport.startOnDeploy` задано значение `true`.
+
+     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
+     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
+     * `bucket`: имя бакета S3.
+     * `accessKey`: идентификатор ключа для доступа к бакету S3.
+     * `secretKey`: секретный ключ для доступа к бакету S3.
+     * `region`: регион S3-совместимого хранилища.
+     * `manifest`: путь до файла с манифестом в формате `manifests/api-platform/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, в том числе стилей карты по умолчанию, которые требуются сервису для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
+
+   * `stylesImport.startOnDeploy`: включить ли автоматический запуск задания импорта стилей карты по умолчанию при установке или обновлении сервиса.
 
 2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-styles.yaml`:
 
@@ -644,7 +761,7 @@
 
    :::
 
-### 6.4. Проверьте работоспособность установленных сервисов {#test-maps}
+### 6.4. Проверьте работоспособность сервисов карт {#test-maps}
 
 #### Проверьте сервис Tiles API {#test-tiles-api}
 
@@ -671,7 +788,7 @@
   http://mapgl-js-api.example.com
   ```
 
-* Если вы хотите поменять настройки инициализации карты, создайте файл `test.html` со следующим содержимым и запустите его в браузере:
+* Чтобы поменять настройки инициализации карты, создайте файл `test.html` со следующим содержимым и запустите его в браузере:
 
   ```html
   <html>
@@ -690,7 +807,7 @@
           <script src="//mapgl-js-api.example.com/api.js"></script>
           <script>
               const map = new mapgl.Map('map', {
-                  center: [55.31878, 25.23584],
+                  center: [37.62, 55.76],
                   zoom: 13,
                   useRtlTextPlugin: 'always-on', // отображение текстов на арабском языке справа налево
               });
@@ -702,6 +819,42 @@
   Должна отобразиться демонстрационная векторная карта, которая использует векторные тайлы, получаемые от сервиса Tiles API.
 
   В этом случае опции [style](/mapgl/reference/interface#map-options/style) и [styleOptions](/mapgl/reference/interface#style-options) не указываются, и их значения будут разрешены по умолчанию относительно [MAPGL\_HOST](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/README.md#environment-variables). Если вы планируете использовать собственные стили, см. [проверку Styles API](#test-styles-api).
+
+#### Проверьте сервис RasterJS API {#test-rasterjs-api}
+
+Чтобы проверить работу сервиса RasterJS API, используйте один из способов:
+
+* Перейдите в браузере по доменному имени или IP-адресу сервиса:
+
+  ```text
+  http://raster-js-api.example.com
+  ```
+
+* Чтобы поменять настройки инициализации карты, создайте файл `test.html` со следующим содержимым и запустите его в браузере:
+
+  ```html
+  <html>
+    <head>
+        <title>RasterJS API. On-Premise</title>
+    </head>
+    <body>
+        <div id="map" style="width:500px; height:400px"></div>
+        <script src="//raster-js-api.example.com/api.js"></script>
+        <script type="text/javascript">
+            var map;
+
+            DG.then(function () {
+                map = DG.map('map', {
+                    center: [55.76, 37.62],
+                    zoom: 13,
+                });
+            });
+        </script>
+    </body>
+  </html>
+  ```
+
+  Должна отобразиться демонстрационная растровая карта.
 
 #### Проверьте сервис Static API {#test-static-api}
 
@@ -723,4 +876,4 @@
 
 #### Проверьте сервис Styles API {#test-styles-api}
 
-Чтобы подключить пользовательский стиль карты, установите [Менеджер Платформы](/on-premise-api-platform/installation#install-pm) и выполните шаги по [загрузке и применению стиля](/on-premise-api-platform/user-guide/platform-manager#adding-map-style).
+Чтобы подключить пользовательский стиль карты, установите [Менеджер Платформы](#install-pm) и выполните шаги по [загрузке и применению стиля](/on-premise-api-platform/user-guide/platform-manager#adding-map-style).

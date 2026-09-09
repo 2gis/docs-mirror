@@ -10,7 +10,7 @@ sidebar: on-premise-api-platform
 ## Архитектура {#architecture}
 
 <NoInvert>
-![Архитектура сервисов карт](/img/on-premise/maps-architecture-658.svg)
+![Архитектура сервисов карт](/img/on-premise/maps-architecture-702.svg)
 </NoInvert>
 
 ### Сервис MapGL JS API
@@ -31,13 +31,17 @@ sidebar: on-premise-api-platform
 | ---------- | --------------------------------------- |
 | Векторные  | MapGL JS API, Mobile SDK                |
 | Мобильные  | Mobile SDK                              |
-| Растровые  | MapGL JS API, Static API, Mobile SDK    |
+| Растровые  | MapGL JS API, Static API, Mobile SDK, RasterJS API    |
 
 Подробнее об архитектуре программного комплекса <Brand /> см. в разделе [Архитектура](/on-premise-api-platform/architecture/solution-architecture).
 
 ### Static API
 
 Предоставляет API для генерации статических изображений карты в формате PNG. Сервис получает растровые тайлы от [Tiles API](#tiles-api), на их основе формирует изображение заданной области с указанным масштабом и наносит на него переданную в запросе информацию — области, линии, метки и другие объекты.
+
+### RasterJS API
+
+Предоставляет JavaScript-библиотеку для интеграции двумерной карты <Brand /> на сайт.
 
 ### Styles API
 
