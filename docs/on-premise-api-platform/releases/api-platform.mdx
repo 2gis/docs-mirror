@@ -5,6 +5,29 @@ sidebar: on-premise-api-platform
 
 Чтобы установить сервисы API-платформы версии 2.44.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-api-platform/releases/dgcli-releases#v3) и следуйте инструкциям по обновлению.
 
+## 2.58.0
+
+Дата релиза: 2026-09-09
+
+<h3 id="dependencies_v2.58.0">Зависимости</h3>
+
+Перед обновлением любого сервиса в составе API-платформы версии 2.58.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.11.0](/on-premise-api-platform/releases/core#2110)  |
+
+Подробнее см. в разделе **Руководство администратора → Обновление**.
+
+<h3 id="new_v2.58.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Менеджер Платформы | <ul><li>Добавлен параметр `ui.mapStyles.key` для указания ключа доступа к импорту стилей карт.</li><li>Добавлен параметр `ui.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size`, ограничивающий максимальный размер тела запроса, обрабатываемого nginx Ingress-контроллером.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.58.0/charts/platform/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/installation#install-platform).|
+| API карт<br />(Styles API) | Добавлен блок параметров `keys` для настройки валидации ключей доступа при импорте стилей карт. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.58.0/charts/styles-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/installation#install-styles-api).|
+| API навигации<br/>(Navi-Splitter) | Добавлен блок параметров `telemetry`, позволяющий настроить экспорт телеметрии. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.58.0/charts/navi-splitter/values.yaml). |
+
 ## 2.57.0
 
 Дата релиза: 2026-09-01
@@ -15,8 +38,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.10.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.10.0](/on-premise-api-platform/releases/core#2100)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -24,7 +47,7 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"170px"}}>Сервис</div> | Изменения |
 | --- | --- |
-| API карт<br />(RasterJS API) | Выпущен сервис RasterJS API — JavaScript-библиотека для интеграции двумерной карты <Brand /> на сайт. Подробнее см. в разделах [Архитектура API карт](/on-premise-api-platform/architecture/maps) и [Установка сервиса RasterJS API](/on-premise-api-platform/installation#install-rasterjs-api). |
+| API карт<br />(RasterJS API) | Выпущен сервис RasterJS API — JavaScript-библиотека для интеграции двумерной карты <Brand /> на сайт. Подробнее см. в разделах [RasterJS API](/maps/others/rasterjs/overview) и [Установка сервиса RasterJS API](/on-premise-api-platform/installation#install-rasterjs-api). |
 | API карт<br />(MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1770) с версии 1.76.0 по версию 1.77.0. |
 | API карт<br />(Styles API) | Добавлена возможность автоматически подключать стиль карты по умолчанию при установке сервисов карт. Для этого добавлены блоки параметров: <ul><li>`dgctlStorage` — настройки хранилища артефактов установки;</li><li>`stylesImport` — настройки импорта стилей.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.57.0/charts/styles-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/installation#install-styles-api). |
 | API навигации<br />(Navi-Castle) | Добавлены параметры: <ul><li>`castle.onpremise.enabled` — включает добавление поля `backup_dir` и данных маршрутизации, необходимых для отображения списка резервных копий Castle в режиме On-Premise.</li><li>`castle.onpremise.routing` — задаёт типы маршрутизации, которые включаются в метаданные `import` и `restrictionImport` резервных копий, если включён режим совместимости с On-Premise.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.57.0/charts/navi-castle/values.yaml). |
@@ -41,8 +64,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.9.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.9.0](/on-premise-api-platform/releases/core#290) |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -64,8 +87,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.8.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.8.0](/on-premise-api-platform/releases/core#280)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -73,7 +96,7 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"170px"}}>Сервис</div> | Изменения |
 | --- | --- |
-| API карт | Выпущен сервис Static API, позволяющий генерировать статичные изображения карт в формате PNG. См. [инструкцию по установке](/on-premise-api-platform/installation#install-static-api), а также см. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.55.0/charts/staticmaps/values.yaml). |
+| API карт | Выпущен сервис Static API, позволяющий генерировать статичные изображения карт в формате PNG. Подробнее см. в разделах [Static API](/maps/others/static/overview) и [Установка сервиса Static API](/on-premise-api-platform/installation#install-static-api). |
 | API карт<br />(MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1750) с версии 1.73.0 по версию 1.75.0. |
 | API поиска<br />(Search API v8) | Добавлены параметры:<ul><li>`head.envoy.ports.http` — для указания HTTP-порта, используемого Envoy;</li> <li>`head.head.segmentDetectorClientTimeoutMs` — для задания таймаута (в миллисекундах) клиента SegmentDetector;</li> <li>`portal.services.fsHeavyOpsTimeout` — для задания таймаута тяжёлых операций файлового хранилища;</li> <li>`controller.projectsApiRequestTimeout` — для задания таймаута HTTP-запросов к API списка проектов;</li> <li>`indexer.indexStatsMetricsEnabled` — для включения или отключения экспорта метрик `indexes_stats*` из индексатора.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.55.0/charts/search-api-v8/values.yaml). |
 | API навигации<br />(Distance Matrix Async API) | Добавлена возможность получать результаты расчётов из непубличного бакета S3. |
@@ -94,8 +117,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.7.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.7.0](/on-premise-api-platform/releases/core#270)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -125,8 +148,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.6.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.6.0](/on-premise-api-platform/releases/core#260)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -158,8 +181,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.4.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.4.0](/on-premise-api-platform/releases/core#240)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -181,8 +204,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.4.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.4.0](/on-premise-api-platform/releases/core#240)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -209,8 +232,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.4.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.4.0](/on-premise-api-platform/releases/core#240)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -242,8 +265,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.2.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.2.0](/on-premise-api-platform/releases/core#220)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -270,8 +293,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.2.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.2.0](/on-premise-api-platform/releases/core#220)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -304,8 +327,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.1.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.1.0](/on-premise-api-platform/releases/core#210)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -325,8 +348,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.1.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.1.0](/on-premise-api-platform/releases/core#210)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -360,8 +383,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.0.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -391,8 +414,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.0.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 
@@ -419,8 +442,8 @@ sidebar: on-premise-api-platform
 
 | <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.0.0  |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
 
 Подробнее см. в разделе **Руководство администратора → Обновление**.
 

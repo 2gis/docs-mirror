@@ -655,15 +655,15 @@
    postgres:
      host: 'styles-postgresql.storage.example.local'
      name: 'onpremise_styles'
-     username: ''
-     password: ''
+     username: dbuser_styles
+     password: wNgJamrIym8UAcdX
 
    s3:
      host: 's3.storage.example.local:80'
      secure: false
      bucket: 'styles'
-     accessKey: ''
-     secretKey: ''
+     accessKey: PHEI4AHTHEETHAHXEEGE
+     secretKey: aiw6ahlaeshahngaiJaebie6aeth0aiV2pucuey1
      publicDomain: ''
      region: ''
      verifySsl: false
@@ -689,6 +689,11 @@
        # - hosts:
        #   - styles-api.example.com
        #   secretName: secret.tls
+
+   keys:
+     enabled: true
+     url: http://keys-service-api
+     token: STYLES_API_TOKEN
 
    dgctlStorage:
      host: artifacts.example.com
@@ -734,7 +739,13 @@
    * `api.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
 
    * `api.ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
-   
+
+   * `keys`: настройки проверки ключей доступа для импорта стилей карт.
+
+     * `enabled`: включить ли проверку ключей доступа для импорта стилей карт.
+     * `url`: URL сервиса API-ключей. Обязателен, если для параметра `keys.enabled` задано значение `true`.
+     * `token`: сервисный токен для аутентификации в сервисе API-ключей. Обязателен, если для параметра `keys.enabled` задано значение `true`.
+
    * `dgctlStorage`: настройки доступа к хранилищу артефактов установки, из которого задание импорта стилей скачивает данные со стилями карты по умолчанию. Обязателен, если для параметра `stylesImport.startOnDeploy` задано значение `true`.
 
      * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.

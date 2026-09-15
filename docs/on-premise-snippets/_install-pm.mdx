@@ -85,6 +85,10 @@
       key: 'MAPGL_KEY'
       initCenter: ''
 
+    mapStyles:
+      url: 'https://styles.example.com'
+      key: 'STYLES_KEY'
+
     catalog:
       url: 'https://catalog.example.com'
       key: 'CATALOG_KEY'
@@ -94,7 +98,7 @@
       key: 'NAVI_KEY'
 
     static:
-      url: 'https://static.example.com'
+      url: 'https://staticmaps.example.com'
       key: 'STATIC_KEY'
 
     resources:
@@ -168,6 +172,11 @@
         * `scriptPath`: путь до скрипта инициализации сервиса. Путь строится относительно `ui.mapgl.url`. Возможные значения: `/api.js`.
         * `key`: API-ключ для сервиса.
         * `initCenter`: координаты карты по умолчанию. Состоят из двух чисел в массиве: `[lng, lat]`. Например: `[55.27, 25.2]` для Дубая, `[37.64, 55.74]` для Москвы.
+
+      * `mapStyles`: настройки доступа к сервису [Styles API](/on-premise-api-platform/architecture/maps):
+
+        * `url`: хост сервиса в формате `HTTP(S)://HOST`.
+        * `key`: API-ключ для доступа к импорту стилей карт.
 
       * `catalog`: настройки доступа к сервису [Catalog APIs](/on-premise-api-platform/architecture/search):
 
