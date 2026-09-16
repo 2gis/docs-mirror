@@ -21,7 +21,33 @@ sidebar: androidsdk
 
 ## Начало работы {#getting-started}
 
-Добавьте в [MapView](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view) элементы [NavigationView](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-view) и [DefaultNavigationControls](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.default-navigation-controls).
+Добавьте на экран карту, [NavigationView](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-view) и [DefaultNavigationControls](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.default-navigation-controls).
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+В SDK 14.0.0 карта создаётся программно, поэтому в макете достаточно контейнера для карты и навигационного слоя:
+
+```xml
+<FrameLayout
+    android:id="@+id/mapContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <ru.dgis.sdk.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <ru.dgis.sdk.navigation.DefaultNavigationControls
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </ru.dgis.sdk.navigation.NavigationView>
+</FrameLayout>
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```xml
 <ru.dgis.sdk.map.MapView
@@ -41,24 +67,91 @@ sidebar: androidsdk
 </ru.dgis.sdk.map.MapView>
 ```
 
+</TabItem>
+</Tabs>
+
 Чтобы у SDK был доступ к данным о текущем местоположении устройства, используйте стандартный источник данных [DefaultLocationSource](/android/sdk/reference/stable/class#ru.dgis.sdk.positioning.default-location-source) или создайте [собственный источник геопозиции](#custom-location-source). Зарегистрируйте источник данных в SDK: вызовите метод [registerPlatformLocationSource()](/android/sdk/reference/stable/method#ru.dgis.sdk.positioning.register-platform-location-source-context-source-) и передайте в него контекст SDK и источник.
 
 Добавьте на карту маркер с текущей геопозицией устройства с помощью источника данных [MyLocationMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.my-location-map-object-source) и передайте его в метод карты [addSource()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map/add-source).
 
 Создайте объект [NavigationManager](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-manager).
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```kotlin
+private lateinit var mapViewModel: DefaultMapControllerViewModel
+private lateinit var mapView: MapView
+
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     sdkContext = DGis.initialize(applicationContext, apiKeys)
 
-    // Создание и регистрация в SDK источника данных о текущей геопозиции
+    // Создать и зарегистрировать в SDK источник данных о текущей геопозиции
     locationProvider = DefaultLocationSource(applicationContext)
     registerPlatformLocationSource(sdkContext, locationProvider)
 
     setContentView(R.layout.activity_navigation)
 
-    // Создание объекта NavigationManager
+    // Создать объект NavigationManager
+    navigationManager = NavigationManager(sdkContext)
+
+    mapViewModel = DefaultMapControllerViewModel(
+        sdkContext,
+        MapControllerOptions()
+    )
+    mapView = MapView(this).also { view ->
+        view.setMapControllerViewModel(mapViewModel)
+    }
+    findViewById<FrameLayout>(R.id.mapContainer).addView(
+        mapView,
+        0,
+        FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+    )
+
+    lifecycleScope.launch {
+        val map = mapViewModel.awaitMap()
+        navigationManager.mapManager.addMap(map)
+
+        // Добавить маркер с текущей геопозицией на карту
+        map.addSource(
+            MyLocationMapObjectSource(sdkContext)
+        )
+
+        // Запустить навигатор в режиме свободной навигации
+        navigationManager.start()
+    }
+
+    findViewById<NavigationView>(R.id.navigationView).apply {
+        // Привязать созданный объект NavigationManager к NavigationView
+        navigationManager = this@NavigationActivity.navigationManager
+    }
+}
+
+override fun onDestroy() {
+    mapViewModel.close()
+    super.onDestroy()
+}
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    sdkContext = DGis.initialize(applicationContext, apiKeys)
+
+    // Создать и зарегистрировать в SDK источник данных о текущей геопозиции
+    locationProvider = DefaultLocationSource(applicationContext)
+    registerPlatformLocationSource(sdkContext, locationProvider)
+
+    setContentView(R.layout.activity_navigation)
+
+    // Создать объект NavigationManager
     navigationManager = NavigationManager(sdkContext)
 
     findViewById<MapView>(R.id.mapView).apply { mapView ->
@@ -67,7 +160,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
         mapView.getMapAsync { map ->
             navigationManager.mapManager.addMap(map)
 
-            // Добавление маркера с текущей геопозицией на карту
+            // Добавить маркер с текущей геопозицией на карту
             map.addSource(
                 MyLocationMapObjectSource(sdkContext)
             )
@@ -75,14 +168,17 @@ override fun onCreate(savedInstanceState: Bundle?) {
     }
 
     findViewById<NavigationView>(R.id.navigationView).apply {
-        // Привязка созданного объекта NavigationManager к элементу интерфейса NavigationView
+        // Привязать созданный объект NavigationManager к NavigationView
         navigationManager = this@NavigationActivity.navigationManager
     }
 
-    // Запуск навигатора в режиме свободной навигации
+    // Запустить навигатор в режиме свободной навигации
     navigationManager.start()
 }
 ```
+
+</TabItem>
+</Tabs>
 
 Навигатор может работать в трёх режимах: свободная навигация, ведение по маршруту и симуляция ведения.
 
@@ -92,7 +188,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 Вместе со стандартным источником данных о местоположении устройства [DefaultLocationSource](/android/sdk/reference/stable/class#ru.dgis.sdk.positioning.default-location-source) вы можете использовать [Radar API](/api/navigation/radar/overview). Radar API вычисляет местоположение устройства по сотовым вышкам и ближайшим точкам доступа Wi-Fi.
 
-Если включено использование Radar API, то постоянно сравнивается точность геопозиции, полученная из GPS и через Radar API. По умолчанию приоритетной являются геопозиция, вычисленная с помощью GPS. Геопозиция, вычисленная через Radar API, используется в следующих случаях:
+Если включено использование Radar API, то постоянно сравнивается точность геопозиции, полученная из GPS и через Radar API. По умолчанию приоритетной является геопозиция, вычисленная с помощью GPS. Геопозиция, вычисленная через Radar API, используется в следующих случаях:
 
 * Потеря сигнала GPS.
 * Ухудшение точности GPS до значения параметра `minimalAcceptableGpsAccuracyM`, который передаётся при инициализации `DefaultLocationSource`. При этом точность геопозиции из Radar API должна быть выше, чем у GPS.
@@ -167,10 +263,10 @@ override fun onCreate(savedInstanceState: Bundle?) {
 В качестве источника данных о текущем местоположении вы можете использовать собственный источник геопозиции. Для этого реализуйте интерфейс [LocationSource](/android/sdk/reference/stable/interface#ru.dgis.sdk.positioning.location-source) и зарегистрируйте созданный источник в SDK с помощью метода [registerPlatformLocationSource()](/android/sdk/reference/stable/method#ru.dgis.sdk.positioning.register-platform-location-source-context-source-).
 
 ```kotlin
-// Создание источника данных о текущем местоположении
+// Создать источник данных о текущем местоположении
 val customSource = CustomLocationSource()
 
-// Регистрация источника данных в SDK
+// Зарегистрировать источник данных в SDK
 registerPlatformLocationSource(sdkContext, customSource)
 ```
 
@@ -178,14 +274,14 @@ registerPlatformLocationSource(sdkContext, customSource)
 
 ```kotlin
 public class CustomLocationSource: LocationSource {
-    // Включение источника геопозиции
+    // Включить источник геопозиции
     override fun activate(listener: LocationChangeListener?) {
     }
     ...
 }
 ```
 
-После этого, чтобы сообщить текущую геопозицию, передайте в `LocationChangeListener` массив объектов [Location](https://developer.android.com/reference/kotlin/android/location/Location) (от более старой геопозиции к более новой) с помощью метода [onLocationChanged()](/android/sdk/reference/stable/interface#ru.dgis.sdk.positioning.location-change-listener/on-availability-changed).
+После этого, чтобы сообщить текущую геопозицию, передайте в `LocationChangeListener` массив объектов [Location](https://developer.android.com/reference/kotlin/android/location/Location) (от более старой геопозиции к более новой) с помощью метода [onLocationChanged()](/android/sdk/reference/stable/interface#ru.dgis.sdk.positioning.location-change-listener/on-location-changed).
 
 ```kotlin
 val location = Location(...)
@@ -201,15 +297,15 @@ listener.onLocationChanged(newLocations)
 
 ```kotlin
 public class CustomLocationSource: LocationSource {
-    // Включение источника геопозиции
+    // Включить источник геопозиции
     override fun activate(listener: LocationChangeListener?) {
     }
 
-    // Выключение источника геопозиции
+    // Выключить источник геопозиции
     override fun deactivate() {
     }
 
-    // Изменение требуемого уровня точности
+    // Изменить требуемый уровень точности
     override fun setDesiredAccuracy(accuracy: DesiredAccuracy?) {
     }
 }
@@ -353,25 +449,26 @@ navigationManager.stop()
 
 <img src="/img/mobile-sdk/first_indoor_ru.png" width="200" /> <img src="/img/mobile-sdk/secoond_indoor_ru.png" width="200" /> <img src="/img/mobile-sdk/third_indoor_ru.png" width="200" />
 
-SDK предоставляет возможность строить маршруты внутри некоторых зданий, для которых существуют этажные планы. Например, можно проложить маршрут до конкретного магазина в торговом центре, составить сложный маршрут между несколькими точками и тд.
+SDK предоставляет возможность строить маршруты внутри некоторых зданий, для которых существуют этажные планы. Например, можно проложить маршрут до конкретного магазина в торговом центре, составить сложный маршрут между несколькими точками и т. д.
 
 Этот тип навигации включен в набор стандартной поставки Full SDK, однако имеет ряд ограничений:
 
 * Может быть активирован только в режиме пешеходной навигации
-* Из-за особенностей работы современных систем позиционирования, возможности определения позиции внутри зданий сильно ограничены. Когда система определит, что устройство попало в пределы здания, слежение за геопозицей и ее отображение отключится, оставив построенный маршрут и рекомендации по проходу.
-  Мы работаем над преодолением этих трудностей и надеемся предоставить надежный способ определения местоположения внутри зданий в будущем.
+* Из-за особенностей работы современных систем позиционирования, возможности определения позиции внутри зданий сильно ограничены. Когда система определит, что устройство попало в пределы здания, слежение за геопозицией и её отображение отключится, оставив построенный маршрут и рекомендации по проходу.
+
+   Мы работаем над преодолением этих трудностей и надеемся предоставить надежный способ определения местоположения внутри зданий в будущем.
 
 ### Создание маршрута
 
 Создание маршрута происходит по принципам, описанным в разделе [Ведение по маршруту](#turn-by-turn-mode) с несколькими важными дополнениями. При создании конечной точки маршрута [RouteSearchPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-search-point) обязательно указывать параметры [objectId](/android/sdk/reference/stable/class#ru.dgis.sdk.dgis-object-id) и [levelId](/android/sdk/reference/stable/class#ru.dgis.sdk.level-id).
 
 ```kotlin
-// объект RouteBuildOptions также необходим
+// Создать объект RouteBuildOptions
 val routeBuildOptions = RouteBuildOptions(
     finishPoint = RouteSearchPoint(
         coordinates = GeoPoint(latitude = 55.752425, longitude = 37.613983),
-        objectId = ..., // Можно получить из DgisMapObject
-        levelId = ..., // Можно получить из DirectoryObject или RenderedObjectInfo
+        objectId = ..., // можно получить из DgisMapObject
+        levelId = ..., // можно получить из DirectoryObject или RenderedObjectInfo
     ),
     // routeSearchOptions должен иметь тип PedestrianRouteSearchOptions
     routeSearchOptions = PedestrianRouteSearchOptions()
@@ -380,9 +477,9 @@ val routeBuildOptions = RouteBuildOptions(
 
 ### Отображение маршрута
 
-Если вы используете стандартный набор из [NavigationView](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-view) и [DefaultNavigationControls](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.default-navigation-controls), как рекомендуется в [начале раздела](#навигатор), эта возможность уже доступна и не требует предварительной конфигурации.
+Если вы используете стандартный набор из [NavigationView](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-view) и [DefaultNavigationControls](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.default-navigation-controls), как рекомендуется в начале раздела [Ведение по маршруту](#turn-by-turn-mode), эта возможность уже доступна и не требует предварительной конфигурации.
 
-Если вы используете собственные UI-элементы, для определения вхождения в режим навигации внутри здания можно пользоваться стандартными возможностями SDK, а именно подпиской на канал [indoorChannel](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.indoor-detector). Этот канал можно получить из [NavigationManager'a](/ios/sdk/reference/stable/class#navigation-manager/var-indoor-detector).
+Если вы используете собственные UI-элементы, для определения вхождения в режим навигации внутри здания можно пользоваться стандартными возможностями SDK, а именно подпиской на канал [indoorChannel](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.indoor-detector). Этот канал можно получить из [NavigationManager](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-manager/val-indoor-detector).
 
 ## Альтернативные маршруты {#alternative-routes}
 
@@ -450,7 +547,7 @@ navigationManager.alternativeRoutesProviderSettings.betterRouteEnabled = false
   // Канал для получения позиции на маршруте
   val positionChannel = navigationManager.uiModel.routePositionChannel
 
-  val postionSubscription = positionChannel.connect {
+  val positionSubscription = positionChannel.connect {
       // Время до конца маршрута в секундах
       val duration = navigationManager.uiModel.duration
       ...
@@ -503,13 +600,13 @@ navigationManager.alternativeRoutesProviderSettings.betterRouteEnabled = false
 * Установить уровень громкости через параметр `notificationVolume` класса [SoundNotificationSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.sound-notification-settings). Передаётся в свойстве `soundNotificationSettings` объекта [NavigationManager](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-manager):
 
    ```kotlin
-   navigationManager.soundNotificationSettings.notificationVolume = 10 // Значение от 0 до 100
+   navigationManager.soundNotificationSettings.notificationVolume = 10 // значение от 0 до 100
    ```
 
 * Отключить звук через параметр `mute` класса [SoundNotificationSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.sound-notification-settings). Передаётся в свойстве `soundNotificationSettings` объекта [NavigationManager](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-manager):
 
    ```kotlin
-   navigationManager.soundNotificationSettings.mute = true // Звук отключен
+   navigationManager.soundNotificationSettings.mute = true // звук отключен
    ```
 
 * Указать категории звуковых оповещений через параметр `enabledSoundCategories` класса [SoundNotificationSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.sound-notification-settings). Передаётся в свойстве `soundNotificationSettings` объекта [NavigationManager](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-manager).
@@ -520,11 +617,11 @@ navigationManager.alternativeRoutesProviderSettings.betterRouteEnabled = false
 
    ```kotlin
    navigationManager.soundNotificationSettings.enabledSoundCategories = EnumSet.of(
-         SoundCategory.CROSSROAD_CAMERAS,     // Камеры контроля перекрёстка
-         SoundCategory.AVERAGE_SPEED_CAMERAS, // Камеры контроля средней скорости
-         SoundCategory.ROAD_WORKS,            // Дорожные работы
-         SoundCategory.TOLLS,                 // Платные дороги
-         SoundCategory.OBSTACLES              // Препятствия
+         SoundCategory.CROSSROAD_CAMERAS,     // камеры контроля перекрёстка
+         SoundCategory.AVERAGE_SPEED_CAMERAS, // камеры контроля средней скорости
+         SoundCategory.ROAD_WORKS,            // дорожные работы
+         SoundCategory.TOLLS,                 // платные дороги
+         SoundCategory.OBSTACLES              // препятствия
    )
    ```
 
@@ -536,17 +633,17 @@ navigationManager.alternativeRoutesProviderSettings.betterRouteEnabled = false
    <TabItem value="sdk-13" label="Для версии SDK 13.0.0 и выше" default>
 
    ```kotlin
-   // Получение списка голосов из VoiceManager
+   // Получить список голосов из VoiceManager
    val voices = VoiceManager.instance(sdkContext).voices
 
-   // Выбор голоса с нужным языком
+   // Выбрать голос с нужным языком
    val voice = voices.firstOrNull{it.language == "en"}
 
-   // Установка голосового пакета
+   // Установить голосовой пакет
    voice.install()
    val navigationVoice = voice?.navigationVoice
 
-   // Передача NavigationVoice в NavigationManager
+   // Передать NavigationVoice в NavigationManager
    navigationManager.voiceSelector.voice = navigationVoice
    ```
 
@@ -554,17 +651,17 @@ navigationManager.alternativeRoutesProviderSettings.betterRouteEnabled = false
    <TabItem value="sdk-12" label="Для версии SDK 12.x">
 
    ```kotlin
-   // Получение списка голосов из VoiceManager
+   // Получить список голосов из VoiceManager
    val voices = getVoiceManager(sdkContext).voices
 
-   // Выбор голоса с нужным языком
+   // Выбрать голос с нужным языком
    val voice = voices.firstOrNull{it.language == "en"}
 
-   // Установка голосового пакета
+   // Установить голосовой пакет
    voice.install()
    val navigationVoice = voice?.navigationVoice
 
-   // Передача NavigationVoice в NavigationManager
+   // Передать NavigationVoice в NavigationManager
    navigationManager.voiceSelector.voice = navigationVoice
    ```
 
@@ -578,7 +675,7 @@ navigationManager.alternativeRoutesProviderSettings.betterRouteEnabled = false
    * `ar` — арабский;
    * `hy` — армянский;
    * `kk` — казахский;
-   * `ky` — киргизский
+   * `ky` — киргизский;
    * `uz` — узбекский;
    * `ka` — грузинский;
    * `az` — азербайджанский;

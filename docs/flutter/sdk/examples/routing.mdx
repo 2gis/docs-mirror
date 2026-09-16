@@ -3,7 +3,7 @@ sidebar: fluttersdk
 ---
 # Маршруты
 
-В этом разделе описывается работа с маршрутами для разных видов транспорта. Вы можете создавать маршруты двумя способами:
+Вы можете создавать маршруты для разных видов транспорта двумя способами:
 
 * [Построить новый маршрут](#building-route) по компонентам:
 
@@ -19,7 +19,7 @@ sidebar: fluttersdk
 * [TrafficRouter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter-class.html) для создания или загрузки маршрута;
 * источник данных [RouteMapObjectSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteMapObjectSource-class.html) для отображения маршрута на карте.
 
-1. Чтобы создать новый маршрут, вызовите метод [findRoute()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter/findRoute.html), передав координаты точек в виде объектов [RouteSearchPoint](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchPoint-class.html). Дополнительно можно указать параметры маршрута ([RouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchOptions-class.html)), а также список промежуточных точек маршрута (список [RouteSearchPoint](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchPoint-class.html)).
+1. Чтобы создать новый маршрут, вызовите метод [findRoute()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter/findRoute.html), передав координаты точек в виде объектов [RouteSearchPoint](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchPoint-class.html). Дополнительно вы можете указать параметры маршрута ([RouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchOptions-class.html)) и список промежуточных точек маршрута (список [RouteSearchPoint](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchPoint-class.html)).
 
     ```dart
     import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
@@ -40,19 +40,18 @@ sidebar: fluttersdk
     import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
 
     // Создать источник данных
-    final sdk.RouteMapObjectSource routeMapObjectSource = sdk.RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL)
-    map.addSource(routeMapObjectSource)
+    final sdk.RouteMapObjectSource routeMapObjectSource = sdk.RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL);
+    map.addSource(routeMapObjectSource);
 
     // Добавить созданный маршрут на карту
-    final List<sdk.TrafficRoute> routes = await trafficRouter.findRoute(startSearchPoint, finishSearchPoint).value;
-
+    final List<sdk.TrafficRoute> routes = await routesFuture.value;
     int routeIdx = 0;
     bool isActive = true;
     routes.forEach((sdk.TrafficRoute route) {
       routeMapObjectSource.addObject(sdk.RouteMapObject(route, isActive, routeIdx));
       routeIdx += 1;
       isActive = false;
-    })
+    });
     ```
 
 Вместо пары [TrafficRouter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter-class.html) и [RouteMapObjectSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteMapObjectSource-class.html) для построения маршрута можно использовать [RouteEditor](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEditor-class.html) и [RouteEditorSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEditorSource-class.html). В таком случае не нужно обрабатывать список [TrafficRoute](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRoute-class.html), достаточно передать координаты маршрута в виде объекта [RouteEditorRouteParams](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEditorRouteParams-class.html) в метод [setRouteParams()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEditor/setRouteParams.html), и маршрут отобразится автоматически.
@@ -79,7 +78,7 @@ routeEditor.setRouteParams(
 
 <img src="/img/mobile-sdk/device-2022-08-22-122901.gif"  />
 
-Можно получить координаты объекта (здания, дороги), который находится в месте клика. Для этого понадобится метод [getRenderedObjects()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map/getRenderedObjects.html). В нем нужно получить объект класса [DgisMapObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisMapObject-class.html), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
+Вы можете получить координаты объекта (здания, дороги), который находится в месте клика. Используйте метод [getRenderedObjects()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map/getRenderedObjects.html). В нём нужно получить объект класса [DgisMapObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisMapObject-class.html), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
@@ -91,12 +90,12 @@ map.getRenderedObjects(sdk.ScreenPoint()).then((List<sdk.RenderedObjectInfo> inf
   // Получить ближайший к месту нажатия объект внутри установленного радиуса
   final sdk.RenderedObject obj = info.first.item;
 
-  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике
   // Для этого нужно убедиться, что тип этого объекта может быть найден
   if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
     final source = obj.source as sdk.DgisSource;
 
-    // Поиск
+    // Найти объект
     final foundObjects =
         await sdk.SearchManager.createOnlineManager(sdkContext)
             .searchByDirectoryObjectIds([(obj.item as sdk.DgisMapObject).id])
@@ -109,7 +108,7 @@ map.getRenderedObjects(sdk.ScreenPoint()).then((List<sdk.RenderedObjectInfo> inf
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
@@ -118,12 +117,12 @@ map.getRenderedObjects(sdk.ScreenPoint()).then((List<sdk.RenderedObjectInfo> inf
   // Получить ближайший к месту нажатия объект внутри установленного радиуса
   final sdk.RenderedObject obj = info.first.item;
 
-  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике
   // Для этого нужно убедиться, что тип этого объекта может быть найден
   if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
     final source = obj.source as sdk.DgisSource;
 
-    // Поиск
+    // Найти объект
     final foundObject =
         await sdk.SearchManager.createOnlineManager(sdkContext)
             .searchByDirectoryObjectId((obj.item as sdk.DgisMapObject).id)
@@ -238,7 +237,7 @@ final routeSearchOptions = sdk.RouteSearchOptions.truck(truckOptions);
 
 :::note[Построение на онлайн-данных]
 
-Для построения маршрутов для грузового транспорта используются только онлайн-данные. В офлайн-режиме маршруты не строятся. 
+Для построения маршрутов для грузового транспорта используются только онлайн-данные. В офлайн-режиме маршруты не строятся.
 
 :::
 
@@ -262,7 +261,7 @@ final publicTransportOptions = sdk.PublicTransportRouteSearchOptions(
     sdk.PublicTransportType.tram,            // Трамвай
     sdk.PublicTransportType.metro,           // Метро
     sdk.PublicTransportType.suburbanTrain,   // Пригородные поезда
-  });
+  }),
 );
 
 final routeSearchOptions = sdk.RouteSearchOptions.publicTransport(publicTransportOptions);
@@ -334,7 +333,7 @@ final finishPoint = sdk.RouteSearchPoint(
   levelId: sdk.LevelId(value: 3));
 ```
 
-Подробнее о ведении по маршруту внутри зданий см. в разделе [Навигация](/ios/sdk/examples/navigation#indoor-navigation).
+Подробнее о ведении по маршруту внутри зданий см. в разделе [Навигация](/flutter/sdk/examples/navigation#indoor-navigation).
 
 Чтобы построить пешеходный маршрут, укажите свойство `pedestrian` в [RouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchOptions-class.html). Дополнительно вы можете настроить параметры построения маршрута [PedestrianRouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PedestrianRouteSearchOptions-class.html):
 
@@ -395,35 +394,35 @@ final polygonExcludedArea = sdk.ExcludedArea(
 1. Создайте маршрут с помощью Routing API, сохраните его и скопируйте идентификатор маршрута: см. [Сохранение маршрута](/api/navigation/routing/examples/special#save-route).
 2. Вызовите метод [fetchSharedRoute()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter/fetchSharedRoute.html) и передайте идентификатор сохранённого маршрута.
 
-    ```dart
-    import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
+   ```dart
+   import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
 
-    final routeId = "ROUTE_ID";
+   final routeId = "ROUTE_ID";
 
-    final trafficRouter = sdk.TrafficRouter(sdkContext);
-    final sdk.SharedRouteData sharedRouteData = await trafficRouter.fetchSharedRoute(routeId).value;
-    ```
+   final trafficRouter = sdk.TrafficRouter(sdkContext);
+   final sdk.SharedRouteData sharedRouteData = await trafficRouter.fetchSharedRoute(routeId).value;
+   ```
 
-    Вызов вернёт отложенный результат с объектом [SharedRouteData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SharedRouteData-class.html), который содержит набор маршрутов (`List<TrafficRoute>`), точки маршрута и параметры поиска.
+   Вызов вернёт отложенный результат с объектом [SharedRouteData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SharedRouteData-class.html), который содержит набор маршрутов (`List<TrafficRoute>`), точки маршрута и параметры поиска.
 
 3. Чтобы отобразить маршрут на карте, создайте объекты [RouteMapObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteMapObject-class.html) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteMapObjectSource-class.html).
 
-    ```dart
-    import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
+   ```dart
+   import 'package:dgis_mobile_sdk_full/dgis.dart' as sdk;
 
-    // Создать источник данных
-    final sdk.RouteMapObjectSource routeMapObjectSource = sdk.RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL);
-    map.addSource(routeMapObjectSource);
+   // Создать источник данных
+   final sdk.RouteMapObjectSource routeMapObjectSource = sdk.RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL);
+   map.addSource(routeMapObjectSource);
 
-    // Добавить полученный маршрут на карту
-    int routeIdx = 0;
-    bool isActive = true;
-    sharedRouteData.routes.forEach((sdk.TrafficRoute route) {
-      routeMapObjectSource.addObject(sdk.RouteMapObject(route, isActive, routeIdx));
-      routeIdx += 1;
-      isActive = false;
-    });
-    ```
+   // Добавить полученный маршрут на карту
+   int routeIdx = 0;
+   bool isActive = true;
+   sharedRouteData.routes.forEach((sdk.TrafficRoute route) {
+   routeMapObjectSource.addObject(sdk.RouteMapObject(route, isActive, routeIdx));
+   routeIdx += 1;
+   isActive = false;
+   });
+   ```
 
 ## Офлайн-режим {#offline-mode}
 

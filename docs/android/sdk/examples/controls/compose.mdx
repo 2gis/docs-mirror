@@ -7,15 +7,15 @@ sidebar: androidsdk
 
 Вы можете использовать [модули для Android Compose](https://2gis.github.io/android-compose-docs/index.html) от <Brand />, чтобы добавить в свой проект стандартные UI-элементы:
 
-- `compose-map` для управления картой. Модуль доступен для обеих (**Full** и **Map**) версий SDK.
-- `compose-navigation` для создания навигатора. Модуль доступен только для полной (**Full**) версии SDK.
+* `compose-map` для управления картой. Модуль доступен для обеих (**Full** и **Map**) версий SDK.
+* `compose-navigation` для создания навигатора. Модуль доступен только для полной (**Full**) версии SDK.
 
 Чтобы подключить модуль в своё приложение, добавьте следующие элементы в `app/build.gradle` и укажите номер и тип версии SDK (оба параметра обязательны):
 
 ```groovy
 dependencies {
 
-      def sdkVersion = "13.0.0" // Номер версии SDK
+      def sdkVersion = "14.0.0" // Номер версии SDK
 
       implementation("ru.dgis.sdk:sdk-map:$sdkVersion") // Укажите sdk-map или sdk-full
       implementation("ru.dgis.sdk:compose-map:$sdkVersion") // Модуль для карты
@@ -31,17 +31,17 @@ dependencies {
 
 Стандартный набор элементов включает в себя:
 
-1. [IndoorComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls/-indoor-composable.html) для переключения этажей.
-2. [TrafficComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls/-traffic-composable.html) для показа текущего уровня пробок и для управления видимостью пробок на карте.
-3. [ZoomComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls/-zoom-composable.html) для масштабирования (приближения и отдаления) карты.
-4. [CompassComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls/-compass-composable.html) для отображения текущего угла поворота карты относительно севера.
-5. [MyLocationComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls/-my-location-composable.html) для перелёта к текущему местоположению пользователя. Этот UI-элемент отображает текущее состояние слежения камеры ([`CameraFollowState`](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.map.camera-follow-state)) и позволяет изменять его.
+1. [IndoorComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls.indoor/-indoor-composable.html) для переключения этажей.
+2. [TrafficComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls.traffic/-traffic-composable.html) для показа текущего уровня пробок и для управления видимостью пробок на карте.
+3. [ZoomComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls.zoom/-zoom-composable.html) для масштабирования (приближения и отдаления) карты.
+4. [CompassComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls.compass/-compass-composable.html) для отображения текущего угла поворота карты относительно севера.
+5. [MyLocationComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.controls.mylocation/-my-location-composable.html) для перелёта к текущему местоположению пользователя. Этот UI-элемент отображает текущее состояние слежения камеры ([CameraFollowState](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.map.camera-follow-state)) и позволяет изменять его.
 
-<img src="/img/mobile-sdk/android_map_controls_1.jpg" width="250" />
+   <img src="/img/mobile-sdk/android_map_controls_1.jpg" width="250" />
 
 6. [MinimapComposable](https://2gis.github.io/android-compose-docs/compose-map/ru.dgis.sdk.compose.map.minimap/-minimap-composable.html) для отображения мини-карты во время навигации.
 
-<img src="/img/mobile-sdk/android_minimap.png" width="250" />
+   <img src="/img/mobile-sdk/android_minimap.png" width="250" />
 
 ## Навигатор {#navigator}
 
@@ -58,31 +58,64 @@ dependencies {
 7. [NavigationFollowComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.mapcontrols.follow/-navigation-follow-composable.html) для управления слежением за маркером местоположения.
 8. [NavigationDashboardComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.dashboard/-navigation-dashboard-composable.html) для отображения информации в режиме [ведения по маршруту](/android/sdk/examples/navigation#turn-by-turn-mode).
 
-<img src="/img/mobile-sdk/android_navi_controls_4.jpg" width="250" /> <img src="/img/mobile-sdk/android_navi_controls_1.jpg" width="250" />
+   <img src="/img/mobile-sdk/android_navi_controls_4.jpg" width="250" />&nbsp;<img src="/img/mobile-sdk/android_navi_controls_1.jpg" width="250" />
 
 9. [NavigationDashboardComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.dashboard/-navigation-dashboard-composable.html) для отображения информации в режиме [свободной навигации](/android/sdk/examples/navigation#free-drive-mode).
 10. [NavigationDashboardComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.dashboard/-navigation-dashboard-composable.html) для отображения информации в режиме [навигации внутри зданий](/android/sdk/examples/navigation#indoor-navigation).
 11. [NavigationIndoorComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.indoor/-navigation-indoor-composable.html) для управления списком этажей при навигации внутри здания.
 
-<img src="/img/mobile-sdk/android_navi_controls_2.jpg" width="250" /> <img src="/img/mobile-sdk/android_navi_controls_3.jpg" width="250" /> <img src="/img/mobile-sdk/android_navi_controls_5.jpg" width="250" />
+      <img src="/img/mobile-sdk/android_navi_controls_2.jpg" width="250" />&nbsp;<img src="/img/mobile-sdk/android_navi_controls_3.jpg" width="250" />&nbsp;<img src="/img/mobile-sdk/android_navi_controls_5.jpg" width="250" />
 
 12. [BetterRoutePromptComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.betterrouteprompt/-better-route-prompt-composable.html) для отображения предложения о переходе на [«маршрут лучше»](/android/sdk/examples/navigation#better-route).
 13. [FinishRouteComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.finishroute/-finish-route-composable.html) для отображения информации о завершении маршрута.
 14. [RouteOverviewComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.routeoverview/-route-overview-composable.html) для отображения общей информации о маршруте во время навигации.
 
-<img src="/img/mobile-sdk/android_navi_controls_6.png" width="250" /><img src="/img/mobile-sdk/android_navi_controls_7.png" width="250" /><img src="/img/mobile-sdk/android_navi_controls_8.png" width="250" />
+      <img src="/img/mobile-sdk/android_navi_controls_6.png" width="250" />&nbsp;<img src="/img/mobile-sdk/android_navi_controls_7.png" width="250" />&nbsp;<img src="/img/mobile-sdk/android_navi_controls_8.png" width="250" />
 
 ## Экран настроек навигатора {#navigator-settings}
 
 Модуль `compose-navigation` содержит экраны и макеты компонентов для интерфейса настроек навигатора. Вы можете использовать готовый экран настроек, который открывается из дашборда навигации, или встроить отдельные компоненты в собственный экран приложения.
 
-Настройки навигатора хранятся в [NavigationSettingsRepository](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-repository/index.html). Приложение создаёт и хранит экземпляр репозитория, а мобильный SDK использует экземпляр и читает из него настройки для управления навигатором и при [построении маршрута](#route-search-options). Используйте один и тот же репозиторий и в интерфейсе настроек навигатора, и в коде построения маршрута. Тогда значения, которые пользователь выбирает в настройках, будут доступны при создании [RouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchOptions-class.html), и приложение учтёт их перед построением маршрута.
+Настройки навигатора хранятся в [NavigationSettingsRepository](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-repository/index.html). Приложение создаёт и хранит экземпляр репозитория, а мобильный SDK использует его и читает из него настройки для управления навигатором и при [построении маршрута](#route-search-options). Используйте один и тот же репозиторий и в интерфейсе настроек навигатора, и в коде построения маршрута. Тогда значения, которые пользователь выбирает в настройках, будут доступны при создании [RouteSearchOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteSearchOptions-class.html), и приложение учтёт их перед построением маршрута.
 
 Если репозиторий передан в [DefaultNavigationControlsState](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.defaultcontrols.navigation/-default-navigation-controls-state/index.html), часть настроек применяется к активной сессии навигации автоматически.
 
 ### Готовый экран настроек {#default-settings-screen}
 
 Создайте [NavigationSettingsRepository](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-navigation-settings-repository/index.html) и передайте его в [DefaultNavigationControlsState](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.defaultcontrols.navigation/-default-navigation-controls-state/index.html). В примере ниже `DefaultNavigationControlsState` также применяет поддерживаемые динамические настройки к `NavigationManager` и учитывает их изменения во время навигации.
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```kotlin
+@Composable
+fun NavigationControls(
+    context: Context,
+    map: Map,
+    navigationManager: NavigationManager,
+) {
+    val settingsRepository = remember(context) {
+        NavigationSettingsRepository.default(context.applicationContext)
+    }
+    val controlsState = remember(map, navigationManager, settingsRepository) {
+        DefaultNavigationControlsState(
+            map = map,
+            navigationManager = navigationManager,
+            minimapOptions = MapControllerOptions(),
+            settingsRepository = settingsRepository,
+        )
+    }
+
+    DisposableEffect(controlsState) {
+        onDispose { controlsState.onCleared() }
+    }
+
+    NavigationControlsComposable(state = controlsState)
+}
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```kotlin
 @Composable
@@ -112,13 +145,16 @@ fun NavigationControls(
 }
 ```
 
+</TabItem>
+</Tabs>
+
 Если репозиторий задан, [NavigationControlsComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.controls.defaultcontrols.navigation/-navigation-controls-composable.html) автоматически покажет кнопку настроек в дашборде навигации и откроет встроенный экран настроек по нажатию.
 
 <img src="/img/mobile-sdk/android_navi_settings_controls_button.png" width="250" />
 
 ### Пользовательский сценарий {#custom-settings-screen}
 
-Если вы планируете создать собственный экран настроек или диалоговое окно, передайте `onSettingsClick` в `NavigationControlsComposable`. В этом случае встроенный экран не откроется, и будет вызван ваша функция обратного вызова
+Чтобы создать собственный экран настроек или диалоговое окно, передайте `onSettingsClick` в `NavigationControlsComposable`. В этом случае встроенный экран не откроется, и будет вызвана ваша функция обратного вызова.
 
 ```kotlin
 NavigationControlsComposable(
@@ -127,28 +163,28 @@ NavigationControlsComposable(
 )
 ```
 
-Также передайте репозиторий в `DefaultNavigationControlsState`, чтобы SDK применял динамические настройки. Видимость кнопки обеспечивает `onSettingsClick`: если передана функция обратного вызова, дашборд покажет кнопку настроек и вызовет эту функцию по нажатию.
+Передайте репозиторий в `DefaultNavigationControlsState`, чтобы SDK применял динамические настройки. Видимость кнопки обеспечивает `onSettingsClick`: если передана функция обратного вызова, дашборд покажет кнопку настроек и вызовет эту функцию по нажатию.
 
 #### Готовые макеты {#ready-layouts}
 
 Для реализации собственного сценария вы можете использовать готовые макеты SDK:
 
-- [RouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-route-settings-layout.html) — основной экран настроек маршрута, звука, событий на карте и ссылок на настройки транспорта.
+* [RouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-route-settings-layout.html) — основной экран настроек маршрута, звука, событий на карте и ссылок на настройки транспорта.
 
-    - [PedestrianRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-pedestrian-route-settings-layout.html) — настройки пешеходных маршрутов.
-    - [BicycleRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-bicycle-route-settings-layout.html) — настройки маршрутов для велосипеда.
-    - [ScooterRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-scooter-route-settings-layout.html) — настройки маршрутов для самоката.
-    - [MotorcycleRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-motorcycle-route-settings-layout.html) - настройки маршрутов для мотоцикла.
-    - [PublicTransportRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-public-transport-route-settings-layout.html) - настройки маршрутов для общественного транспорта.
-    - [TruckRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-truck-route-settings-layout.html) - настройки параметров грузовика и ограничений маршрута для грузового транспорта.
+   * [PedestrianRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-pedestrian-route-settings-layout.html) — настройки пешеходных маршрутов.
+   * [BicycleRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-bicycle-route-settings-layout.html) — настройки маршрутов для велосипеда.
+   * [ScooterRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-scooter-route-settings-layout.html) — настройки маршрутов для самоката.
+   * [MotorcycleRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-motorcycle-route-settings-layout.html) — настройки маршрутов для мотоцикла.
+   * [PublicTransportRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-public-transport-route-settings-layout.html) — настройки маршрутов для общественного транспорта.
+   * [TruckRouteSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-truck-route-settings-layout.html) — настройки параметров грузовика и ограничений маршрута для грузового транспорта.
 
-    <img src="/img/mobile-sdk/android_navi_settings_controls_main.png" width="250" /><img src="/img/mobile-sdk/android_navi_settings_controls_transport.png" width="250" />
+   <img src="/img/mobile-sdk/android_navi_settings_controls_main.png" width="250" />&nbsp;<img src="/img/mobile-sdk/android_navi_settings_controls_transport.png" width="250" />
 
-- [SoundSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-sound-settings-layout.html) — настройки звука и предупреждений.
+* [SoundSettingsLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-sound-settings-layout.html) — настройки звука и предупреждений.
 
     <img src="/img/mobile-sdk/android_navi_settings_controls_sound.png" width="250" />
 
-- [VoicesLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-voices-layout.html) — выбор, загрузка и удаление голосов.
+* [VoicesLayout](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.navigation.settings/-voices-layout.html) — выбор, загрузка и удаление голосов.
 
     <img src="/img/mobile-sdk/android_navi_settings_controls_voices.png" width="250" />
 

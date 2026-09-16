@@ -16,17 +16,43 @@ sidebar: androidsdk
 3. Переместите скачанный стиль в проект с мобильным приложением.
 4. Подключите стиль с помощью метода [File()](/android/sdk/reference/stable/class#ru.dgis.sdk.file) и укажите объект стиля в качестве параметра `styleFile`:
 
+   <Tabs>
+   <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
    ```kotlin
-   // Установка стиля в настройках карты
+   // Установить стиль в настройках карты
+   val mapContainer = findViewById<LinearLayout>(R.id.map_container)
+   val mapViewModel = DefaultMapControllerViewModel(
+      sdkContext,
+      MapControllerOptions(
+         styleFile = File.fromAsset(sdkContext, "custom-styles.2gis")
+      )
+   )
+
+   // Создать карту с указанными настройками
+   mapView = MapView(this).also { view ->
+      view.setMapControllerViewModel(mapViewModel)
+   }
+   mapContainer.addView(mapView)
+   ```
+
+   </TabItem>
+   <TabItem value="sdk-13" label="Для версии SDK 13.x">
+
+   ```kotlin
+   // Установить стиль в настройках карты
    val mapContainer = findViewById<LinearLayout>(R.id.map_container)
    val mapOptions = MapOptions().apply {
-       styleFile = File.fromAsset(sdkContext, "custom-styles.2gis")
+      styleFile = File.fromAsset(sdkContext, "custom-styles.2gis")
    }
 
-   // Создание карты с указанными настройками
+   // Создать карту с указанными настройками
    mapView = MapView(this, mapOptions)
    mapContainer.addView(mapView)
    ```
+
+   </TabItem>
+   </Tabs>
 
    Вы можете указать [File()](/android/sdk/reference/stable/class#ru.dgis.sdk.file) с помощью различных конструкторов:
 
@@ -48,10 +74,10 @@ sidebar: androidsdk
 2. Загрузите новый стиль с помощью [StyleBuilder](/android/sdk/reference/stable/class#ru.dgis.sdk.map.style-builder):
 
     ```kotlin
-    // Загрузка нового стиля карты
+    // Загрузить новый стиль карты
     val newStyle = StyleBuilder(sdkContext).loadStyle(File.fromAsset(sdkContext, "custom-styles.2gis"))
 
-    // Изменение стиля карты после загрузки
+    // Изменить стиль карты после загрузки
     newStyle.onResult { map.style = it }
     ```
 
@@ -63,28 +89,69 @@ sidebar: androidsdk
 
 ### При создании карты {#switch-theme-on-map-creation}
 
-Вы можете указать темы при создании карты с помощью метода [setTheme()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view/set-theme):
+Вы можете указать тему при создании карты:
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
 ```kotlin
-// Установка стиля в настройках карты
+// Установить тему в настройках карты
+val mapContainer = findViewById<LinearLayout>(R.id.map_container)
+val mapViewModel = DefaultMapControllerViewModel(
+    sdkContext,
+    MapControllerOptions(
+        mapAppearance = MapAppearance(
+            Fixed(MapTheme("day", Color(0xFFFF0000.toInt())))
+        )
+    )
+)
+
+// Создать карту с указанными настройками
+mapView = MapView(this).also { view ->
+    view.setMapControllerViewModel(mapViewModel)
+}
+mapContainer.addView(mapView)
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
+
+```kotlin
+// Установить тему в настройках карты
 val mapContainer = findViewById<LinearLayout>(R.id.map_container)
 val mapOptions = MapOptions().apply {
-    // Переключение между темами
+    // Переключиться между темами
     setTheme(theme = MapTheme("day", Color(255,0,0)))
 }
 
-// Создание карты с указанными настройками
+// Создать карту с указанными настройками
 mapView = MapView(this, mapOptions)
 mapContainer.addView(mapView)
 ```
 
+</TabItem>
+</Tabs>
+
 ### После создания карты {#switch-theme-after-map-creation}
 
-Изменить тему после создания карты вы можете с помощью метода [setTheme()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view/set-theme):
+Вы можете изменить тему после создания карты:
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+```kotlin
+map.appearance = MapAppearance(Fixed(MapTheme.defaultDarkTheme))
+```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```kotlin
 mapView.setTheme(MapTheme.defaultDarkTheme)
 ```
+
+</TabItem>
+</Tabs>
 
 ## Управление стилевыми слоями {#manage-style-layers}
 
@@ -96,8 +163,6 @@ mapView.setTheme(MapTheme.defaultDarkTheme)
    2. В блоке **Мои стили** откройте карточку нужного стиля.
    3. В разделе **Слои** выберите слой, который нужно включить.
    4. В блоке **Данные (JSON)** отредактируйте JSON-файл и добавьте нужную глобальную переменную (`global`). Например, для слоя с парковками — это переменная `parkingOn`:
-
-        {/*  prettier-ignore  */}
 
       <img src="/img/mobile-sdk/add-attribute.png" alt="Добавление глобальной переменной" width="650"  />
 

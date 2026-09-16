@@ -3,11 +3,11 @@ sidebar: androidsdk
 ---
 # Маршруты
 
-В этом разделе описывается работа с маршрутами для разных видов транспорта. Вы можете создавать маршруты двумя способами:
+Вы можете создавать маршруты для разных видов транспорта двумя способами:
 
 * [Построить новый маршрут](#building-route) по компонентам:
 
-    * Точки маршрута: начальная, конечная и, если необходимо, промежуточные. 
+    * Точки маршрута: начальная, конечная и, если необходимо, промежуточные.
     * [Параметры поиска маршрута](#route-parameters). Набор параметров зависит от типа транспорта, для которого строится маршрут.
 
 * [Использовать готовый маршрут](#using-ready-route), который был построен ранее с помощью [Routing API](/api/navigation/routing/overview). Готовый маршрут уже содержит необходимые данные для отображения и навигации.
@@ -38,11 +38,11 @@ sidebar: androidsdk
 2. Чтобы отобразить найденный маршрут на карте, создайте объекты [RouteMapObject](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object) на основе полученных объектов `TrafficRoute` и добавьте их в источник данных [RouteMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-map-object-source).
 
     ```kotlin
-    // Создаём источник данных
+    // Создать источник данных
     val routeMapObjectSource = RouteMapObjectSource(sdkContext, RouteVisualizationType.NORMAL)
     map.addSource(routeMapObjectSource)
 
-    // Добавляем созданный маршрут на карту
+    // Добавить созданный маршрут на карту
     routesFuture.onResult { routes: List<TrafficRoute> ->
         var isActive = true
         var routeIndex = 0
@@ -83,39 +83,82 @@ routeEditor.setRouteParams(
 
 <img src="/img/mobile-sdk/device-2022-08-22-114935.gif"  />
 
-В интерфейсе [TouchEventsObserver](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer) существуют методы [onTap](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-tap) и [onLongTouch](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-long-touch), которые позволяют получить [ScreenPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.screen-point). Объект этого класса можно преобразовать в [GeoPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.coordinates.geo-point) с помощью метода [screenToMap()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.projection/screen-to-map).
+Вы можете получить [ScreenPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.screen-point) точки нажатия и преобразовать его в [GeoPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.coordinates.geo-point) с помощью метода [screenToMap()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.projection/screen-to-map).
 
-Таким образом, мы получим координаты в точке нажатия на карту.
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+Подпишитесь на канал `tap` распознавателя жестов [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller):
 
 ```kotlin
-    override fun onTap(point: ScreenPoint) {
-        val geoPoint: GeoPoint? = map.camera.projection.screenToMap(point)
-    }
+val connection = mapController.gestureRecognizer.tap.connect { point ->
+    val geoPoint: GeoPoint? = map.camera.projection.screenToMap(point)
+}
 ```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
+
+В интерфейсе [TouchEventsObserver](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer) существуют методы [onTap()](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-tap) и [onLongTouch()](/android/sdk/reference/stable/interface#ru.dgis.sdk.map.touch-events-observer/on-long-touch), которые позволяют получить точку нажатия:
+
+```kotlin
+override fun onTap(point: ScreenPoint) {
+    val geoPoint: GeoPoint? = map.camera.projection.screenToMap(point)
+}
+```
+
+</TabItem>
+</Tabs>
 
 ### Получение координат объекта в месте нажатия на карту {#getting-coordinates-on-tap}
 
 <img src="/img/mobile-sdk/device-2022-08-22-122901.gif"  />
 
-Можно получить координаты объекта (здания, дороги), который находится в месте клика. Для этого понадобится метод [getRenderedObjects()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map/get-rendered-objects). В нем нужно получить объект класса [DgisMapObject](/android/sdk/reference/stable/class#ru.dgis.sdk.map.dgis-map-object), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
+Вы можете получить координаты объекта (здания, дороги), который находится в месте клика. Используйте метод [getRenderedObjects()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map/get-rendered-objects). В нём нужно получить объект класса [DgisMapObject](/android/sdk/reference/stable/class#ru.dgis.sdk.map.dgis-map-object), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
+
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
 ```kotlin
-map.getRenderedObjects(point).onResult {objects ->
-    // Получим ближайший к месту нажатия объект класса DgisMapObject
+map.getRenderedObjects(point).onResult { objects ->
+    // Получить ближайший к месту нажатия объект класса DgisMapObject
     val renderedObject = objects.firstOrNull { it.item.item is DgisMapObject } ?: return@onResult
     val mapObject = renderedObject.item.item as DgisMapObject
 
-    // Создадим поисковый запрос по идентификатору этого объекта
+    // Получить объект справочника по идентификатору
     searchManager
-        .searchByDirectoryObjectId(mapObject.id)
-        .onResult onDirectoryObjectReady@{ directoryObject ->
-            // Получим объект и убедимся, что не null
-            directoryObject ?: return@onDirectoryObjectReady
-            // Получим координаты объекта в виде GeoPoint
+        .searchByDirectoryObjectIds(listOf(mapObject.id))
+        .onResult onDirectoryObjectReady@{ directoryObjects ->
+            // Получить первый найденный объект
+            val directoryObject = directoryObjects.firstOrNull() ?: return@onDirectoryObjectReady
+            // Получить координаты объекта в виде GeoPoint
             val geoPoint = directoryObject.markerPosition?.point ?: return@onDirectoryObjectReady
         }
 }
 ```
+
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
+
+```kotlin
+map.getRenderedObjects(point).onResult { objects ->
+    // Получить ближайший к месту нажатия объект класса DgisMapObject
+    val renderedObject = objects.firstOrNull { it.item.item is DgisMapObject } ?: return@onResult
+    val mapObject = renderedObject.item.item as DgisMapObject
+
+    // Получить объект справочника по идентификатору
+    searchManager
+        .searchByDirectoryObjectId(mapObject.id)
+        .onResult onDirectoryObjectReady@{ directoryObject ->
+            directoryObject ?: return@onDirectoryObjectReady
+            // Получить координаты объекта в виде GeoPoint
+            val geoPoint = directoryObject.markerPosition?.point ?: return@onDirectoryObjectReady
+        }
+}
+```
+
+</TabItem>
+</Tabs>
 
 :::note[Координаты больших объектов]
 
@@ -140,7 +183,7 @@ map.getRenderedObjects(point).onResult {objects ->
 * `avoidUnpavedRoads`: избегать ли грунтовых дорог (по умолчанию `false`).
 * `avoidFerries`: избегать ли паромных переправ (по умолчанию `false`).
 * `avoidLockedRoads`: избегать ли закрытых для проезда дорог (по умолчанию `true`).
-* `routeSearchType`: способ учёта данных о пробках при построении маршрута. Вы можете строить маршрут с учётом реальных (`JAM`) или статистических (`STATIC`) данных о пробках или построить кратчайший по расстоянию маршрут, даже если он не является оптимальным по времени (`SHORTEST`).
+* `routeSearchType`: способ учёта данных о пробках при построении маршрута. Вы можете строить маршрут с учётом реальных (`JAM`) или статистических (`STATISTIC`) данных о пробках или построить кратчайший по расстоянию маршрут, даже если он не является оптимальным по времени (`SHORTEST`).
 * `excludedAreas`: список областей (не более 25), которые следует избегать при построении маршрута. Подробнее см. в разделе [Исключение областей](#excluded-areas) ниже.
 
 ```kotlin

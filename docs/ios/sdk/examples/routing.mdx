@@ -3,11 +3,11 @@ sidebar: iossdk
 ---
 # Маршруты
 
-В этом разделе описывается работа с маршрутами для разных видов транспорта. Вы можете создавать маршруты двумя способами:
+Вы можете создавать маршруты для разных видов транспорта двумя способами:
 
 * [Построить новый маршрут](#building-route) по компонентам:
 
-    * Точки маршрута: начальная, конечная и, если необходимо, промежуточные. 
+    * Точки маршрута: начальная, конечная и, если необходимо, промежуточные.
     * [Параметры поиска маршрута](#route-parameters). Набор параметров зависит от типа транспорта, для которого строится маршрут.
 
 * [Использовать готовый маршрут](#using-ready-route), который был построен ранее с помощью [Routing API](/api/navigation/routing/overview). Готовый маршрут уже содержит необходимые данные для отображения и навигации.
@@ -19,7 +19,7 @@ sidebar: iossdk
 * [TrafficRouter](/ios/sdk/reference/stable/class#traffic-router) для создания или загрузки маршрута;
 * источник данных [RouteMapObjectSource](/ios/sdk/reference/stable/class#route-map-object-source) для отображения маршрута на карте.
 
-1. Чтобы создать новый маршрут, вызовите метод [findRoute()](/ios/sdk/reference/stable/class#traffic-router/find-route), передав координаты точек в виде объектов [RouteSearchPoint](/ios/sdk/reference/stable/struct#route-search-point) и параметры маршрута ([RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options)). Дополнительно можно указать список промежуточных точек маршрута (`RouteSearchPoint`).
+1. Чтобы создать новый маршрут, вызовите метод [findRoute()](/ios/sdk/reference/stable/class#traffic-router/find-route), передав координаты точек в виде объектов [RouteSearchPoint](/ios/sdk/reference/stable/struct#route-search-point) и параметры маршрута ([RouteSearchOptions](/ios/sdk/reference/stable/enumeration#route-search-options)). Дополнительно вы можете указать список промежуточных точек маршрута (`RouteSearchPoint`).
 
     ```swift
     let startPoint = RouteSearchPoint(coordinates: GeoPoint(latitude: 55.759909, longitude: 37.618806))
@@ -65,7 +65,7 @@ sidebar: iossdk
 
 ### Получение точек по нажатию на карту {#getting-points-on-tap}
 
-Чтобы получить географические координаты места нажатия, нужно получить [ScreenPoint](/ios/sdk/reference/stable/struct#screen-point), как в примере [Получение объектов по экранным координатам](/ios/sdk/examples/map#get-rendered-objects):
+Чтобы получить географические координаты места нажатия, получите [ScreenPoint](/ios/sdk/reference/stable/struct#screen-point), как в примере [Получение объектов по экранным координатам](/ios/sdk/examples/map#getting-objects-using-screen-coordinates):
 
 ```swift
 func tap(location: CGPoint) {
@@ -84,11 +84,9 @@ func tap(location: CGPoint) {
 	...
 ```
 
-Таким образом, мы получим координаты в точке нажатия на карту.
-
 ### Получение координат объекта в месте нажатия на карту {#getting-coordinates-on-tap}
 
-Можно получить координаты объекта (здания, дороги), который находится в месте клика. Для этого понадобится метод [getRenderedObjects()](/ios/sdk/reference/stable/class#map/get-rendered-objects). В нем нужно получить объект класса [DgisMapObject](/ios/sdk/reference/stable/class#dgis-map-object), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
+Вы можете получить координаты объекта (здания, дороги), который находится в месте клика. Используйте метод [getRenderedObjects()](/ios/sdk/reference/stable/class#map/get-rendered-objects). В нём нужно получить объект класса [DgisMapObject](/ios/sdk/reference/stable/class#dgis-map-object), который имеет поле `id`. Этот идентификатор является стабильным числовым идентификатором объекта справочника, с помощью которого можно выполнить поисковый запрос и получить информацию об объекте, в том числе географические координаты его центра.
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
@@ -131,7 +129,7 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
@@ -222,7 +220,7 @@ let routeSearchOptions = RouteSearchOptions.car(carOptions)
 
 ```swift
 let taxiOptions = TaxiRouteSearchOptions(
-    car: carOptions,
+    car: carOptions
 )
 
 let routeSearchOptions = RouteSearchOptions.taxi(taxiOptions)

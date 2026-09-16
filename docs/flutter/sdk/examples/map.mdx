@@ -82,10 +82,10 @@ initState() {
 В общем случае работа с источниками данных выглядит следующим образом:
 
 ```dart
-// Создание источника данных
+// Создать источник данных
 final sdk.MyLocationMapObjectSource locationSource = sdk.MyLocationMapObjectSource(sdkContext);
 
-// Добавление источника данных на карту
+// Добавить источник данных на карту
 map?.addSource(locationSource);
 ```
 
@@ -252,38 +252,38 @@ final marker = sdk.Marker(
 Чтобы изменить настройки уже созданного маркера, установите новые значения для параметров объекта `Marker`: cм. полный список доступных параметров в описании [Marker](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Marker-class.html).
 
 ```dart
-// Изменение позиции маркера
+// Изменить позицию маркера
 marker.position = const sdk.GeoPointWithElevation(
   latitude: sdk.Latitude(55.74460317215391),
   longitude: sdk.Longitude(37.63435363769531),
 );
 
-// Изменение иконки
+// Изменить иконку
 late sdk.ImageLoader loader;
 marker.icon = loader.loadSVGFromAsset("Path to SVG");
 
-// Изменение точки привязки иконки
+// Изменить точку привязки иконки
 marker.anchor = const sdk.Anchor(x:0.5, y:0.5);
 
-// Изменение прозрачности иконки
+// Изменить прозрачность иконки
 marker.iconOpacity = const sdk.Opacity(0.5);
 
-// Изменение подписи маркера
+// Изменить подпись маркера
 marker.text = 'Text';
 
-// Изменения стиля подписи
+// Изменить стиль подписи
 marker.textStyle = sdk.TextStyle();
 
-// Изменение флага перемещаемости маркера
+// Изменить флаг перемещаемости маркера
 marker.isDraggable = false;
 
-// Изменение целевой ширины маркера
+// Изменить целевую ширину маркера
 marker.iconWidth = const sdk.LogicalPixel(10);
 
-// Изменение угла поворота маркера на карте относительно направления на север
+// Изменить угол поворота маркера на карте относительно направления на север
 marker.iconMapDirection = sdk.MapDirection(0.5);
 
-// Изменение флага анимации для появления маркера
+// Изменить флаг анимации для появления маркера
 marker.animatedAppearance = true;
 ```
 
@@ -302,7 +302,7 @@ final sdk.GeoPoint point2 = sdk.GeoPoint(latitude: sdk.Latitude(55.7405), longit
 final sdk.GeoPoint point3 = sdk.GeoPoint(latitude: sdk.Latitude(55.7439), longitude: sdk.Longitude(37.6506));
 final List<sdk.GeoPoint> geopoints = <sdk.GeoPoint>[point1, point2, point3];
 
-// Создание линии
+// Создать линию
 final sdk.Polyline polyline = sdk.Polyline(
   sdk.PolylineOptions(
     points: geopoints,
@@ -311,30 +311,30 @@ final sdk.Polyline polyline = sdk.Polyline(
   ),
 );
 
-// Добавление линии на карту
+// Добавить линию на карту
 mapObjectManager.addObject(polyline);
 ```
 
 Чтобы изменить настройки созданной линии, установите новые значения для параметров объекта `Polyline`: см. полный список доступных параметров в описании [Polyline](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polyline-class.html).
 
 ```dart
-// Изменение координат вершин линии
+// Изменить координаты вершин линии
 final sdk.GeoPoint point1 = sdk.GeoPoint(latitude: sdk.Latitude(54.7513), longitude: sdk.Longitude(36.6236));
 final sdk.GeoPoint point2 = sdk.GeoPoint(latitude: sdk.Latitude(54.7405), longitude: sdk.Longitude(36.6235));
 final sdk.GeoPoint point3 = sdk.GeoPoint(latitude: sdk.Latitude(54.7439), longitude: sdk.Longitude(36.6506));
 final List<sdk.GeoPoint> newPoints = <sdk.GeoPoint>[point1, point2, point3];
 polyline.points = newPoints;
 
-// Изменение толщины линии
+// Изменить толщину линии
 polyline.width = const sdk.LogicalPixel(10);
 
-// Изменение цвета линии
+// Изменить цвет линии
 polyline.color = sdk.Color(Colors.black.value);
 
-// Стирание части линии
+// Стереть часть линии
 polyline.erasedPart = 0.1;
 
-// Изменение параметров пунктирной линии
+// Изменить параметры пунктирной линии
 polyline.dashedPolylineOptions = const sdk.DashedPolylineOptions(
     dashLength: sdk.LogicalPixel(5),
     dashSpaceLength: sdk.LogicalPixel(5),
@@ -358,7 +358,7 @@ final colors = <sdk.Color>[
 // Индексы цветов для каждого сегмента линии
 final colorIndices = Uint8List.fromList([0, 2]);
 
-// Изменение параметров градиентной линии
+// Изменить параметры градиентной линии
 polyline.gradientPolylineOptions = sdk.GradientPolylineOptions(
     borderWidth: const sdk.LogicalPixel(10),       // Ширина границы линии
     secondBorderWidth: const sdk.LogicalPixel(5),  // Ширина второй границы линии
@@ -400,16 +400,16 @@ mapObjectManager.addObject(polygon);
 Чтобы изменить настройки уже созданного многоугольника, установите новые значения для параметров объекта `Polygon`: cм. полный список доступных параметров в описании [Polygon](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Polygon-class.html).
 
 ```dart
-// Изменение вершин многоугольника
-polygon.contours = [contuor, points];
+// Изменить вершины многоугольника
+polygon.contours = [contour, points];
 
-// Изменение цвета заливки многоугольника
+// Изменить цвет заливки многоугольника
 polygon.color = sdk.Color(Colors.black.value);
 
-// Изменение толщины границы многоугольника
+// Изменить толщину границы многоугольника
 polygon.strokeWidth = sdk.LogicalPixel(10);
 
-// Изменение цвета границы многоугольника
+// Изменить цвет границы многоугольника
 polygon.strokeColor = sdk.Color(Colors.black.value);
 ```
 
@@ -426,26 +426,26 @@ final circle = sdk.Circle(
   )
 );
 
-// Создание и добавление окружности
+// Создать и добавить окружность
 mapObjectManager.addObject(circle);
 ```
 
 Чтобы изменить настройки уже созданной окружности, установите новые значения для параметров объекта `Circle`: cм. полный список доступных параметров в описании [Circle](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Circle-class.html).
 
 ```dart
-// Изменение центра окружности
+// Изменить центр окружности
 circle.position = sdk.GeoPoint(latitude: sdk.Latitude(55.752425),longitude: sdk.Longitude(37.613983));
 
-// Изменение радиуса окружности
+// Изменить радиус окружности
 circle.radius = sdk.Meter(10);
 
-// Изменение цвета заливки окружности
+// Изменить цвет заливки окружности
 circle.color = sdk.Color(Colors.black.value);
 
-// Изменение толщины границы окружности
+// Изменить толщину границы окружности
 circle.strokeWidth = sdk.LogicalPixel(12);
 
-// Изменение цвета границы окружности
+// Изменить цвет границы окружности
 circle.strokeColor = sdk.Color(Colors.black.value);
 ```
 
@@ -507,7 +507,7 @@ circle.strokeColor = sdk.Color(Colors.black.value);
 1. Создайте объект [ModelMapObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelMapObject-class.html), указав нужные настройки в [ModelMapObjectOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelMapObjectOptions-class.html), и передайте его в метод `addObject()` менеджера объектов:
 
     ```dart
-    // Настройки 3D-модели
+    // Настроить параметры 3D-модели
     final model = sdk.ModelMapObject(
       sdk.ModelMapObjectOptions(
         position: const sdk.GeoPointWithElevation(
@@ -517,38 +517,37 @@ circle.strokeColor = sdk.Color(Colors.black.value);
         data: modelData,
         size: size,
         mapDirection: const sdk.MapDirection(0.5),
-        opacity: const sdk.Opacity(0.9),
+        opacity: const sdk.Opacity(1.0),
+        visible: true,
       ),
     );
 
-    // Создание и добавление 3D-модели на карту
+    // Создать и добавить 3D-модель на карту
     mapObjectManager.addObject(model);
     ```
 
 Чтобы изменить настройки уже добавленной модели, установите новые значения для параметров объекта `ModelMapObject`: cм. полный список доступных параметров в описании [ModelMapObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelMapObject-class.html).
 
 ```dart
-// Изменение координат центра 3D-модели
+// Изменить координаты центра 3D-модели
 model.position = const sdk.GeoPointWithElevation(
   latitude: sdk.Latitude(55.74460317215391),
   longitude: sdk.Longitude(37.63435363769531),
 );
 
-// Изменение прозрачности 3D-модели
+// Изменить прозрачность 3D-модели
 model.opacity = const sdk.Opacity(0.5);
 
-// Изменение постоянного размера 3D-модели
-model.size = sdk.ModelSize.logicalPixel(const sdk.LogicalPixel(128, 128));
+// Изменить постоянный размер 3D-модели
+model.size = sdk.ModelSize.logicalPixel(const sdk.LogicalPixel(128));
 
-// Изменение коэффициента масштабирования 3D-модели
-model.size = sdk.ModelSize.logicalPixel(
-  const sdk.LogicalPixel(128),
-);
+// Изменить коэффициент масштабирования 3D-модели
+model.size = sdk.ModelSize.scale(const sdk.ModelScale(1.0));
 
-// Изменение угла поворота 3D-модели
+// Изменить угол поворота 3D-модели
 model.mapDirection = const sdk.MapDirection(0.5);
 
-// Изменение настроек анимации 3D-модели
+// Изменить настройки анимации 3D-модели
 model.animationSettings = sdk.AnimationSettings();
 ```
 
@@ -559,7 +558,7 @@ model.animationSettings = sdk.AnimationSettings();
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-// Подготавка коллекции объектов
+// Подготовить коллекцию объектов
 final List<sdk.Marker> markers = [];
 final sdk.MarkerOptions markerOptions = sdk.MarkerOptions(
     <params>
@@ -567,7 +566,7 @@ final sdk.MarkerOptions markerOptions = sdk.MarkerOptions(
 
 markers.add(sdk.Marker(markerOptions));
 
-// Добавление коллекции объектов на карту
+// Добавить коллекцию объектов на карту
 mapObjectManager.addObjects(markers)
 ```
 
@@ -684,7 +683,7 @@ mapObjectManager = sdk.MapObjectManager.withGeneralization(
 3. Установите 3D-модель с помощью метода [setModelData()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObject/setModelData.html):
 
     ```dart
-    locationSource.item.setModelData(modelData);
+    locationSource.setModelData(modelData);
     ```
 
 </TabItem>
@@ -762,7 +761,7 @@ mapObjectManager = sdk.MapObjectManager.withGeneralization(
    final geometryObject = sdk.GeometryMapObjectBuilder()
      ..setGeometry(sdk.PointGeometry(point)) // Геометрия в виде точки
      ..setObjectAttribute('db_sublayer', sdk.AttributeValue.string('my_object_layer'))
-     ..createObject();   // Создание объекта
+     ..createObject();   // Создать объект
    ```
 
 3. Чтобы объект отобразился на карте, добавьте его в источник данных:
@@ -799,9 +798,9 @@ mapObjectManager = sdk.MapObjectManager.withGeneralization(
 
 ### Выделение объектов по нажатию на карту {#highlight-on-tap}
 
-Для начала получим информацию об объектах, попадающих в область нажатия, с помощью метода [getRenderedObjects()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map/getRenderedObjects.html), как в примере [Получение объектов по экранным координатам](#getting-objects-using-screen-coordinates).
+Получите информацию об объектах, попадающих в область нажатия, с помощью метода [getRenderedObjects()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map/getRenderedObjects.html), как в примере [Получение объектов по экранным координатам](#getting-objects-using-screen-coordinates).
 
-Выделение объектов происходит с помощью вызова метода [setHighlighted()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSource/setHighlighted.html), который получает на вход список идентификаторов справочника изменяемых объектов [DgisObjectId](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSource-class.html). Внутри метода `getRenderedObjects()` можно получить все данные, необходимые для использования этого метода, например источник данных объектов и их идентификаторы:
+Чтобы выделить объекты, вызовите метод [setHighlighted()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSource/setHighlighted.html), который получает на вход список идентификаторов справочника изменяемых объектов [DgisObjectId](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSource-class.html). Внутри метода `getRenderedObjects()` можно получить данные, необходимые для использования этого метода, например источник данных объектов и их идентификаторы:
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
@@ -812,8 +811,8 @@ mapWidgetController
   // Получить ближайший к месту нажатия объект внутри установленного радиуса
   final sdk.RenderedObject obj = info.item;
 
-  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
-  // Для этого нужно убедиться, что тип этого объекта может быть найден
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике
+  // Для этого убедитесь, что тип этого объекта может быть найден
   if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
     final source = obj.source as sdk.DgisSource;
 
@@ -831,14 +830,14 @@ mapWidgetController
     // Снять выделение с выбранных ранее объектов
     source
       ..setHighlighted(source.highlightedObjects, false)
-      // Выделить полученный объект и входы
+      // Выделить полученные объекты и входы
       ..setHighlighted(entranceIds, true);
   }
 });
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```dart
 mapWidgetController
@@ -846,8 +845,8 @@ mapWidgetController
   // Получить ближайший к месту нажатия объект внутри установленного радиуса
   final sdk.RenderedObject obj = info.item;
 
-  // В этом примере нужно найти информацию о выбранном объекте в справочнике.
-  // Для этого нужно убедиться, что тип этого объекта может быть найден
+  // В этом примере нужно найти информацию о выбранном объекте в справочнике
+  // Для этого убедитесь, что тип этого объекта может быть найден
   if (obj.source is sdk.DgisSource && obj.item is sdk.DgisMapObject) {
     final source = obj.source as sdk.DgisSource;
 
@@ -864,7 +863,7 @@ mapWidgetController
     // Снять выделение с выбранных ранее объектов
     source
       ..setHighlighted(source.highlightedObjects, false)
-      // Выделить полученный объект и входы
+      // Выделить полученные объекты и входы
       ..setHighlighted(entranceIds, true);
   }
 });
@@ -927,13 +926,13 @@ final sdk.CameraState currentState = map.camera.state;
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
 map.camera.stateChannel.listen((sdk.CameraState cameraState) {
-  // Обработка изменений состояния камеры
+  // Обработать изменения состояния камеры
 });
 ```
 
 ### Получение позиции камеры
 
-Текущую позицию камеры можно получить, используя свойство `position` (см. объект [CameraPosition](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/CameraPosition-class.html)):
+Чтобы получить текущую позицию камеры, используйте свойство `position` (см. объект [CameraPosition](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/CameraPosition-class.html)):
 
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
@@ -941,11 +940,11 @@ import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 final sdk.CameraPosition currentPosition = sdkMap.camera.position;
 ```
 
-Подписаться на изменения позиции камеры (и угла наклона/поворота) можно с помощью свойства `positionChannel`:
+Чтобы подписаться на изменения позиции камеры (и угла наклона или поворота), используйте свойство `positionChannel`:
 
 ```dart
 sdkMap.camera.positionChannel.listen((position) {
-  // Обработка изменений позиции камеры
+  // Обработать изменения позиции камеры
 });
 ```
 
@@ -967,7 +966,7 @@ final position = sdk.calcPositionForObjects(camera, objects, styleZoomToTiltRela
 map.camera.moveToCameraPosition(position)
 ```
 
-Пример выше выдаст результат похожий на такой:
+Пример выше выдаст похожий результат:
 
 <img src="/img/mobile-sdk/calc_position_example_1_android.png" height="500" align="center" />
 
@@ -995,7 +994,7 @@ import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
 final sdk.Geometry geometry = sdk.ComplexGeometry([sdk.PointGeometry(point1), sdk.PointGeometry(point2),])
 // Задать активную область только для расчёта позиции
-val position = sdk.calcPositionForGeometry(map.camera, geometry, styleZoomToTiltRelation, sdk.Padding({top:100, bottom:100}), tilt, bearing, size,)
+final position = sdk.calcPositionForGeometry(map.camera, geometry, styleZoomToTiltRelation, sdk.Padding({top:100, bottom:100}), tilt, bearing, size,)
 map.camera.move(position)
 ```
 
@@ -1005,7 +1004,7 @@ map.camera.move(position)
 
 На изображении видно, что активная область не изменилась, но маркеры вписаны полностью. Такой подход может приводить к неожиданному поведению, так как позиция камеры задаёт геокоординату, которая должна быть в точке позиции камеры (красный кружок в центре экрана). Настройки `padding`, `positionPoint` и `size` влияют на положение данной точки.
 
-Если при вычислении позиции в метод будут переданы параметры, которые сместят точку позиции камеры, то использование результата приведёт к неожиданному поведению. Например, если вы задаёте ассиметричную активную область, то изображение может сильно смещаться.
+Если при вычислении позиции в метод будут переданы параметры, которые сместят точку позиции камеры, то использование результата приведёт к неожиданному поведению. Например, если вы задаёте асимметричную активную область, то изображение может сильно смещаться.
 
 Пример установки одной и той же позиции для разных отступов:
 
@@ -1078,10 +1077,10 @@ camera.visibleArea.intersects(geometry)
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-// Получение информации о текущем здании с поэтажными планами
+// Получить информацию о текущем здании с поэтажными планами
 final sdk.IndoorBuilding? currentBuilding = map.indoorManager.focusedBuilding;
 
-// Подписка на изменения текущего здания
+// Подписаться на изменения текущего здания
 final subscription = map?.indoorManager.focusedBuildingChannel.listen(
   (building) {
     if (building == null) {
@@ -1094,7 +1093,7 @@ final subscription = map?.indoorManager.focusedBuildingChannel.listen(
   },
 );
 
-// Отписка от изменений текущего здания
+// Отписаться от изменений текущего здания
 subscription?.cancel();
 ```
 
@@ -1117,23 +1116,24 @@ map.indoorManager.setIndoorState(sdk.IndoorManagerState.disabled);
 Чтобы переключаться между этажами, укажите индекс нужного этажа в свойстве `activeLevelIndex` объекта [IndoorBuilding](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/IndoorBuilding-class.html):
 
 ```dart
+// Получить информацию о текущем здании
 final building = sdkMap?.indoorManager.focusedBuilding;
 
 if (building != null) {
-  // Получение информации о всех этажах
+  // Получить информацию о всех этажах
   final levels = building.levels;
   print('Доступные этажи:');
   for (var i = 0; i < levels.length; i++) {
     print('Этаж $i: ${levels[i].name}');
   }
 
-  // Переключение на первый этаж (индекс 0)
+  // Переключиться на первый этаж (индекс 0)
   building.activeLevelIndex = 0;
 
-  // Переключение на последний этаж
+  // Переключиться на последний этаж
   building.activeLevelIndex = levels.length - 1;
 
-  // Подписка на изменения активного этажа
+  // Подписаться на изменения активного этажа
   building.activeLevelIndexChannel.listen((int levelIndex) {
     final levelName = levels[levelIndex].name;
     print('Активный этаж изменился на: $levelName');
@@ -1150,8 +1150,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:dgis_mobile_sdk/dgis.dart' as sdk;
 
-/// Простой виджет переключения этажей.
-/// Требует экземпляр sdk.Map (получите его из контроллера/контекста карты).
+// Простой виджет переключения этажей
+// Требует экземпляр sdk.Map (получите его из контроллера или контекста карты)
 class SimpleIndoorControlWidget extends StatefulWidget {
   final sdk.Map map;
 
@@ -1236,14 +1236,14 @@ class _SimpleIndoorControlWidgetState extends State<SimpleIndoorControlWidget> {
 ```dart
 import 'package:dgis_mobile_sdk_map/dgis.dart' as sdk;
 
-// Установка отмеченных этажей
+// Установить отмеченные этажи
 final Set<sdk.LevelId> markedLevels = {
   const sdk.LevelId('level_1'),
   const sdk.LevelId('level_3'),
 };
 _indoorControlModel.markedLevels = markedLevels;
 
-// Проверка, отмечен ли этаж
+// Проверить, отмечен ли этаж
 final bool isMarked = _indoorControlModel.isLevelMarked(1); // true для этажа с индексом 1
 ```
 
@@ -1302,7 +1302,7 @@ map?.removeSource(roadEventSource);
        "ДТП на левой полосе"
      );
 
-     // Обработка результата
+     // Обработать результат
      accidentOperation.value.then((result) {
        if (result.isEvent) {
          print("Событие ДТП успешно создано! ID: ${result.asEvent?.id}");
@@ -1325,7 +1325,7 @@ map?.removeSource(roadEventSource);
        "Камера контроля скорости"
      );
 
-     // Обработка результата
+     // Обработать результат
      cameraOperation.value.then((result) {
        if (result.isEvent) {
          print("Событие камеры успешно создано! ID: ${result.asEvent?.id}");
@@ -1348,7 +1348,7 @@ map?.removeSource(roadEventSource);
        "Дорога перекрыта для фестиваля"
      );
 
-     // Обработка результата
+     // Обработать результат
      restrictionOperation.value.then((result) {
        if (result.isEvent) {
          print("Событие перекрытия успешно создано! ID: ${result.asEvent?.id}");
@@ -1373,7 +1373,7 @@ map?.removeSource(roadEventSource);
        "Ремонт дорожного покрытия"
      );
 
-     // Обработка результата
+     // Обработать результат
      roadWorksOperation.value.then((result) {
        if (result.isEvent) {
          print("Событие дорожных работ успешно создано! ID: ${result.asEvent?.id}");
@@ -1396,7 +1396,7 @@ map?.removeSource(roadEventSource);
        "Осторожно, гололёд!"
      );
 
-     // Обработка результата
+     // Обработать результат
      commentOperation.value.then((result) {
        if (result.isEvent) {
          print("Комментарий успешно создан! ID: ${result.asEvent?.id}");
@@ -1413,7 +1413,7 @@ map?.removeSource(roadEventSource);
        latitude: sdk.Latitude(55.756000),
        longitude: sdk.Longitude(37.623000)
      );
-     final otherLanes = sdk.LaneEnumSet.of([sdk.Lane.center, sdk.Lane.right]); // затронуты правая и средняя полосы движения
+     final otherLanes = sdk.LaneEnumSet.of([sdk.Lane.center, sdk.Lane.right]); // затронуты средняя и правая полосы движения
 
      final otherOperation = roadEventManager.createOther(
        otherLocation,
@@ -1421,7 +1421,7 @@ map?.removeSource(roadEventSource);
        "Препятствие на дороге"
      );
 
-     // Обработка результата
+     // Обработать результат
      otherOperation.value.then((result) {
        if (result.isEvent) {
          print("Другое событие успешно создано! ID: ${result.asEvent?.id}");
@@ -1481,7 +1481,7 @@ mapWidgetController.getMapAsync((map) {
 
 * `enableGesture` — включение жестов;
 * `disableGesture` — отключение жестов;
-* `gestureEnabled` — проверка, включен или отключен жест.
+* `gestureEnabled` — проверка, включён или отключён жест.
 
 Для изменения настроек или получения информации о нескольких жестах за раз можно работать напрямую со свойством [enabledGestures](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GestureManager/enabledGestures.html).
 

@@ -35,7 +35,7 @@ let mapFactory: DGis.IMapFactory = try sdk.makeMapFactory(
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 В SDK 13.x настройки карты передаются через структуру [MapOptions](/ios/sdk/reference/13.6/struct#map-options).
 
@@ -163,7 +163,7 @@ let mapFactory: DGis.IMapFactory = try sdk.makeMapFactory(options: mapOptions)
     ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 Чтобы отобразить карту, вы можете использовать элементы UIKit или SwiftUI:
 
@@ -393,7 +393,7 @@ class MapViewController: UIViewController {
    ```
 
    </TabItem>
-   <TabItem value="sdk-13" label="Для версии 13.x">
+   <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
    ```swift
    var mapOptions = MapOptions.default
@@ -428,9 +428,9 @@ class MapViewController: UIViewController {
 self.objectManager = MapObjectManager(map: map)
 ```
 
-Для добавления объектов используются методы [addObject()](/ios/sdk/reference/stable/class#map-object-manager/with-generalization) и [addObjects()](/ios/sdk/reference/stable/class#map-object-manager/with-generalization). Для каждого динамического объекта можно указать поле `userData`, которое будет хранить произвольные данные, связанные с объектом. Настройки объектов можно менять после их создания.
+Для добавления объектов используются методы [addObject()](/ios/sdk/reference/stable/class#map-object-manager/add-object) и [addObjects()](/ios/sdk/reference/stable/class#map-object-manager/add-objects). Для каждого динамического объекта можно указать поле `userData`, которое будет хранить произвольные данные, связанные с объектом. Настройки объектов можно менять после их создания.
 
-Для удаления объектов используются методы [removeObject()](/ios/sdk/reference/stable/class#map-object-manager/with-generalization) и [removeObjects()](/ios/sdk/reference/stable/class#map-object-manager/with-generalization). Чтобы удалить все объекты, можно использовать метод [removeAll()](/ios/sdk/reference/stable/class#map-object-manager/with-generalization).
+Для удаления объектов используются методы [removeObject()](/ios/sdk/reference/stable/class#map-object-manager/remove-object) и [removeObjects()](/ios/sdk/reference/stable/class#map-object-manager/remove-objects). Чтобы удалить все объекты, можно использовать метод [removeAll()](/ios/sdk/reference/stable/class#map-object-manager/remove-all).
 
 :::note[Сохранение объектов на карте]
 
@@ -472,24 +472,24 @@ objectManager.addObject(object: marker)
 Чтобы изменить настройки уже созданного маркера, установите новые значения для параметров объекта `Marker`: cм. полный список доступных параметров в описании [Marker](/ios/sdk/reference/stable/class#marker).
 
 ```swift
-// Изменение позиции маркера
+// Изменить координаты маркера
 marker.position = GeoPointWithElevation(latitude: 59.93428, longitude: 30.33510)
 
-// Изменение иконки
+// Изменить иконку
 let uiImage = UIImage(systemName: "bubble.right.fill")!.withTintColor(.systemGreen)
 let newIcon = sdk.imageFactory.make(image: uiImage)
 marker.icon = newIcon
 
-// Изменение точки привязки иконки
+// Изменить точку привязки иконки
 marker.anchor = Anchor(x: 0.5, y: 0.5)
 
-// Изменение прозрачности иконки
+// Изменить прозрачность иконки
 marker.iconOpacity = Opacity(value: 1.0)
 
-// Изменение подписи маркера
+// Изменить подпись маркера
 marker.text = "Новый текст"
 
-// Изменения стиля подписи
+// Изменить стиль подписи
 marker.textStyle = TextStyle(
     fontSize: LogicalPixel(value: 8),
     color: Color(argb: 4294967295),
@@ -500,16 +500,16 @@ marker.textStyle = TextStyle(
     fontName: nil
 )
 
-// Изменение флага перемещаемости маркера
+// Изменить флаг перемещаемости маркера
 marker.isDraggable = true
 
-// Изменение целевой ширины маркера
+// Изменить целевую ширину маркера
 marker.iconWidth = LogicalPixel(value: 2.0)
 
-// Изменение угла поворота маркера на карте относительно направления на север
+// Изменить угол поворота маркера на карте относительно направления на север
 marker.iconMapDirection = MapDirection(value: 10)
 
-// Изменение флага анимации для появления маркера
+// Изменить флаг анимации для появления маркера
 marker.animatedAppearance = true
 ```
 
@@ -534,7 +534,7 @@ let options = PolylineOptions(
     color: DGis.Color.black
 )
 
-// Создание линии и добавление линии на карту
+// Создать линию и добавление линии на карту
 let polyline = try Polyline(options: options)
 objectManager.addObject(object: polyline)
 ```
@@ -542,23 +542,23 @@ objectManager.addObject(object: polyline)
 Чтобы изменить настройки созданной линии, установите новые значения для параметров объекта `Polyline`: см. полный список доступных параметров в описании [Polyline](/ios/sdk/reference/stable/class#polyline).
 
 ```swift
-// Изменение координат вершин линии
+// Изменить координаты вершин линии
 polyline.points = [
     GeoPoint(latitude: 54.7513, longitude: 36.6236),
     GeoPoint(latitude: 54.7405, longitude: 36.6235),
     GeoPoint(latitude: 54.7439, longitude: 36.6506)
 ]
 
-// Изменение толщины линии
+// Изменить толщину линии
 polyline.width = LogicalPixel(value: 3)
 
-// Изменение цвета линии
+// Изменить цвет линии
 polyline.color = Color(argb: 4294967295)
 
-// Стирание части линии
+// Стереть часть линии
 polyline.erasedPart = 0.8
 
-// Изменение параметров пунктирной линии
+// Изменить параметры пунктирной линии
 polyline.dashedPolylineOptions = DashedPolylineOptions(
     dashLength: LogicalPixel(value: 5),
     dashSpaceLength: LogicalPixel(value: 2)
@@ -582,7 +582,7 @@ let colors: [DGis.Color] = [
 // Индексы цветов для каждого сегмента линии
 let colorIndices = Data([0, 2])
 
-// Изменение параметров градиентной линии
+// Изменить параметры градиентной линии
 polyline.gradientPolylineOptions = GradientPolylineOptions(
     borderWidth: LogicalPixel(value: 10),       // Ширина границы линии
     secondBorderWidth: LogicalPixel(value: 5),  // Ширина второй границы линии
@@ -601,10 +601,10 @@ polyline.gradientPolylineOptions = GradientPolylineOptions(
 Координаты для многоугольника указываются в виде двумерного массива. Первый вложенный массив должен содержать координаты основных вершин многоугольника. Остальные вложенные массивы не обязательны и могут быть заданы для того, чтобы создать вырез внутри многоугольника (один дополнительный массив — один вырез в виде многоугольника).
 
 ```swift
-// Настройки многоугольника.
+// Настройки многоугольника
 let options = PolygonOptions(
     contours: [
-        // Вершины многоугольника.
+        // Вершины многоугольника
         [
             GeoPoint(latitude: 55.72014932919687, longitude: 37.562599182128906),
             GeoPoint(latitude: 55.72014932919687, longitude: 37.67555236816406),
@@ -612,7 +612,7 @@ let options = PolygonOptions(
             GeoPoint(latitude: 55.78004852149085, longitude: 37.562599182128906),
             GeoPoint(latitude: 55.72014932919687, longitude: 37.562599182128906)
         ],
-        // Координаты выреза внутри многоугольника.
+        // Координаты выреза внутри многоугольника
         [
             GeoPoint(latitude: 55.754167897761, longitude: 37.62422561645508),
             GeoPoint(latitude: 55.74450654680055, longitude: 37.61238098144531),
@@ -624,7 +624,7 @@ let options = PolygonOptions(
     strokeWidth: LogicalPixel(value: 2)
 )
 
-// Создание и добавление многоугольника.
+// Создать и добавить многоугольник
 let polygon = try Polygon(options: options)
 objectManager.addObject(object: polygon)
 ```
@@ -632,20 +632,20 @@ objectManager.addObject(object: polygon)
 Чтобы изменить настройки уже созданного многоугольника, установите новые значения для параметров объекта `Polygon`: cм. полный список доступных параметров в описании [Polygon](/ios/sdk/reference/stable/class#polygon).
 
 ```swift
-// Изменение вершин многоугольника
+// Изменить вершины многоугольника
 polygon.contours = [
     GeoPoint(latitude: 55.72014932919687, longitude: 37.562599182128906),
     GeoPoint(latitude: 55.72014932919687, longitude: 37.67555236816406),
     GeoPoint(latitude: 55.72014932919687, longitude: 37.562599182128906)
 ]
 
-// Изменение цвета заливки многоугольника
+// Изменить цвет заливки многоугольника
 polygon.color = Color(argb: 4294967295)
 
-// Изменение толщины границы многоугольника
+// Изменить толщину границы многоугольника
 polygon.strokeWidth = LogicalPixel(value: 2)
 
-// Изменение цвета границы многоугольника
+// Изменить цвет границы многоугольника
 polygon.strokeColor = Color(argb: 4294967295)
 ```
 
@@ -660,7 +660,7 @@ let options = CircleOptions(
     radius: Meter(value: 10)
 )
 
-// Создание и добавление окружности
+// Создать и добавить окружность
 let circle = try Circle(options: options)
 objectManager.addObject(object: circle)
 ```
@@ -671,16 +671,16 @@ objectManager.addObject(object: circle)
 // Изменение центра окружности
 circle.position = GeoPoint(latitude: 55.74460317215391, longitude: 37.63435363769531)
 
-// Изменение радиуса окружности
+// Изменить радиус окружности
 circle.radius = Meter(value: 1)
 
-// Изменение цвета заливки окружности
+// Изменить цвет заливки окружности
 circle.color = Color(argb: 4294967295)
 
-// Изменение толщины границы окружности
+// Изменить толщину границы окружности
 circle.strokeWidth = LogicalPixel(value: 2)
 
-// Изменение цвета границы окружности
+// Изменить цвет границы окружности
 circle.strokeColor = Color(argb: 4294967295)
 ```
 
@@ -743,7 +743,7 @@ circle.strokeColor = Color(argb: 4294967295)
 1. Создайте объект [ModelMapObject](/ios/sdk/reference/stable/class#model-map-object), указав нужные настройки в [ModelMapObjectOptions](/ios/sdk/reference/stable/struct#model-map-object-options), и передайте его в метод `addObject()` менеджера объектов:
 
     ```swift
-    // Настройки 3D-модели
+    // Настроить параметры 3D-модели
     let model = try ModelMapObject(
         options: ModelMapObjectOptions(
             position: GeoPointWithElevation(
@@ -758,32 +758,32 @@ circle.strokeColor = Color(argb: 4294967295)
         )
     )
 
-    // Создание и добавление 3D-модели на карту
+    // Создать и добавить 3D-модель на карту
     mapObjectManager.addObject(item: model)
     ```
 
 Чтобы изменить настройки уже добавленной модели, установите новые значения для параметров объекта `ModelMapObject`: cм. полный список доступных параметров в описании [ModelMapObject](/ios/sdk/reference/stable/class#model-map-object).
 
 ```swift
-// Изменение координат центра 3D-модели
+// Изменить координаты центра 3D-модели
 model.position = GeoPointWithElevation(latitude: 55.74460317215391, longitude: 37.63435363769531)
 
-// Изменение прозрачности 3D-модели
+// Изменить прозрачность 3D-модели
 model.opacity = Opacity(value: 0.5)
 
-// Изменение постоянного размера 3D-модели
+// Изменить постоянный размер 3D-модели
 model.size = ModelSize.logicalPixel(LogicalPixel(5))
 
-// Изменение коэффициента масштабирования 3D-модели
+// Изменить коэффициент масштабирования 3D-модели
 model.size = ModelSize.scale(ModelScale(value: 3))
 
-// Изменение угла поворота 3D-модели
+// Изменить угол поворота 3D-модели
 model.mapDirection = MapDirection(value: 35)
 ```
 
 ### Добавление нескольких объектов {#add-multiple-objects}
 
-Если на карту необходимо добавить коллекцию объектов, то добавление через метод [addObject](/ios/sdk/reference/stable/class#map-object-manager/with-generalization) в цикле по всей коллекции приведет к потере производительности. Для добавления коллекции объектов нужно сначала подготовить всю коллекцию и добавить её через метод [addObjects](/ios/sdk/reference/stable/class#map-object-manager/with-generalization):
+Если на карту необходимо добавить коллекцию объектов, то добавление через метод [addObject()](/ios/sdk/reference/stable/class#map-object-manager/add-object) в цикле по всей коллекции приведет к потере производительности. Для добавления коллекции объектов нужно сначала подготовить всю коллекцию и добавить её через метод [addObjects()](/ios/sdk/reference/stable/class#map-object-manager/add-objects):
 
 ```swift
 // Подготовить коллекцию объектов
@@ -801,7 +801,7 @@ mapObjectManager.addObjects(objects: markers)
 
 Кластеризация — это визуальная группировка близко расположенных друг к другу объектов (маркеров) в один кластер при уменьшении масштаба карты. Группировка происходит постепенно: чем меньше масштаб карты, тем меньше кластеров. Кластер отображается как маркер с цифрой, соответствующий количеству объектов в кластере.
 
-Чтобы добавить на карту маркеры в режиме кластеризации, создайте менеджер объектов ([MapObjectManager](/ios/sdk/reference/stable/class#map-object-manager)) с помощью метода [MapObjectManager.withClustering()](/ios/sdk/reference/stable/class#map-object-manager/with-generalization) и укажите следующие свойства:
+Чтобы добавить на карту маркеры в режиме кластеризации, создайте менеджер объектов ([MapObjectManager](/ios/sdk/reference/stable/class#map-object-manager)) с помощью метода [MapObjectManager.withClustering()](/ios/sdk/reference/stable/class#map-object-manager/with-clustering) и укажите следующие свойства:
 
 * Экземпляр карты (`map`).
 * Минимальное расстояние между маркерами в логических пикселях на уровнях масштабирования, при которых работает кластеризация (`logicalPixel`).
@@ -845,7 +845,7 @@ self.objectManager = MapObjectManager.withClustering(
     map: map,
     logicalPixel: LogicalPixel(80.0),
     maxZoom: Zoom(19.0),
-    minZoom: Zoom(8.0)
+    minZoom: Zoom(8.0),
     clusterRenderer: SimpleClusterRendererImpl(image: self.icon)
 )
 ```
@@ -982,7 +982,7 @@ self.objectManager = MapObjectManager.withGeneralization(
    let geometryObject = GeometryMapObjectBuilder()
        .setGeometry(geometry: PointGeometry(point: point))   // Геометрия в виде точки
        .setObjectAttribute(name: "db_sublayer", value: .string("my_object_layer"))
-       .createObject()   // Создание объекта
+       .createObject()   // Создать объект
    ```
 
 3. Чтобы объект отобразился на карте, добавьте его в источник данных:
@@ -1019,9 +1019,9 @@ self.objectManager = MapObjectManager.withGeneralization(
 
 ### Выделение объектов по нажатию на карту
 
-Для начала получим информацию об объектах, попадающих в область нажатия, с помощью метода [getRenderedObjects()](/ios/sdk/reference/stable/class#map/get-rendered-objects), как в примере [Получение объектов по экранным координатам](#получение-объектов-по-экранным-координатам)
+Получите информацию об объектах, попадающих в область нажатия, с помощью метода [getRenderedObjects()](/ios/sdk/reference/stable/class#map/get-rendered-objects), как в примере [Получение объектов по экранным координатам](#getting-objects-using-screen-coordinates).
 
-Выделение объектов происходит с помощью вызова метода [setHighlighted()](/ios/sdk/reference/stable/class#dgis-source/create-dgis-source), который получает на вход список идентификаторов справочника изменяемых объектов [DgisObjectId](/ios/sdk/reference/stable/struct#dgis-object-id). Внутри метода `getRenderedObjects()` мы можем получить все данные, необходимые для использования этого метода, как то источник данных объектов и их идентификаторы:
+Чтобы выделить объекты, вызовите метод [setHighlighted()](/ios/sdk/reference/stable/class#dgis-source/set-highlighted), который получает на вход список идентификаторов справочника изменяемых объектов [DgisObjectId](/ios/sdk/reference/stable/struct#dgis-object-id). Внутри метода `getRenderedObjects()` можно получить данные, необходимые для использования этого метода, например источник данных объектов и их идентификаторы:
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
@@ -1046,7 +1046,7 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
             let source = info.item.source as! DgisSource
             let id = (info.item.item as! DgisMapObject).id
 
-            // Выделить объект и входы в него.
+            // Выделить объект и входы в него
             let future = searchManager.searchByDirectoryObjectIds(objectIds: [id])
 
             self.getDirectoryObjectCancellable = future.sinkOnMainThread(
@@ -1073,7 +1073,7 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
@@ -1095,7 +1095,7 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
             let source = info.item.source as! DgisSource
             let id = (info.item.item as! DgisMapObject).id
 
-            // Выделить объект и входы в него.
+            // Выделить объект и входы в него
             let future = searchManager.searchByDirectoryObjectId(objectId: id)
 
             self.getDirectoryObjectCancellable = future.sinkOnMainThread(
@@ -1144,7 +1144,7 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
             let source = info.item.source as! DgisSource
             let id = (info.item.item as! DgisMapObject).id
 
-            // Выделить объект и входы в него.
+            // Выделить объект и входы в него
             let future = searchManager.searchByDirectoryObjectId(objectId: id)
 
             self.getDirectoryObjectCancellable = future.sinkOnMainThread(
@@ -1188,20 +1188,20 @@ private func tap(point: ScreenPoint, tapRadius: ScreenDistance) {
 Функция `move()` возвращает объект [Future](/ios/sdk/reference/stable/class#Future), который можно использовать, чтобы обработать событие завершения перелета.
 
 ```swift
-// Новая позиция камеры.
+// Новая позиция камеры
 let newCameraPosition = CameraPosition(
     point: GeoPoint(latitude: 55.752425, longitude: 37.613983),
     zoom: Zoom(value: 16)
 )
 
-// Запуск перелёта.
+// Запустить перелёт
 let future = map.camera.move(
     position: newCameraPosition,
     time: 0.4,
     animationType: .linear
 )
 
-// Получение события завершения перелета.
+// Получить событие завершения перелета
 let cancellable = future.sink { _ in
     print("Перелет камеры завершён.")
 } failure: { error in
@@ -1223,29 +1223,29 @@ let currentState = map.camera.state
 Чтобы подписаться на изменение состояния камеры, используйте `sinkOnStatefulChanges` для подписки на конкретную очередь. Для подписки на очереди `main` можно использовать `sinkOnStatefulChangesOnMainThread`.
 
 ```swift
-// Подписка.
+// Подписаться
 let connection = map.camera.sinkOnStatefulChangesOnMainThread(reason: .state) {
     [weak self] (state: CameraState) in
     print("Состояние камеры изменилось на \(state)")
 }
 
-// Отписка.
+// Отписаться
 connection.cancel()
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 Чтобы подписаться на изменение состояния камеры, используйте `sinkOnStatefulChanges` для подписки на конкретную очередь. Для подписки на очереди `main` можно использовать `sinkOnStatefulChangesOnMainThread`.
 
 ```swift
-// Подписка.
+// Подписаться
 let connection = map.camera.sinkOnStatefulChangesOnMainThread(reason: .state) {
     [weak self] (state: CameraState) in
     print("Состояние камеры изменилось на \(state)")
 }
 
-// Отписка.
+// Отписаться
 connection.cancel()
 ```
 
@@ -1255,12 +1255,12 @@ connection.cancel()
 Чтобы подписаться на изменение состояния камеры, используйте `stateChannel.sink`.
 
 ```swift
-// Подписка.
+// Подписаться
 let connection = map.camera.stateChannel.sink { state in
     print("Состояние камеры изменилось на \(state)")
 }
 
-// Отписка.
+// Отписаться
 connection.cancel()
 ```
 
@@ -1269,7 +1269,7 @@ connection.cancel()
 
 ### Получение позиции камеры
 
-Текущую позицию камеры можно получить, используя свойство `position` (см. структуру [CameraPosition](/ios/sdk/reference/stable/struct#camera-position)).
+Чтобы получить текущую позицию камеры, используйте свойство `position` (см. структуру [CameraPosition](/ios/sdk/reference/stable/struct#camera-position)).
 
 ```swift
 let currentPosition = map.camera.position
@@ -1285,29 +1285,29 @@ print("Поворот: \(currentPosition.bearing)")
 Чтобы подписаться на изменения позиции камеры (и угла наклона/поворота), используйте `sinkOnStatefulChanges` для подписки на конкретную очередь. Для подписки на очереди `main` можно использовать `sinkOnStatefulChangesOnMainThread`.
 
 ```swift
-// Подписка.
+// Подписаться
 let connection = map.camera.sinkOnStatefulChangesOnMainThread(reason: .position) {
     [weak self] (position: CameraPosition) in
-    print("Изменилась позиция камеры или угол наклона/поворота.")
+    print("Изменилась позиция камеры или угол наклона или поворота.")
 }
 
-// Отписка.
+// Отписаться
 connection.cancel()
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 Чтобы подписаться на изменения позиции камеры (и угла наклона/поворота), используйте `sinkOnStatefulChanges` для подписки на конкретную очередь. Для подписки на очереди `main` можно использовать `sinkOnStatefulChangesOnMainThread`.
 
 ```swift
-// Подписка.
+// Подписаться
 let connection = map.camera.sinkOnStatefulChangesOnMainThread(reason: .position) {
     [weak self] (position: CameraPosition) in
-    print("Изменилась позиция камеры или угол наклона/поворота.")
+    print("Изменилась позиция камеры или угол наклона или поворота.")
 }
 
-// Отписка.
+// Отписаться
 connection.cancel()
 ```
 
@@ -1317,12 +1317,12 @@ connection.cancel()
 Чтобы подписаться на изменения позиции камеры (и угла наклона/поворота), используйте `positionChannel.sink`.
 
 ```swift
-// Подписка.
+// Подписаться
 let connection = map.camera.positionChannel.sink { position in
-    print("Изменилась позиция камеры или угол наклона/поворота.")
+    print("Изменилась позиция камеры или угол наклона или поворота.")
 }
 
-// Отписка.
+// Отписаться
 connection.cancel()
 ```
 
@@ -1344,7 +1344,7 @@ let position = calcPosition(camera: map.camera, geometry: geometry)
 map.camera.move(position: position)
 ```
 
-Пример выше выдаст результат похожий на такой:
+Пример выше выдаст похожий результат:
 
 <img src="/img/mobile-sdk/calc_position_example_1_ios.png" height="500" align="center" />
 
@@ -1381,7 +1381,7 @@ map.camera.move(position: position)
 
 На изображении видно, что активная область не изменилась, но маркеры вписаны полностью. Такой подход может приводить к неожиданному поведению, так как позиция камеры задаёт геокоординату, которая должна быть в точке позиции камеры (красный кружок в центре экрана). Настройки `padding`, `positionPoint` и `size` влияют на положение данной точки.
 
-Если при вычислении позиции в метод будут переданы параметры, которые сместят точку позиции камеры, то использование результата приведёт к неожиданному поведению. Например, если вы задаёте ассиметричную активную область, то изображение может сильно смещаться.
+Если при вычислении позиции в метод будут переданы параметры, которые сместят точку позиции камеры, то использование результата приведёт к неожиданному поведению. Например, если вы задаёте асимметричную активную область, то изображение может сильно смещаться.
 
 Пример установки одной и той же позиции для разных отступов:
 
@@ -1402,7 +1402,7 @@ let cameraPositionPoint = CameraPositionPoint(x: 0.5, y: 0.5)
 map.camera.setPositionPoint(positionPoint: Constants.cameraPositionPoint)
 ```
 
-При изменении точки позиции камеры меняется область видимости карты и смещается точка наблюдения [CameraPosition.Point](/ios/sdk/reference/stable/struct#camera-position/var-point) — точка на местности в географических координатах, которая находится в точке позиции камеры. Угол наклона [CameraPosition.Tilt](/ios/sdk/reference/stable/struct#camera-position/var-tilt) и угол поворота камеры [CameraPosition.Bearing](/ios/sdk/reference/stable/struct#camera-position/var-bearing) не меняются:
+При изменении точки позиции камеры меняется область видимости карты и смещается точка наблюдения [CameraPosition.point](/ios/sdk/reference/stable/struct#camera-position/var-point) — точка на местности в географических координатах, которая находится в точке позиции камеры. Угол наклона [CameraPosition.tilt](/ios/sdk/reference/stable/struct#camera-position/var-tilt) и угол поворота камеры [CameraPosition.bearing](/ios/sdk/reference/stable/struct#camera-position/var-bearing) не меняются:
 
 <img src="/img/mobile-sdk/camera-position-point-before.png" height="500" align="center" /> <img src="/img/mobile-sdk/camera-position-point-after.png" height="500" align="center" />
 
@@ -1415,7 +1415,7 @@ let cameraViewPoint = CameraViewPoint(x: 0.5, y: 0.5)
 map.camera.setViewPoint(viewPoint: Constants.cameraViewPoint)
 ```
 
-При изменении точки обзора камеры меняется направление обзора относительно точки наблюдения. Точка наблюдения [CameraPosition.Point](/ios/sdk/reference/stable/struct#camera-position/var-point) не смещается, также не меняется угол наклона [CameraPosition.Tilt](/ios/sdk/reference/stable/struct#camera-position/var-tilt) и угол поворота камеры [CameraPosition.Bearing](/ios/sdk/reference/stable/struct#camera-position/var-bearing):
+При изменении точки обзора камеры меняется направление обзора относительно точки наблюдения. Точка наблюдения [CameraPosition.point](/ios/sdk/reference/stable/struct#camera-position/var-point) не смещается, также не меняется угол наклона [CameraPosition.tilt](/ios/sdk/reference/stable/struct#camera-position/var-tilt) и угол поворота камеры [CameraPosition.bearing](/ios/sdk/reference/stable/struct#camera-position/var-bearing):
 
 <Video src="/video/MSDK.ViewPoint.mp4" width="300px" />
 
@@ -1423,9 +1423,9 @@ map.camera.setViewPoint(viewPoint: Constants.cameraViewPoint)
 
 У камеры есть два свойства, которые описывают геометрию видимой области, но делают это по-разному. [visibleRect](/ios/sdk/reference/stable/class#base-camera/var-visible-rect) имеет тип [GeoRect](/ios/sdk/reference/stable/struct#geo-rect) и всегда является прямоугольником. [visibleArea](/ios/sdk/reference/stable/class#base-camera/var-visible-area) представляет собой произвольную геометрию. Проще всего увидеть на примере с разными углами наклона камеры относительно карты:
 
-* При наклоне 45° `visibleRect` и `visibleArea` не будут равны: `visibleRect`, в данном случае, будет больше, т.к. он должен быть прямоугольником и должен содержать в себе `visibleArea`
+* При наклоне 45° `visibleRect` и `visibleArea` не будут равны: `visibleRect`, в данном случае, будет больше, т.к. он должен быть прямоугольником и должен содержать в себе `visibleArea`.
 
-  Синим цветом изображена `visibleArea`, красным – `visibleRect`
+  Синим цветом изображена `visibleArea`, красным — `visibleRect`
 
   <img src="/img/mobile-sdk/tilt_45_ios.gif" height="300"  />
 
@@ -1438,7 +1438,7 @@ map.camera.setViewPoint(viewPoint: Constants.cameraViewPoint)
 С помощью свойства [visibleArea](/ios/sdk/reference/stable/class#base-camera/var-visible-area) мы можем получить область карты, которая попадает в камеру, в виде [Geometry](/ios/sdk/reference/stable/class#geometry). С помощью метода [intersects()](/ios/sdk/reference/stable/class#geometry/intersects) мы можем получить пересечение видимой области камеры с нужной нам геометрией:
 
 ```swift
-// Допустим, есть маркер и нужно узнать, попадает ли он в видимую область карты
+// Проверить, попадает ли маркер в видимую область карты
 // let marker: Marker
 let markerGeometry: Geometry = PointGeometry(point: marker.position)
 
@@ -1454,10 +1454,10 @@ let intersects: Bool = map.camera.visibleArea.intersects(geometry: markerGeometr
 Чтобы получить информацию о поэтажных планах здания, которое в данный момент отображается на карте, используйте свойство `focusedBuilding` класса [IndoorManager](/ios/sdk/reference/stable/class#indoor-manager) или подпишитесь на канал `focusedBuildingChannel`.
 
 ```swift
-// Получение информации о текущем здании с поэтажными планами
+// Получить информацию о текущем здании с поэтажными планами
 let currentBuilding = map.indoorManager.focusedBuilding
 
-// Подписка на изменения текущего здания
+// Подписаться на изменения текущего здания
 let connection = map.indoorManager.focusedBuildingChannel.sink { building in
     if let building = building {
         print("Отображается здание с ID: \(building.id)")
@@ -1468,7 +1468,7 @@ let connection = map.indoorManager.focusedBuildingChannel.sink { building in
     }
 }
 
-// Отписка от уведомлений
+// Отписаться от уведомлений
 connection.cancel()
 ```
 
@@ -1489,24 +1489,24 @@ map.indoorManager.setIndoorState(newState: .disabled)
 Чтобы переключаться между этажами, укажите индекс нужного этажа в свойстве `activeLevelIndex` объекта [IndoorBuilding](/ios/sdk/reference/stable/class#indoor-building):
 
 ```swift
-// Получение информации о текущем здании
+// Получить информацию о текущем здании
 let currentBuilding = map.indoorManager.focusedBuilding
 
 if let currentBuilding = currentBuilding {
-    // Получение информации о всех этажах
+    // Получить информацию о всех этажах
     let levels = currentBuilding.levels
     print("Доступные этажи:")
     for (index, levelInfo) in levels.enumerated() {
         print("Этаж \(index): \(levelInfo.name)")
     }
 
-    // Переключение на первый этаж (индекс 0)
+    // Переключиться на первый этаж (индекс 0)
     currentBuilding.activeLevelIndex = 0
 
-    // Переключение на последний этаж
+    // Переключиться на последний этаж
     currentBuilding.activeLevelIndex = UInt64(levels.count - 1)
 
-    // Подписка на изменения активного этажа
+    // Подписаться на изменения активного этажа
     let connection = currentBuilding.activeLevelIndexChannel.sink { levelIndex in
         let levelName = levels[Int(levelIndex)].name
         print("Активный этаж изменился на: \(levelName)")
@@ -1542,10 +1542,10 @@ class IndoorControlViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
 
-        // Создание модели управления этажами
+        // Создать модель управления этажами
         indoorControlModel = IndoorControlModel(map: map)
 
-        // Подписка на изменения списка этажей
+        // Подписаться на изменения списка этажей
         levelNamesConnection = indoorControlModel?.levelNamesChannel.sinkOnMainThread { [weak self] levelNames in
             guard let self = self else { return }
             if !levelNames.isEmpty {
@@ -1559,7 +1559,7 @@ class IndoorControlViewController: UIViewController {
             }
         }
 
-        // Подписка на изменения активного этажа
+        // Подписаться на изменения активного этажа
         activeLevelConnection = indoorControlModel?.activeLevelIndexChannel.sinkOnMainThread { [weak self] levelIndex in
             if let levelIndex = levelIndex {
                 Task { @MainActor in
@@ -1584,10 +1584,10 @@ class IndoorControlViewController: UIViewController {
     }
 
     private func updateLevelsUI(levelNames: [String]) {
-        // Удаление существующих кнопок
+        // Удалить существующие кнопки
         levelButtonsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
-        // Создание кнопок для каждого этажа
+        // Создать кнопки для каждого этажа
         for (index, levelName) in levelNames.enumerated() {
             let button = UIButton(type: .system)
             button.setTitle(levelName, for: .normal)
@@ -1606,12 +1606,12 @@ class IndoorControlViewController: UIViewController {
     }
 
     @objc private func levelButtonTapped(_ sender: UIButton) {
-        // Переключение на выбранный этаж
+        // Переключиться на выбранный этаж
         indoorControlModel?.activeLevelIndex = UInt64(sender.tag)
     }
 
     private func updateActiveLevelUI(activeLevelIndex: Int) {
-        // Обновление визуального состояния кнопок
+        // Обновить визуальное состояние кнопок
         for (index, button) in levelButtonsStackView.arrangedSubviews.enumerated() {
             if let button = button as? UIButton {
                 if index == activeLevelIndex {
@@ -1626,14 +1626,14 @@ class IndoorControlViewController: UIViewController {
     }
 
     private func hideLevelsUI() {
-        // Скрытие UI управления этажами
+        // Скрыть UI управления этажами
         levelButtonsStackView.isHidden = true
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        // Отписка от уведомлений
+        // Отписаться от уведомлений
         levelNamesConnection?.cancel()
         activeLevelConnection?.cancel()
     }
@@ -1645,20 +1645,20 @@ class IndoorControlViewController: UIViewController {
 Чтобы выделить определённый этаж (например, с важными объектами), используйте свойство `markedLevels` модели [IndoorControlModel](/ios/sdk/reference/stable/class#indoor-control-model):
 
 ```swift
-// Установка отмеченных этажей
+// Установить отмеченные этажи
 let markedLevels: Set<LevelId> = [
     LevelId(value: 70030076428115998),
     LevelId(value: 70030076428235234)
 ]
 indoorControlModel?.markedLevels = markedLevels
 
-// Проверка, отмечен ли этаж
+// Проверить, отмечен ли этаж
 let isMarked = indoorControlModel?.isLevelMarked(index: 1) ?? false // true для этажа с индексом 1
 ```
 
 ## Пробки на карте {#traffic}
 
-Чтобы отобразить слой пробок на карте, создайте источник данных [TrafficSource](/ios/sdk/reference/stable/class#traffic-source) и передайте его в метод карты [addSource()](/ios/sdk/reference/stable/class#map/get-rendered-objects).
+Чтобы отобразить слой пробок на карте, создайте источник данных [TrafficSource](/ios/sdk/reference/stable/class#traffic-source) и передайте его в метод карты [addSource()](/ios/sdk/reference/stable/class#map/add-source).
 
 ```swift
 let trafficSource = TrafficSource(context: sdk.context)
@@ -1671,14 +1671,14 @@ map.addSource(source: trafficSource)
 
 ### Отображение событий на карте
 
-Чтобы показать слой дорожных событий на карте, создайте источник данных [RoadEventSource](/ios/sdk/reference/stable/class#road-event-source) и добавьте его на карту с помощью метода карты [addSource()](/ios/sdk/reference/stable/class#map/get-rendered-objects):
+Чтобы показать слой дорожных событий на карте, создайте источник данных [RoadEventSource](/ios/sdk/reference/stable/class#road-event-source) и добавьте его на карту с помощью метода карты [addSource()](/ios/sdk/reference/stable/class#map/add-source):
 
 ```swift
 let roadEventSource = RoadEventSource(context: sdk.context)
 map.addSource(source: roadEventSource)
 ```
 
-Чтобы удалить созданный источник данных и все связанные с ним объекты, вызовите метод карты [removeSource()](/ios/sdk/reference/stable/class#map/get-rendered-objects):
+Чтобы удалить созданный источник данных и все связанные с ним объекты, вызовите метод карты [removeSource()](/ios/sdk/reference/stable/class#map/remove-source):
 
 ```swift
 map.removeSource(source: roadEventSource)
@@ -1698,7 +1698,7 @@ map.removeSource(source: roadEventSource)
     ```
 
     </TabItem>
-    <TabItem value="sdk-13" label="Для версии 13.x">
+    <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
     ```swift
     self.roadEventManager = RoadEventManager.instance(context: sdk.context)
@@ -1716,7 +1716,7 @@ map.removeSource(source: roadEventSource)
 
 2. Добавьте событие одного из типов ниже (каждому типу соответствует своя иконка на карте):
 
-   * ДТП. Вызовите метод [createAccident()](/ios/sdk/reference/stable/class#road-event-manager/create-road-restriction) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/ios/sdk/reference/stable/enumeration#lane)) и текстовое описание события:
+   * ДТП. Вызовите метод [createAccident()](/ios/sdk/reference/stable/class#road-event-manager/create-accident) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/ios/sdk/reference/stable/enumeration#lane)) и текстовое описание события:
 
      ```swift
      let accidentLocation = GeoPoint(latitude: 55.751244, longitude: 37.618423)
@@ -1728,7 +1728,7 @@ map.removeSource(source: roadEventSource)
          description: "ДТП на левой полосе"
      )
 
-     // Обработка результата
+     // Обработать результат
      let accidentCancellable = accidentFuture.sink(
          receiveValue: { result in
              switch result {
@@ -1744,7 +1744,7 @@ map.removeSource(source: roadEventSource)
      )
      ```
 
-   * Камера ГИБДД. Вызовите метод [createCamera()](/ios/sdk/reference/stable/class#road-event-manager/create-road-restriction) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)) и текстовое описание:
+   * Камера ГИБДД. Вызовите метод [createCamera()](/ios/sdk/reference/stable/class#road-event-manager/create-camera) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)) и текстовое описание:
 
      ```swift
      let cameraLocation = GeoPoint(latitude: 55.752220, longitude: 37.615560)
@@ -1754,7 +1754,7 @@ map.removeSource(source: roadEventSource)
          description: "Камера контроля скорости"
      )
 
-     // Обработка результата
+     // Обработать результат
      let cameraCancellable = cameraFuture.sink(
          receiveValue: { result in
              switch result {
@@ -1780,7 +1780,7 @@ map.removeSource(source: roadEventSource)
          description: "Дорога перекрыта для фестиваля"
      )
 
-     // Обработка результата
+     // Обработать результат
      let restrictionCancellable = restrictionFuture.sink(
          receiveValue: { result in
              switch result {
@@ -1796,7 +1796,7 @@ map.removeSource(source: roadEventSource)
      )
      ```
 
-   * Дорожные работы. Вызовите метод [createRoadWorks()](/ios/sdk/reference/stable/class#road-event-manager/create-road-restriction) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/ios/sdk/reference/stable/enumeration#lane)) и текстовое описание события:
+   * Дорожные работы. Вызовите метод [createRoadWorks()](/ios/sdk/reference/stable/class#road-event-manager/create-road-works) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/ios/sdk/reference/stable/enumeration#lane)) и текстовое описание события:
 
      ```swift
      let roadWorksLocation = GeoPoint(latitude: 55.754800, longitude: 37.621000)
@@ -1808,7 +1808,7 @@ map.removeSource(source: roadEventSource)
          description: "Ремонт дорожного покрытия"
      )
 
-     // Обработка результата
+     // Обработать результат
      let roadWorksCancellable = roadWorksFuture.sink(
          receiveValue: { result in
              switch result {
@@ -1824,7 +1824,7 @@ map.removeSource(source: roadEventSource)
      )
      ```
 
-   * Комментарий. Вызовите метод [createComment()](/ios/sdk/reference/stable/class#road-event-manager/create-road-restriction) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)) и текстовое описание:
+   * Комментарий. Вызовите метод [createComment()](/ios/sdk/reference/stable/class#road-event-manager/create-comment) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)) и текстовое описание:
 
      ```swift
      let commentLocation = GeoPoint(latitude: 55.755000, longitude: 37.622000)
@@ -1834,7 +1834,7 @@ map.removeSource(source: roadEventSource)
          description: "Осторожно, гололёд!"
      )
 
-     // Обработка результата
+     // Обработать результат
      let commentCancellable = commentFuture.sink(
          receiveValue: { result in
              switch result {
@@ -1850,11 +1850,11 @@ map.removeSource(source: roadEventSource)
      )
      ```
 
-   * Другое событие. Вызовите метод [createOther()](/ios/sdk/reference/stable/class#road-event-manager/create-road-restriction) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/ios/sdk/reference/stable/enumeration#lane)) и текстовое описание события:
+   * Другое событие. Вызовите метод [createOther()](/ios/sdk/reference/stable/class#road-event-manager/create-other) и укажите координаты события ([GeoPoint](/ios/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/ios/sdk/reference/stable/enumeration#lane)) и текстовое описание события:
 
      ```swift
      let otherLocation = GeoPoint(latitude: 55.756000, longitude: 37.623000)
-     let otherLanes: LaneOptionSet = [.center, .right] // затронуты правая и средняя полосы движения
+     let otherLanes: LaneOptionSet = [.center, .right] // затронуты средняя и правая полосы движения
 
      let otherFuture = roadEventManager.createOther(
          location: otherLocation,
@@ -1862,7 +1862,7 @@ map.removeSource(source: roadEventSource)
          description: "Препятствие на дороге"
      )
 
-     // Обработка результата
+     // Обработать результат
      let otherCancellable = otherFuture.sink(
          receiveValue: { result in
              switch result {
@@ -1878,7 +1878,7 @@ map.removeSource(source: roadEventSource)
      )
      ```
 
-## Получение объектов по экранным координатам {#get-rendered-objects}
+## Получение объектов по экранным координатам {#getting-objects-using-screen-coordinates}
 
 Информацию об объектах на карте можно получить, используя пиксельные координаты. Для этого нужно вызвать метод карты [getRenderedObjects()](/ios/sdk/reference/stable/class#map/get-rendered-objects), указав координаты в пикселях и радиус в экранных миллиметрах (не более 30). Метод вернет отложенный результат, содержащий информацию обо всех найденных объектах в указанном радиусе на видимой области карты (массив [RenderedObjectInfo](/ios/sdk/reference/stable/struct#rendered-object-info)).
 
@@ -1893,9 +1893,9 @@ private func tap(location: CGPoint) {
     let cancel = map.getRenderedObjects(centerPoint: point, radius: radius).sink(
         receiveValue: {
             infos in
-            // Первый объект в массиве — самый близкий к координатам.
+            // Первый объект в массиве — самый близкий к координатам
             guard let info = infos.first else { return }
-            // Обработка результата в главной очереди.
+            // Обработать результат в главной очереди
             DispatchQueue.main.async {
                 [weak self] in
                 self?.handle(selectedObject: info)
@@ -1905,7 +1905,7 @@ private func tap(location: CGPoint) {
             print("Ошибка получения информации об объектах: \(error)")
         }
     )
-    // Сохраняем результат вызова, так как его удаление отменяет обработку.
+    // Сохранить результат вызова, так как его удаление отменяет обработку
     self.getRenderedObjectsCancellable = cancel
 }
 ```
@@ -1915,7 +1915,7 @@ private func tap(location: CGPoint) {
 
 Чтобы установить функцию обратного вызова для тапа по экрану:
 
-* **UIKit**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) с помощью методов [addObjectTappedCallback](/ios/sdk/reference/stable/interface#imap-uiview/add-object-tapped-callback) и [addObjectLongPressCallback](/ios/sdk/reference/stable/interface#imap-uiview/add-object-long-press-callback). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
+* **UIKit**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/stable/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/stable/interface#imap-uiview) с помощью методов [addObjectTappedCallback()](/ios/sdk/reference/stable/interface#imap-uiview/add-object-tapped-callback) и [addObjectLongPressCallback()](/ios/sdk/reference/stable/interface#imap-uiview/add-object-long-press-callback). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/stable/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
 
     ```swift
     ...
@@ -1943,11 +1943,11 @@ private func tap(location: CGPoint) {
     ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 Чтобы установить функцию обратного вызова для тапа по экрану:
 
-* **UIKit**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/13.6/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/13.6/interface#imap-uiview) с помощью методов [addObjectTappedCallback](/ios/sdk/reference/13.6/interface#imap-uiview) и [addObjectLongPressCallback](/ios/sdk/reference/13.6/interface#imap-uiview). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/13.6/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
+* **UIKit**: установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/13.6/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/13.6/interface#imap-uiview) с помощью методов [addObjectTappedCallback()](/ios/sdk/reference/13.6/interface#imap-uiview/add-object-tapped-callback) и [addObjectLongPressCallback()](/ios/sdk/reference/13.6/interface#imap-uiview/add-object-long-press-callback). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/13.6/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
 
     ```swift
     ...
@@ -1977,7 +1977,7 @@ private func tap(location: CGPoint) {
 </TabItem>
 <TabItem value="sdk-12" label="Для версии SDK 12.x">
 
-Установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/12.10/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/12.10/interface#imap-uiview) с помощью методов [addObjectTappedCallback](/ios/sdk/reference/12.10/interface#imap-uiview/add-object-tapped-callback) и [addObjectLongPressCallback](/ios/sdk/reference/12.10/interface#imap-uiview/add-object-long-press-callback). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/12.10/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
+Установите функцию обратного вызова [MapObjectTappedCallback](/ios/sdk/reference/12.10/class#map-object-tapped-callback) для тапа или лонгтапа в [IMapUIView](/ios/sdk/reference/12.10/interface#imap-uiview) с помощью методов [addObjectTappedCallback()](/ios/sdk/reference/12.10/interface#imap-uiview/add-object-tapped-callback) и [addObjectLongPressCallback()](/ios/sdk/reference/12.10/interface#imap-uiview/add-object-long-press-callback). В эту функцию обратного вызова придет [RenderedObjectInfo](/ios/sdk/reference/12.10/struct#rendered-object-info) для объекта, который находится ближе всего к точке касания.
 
 ```swift
 ...
@@ -2004,7 +2004,7 @@ self.mapView.addObjectLongPressCallback(callback: mapObjectTappedOrLongPress)
 Пример такой кастомизации распознавателя можно посмотреть [здесь](https://github.com/2gis/mobile-sdk-ios-demo/blob/master/app/Views/CustomGestures/CustomMapGestureView.swift).
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 Для кастомизации распознавателя жестов карты задайте реализацию протокола [IMapGestureUIView](/ios/sdk/reference/13.6/interface#imap-gesture-uiview) в [IMapUIView](/ios/sdk/reference/13.6/interface#imap-uiview) и [MapView](/ios/sdk/reference/13.6/struct#map-view) или реализацию [IMapGestureUIViewFactory](/ios/sdk/reference/13.6/interface#imap-gesture-uiview-factory) в [MapOptions](/ios/sdk/reference/13.6/struct#map-options).
 
@@ -2087,7 +2087,7 @@ self.mapView.addObjectLongPressCallback(callback: mapObjectTappedOrLongPress)
     Для отображения полученного View необходимо добавить его методом `add()` объекта [MarkerOverlayView](/ios/sdk/reference/stable/interface#imarker-overlay-uiview), полученного из фабрики [IMapFactory.markerOverlayView](/ios/sdk/reference/stable/interface#imap-factory).
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 * **UIKit**:
 

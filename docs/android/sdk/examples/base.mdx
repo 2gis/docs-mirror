@@ -5,35 +5,64 @@ sidebar: androidsdk
 
 ## Отложенные результаты {#deferred-results}
 
-Некоторые методы SDK (например те, которые обращаются к удалённому серверу) возвращают отложенные результаты ([Future](/android/sdk/reference/stable/interface#ru.dgis.sdk.future)). Для работы с ними нужно создать обработчик получения данных и обработчик ошибок.
+Некоторые методы SDK (например, методы, которые обращаются к удалённому серверу) возвращают отложенные результаты ([Future](/android/sdk/reference/stable/interface#ru.dgis.sdk.future)). Для работы с ними создайте обработчик получения данных и обработчик ошибок.
 
 Пример получения объекта из справочника:
 
+<Tabs>
+<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
 ```kotlin
-// Создание объекта для поиска по справочнику
+// Создать объект для поиска по справочнику
 val searchManager = SearchManager.createOnlineManager(sdkContext)
 
-// Получение объекта из справочника по идентификатору
-val future = searchManager.searchByDirectoryObjectId(objectId)
+// Получить объект из справочника по идентификатору
+val future = searchManager.searchByDirectoryObjectIds(listOf(objectId))
 
-// Обработка результата
-future.onResult { directoryObject ->
+// Обработать результат
+future.onResult { directoryObjects ->
+    val directoryObject = directoryObjects.firstOrNull() ?: return@onResult
     Log.d("APP", "Название объекта: ${directoryObject.title}")
 }
 
-// Обработка ошибки
+// Обработать ошибку
 future.onError { error ->
     Log.d("APP", "Ошибка получения информации об объекте.")
 }
 ```
 
-По умолчанию обработка результатов происходит в UI-потоке. Чтобы это изменить, для `onResult` и `onError` можно указать [Executor](https://developer.android.com/reference/java/util/concurrent/Executor.html).
+</TabItem>
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
-Подробнее про работу со справочником можно посмотреть в разделе [Справочник объектов](/android/sdk/examples/directory).
+```kotlin
+// Создать объект для поиска по справочнику
+val searchManager = SearchManager.createOnlineManager(sdkContext)
+
+// Получить объект из справочника по идентификатору
+val future = searchManager.searchByDirectoryObjectId(objectId)
+
+// Обработать результат
+future.onResult { directoryObject ->
+    directoryObject ?: return@onResult
+    Log.d("APP", "Название объекта: ${directoryObject.title}")
+}
+
+// Обработать ошибку
+future.onError { error ->
+    Log.d("APP", "Ошибка получения информации об объекте.")
+}
+```
+
+</TabItem>
+</Tabs>
+
+По умолчанию результаты обрабатываются в UI-потоке. Чтобы это изменить, для функций `onResult` и `onError` укажите [Executor](https://developer.android.com/reference/java/util/concurrent/Executor.html).
+
+Подробнее о работе со справочником объектов см. в разделе [Справочник](/android/sdk/examples/directory).
 
 ## Потоки значений {#data-channels}
 
-Некоторые объекты SDK предоставляют потоки значений, которые можно обработать, используя механизм каналов: на поток можно подписаться, указав функцию-обработчик данных, и отписаться, когда обработка данных больше не требуется. Для работы с потоками значений используется интерфейс [Channel](/android/sdk/reference/stable/interface#ru.dgis.sdk.channel).
+Некоторые объекты SDK предоставляют потоки значений, которые можно обработать. На поток значений можно подписаться, указав функцию-обработчик данных. От потока можно отписаться, когда обработка данных больше не требуется. Для работы с потоками значений используется интерфейс [Channel](/android/sdk/reference/stable/interface#ru.dgis.sdk.channel).
 
 Пример подписки на изменение видимой области карты (поток новых прямоугольных областей):
 
@@ -41,9 +70,9 @@ future.onError { error ->
 <TabItem value="sdk-13" label="Для версии SDK 13.0.0 и выше" default>
 
 ```kotlin
-// Подписываемся и обрабатываем результаты в главной очереди.
-// Значения будут присылаться при любом изменении видимой области до момента отписки.
-// Важно сохранить соединение с каналом, иначе подписка будет уничтожена.
+// Подписаться и обрабатывать результаты в главной очереди
+// Значения будут присылаться при любом изменении видимой области до момента отписки
+// Важно сохранить соединение с каналом, иначе подписка будет уничтожена
 val connection = map.camera
     .statefulChanges(CameraChangeReason.STATE) { map.camera.visibleRect }
     .connect { geoRect ->
@@ -55,12 +84,12 @@ val connection = map.camera
 <TabItem value="sdk-12" label="Для версии SDK 12.x">
 
 ```kotlin
-// Выбираем канал (прямоугольники видимой области карты)
+// Выбрать канал (прямоугольники видимой области карты)
 val visibleRectChannel = map.camera.visibleRectChannel
 
-// Подписываемся и обрабатываем результаты в главной очереди.
-// Значения будут присылаться при любом изменении видимой области до момента отписки.
-// Важно сохранить соединение с каналом, иначе подписка будет уничтожена.
+// Подписаться и обрабатывать результаты в главной очереди
+// Значения будут присылаться при любом изменении видимой области до момента отписки
+// Важно сохранить соединение с каналом, иначе подписка будет уничтожена
 val connection = visibleRectChannel.connect { geoRect ->
     Log.d("APP", "${geoRect.southWestPoint.latitude.value}")
 }
@@ -69,10 +98,8 @@ val connection = visibleRectChannel.connect { geoRect ->
 </TabItem>
 </Tabs>
 
-После окончания работы с каналом важно отменить подписку, чтобы избежать утечки памяти. Для этого нужно вызвать метод `close()`:
+Чтобы избежать утечки памяти, после окончания работы с каналом отпишитесь от него:
 
 ```kotlin
 connection.close()
 ```
-
-

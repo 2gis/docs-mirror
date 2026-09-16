@@ -5,7 +5,7 @@ sidebar: fluttersdk
 
 ## Отложенные результаты {#deferred-results}
 
-Некоторые методы SDK (например те, которые обращаются к удалённому серверу) возвращают отложенные результаты [Future](https://api.flutter.dev/flutter/dart-async/Future-class.html) или [CancelableOperation](https://pub.dev/documentation/async/latest/async/CancelableOperation-class.html) в тех случаях, когда может быть важно отменить запрос. Для работы с ними нужно создать обработчик получения данных и обработчик ошибок.
+Некоторые методы SDK (например, методы, которые обращаются к удалённому серверу) возвращают отложенные результаты в виде [Future](https://api.flutter.dev/flutter/dart-async/Future-class.html) или [CancelableOperation](https://pub.dev/documentation/async/latest/async/CancelableOperation-class.html) в случаях, когда может быть важно отменить запрос. Для работы с ними создайте обработчик получения данных и обработчик ошибок.
 
 Пример получения объекта из справочника:
 
@@ -24,7 +24,7 @@ final object = objects.isEmpty ? null : objects.first;
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```dart
 import 'package:dgis_mobile_sdk/dgis.dart' as sdk;
@@ -33,17 +33,17 @@ import 'package:dgis_mobile_sdk/dgis.dart' as sdk;
 searchManager = sdk.SearchManager.createOnlineManager(context);
 
 // Получить объект из справочника по идентификатору
-searchManager.searchByDirectoryObjectId(objectId)
+searchManager.searchByDirectoryObjectId(objectId);
 ```
 
 </TabItem>
 </Tabs>
 
-Подробнее про работу со справочником можно посмотреть в разделе [Справочник объектов](/flutter/sdk/examples/directory).
+Подробнее о работе со справочником объектов см. в разделе [Справочник](/flutter/sdk/examples/directory).
 
 ## Потоки значений {#data-channels}
 
-Некоторые объекты SDK предоставляют потоки значений, которые можно обработать, используя механизм каналов: на поток можно подписаться, указав функцию-обработчик данных, и отписаться, когда обработка данных больше не требуется. Для работы с потоками значений используется интерфейс `Channel`.
+Некоторые объекты SDK предоставляют потоки значений, которые можно обработать. На поток значений можно подписаться, указав функцию-обработчик данных. От потока можно отписаться, когда обработка данных больше не требуется. Для работы с потоками значений используется интерфейс `Channel`.
 
 Подписка на `Channel` возвращает [StreamSubscription](https://api.flutter.dev/flutter/dart-async/StreamSubscription-class.html).
 
@@ -87,7 +87,7 @@ class SampleState extends State<Widget> {
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```dart
 import 'dart:async';
@@ -103,7 +103,7 @@ class SampleState extends State<Widget> {
     super.initState();
      mapWidgetController.getMapAsync((map) {
         visibleRectSubscription = map.camera.visibleRectChannel.listen((geoRect) {
-          debugPrint("Current rect: ${geoRect}")
+          debugPrint("Current rect: ${geoRect}");
         });
       });
   }

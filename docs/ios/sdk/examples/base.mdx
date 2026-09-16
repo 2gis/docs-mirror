@@ -5,7 +5,7 @@ sidebar: iossdk
 
 ## Отложенные результаты {#deferred-results}
 
-Некоторые методы SDK (например те, которые обращаются к удаленному серверу) возвращают отложенные результаты (объект [Future](/ios/sdk/reference/stable/class#future)). Для работы с ними нужно создать обработчик получения данных и обработчик ошибок. Обработать результат в главной очереди можно с помощью [DispatchQueue](https://developer.apple.com/documentation/dispatch/dispatchqueue).
+Некоторые методы SDK (например, методы, которые обращаются к удалённому серверу) возвращают отложенные результаты ([Future](/ios/sdk/reference/stable/class#future)). Для работы с ними создайте обработчик получения данных и обработчик ошибок. Обработать результат в главной очереди можно с помощью [DispatchQueue](https://developer.apple.com/documentation/dispatch/dispatchqueue).
 
 Пример получения объекта из справочника:
 
@@ -13,14 +13,14 @@ sidebar: iossdk
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
 ```swift
-// Создание объекта для поиска по справочнику.
+// Создать объект для поиска по справочнику
 let searchManager = SearchManager.createOnlineManager(context: sdk.context)
 
-// Получение объекта из справочника по идентификатору.
+// Получить объект из справочника по идентификатору
 let future = searchManager.searchByDirectoryObjectIds(objectIds: [object.id])
 
-// Обработка результата поиска в главной очереди.
-// Сохранение результата вызова, так как его удаление отменяет обработку.
+// Обработать результат поиска в главной очереди
+// Сохранить результат вызова, так как его удаление отменяет обработку
 self.searchDirectoryObjectCancellable = future.sink(
 	receiveValue: {
 		[weak self] directoryObjects in
@@ -34,21 +34,21 @@ self.searchDirectoryObjectCancellable = future.sink(
 			self.handle(error)
 		}
 	}
-	)
+)
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
-// Создание объекта для поиска по справочнику.
+// Создать объект для поиска по справочнику
 let searchManager = SearchManager.createOnlineManager(context: sdk.context)
 
-// Получение объекта из справочника по идентификатору.
+// Получить объект из справочника по идентификатору
 let future = searchManager.searchByDirectoryObjectId(objectId: object.id)
 
-// Обработка результата поиска в главной очереди.
-// Сохранение результата вызова, так как его удаление отменяет обработку.
+// Обработать результат поиска в главной очереди
+// Сохранить результат вызова, так как его удаление отменяет обработку
 self.searchDirectoryObjectCancellable = future.sink(
 	receiveValue: {
 		[weak self] directoryObject in
@@ -68,7 +68,7 @@ self.searchDirectoryObjectCancellable = future.sink(
 </TabItem>
 </Tabs>
 
-Для упрощения работы можно создать расширение:
+Для упрощения работы с отложенными результатами вы можете создать расширение:
 
 ```swift
 extension DGis.Future {
@@ -110,14 +110,14 @@ self.searchDirectoryObjectCancellable = future.sinkOnMainThread(
 
 :::note[Обновление в версии 13.x]
 
-В версии SDK 13.0.0 и выше в рамках перехода на Swift 6 обычный `Future.sink` был удалён. Теперь для получения отложенных результатов можно использовать `Future.sink(on queue: DispatchQueue, ...)` и `Future.sinkOnMainThread`.
+В версии SDK 13.0.0 и выше в рамках перехода на Swift 6 обычный `Future.sink` был удалён. Для получения отложенных результатов используйте `Future.sink(on queue: DispatchQueue, ...)` и `Future.sinkOnMainThread`.
 
 :::
 
-Можно также использовать [Combine](https://developer.apple.com/documentation/combine):
+Также вы можете использовать [Combine](https://developer.apple.com/documentation/combine):
 
 ```swift
-// Создание Combine.Future из DGis.Future.
+// Создать Combine.Future из DGis.Future
 extension DGis.Future {
 	func asCombineFuture() -> Combine.Future<Value, Error> {
 		Combine.Future { [self] promise in
@@ -135,10 +135,10 @@ extension DGis.Future {
 	}
 }
 
-// Создание Combine.Future.
+// Создать Combine.Future
 let combineFuture = future.asCombineFuture()
 
-// Обработка результата поиска в главной очереди.
+// Обработать результат поиска в главной очереди
 combineFuture.receive(on: DispatchQueue.main).sink {
 	[weak self] completion in
 	switch completion {
@@ -153,19 +153,21 @@ combineFuture.receive(on: DispatchQueue.main).sink {
 }.store(in: &self.subscriptions)
 ```
 
+Подробнее о работе со справочником объектов см. в разделе [Справочник](/ios/sdk/examples/directory).
+
 ## Потоки значений {#data-channels}
 
-Некоторые объекты SDK предоставляют потоки значений, которые можно обработать, используя механизм каналов: на поток можно подписаться, указав функцию-обработчик данных, и отписаться, когда обработка данных больше не требуется. Для работы с потоками значений используется класс [Channel](/ios/sdk/reference/stable/class#channel).
+Некоторые объекты SDK предоставляют потоки значений, которые можно обработать. На поток значений можно подписаться, указав функцию-обработчик данных. От потока можно отписаться, когда обработка данных больше не требуется. Для работы с потоками значений используется класс [Channel](/ios/sdk/reference/stable/class#channel).
 
 Пример подписки на изменение видимой области карты (поток новых прямоугольных областей):
 
 ```swift
-// Выбрать канал (прямоугольники видимой области карты).
+// Выбрать канал (прямоугольники видимой области карты)
 let visibleRectChannel = map.camera.visibleRectChannel
 
-// Подписаться и обрабатывать результаты в главной очереди.
-// Значения будут присылаться при любом изменении видимой области до момента отписки.
-// Важно сохранить Cancellable, иначе подписка будет уничтожена.
+// Подписаться и обрабатывать результаты в главной очереди
+// Значения будут присылаться при любом изменении видимой области до момента отписки
+// Важно сохранить Cancellable, иначе подписка будет уничтожена
 self.cancellable = visibleRectChannel.sink { [weak self] visibleRect in
 	DispatchQueue.main.async {
 		self?.handle(visibleRect)
@@ -173,13 +175,13 @@ self.cancellable = visibleRectChannel.sink { [weak self] visibleRect in
 }
 ```
 
-Чтобы отменить подписку, нужно вызвать метод `cancel()`:
+Чтобы избежать утечки памяти, после окончания работы с каналом отпишитесь от него:
 
 ```swift
 self.cancellable.cancel()
 ```
 
-Для упрощения работы можно создать расширение:
+Для упрощения работы с потоками значений вы можете создать расширение:
 
 ```swift
 extension Channel {
@@ -203,6 +205,6 @@ self.cancellable = visibleRectChannel.sinkOnMainThread { [weak self] visibleRect
 
 :::note[Обновление в версии 13.x]
 
-В версии SDK 13.0.0 и выше в рамках перехода на Swift 6 обычный `Channel.sink` был удалён. Теперь для получения отложенных результатов можно использовать `Channel.sink(on queue: DispatchQueue, ...)` и `Channel.sinkOnMainThread`.
+В версии SDK 13.0.0 и выше в рамках перехода на Swift 6 обычный `Channel.sink` был удалён. Для подписки на потоки значений используйте `Channel.sink(on queue: DispatchQueue, ...)` и `Channel.sinkOnMainThread`.
 
 :::

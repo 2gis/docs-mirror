@@ -10,8 +10,8 @@ sidebar: iossdk
 * парковки;
 * остановки общественного транспорта и станции метро;
 * дороги (улицы, перекрёстки, проезды);
-* населённые пункты разного размера (страны, города, регионы, деревни, микрорайоны и т.д.);
-* различные площадные объекты (парки, пляжи и т.д.).
+* населённые пункты разного размера (страны, города, регионы, деревни, микрорайоны и т. д.);
+* различные площадные объекты (парки, пляжи и т. д.).
 
 Полный список доступных типов объектов см. в описании класса [ObjectType](/ios/sdk/reference/stable/enumeration#object-type).
 
@@ -45,7 +45,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
 
 ## Формирование поискового запроса {#create-search-query}
 
-Чтобы отправить поисковый запрос, создайте объект [SearchQuery](/ios/sdk/reference/stable/class#search-query) с помощью [SearchQueryBuilder](/ios/sdk/reference/stable/class#search-query-builder) и передайте его в метод [search()](/ios/sdk/reference/stable/class#search-manager/create-offline-manager).
+Чтобы отправить поисковый запрос, создайте объект [SearchQuery](/ios/sdk/reference/stable/class#search-query) с помощью [SearchQueryBuilder](/ios/sdk/reference/stable/class#search-query-builder) и передайте его в метод [search()](/ios/sdk/reference/stable/class#search-manager/search).
 
 Поисковый запрос должен состоять из трёх логических компонентов:
 
@@ -58,67 +58,62 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
   * По идентификаторам рубрик с помощью метода [setRubricIds()](/ios/sdk/reference/stable/class#search-query-builder/set-rubric-ids). Этот способ полезен для создания выборки объектов определённого типа.
   * По идентификатору:
 
-    * Организации с помощью метода [setOrgId()](/ios/sdk/reference/stable/class#search-query-builder/set-org-id). Если у компании несколько филиалов, в ответе будут перечислены все точки.
+    * Организации с помощью метода [setOrgId()](/ios/sdk/reference/stable/class#search-query-builder/set-org-id). Если у организации несколько филиалов, в ответе будут перечислены все точки.
     * Зданий с помощью метода [setBuildingIds()](/ios/sdk/reference/stable/class#search-query-builder/set-building-ids).
     * Любых объектов с помощью методов поискового движка [searchByIds()](/ios/sdk/reference/stable/class#search-manager/search-by-ids) и [searchByDirectoryObjectIds()](/ios/sdk/reference/stable/class#search-manager/search-by-directory-object-ids).
 
 * Геоограничение поиска (где нужно искать?). Вы можете ограничить зону поиска с помощью одного из методов ниже:
 
-  * Поиск внутри полигона: задайте область поиска с помощью метода [setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объекта [PolygonGeometry](/ios/sdk/reference/stable/class#polygon-geometry).
-
-  * Поиск в прямоугольной области интереса: задайте координаты с помощью метода [setAreaOfInterest()](/ios/sdk/reference/stable/class#search-query-builder/set-area-of-interest). Этот метод задаёт приоритетную зону поиска, но не ограничивает поиск строго: если внутри области интереса результаты не найдены, поиск продолжится за пределами области.
-
-  * Поиск в радиусе вокруг точки: задайте центр поиска с помощью метода [setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объекта [PointGeometry](/ios/sdk/reference/stable/class#point-geometry), а радиус — с помощью метода [setRadius()](/ios/sdk/reference/stable/class#search-query-builder/set-radius).
-
-  * Произвольный запрос: если запрос для поиска объекта сформирован с помощью метода [setQueryText()](/ios/sdk/reference/stable/class#search-query-builder/set-query-text), вы можете в этом же тексте указать и геоограничение (`цветы у Бауманской`).
+   * Поиск внутри полигона: задайте область поиска с помощью метода [setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объекта [PolygonGeometry](/ios/sdk/reference/stable/class#polygon-geometry).
+   * Поиск в прямоугольной области интереса: задайте координаты с помощью метода [setAreaOfInterest()](/ios/sdk/reference/stable/class#search-query-builder/set-area-of-interest). Этот метод задаёт приоритетную зону поиска, но не ограничивает поиск строго: если внутри области интереса результаты не найдены, поиск продолжится за пределами области.
+   * Поиск в радиусе вокруг точки: задайте центр поиска с помощью метода [setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объекта [PointGeometry](/ios/sdk/reference/stable/class#point-geometry), а радиус — с помощью метода [setRadius()](/ios/sdk/reference/stable/class#search-query-builder/set-radius).
+   * Произвольный запрос: если запрос для поиска объекта сформирован с помощью метода [setQueryText()](/ios/sdk/reference/stable/class#search-query-builder/set-query-text), вы можете в этом же тексте указать и геоограничение (`цветы у Бауманской`).
 
 * (Необязательный компонент) Дополнительные ограничения результатов поиска с помощью одного или нескольких методов ниже:
 
-  * Поиск объектов только определённого типа: перечислите интересующие вас типы объектов с помощью метода [setAllowedResultTypes()](/ios/sdk/reference/stable/class#search-query-builder/set-allowed-result-types) (например, только здания).
-  * Фильтрация результатов: задайте критерий фильтрации с помощью метода [setDirectoryFilter()](/ios/sdk/reference/stable/class#search-query-builder/set-directory-filter) (например, по времени работы).
-  * Сортировка результатов: задайте критерий сортировки с помощью метода [setSortingType()](/ios/sdk/reference/stable/class#search-query-builder/set-sorting-type) (например, по рейтингу).
-  * Количество результатов на странице: задайте ограничение с помощью метода [setPageSize()](/ios/sdk/reference/stable/class#search-query-builder/set-page-size).
-  * Номер страницы поисковой выдачи: по умолчанию возвращается первая страница. Чтобы получить следующие страницы, используйте метод [fetchNextPage()](/ios/sdk/reference/stable/class#page/fetch-next-page).
-  * Локаль для поискового запроса: задайте язык и регион с помощью метода [setLocale()](/ios/sdk/reference/stable/class#search-query-builder/set-locale).
+   * Поиск объектов определённого типа: перечислите типы объектов с помощью метода [setAllowedResultTypes()](/ios/sdk/reference/stable/class#search-query-builder/set-allowed-result-types) (например, только здания).
+   * Фильтрация результатов: задайте критерий фильтрации с помощью метода [setDirectoryFilter()](/ios/sdk/reference/stable/class#search-query-builder/set-directory-filter) (например, по времени работы).
+   * Сортировка результатов: задайте критерий сортировки с помощью метода [setSortingType()](/ios/sdk/reference/stable/class#search-query-builder/set-sorting-type) (например, по рейтингу).
+   * Количество результатов на странице: задайте ограничение с помощью метода [setPageSize()](/ios/sdk/reference/stable/class#search-query-builder/set-page-size).
+   * Номер страницы поисковой выдачи: по умолчанию возвращается первая страница. Чтобы получить следующие страницы, используйте метод [fetchNextPage()](/ios/sdk/reference/stable/class#page/fetch-next-page).
+   * Локаль для поискового запроса: задайте язык и регион с помощью метода [setLocale()](/ios/sdk/reference/stable/class#search-query-builder/set-locale).
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 * Запрос для поиска объекта (что нужно искать?). Вы можете сформулировать запрос с помощью одного из методов ниже:
 
-  * Из текстовой строки с помощью метода [fromQueryText()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text). Вы можете сформулировать текстовый запрос для поиска конкретного объекта (`храм Василия Блаженного`) или для получения списка множества объектов по критерию (`магазины музыкальных инструментов`).
-  * По идентификаторам рубрик с помощью метода [fromRubricIds()](/ios/sdk/reference/13.6/class#search-query-builder/from-rubric-ids) или в сочетании с текстовой строкой с помощью метода [fromQueryTextAndRubricIds()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text-and-rubric-ids). Этот способ полезен для создания выборки объектов определённого типа.
-  * По идентификатору:
+   * Из текстовой строки с помощью метода [fromQueryText()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text). Вы можете сформулировать текстовый запрос для поиска конкретного объекта (`храм Василия Блаженного`) или для получения списка множества объектов по критерию (`магазины музыкальных инструментов`).
+   * По идентификаторам рубрик с помощью метода [fromRubricIds()](/ios/sdk/reference/13.6/class#search-query-builder/from-rubric-ids) или в сочетании с текстовой строкой с помощью метода [fromQueryTextAndRubricIds()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text-and-rubric-ids). Этот способ полезен для создания выборки объектов определённого типа.
+   * По идентификатору:
 
-    * Организации с помощью метода [fromOrgId()](/ios/sdk/reference/13.6/class#search-query-builder/from-org-id). Если у компании несколько филиалов, в ответе будут перечислены все точки.
-    * Здания с помощью метода [fromBuildingId()](/ios/sdk/reference/13.6/class#search-query-builder/from-building-id).
-    * Любого объекта с помощью метода поискового движка [searchById()](/ios/sdk/reference/13.6/class#search-manager/search-by-id).
+      * Организации с помощью метода [fromOrgId()](/ios/sdk/reference/13.6/class#search-query-builder/from-org-id). Если у организации несколько филиалов, в ответе будут перечислены все точки.
+      * Здания с помощью метода [fromBuildingId()](/ios/sdk/reference/13.6/class#search-query-builder/from-building-id).
+      * Любого объекта с помощью метода поискового движка [searchById()](/ios/sdk/reference/13.6/class#search-manager/search-by-id).
 
 * Геоограничение поиска (где нужно искать?). Вы можете ограничить зону поиска с помощью одного из методов ниже:
 
-  * Поиск внутри полигона: задайте координаты с помощью метода [setSpatialRestriction()](/ios/sdk/reference/13.6/class#search-query-builder/set-spatial-restriction).
+   * Поиск внутри полигона: задайте координаты с помощью метода [setSpatialRestriction()](/ios/sdk/reference/13.6/class#search-query-builder/set-spatial-restriction).
+   * Поиск в прямоугольной области интереса: задайте координаты с помощью метода [setAreaOfInterest()](/ios/sdk/reference/13.6/class#search-query-builder/set-area-of-interest). Этот метод задаёт приоритетную зону поиска, но не ограничивает поиск строго: если внутри области интереса результаты не найдены, поиск продолжится за пределами области.
+   * Поиск в радиусе вокруг точки: задайте центр поиска с помощью метода [setGeoPoint()](/ios/sdk/reference/13.6/class#search-query-builder/set-geo-point) или [fromGeoPoint()](/ios/sdk/reference/13.6/class#search-query-builder/from-geo-point) и, если необходимо, радиус поиска с помощью метода [setRadius()](/ios/sdk/reference/13.6/class#search-query-builder/set-radius).
 
-  * Поиск в прямоугольной области интереса: задайте координаты с помощью метода [setAreaOfInterest()](/ios/sdk/reference/13.6/class#search-query-builder/set-area-of-interest). Этот метод задаёт приоритетную зону поиска, но не ограничивает поиск строго: если внутри области интереса результаты не найдены, поиск продолжится за пределами области.
+      Метод [fromGeoPoint()](/ios/sdk/reference/13.6/class#search-query-builder/from-geo-point) работает только в режиме поиска онлайн.
 
-  * Поиск в радиусе вокруг точки: задайте центр поиска с помощью метода [setGeoPoint()](/ios/sdk/reference/13.6/class#search-query-builder/set-geo-point) или [fromGeoPoint()](/ios/sdk/reference/13.6/class#search-query-builder/from-geo-point) и, если необходимо, радиус поиска с помощью метода [setRadius()](/ios/sdk/reference/13.6/class#search-query-builder/set-radius).
-
-    Метод [fromGeoPoint()](/ios/sdk/reference/13.6/class#search-query-builder/from-geo-point) работает только в режиме поиска онлайн.
-
-  * Произвольный запрос: если запрос для поиска объекта сформирован с помощью метода [fromQueryText()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text), вы можете в этом же тексте указать и геоограничение (`цветы у Бауманской`).
+   * Произвольный запрос: если запрос для поиска объекта сформирован с помощью метода [fromQueryText()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text), вы можете в этом же тексте указать и геоограничение (`цветы у Бауманской`).
 
 * (Необязательный компонент) Дополнительные ограничения результатов поиска с помощью одного или нескольких методов ниже:
 
-  * Поиск объектов только определённого типа: перечислите интересующие вас типы объектов с помощью метода [setAllowedResultTypes()](/ios/sdk/reference/13.6/class#search-query-builder/set-allowed-result-types) (например, только здания).
-  * Фильтрация результатов: задайте критерий фильтрации с помощью метода [setDirectoryFilter()](/ios/sdk/reference/13.6/class#search-query-builder/set-directory-filter) (например, по времени работы).
-  * Сортировка результатов: задайте критерий сортировки с помощью метода [setSortingType()](/ios/sdk/reference/13.6/class#search-query-builder/set-sorting-type) (например, по рейтингу).
-  * Количество результатов на странице: задайте ограничение с помощью метода [setPageSize()](/ios/sdk/reference/13.6/class#search-query-builder/set-page-size).
-  * Номер страницы поисковой выдачи: по умолчанию возвращается первая страница. Чтобы получить следующие страницы, используйте метод [fetchNextPage()](/ios/sdk/reference/13.6/class#page/fetch-next-page).
-  * Локаль для поискового запроса: задайте язык и регион с помощью метода [setLocale()](/ios/sdk/reference/13.6/class#search-query-builder/set-locale).
+   * Поиск объектов определённого типа: перечислите типы объектов с помощью метода [setAllowedResultTypes()](/ios/sdk/reference/13.6/class#search-query-builder/set-allowed-result-types) (например, только здания).
+   * Фильтрация результатов: задайте критерий фильтрации с помощью метода [setDirectoryFilter()](/ios/sdk/reference/13.6/class#search-query-builder/set-directory-filter) (например, по времени работы).
+   * Сортировка результатов: задайте критерий сортировки с помощью метода [setSortingType()](/ios/sdk/reference/13.6/class#search-query-builder/set-sorting-type) (например, по рейтингу).
+   * Количество результатов на странице: задайте ограничение с помощью метода [setPageSize()](/ios/sdk/reference/13.6/class#search-query-builder/set-page-size).
+   * Номер страницы поисковой выдачи: по умолчанию возвращается первая страница. Чтобы получить следующие страницы, используйте метод [fetchNextPage()](/ios/sdk/reference/13.6/class#page/fetch-next-page).
+   * Локаль для поискового запроса: задайте язык и регион с помощью метода [setLocale()](/ios/sdk/reference/13.6/class#search-query-builder/set-locale).
 
 </TabItem>
 </Tabs>
 
-### Примеры
+### Примеры {#examples}
 
 * Найти рестораны итальянской кухни в Пресненском районе Москвы, которые открыты сейчас, с сортировкой по рейтингу:
 
@@ -141,7 +136,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
   ```
 
   </TabItem>
-  <TabItem value="sdk-13" label="Для версии 13.x">
+  <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
   ```swift
   // Создать фильтр по времени работы
@@ -176,7 +171,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
   ```
 
   </TabItem>
-  <TabItem value="sdk-13" label="Для версии 13.x">
+  <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
   ```swift
   let searchQuery = SearchQueryBuilder
@@ -211,7 +206,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
   ```
 
   </TabItem>
-  <TabItem value="sdk-13" label="Для версии 13.x">
+  <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
   ```swift
   // Создать область поиска в виде полигона
@@ -249,7 +244,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
   ```
 
   </TabItem>
-  <TabItem value="sdk-13" label="Для версии 13.x">
+  <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
   ```swift
   // Создать прямоугольную область интереса по координатам двух углов
@@ -281,7 +276,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
   ```
 
   </TabItem>
-  <TabItem value="sdk-13" label="Для версии 13.x">
+  <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
   ```swift
   let searchQuery = SearchQueryBuilder
@@ -308,7 +303,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
   ```
 
   </TabItem>
-  <TabItem value="sdk-13" label="Для версии 13.x">
+  <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
   ```swift
   let id = 4504136498310300
@@ -337,7 +332,7 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
     ```
 
     </TabItem>
-    <TabItem value="sdk-13" label="Для версии 13.x">
+    <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
     ```swift
     let id = 70000001035164789
@@ -373,47 +368,47 @@ let searchManager = SearchManager.createOnlineManager(context: sdk.context)
 
 * Адрес в текстовом запросе:
 
-  <Tabs>
-  <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+   <Tabs>
+   <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
-  Используйте метод [setQueryText()](/ios/sdk/reference/stable/class#search-query-builder/set-query-text).
+   Используйте метод [setQueryText()](/ios/sdk/reference/stable/class#search-query-builder/set-query-text).
 
-  </TabItem>
-  <TabItem value="sdk-13" label="Для версии 13.x">
+   </TabItem>
+   <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
-  Используйте метод [fromQueryText()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text).
+   Используйте метод [fromQueryText()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text).
 
-  </TabItem>
-  </Tabs>
+   </TabItem>
+   </Tabs>
 
-  Для более точных результатов укажите в тексте город (посёлок, деревню), где выполняется поиск. Название небольшого населённого пункта (например, деревни) рекомендуется указывать вместе с названием области и другими объединениями, к которым он относится (например, сельским или городским поселением).
+   Для более точных результатов укажите в тексте город (посёлок, деревню), где выполняется поиск. Название небольшого населённого пункта (например, деревни) рекомендуется указывать вместе с названием области и другими объединениями, к которым он относится (например, сельским или городским поселением).
 
 * (Рекомендуется) Тип объекта, координаты которого нужно получить, с помощью метода [setAllowedResultTypes()](/ios/sdk/reference/stable/class#search-query-builder/set-allowed-result-types).
 
-Например, чтобы получить координаты здания по адресу «Москва, ул. Тверская 19а»:
+   Например, чтобы получить координаты здания по адресу «Москва, ул. Тверская 19а»:
 
-<Tabs>
-<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+      <Tabs>
+      <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
-```swift
-let searchQuery = SearchQueryBuilder()
-    .setQueryText(queryText: "Москва, ул. Тверская 19а")
-    .setAllowedResultTypes(allowedResultTypes: [.building])
-    .build()
-```
+      ```swift
+      let searchQuery = SearchQueryBuilder()
+         .setQueryText(queryText: "Москва, ул. Тверская 19а")
+         .setAllowedResultTypes(allowedResultTypes: [.building])
+         .build()
+      ```
 
-</TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+      </TabItem>
+      <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
-```swift
-let searchQuery = SearchQueryBuilder
-    .fromQueryText(queryText: "Москва, ул. Тверская 19а")
-    .setAllowedResultTypes(allowedResultTypes: [.building])
-    .build()
-```
+      ```swift
+      let searchQuery = SearchQueryBuilder
+         .fromQueryText(queryText: "Москва, ул. Тверская 19а")
+         .setAllowedResultTypes(allowedResultTypes: [.building])
+         .build()
+      ```
 
-</TabItem>
-</Tabs>
+   </TabItem>
+   </Tabs>
 
 В [результате поиска](#get-search-results) вы получите объект справочника [DirectoryObject](/ios/sdk/reference/stable/class#directory-object). Координаты объекта будут представлены в поле `markerPosition` в виде объекта [GeoPointWithElevation](/ios/sdk/reference/stable/struct#geo-point-with-elevation). Пример:
 
@@ -430,25 +425,14 @@ markerPosition:
 
 #### Обратное геокодирование {#reverse-geocoding}
 
-Чтобы получить адрес объекта по его координатам, сформируйте поисковый запрос, указав координаты объекта:
-
-<Tabs>
-<TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
-
-Используйте метод [setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объект [PointGeometry](/ios/sdk/reference/stable/class#point-geometry).
-
-</TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
-
-Используйте метод [fromGeoPoint()](/ios/sdk/reference/stable/class#search-query-builder/from-geo-point).
-
-</TabItem>
-</Tabs>
+Чтобы получить адрес объекта по его координатам, сформируйте поисковый запрос, указав координаты объекта.
 
 Например, найти адрес объекта по координатам `55.7659, 37.602827`:
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
+
+Используйте метод [setRestrictionGeometry()](/ios/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объект [PointGeometry](/ios/sdk/reference/stable/class#point-geometry):
 
 ```swift
 let searchQuery = SearchQueryBuilder()
@@ -457,7 +441,9 @@ let searchQuery = SearchQueryBuilder()
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
+
+Используйте метод [fromGeoPoint()](/ios/sdk/reference/13.6/class#search-query-builder/from-geo-point):
 
 ```swift
 let searchQuery = SearchQueryBuilder
@@ -495,7 +481,7 @@ address:
 
 ### Изменение параметров поиска {#modify-search-params}
 
-Вы можете изменять или дополнять параметры уже созданного поискового запроса. Для этого создайте новый объект [SearchQuery](/ios/sdk/reference/stable/class#search-query), укажите существующий запрос с помощью метода [fromQuery()](/ios/sdk/reference/stable/class#search-query-builder/from-query) и укажите параметры, которые нужно дополнительно применить. Например, изменить тип сортировки результатов при поиске парковок:
+Чтобы изменить или дополнить параметры созданного поискового запроса, создайте новый объект [SearchQuery](/ios/sdk/reference/stable/class#search-query), укажите существующий запрос с помощью метода [fromQuery()](/ios/sdk/reference/stable/class#search-query-builder/from-query) и укажите параметры, которые нужно дополнительно применить. Например, изменить тип сортировки результатов при поиске парковок:
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
@@ -517,7 +503,7 @@ let searchQueryUpdated = SearchQueryBuilder
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 // Создать изначальный запрос
@@ -542,7 +528,7 @@ let searchQueryUpdated = SearchQueryBuilder
 
 ## Получение результатов поиска {#get-search-results}
 
-Вызов метода [search()](/ios/sdk/reference/stable/class#search-manager) возвращает отложенный результат [SearchResult](/ios/sdk/reference/stable/class#search-result), содержащий список найденных объектов ([DirectoryObject](/ios/sdk/reference/stable/class#directory-object)), разделенный на страницы:
+Вызов метода [search()](/ios/sdk/reference/stable/class#search-manager) возвращает отложенный результат [SearchResult](/ios/sdk/reference/stable/class#search-result), содержащий список найденных объектов ([DirectoryObject](/ios/sdk/reference/stable/class#directory-object)), разделённый на страницы:
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
@@ -558,7 +544,7 @@ searchManager.search(query: searchQuery).sinkOnMainThread { searchResult in
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 searchManager.search(query: searchQuery).sinkOnMainThread { searchResult in
@@ -598,7 +584,7 @@ firstPage?.fetchNextPage().sinkOnMainThread { nextPage in
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 firstPage?.fetchNextPage().sinkOnMainThread { nextPage in
@@ -667,7 +653,7 @@ func displaySearchResultMarkers(map: Map, searchResult: SearchResult, sdk: DGis.
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 func displaySearchResultMarkers(map: Map, searchResult: SearchResult, sdk: DGis.Container) {
@@ -765,22 +751,22 @@ func displaySearchResultMarkers(map: Map, searchResult: SearchResult, sdk: DGis.
 
   * Координаты для размещения маркера на карте (`markerPosition`).
   * Полный адрес объекта (`address`). Некоторые компоненты адреса доступны только по запросу: см. описание объекта [Address](/ios/sdk/reference/stable/struct#address).
-  * (Данные по запросу) Информация об этаже здания, на котором расположен объект (`levelId` и `buildingLevels`). Актуально для компаний, которые расположены на определённом этаже многоэтажного здания.
+  * (Данные по запросу) Информация об этаже здания, на котором расположен объект (`levelId` и `buildingLevels`). Актуально для организаций, которые расположены на определённом этаже многоэтажного здания.
   * (Данные по запросу) Информация о входах в объект (`entrances`) с координатами и другими данными. Актуально как для компаний и зданий, так и для других объектов с физически обозначенными входами (например, парков).
   * (Данные по запросу) Дополнительная информация для уточнения адреса (`titleAddition`). Например, номер подъезда или номер квартиры.
 
 * Время работы:
 
   * Смещение локального времени объекта от UTC в виде временной метки (`timeZoneOffset`). Например, `03:00:00` для часового пояса UTC+3.
-  * Время работы (`openingHours`) в виде списка временных промежутков или флага круглосуточной работы. Актуально для компаний.
+  * Время работы (`openingHours`) в виде списка временных промежутков или флага круглосуточной работы. Актуально для организаций.
   * Расписание работы и текущий статус (`workStatus`). Актуально для организаций.
 
-    В зависимости от версии SDKнаполнение `workStatus` может отличаться:
+    В зависимости от версии SDK наполнение `workStatus` может отличаться:
 
     <Tabs>
     <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
 
-    ```dart
+    ```swift
     workStatus: WorkStatus(
       openStatus: .opened(Opened(timeUntilClose: nil)),
       openStatusHint: "Открыто до 23:00",
@@ -790,9 +776,9 @@ func displaySearchResultMarkers(map: Map, searchResult: SearchResult, sdk: DGis.
     ```
 
     </TabItem>
-    <TabItem value="sdk-13" label="Для версии 13.x">
+    <TabItem value="sdk-13" label="Для версии SDK 13.x">
 
-    ```dart
+    ```swift
     workStatus: WorkStatus(isOpen: true, description: "Открыто до 23:00"),
     ```
 
@@ -831,7 +817,7 @@ group: [
 ]
 ```
 
-#### Примеры
+#### Примеры {#object-data-examples}
 
 Ниже представлены примеры [DirectoryObject](/ios/sdk/reference/stable/class#directory-object) разных типов объектов справочника.
 
@@ -1211,7 +1197,7 @@ group: [
 
 ## Поисковые подсказки {#search-suggestions}
 
-Вы можете формировать подсказки для пользователей при текстовом поиске объектов. Для этого создайте объект [SuggestQuery](/ios/sdk/reference/stable/class#suggest-query) с помощью [SuggestQueryBuilder](/ios/sdk/reference/stable/class#suggest-query-builder) и передайте его в метод [suggest()](/ios/sdk/reference/stable/class#search-manager/create-offline-manager):
+Вы можете формировать подсказки для пользователей при текстовом поиске объектов. Для этого создайте объект [SuggestQuery](/ios/sdk/reference/stable/class#suggest-query) с помощью [SuggestQueryBuilder](/ios/sdk/reference/stable/class#suggest-query-builder) и передайте его в метод [suggest()](/ios/sdk/reference/stable/class#search-manager/suggest):
 
 <Tabs>
 <TabItem value="sdk-14" label="Для версии SDK 14.0.0 и выше" default>
@@ -1227,7 +1213,7 @@ searchManager.suggest(query: query).sink { suggestResult in
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 let query = SuggestQueryBuilder.fromQueryText(queryText: "пицц").setLimit(limit: 10).build()
@@ -1247,7 +1233,7 @@ searchManager.suggest(query: query).sink { suggestResult in
 Когда пользователь выбирает одну из предложенных подсказок, вы можете настроить реакцию на это событие с помощью обработчика [SuggestHandler](/ios/sdk/reference/stable/enumeration#suggest-handler) одного из следующих типов:
 
 * [SuggestObjectHandler](/ios/sdk/reference/stable/class#suggest-object-handler) — возвращает объект справочника [DirectoryObject](/ios/sdk/reference/stable/class#directory-object).
-* [PerformSearchHandler](/ios/sdk/reference/stable/class#perform-search-handler) — возвращает объект поискового запроса [SearchQuery](/ios/sdk/reference/stable/class#search-query). Вы можете использовать этот объект для дальнейшего поиска: передайте его в метод [SearchManager.search()](/ios/sdk/reference/stable/class#search-manager/create-offline-manager) или создайте на его основе новый [SearchQuery](/ios/sdk/reference/stable/class#search-query) с дополнительными параметрами с помощью метода [fromQuery()](/ios/sdk/reference/stable/class#search-query-builder/from-query) (подробнее см. в разделе [Изменение параметров поиска](#modify-search-params)).
+* [PerformSearchHandler](/ios/sdk/reference/stable/class#perform-search-handler) — возвращает объект поискового запроса [SearchQuery](/ios/sdk/reference/stable/class#search-query). Вы можете использовать этот объект для дальнейшего поиска: передайте его в метод [SearchManager.search()](/ios/sdk/reference/stable/class#search-manager/search) или создайте на его основе новый [SearchQuery](/ios/sdk/reference/stable/class#search-query) с дополнительными параметрами с помощью метода [fromQuery()](/ios/sdk/reference/stable/class#search-query-builder/from-query) (подробнее см. в разделе [Изменение параметров поиска](#modify-search-params)).
 * [IncompleteTextHandler](/ios/sdk/reference/stable/class#incomplete-text-handler) — возвращает автоматически дополненный текст подсказки, который можно использовать для дальнейшего формирования поискового запроса с помощью метода [setQueryText()](/ios/sdk/reference/stable/class#search-query-builder/set-query-text) в SDK 14.0.0 и выше или [fromQueryText()](/ios/sdk/reference/13.6/class#search-query-builder/from-query-text) в SDK 13.x.
 
 Пример функции для применения всех типов обработчика:
@@ -1276,7 +1262,7 @@ func apply(suggest: Suggest) {
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 func apply(suggest: Suggest) {
@@ -1390,7 +1376,7 @@ searchHistory.items(page: page).sinkOnMainThread { result in
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 // Создать объект SearchHistory
@@ -1448,13 +1434,13 @@ searchHistory.items(page: page).sink { result in
 
 Чтобы убрать отдельные элементы из истории поиска:
 
-* Чтобы убрать один элемент, используйте метод `removeItem()` объекта [SearchHistory](/ios/sdk/reference/stable/class#search-history) и передайте ему нужный объект [SearchHistoryItem](/ios/sdk/reference/stable/enumeration#search-history-item). Подробнее о наполнении `SearchHistoryItem` см. в инструкции [Добавить элементы в историю поиска](#add-elements-to-history).
+* Чтобы убрать один элемент, используйте метод `removeItem()` объекта [SearchHistory](/ios/sdk/reference/stable/class#search-history) и передайте ему нужный объект [SearchHistoryItem](/ios/sdk/reference/stable/enumeration#search-history-item). Подробнее о наполнении `SearchHistoryItem` см. в инструкции [Добавление элементов в историю поиска](#add-elements-to-history).
 
   ```swift
   searchHistory.removeItem(item: searchHistoryItem)
   ```
 
-* Чтобы убрать несколько элементов, используйте метод `removeItems()` объекта [SearchHistory](/ios/sdk/reference/stable/class#search-history) и передайте ему список нужных объектов [SearchHistoryItem](/ios/sdk/reference/stable/enumeration#search-history-item). Подробнее о наполнении `SearchHistoryItem` см. в инструкции [Добавить элементы в историю](#add-elements-to-history).
+* Чтобы убрать несколько элементов, используйте метод `removeItems()` объекта [SearchHistory](/ios/sdk/reference/stable/class#search-history) и передайте ему список нужных объектов [SearchHistoryItem](/ios/sdk/reference/stable/enumeration#search-history-item). Подробнее о наполнении `SearchHistoryItem` см. в инструкции [Добавление элементов в историю поиска](#add-elements-to-history).
 
   ```swift
   searchHistory.removeItems(items: searchHistoryItemsList)
@@ -1489,7 +1475,7 @@ searchHistory.onHistoryChanged.sinkOnMainThread { changeType in
 ```
 
 </TabItem>
-<TabItem value="sdk-13" label="Для версии 13.x">
+<TabItem value="sdk-13" label="Для версии SDK 13.x">
 
 ```swift
 let searchHistory = SearchHistory.instance(context: context)
@@ -1544,11 +1530,11 @@ searchHistory.onHistoryChanged.sink { changeType in
 
 ```swift
 func getMarkerPosition(directoryObject: DirectoryObject) -> GeoPoint? {
-	guard let entranceId = directoryObject.id?.entranceId,
-		  let info = directoryObject.entrances.first(where: { $0.id.entranceId == entranceId }),
-		  let entrancePoint = info.geometry?.entrancePoints.first else {
-		return directoryObject.markerPosition?.point
-	}
-	return entrancePoint
+   guard let entranceId = directoryObject.id?.entranceId,
+        let info = directoryObject.entrances.first(where: { $0.id.entranceId == entranceId }),
+        let entrancePoint = info.geometry?.entrancePoints.first else {
+      return directoryObject.markerPosition?.point
+   }
+   return entrancePoint
 }
 ```
