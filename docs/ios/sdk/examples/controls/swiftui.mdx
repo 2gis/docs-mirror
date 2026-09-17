@@ -3,13 +3,11 @@ sidebar: iossdk
 ---
 # SwiftUI
 
-## Карта
+## Карта {#map}
 
 Все варианты поставки SDK содержат стандартный набор SwiftUI-элементов для управления картой, которые вы можете добавить в иерархию и использовать для управления параметрами карты.
 
-Процесс создания и добавления `Map` подробно описан в разделе [Создание карты](/ios/sdk/examples/map#creating-map).
-
-Перечисленные ниже элементы для удобства объединены в [IMapViewsFactory](/ios/sdk/reference/stable/interface#imap-views-factory).
+Процесс создания и добавления `Map` описан в разделе [Создание карты](/ios/sdk/examples/map#creating-map). Перечисленные ниже элементы объединены в [IMapViewsFactory](/ios/sdk/reference/stable/interface#imap-views-factory).
 
 Стандартный набор включает в себя:
 
@@ -24,9 +22,9 @@ sidebar: iossdk
 
    <img src="/img/mobile-sdk/ios_map_controls_1.png" width="200" /> <img src="/img/mobile-sdk/ios_map_controls_2.png" width="200" /> <img src="/img/mobile-sdk/ios_map_controls_3.png" width="200" />
 
-## Навигатор
+## Навигатор {#navigator}
 
-Полный вариант поставки SDK содержит набор SwiftUI-элементов для отображения и управления навигацией. Для удобства все элементы объединены в [INavigationMapViewsFactory](/ios/sdk/reference/stable/interface#inavigation-map-views-factory) и [INavigationViewsFactory](/ios/sdk/reference/stable/interface#inavigation-views-factory).
+Полный вариант поставки SDK содержит набор SwiftUI-элементов для отображения и управления навигацией. Все элементы объединены в [INavigationMapViewsFactory](/ios/sdk/reference/stable/interface#inavigation-map-views-factory) и [INavigationViewsFactory](/ios/sdk/reference/stable/interface#inavigation-views-factory).
 
 Набор SwiftUI-элементов навигации состоит из:
 
@@ -46,3 +44,15 @@ sidebar: iossdk
 11. [NavigationIndoorView](/ios/sdk/reference/stable/interface#inavigation-map-views-factory/make-navigation-traffic-and-parking-view) для выделения этажей, через которые проходит маршрут.
 
       <img src="/img/mobile-sdk/ios_navi_controls_3.png" width="200" /> <img src="/img/mobile-sdk/ios_navi_controls_4.png" width="200" /> <img src="/img/mobile-sdk/ios_navi_controls_5.png" width="200" />
+
+## Справочник {#directory}
+
+Все варианты поставки SDK содержат набор SwiftUI-элементов для поиска и отображения объектов справочника. Элементы объединены в [IDirectoryViewsFactory](/ios/sdk/reference/stable/interface#idirectory-views-factory).
+
+Набор элементов состоит из:
+
+1. [DirectorySearchView](/ios/sdk/reference/stable/struct#directory-search-view) для отображения поисковой выдачи целиком: строки поиска, подсказок (при использовании [Suggest API](/api/search/suggest/overview)), категорий и списка результатов.
+2. [SearchResultItemView](/ios/sdk/reference/stable/struct#search-result-item-view) для отображения мини-карточки объекта в списке результатов поиска.
+3. [DirectoryObjectView](/ios/sdk/reference/stable/struct#directory-object-view) для отображения полноэкранной карточки объекта с подробной информацией о нём.
+
+<img src="/img/mobile-sdk/search.png" width="200" /> <img src="/img/mobile-sdk/object_card_small.png" width="200" /> <img src="/img/mobile-sdk/object_card.png" width="200" />
