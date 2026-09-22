@@ -1,0 +1,257 @@
+---
+sidebar: reactnativesdk
+---
+# Начало работы
+
+## 1. Получите ключ доступа {#get-api-key}
+
+Чтобы подключиться к серверам <Brand />, получать геоданные и включить возможности SDK, получите файл ключа доступа `dgissdk.key`:
+
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_react_native" target="_blank">
+      В кабинет
+   </CtaButton>
+
+2. Купите [подписку](/platform-manager/subscription/purchase) для доступа к необходимым API. Набор API зависит от необходимых функциональностей и [версии SDK](/react-native/sdk/overview#versions). См. подробнее в разделе [API для работы SDK](/react-native/sdk/overview#api-list).
+
+    :::note[Использование демо-ключей]
+
+    Бесплатные демо-ключи недоступны для работы с мобильным SDK.
+
+    :::
+
+3. Создайте [ключ доступа](/platform-manager/subscription/keys#production) или [настройте существующий ключ в активной подписке для использования с мобильным SDK](/platform-manager/subscription/managing-keys#sdk-key-configuration).
+4. Скачайте файл ключа `dgissdk.key`.
+
+Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
+
+### Требования к работе с ключами {#key-requirements}
+
+* Указание App ID при создании ключа необязательно. Укажите App ID, только если вы планируете работать с [офлайн-данными](#offline-mode).
+* Если в ключе указан App ID, вы можете использовать этот ключ только для одного приложения. Отдельные ключи требуются в следующих случаях:
+  * Если приложение доступно для разных операционных систем.
+  * Если у приложения есть несколько вариантов для одной ОС (например, приложение для водителя и приложение для пассажира).
+  * Если используются разные версии SDK (**Full** и **Map**).
+* Изменение файла ключа во время работы приложения не поддерживается.
+
+## 2. Установите SDK {#install}
+
+### Для всех платформ {#all-platforms}
+
+Чтобы установить React Native SDK на iOS и Android, добавьте в проект один из пакетов:
+
+<Tabs>
+<TabItem value="sdk-map" label="Для версии Map">
+
+```bash
+npm install @2gis/dgis-mobile-sdk-map react-native-safe-area-context
+```
+
+или:
+
+```bash
+yarn add @2gis/dgis-mobile-sdk-map react-native-safe-area-context
+```
+
+</TabItem>
+<TabItem value="sdk-full" label="Для версии Full" default>
+
+```bash
+npm install @2gis/dgis-mobile-sdk-full react-native-safe-area-context react-native-svg
+```
+
+или:
+
+```bash
+yarn add @2gis/dgis-mobile-sdk-full react-native-safe-area-context react-native-svg
+```
+
+</TabItem>
+</Tabs>
+
+После установки выполните дополнительные шаги для [Android](#android) и [iOS](#ios).
+
+### Android {#android}
+
+При сборке для Android используется бинарный артефакт в формате `.aar`.
+
+1. Добавьте репозиторий с этим артефактом в Gradle-конфигурацию проекта:
+
+    ```gradle
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url "https://artifactory.2gis.dev/sdk-maven-release"
+        }
+    }
+    ```
+
+2. Поместите файл ключа в `assets` приложения:
+
+    ```text
+    android/app/src/main/assets/dgissdk.key
+    ```
+
+### iOS {#ios}
+
+1. Добавьте `dgissdk.key` в app target Xcode-проекта как ресурс приложения: файл должен оказаться в `Bundle.main`.
+
+2. После установки пакета обновите CocoaPods-зависимости:
+
+    ```bash
+    cd ios
+    pod install
+    ```
+
+## 3. Инициализируйте SDK {#initialize}
+
+Создайте [Context](/react-native/sdk/reference/stable/class#context) один раз на время жизни приложения или экрана, где используется SDK. По умолчанию SDK ищет ключ в asset-е `dgissdk.key`.
+
+```tsx
+import React, { createContext, useContext, useEffect, useRef } from 'react';
+import { DGis, type Context } from '@2gis/dgis-mobile-sdk-full';
+
+const SdkContext = createContext<Context | null>(null);
+
+export function SdkProvider({ children }: { children: React.ReactNode }) {
+  const contextRef = useRef<Context | null>(null);
+
+  if (contextRef.current === null) {
+    contextRef.current = DGis.createContext();
+  }
+
+  useEffect(() => {
+    return () => {
+      if (contextRef.current !== null) {
+        DGis.releaseContext(contextRef.current);
+        contextRef.current = null;
+      }
+    };
+  }, []);
+
+  return (
+    <SdkContext.Provider value={contextRef.current}>
+      {children}
+    </SdkContext.Provider>
+  );
+}
+
+export function useSdkContext(): Context {
+  const context = useContext(SdkContext);
+  if (context === null) {
+    throw new Error('SdkProvider is not mounted');
+  }
+  return context;
+}
+```
+
+Если нужно указать источник ключа явно, передайте его в [DGis.createContext()](/react-native/sdk/reference/stable/class#dgis/create-context):
+
+```tsx
+import {
+  DGis,
+  HttpOptions,
+  KeyFromAsset,
+  KeySource,
+  LogLevel,
+  LogOptions,
+  PersonalDataCollectionConsent,
+  VendorConfig,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const context = DGis.createContext(
+  new HttpOptions({}),
+  new LogOptions({
+    systemLevel: LogLevel.Warning,
+    customLevel: LogLevel.Warning,
+  }),
+  VendorConfig.none(),
+  KeySource.fromAsset(new KeyFromAsset({ path: 'dgissdk.key' })),
+  PersonalDataCollectionConsent.Granted,
+);
+```
+
+## Дополнительные настройки {#additional-settings}
+
+### Vendor Config {#vendor-config}
+
+Чтобы переопределить конфигурацию SDK, передайте `VendorConfig` при создании контекста. Для Android путь указывается относительно директории `assets`, для iOS — относительно `Bundle.main`.
+
+```tsx
+import {
+  DGis,
+  HttpOptions,
+  KeyFromAsset,
+  KeySource,
+  LogOptions,
+  VendorConfig,
+  VendorConfigFromAsset,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const context = DGis.createContext(
+  new HttpOptions({}),
+  new LogOptions({}),
+  VendorConfig.fromAsset(new VendorConfigFromAsset({ path: 'vendorConfig.json' })),
+  KeySource.fromAsset(new KeyFromAsset({ path: 'dgissdk.key' })),
+);
+```
+
+{/* ### Работа с офлайн-данными {#offline-mode}
+
+Мобильный SDK (версия **Full**) позволяет работать с данными карты, справочника и навигатора офлайн из предварительно загруженных пакетов. Это может быть полезно в условиях плохой связи или при её полном отсутствии.
+
+Чтобы настроить работу в режиме офлайн:
+
+1. Обратитесь в [отдел продаж <Brand />](https://dev.2gis.ru/api/mobile-sdk#form), чтобы получить права на работу с офлайн-данными. Вы можете запросить права на офлайн-данные всех компонентов (карта, справочник, построение маршрутов) или выбрать только необходимые.
+
+2. Создайте источник [DgisSource](/react-native/sdk/reference/stable/class#dgis-source) в офлайн- или гибрид-режиме и добавьте его при создании карты или через [map.addSource()](/react-native/sdk/reference/stable/class#map/add-source).
+
+    ```tsx
+    import {
+      DgisSource,
+      DgisSourceWorkingMode,
+      MapControllerOptions,
+    } from '@2gis/dgis-mobile-sdk-full';
+
+    const source = DgisSource.createDgisSource(
+      context,
+      DgisSourceWorkingMode.HybridOnlineFirst,
+    );
+
+    const options = new MapControllerOptions({
+      sources: [source],
+    });
+    ```
+
+3. Скачайте файлы с данными для территорий, где необходима офлайн-работа приложения, через `TerritoryManager`. Установку запускает сам объект территории.
+
+    ```tsx
+    import { TerritoryManager } from '@2gis/dgis-mobile-sdk-full';
+
+    const territoryManager = TerritoryManager.instance(context);
+    const connection = territoryManager.territoriesChannel.subscribe(territories => {
+      const city = territories.find(item => item.infoChannel.value.name === 'Новосибирск');
+      city?.install();
+    });
+
+    // Когда подписка больше не нужна:
+    connection.disconnect();
+    ``` */}
+
+### Язык приложения {#application-language}
+
+Чтобы переопределить локаль SDK, используйте [LocaleManager](/react-native/sdk/reference/stable/class#locale-manager).
+
+```tsx
+import { Locale, LocaleManager } from '@2gis/dgis-mobile-sdk-full';
+
+const localeManager = LocaleManager.instance(context);
+
+localeManager.overrideLocales([
+  new Locale({ language: 'ru', region: 'RU' }),
+]);
+```
+
+Если локаль не задана явно, SDK использует локали операционной системы.

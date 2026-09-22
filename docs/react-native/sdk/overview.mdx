@@ -1,0 +1,78 @@
+---
+sidebar: reactnativesdk
+---
+# React Native SDK
+
+React Native SDK позволяет добавить карту <Brand /> в ваше приложение на платформе React Native. С помощью SDK можно отобразить карту на экране, получать информацию об объектах карты, строить маршруты, использовать навигатор и работать с офлайн-данными.
+
+Примеры использования SDK см. в разделе [Примеры](/react-native/sdk/examples/base).
+
+Картографические данные поддерживают [стандарты OGC](https://ru.wikipedia.org/wiki/Open_Geospatial_Consortium).
+
+Вы можете использовать React Native SDK на устройствах с операционными системами iOS и Android.
+
+<CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_react_native" target="_blank">
+   В кабинет
+</CtaButton>
+
+:::warning
+
+Текущая версия 14.0.0 является предварительной. API может изменяться без обратной совместимости в будущих минорных релизах 14.x.
+
+:::
+
+## Версии SDK {#versions}
+
+Пакет React Native SDK в первом релизе доступен в версии **Map** ([@2gis/dgis-mobile-sdk-map](https://www.npmjs.com/package/@2gis/dgis-mobile-sdk-map)) — облегчённая версия, которая позволяет:
+
+* Добавлять [карту](/react-native/sdk/examples/map) в приложение и управлять ей: добавлять маркеры и геометрические фигуры, управлять движением камеры, отображать слои, работать со стилевыми атрибутами карты и т. д.
+* Искать объекты в [справочнике](/react-native/sdk/examples/directory): организации, здания, места и другие.
+
+Версия **Full**, которая позволяет работать с навигацией и оффлайн-данными, появится в будущих релизах.
+
+## API для работы SDK {#api-list}
+
+В зависимости от нужных функциональностей, для работы SDK требуются ключи доступа к API карт, поиска и навигации. Доступные возможности зависят от [версии SDK](#versions): **Full** или **Map**.
+
+При использовании ключа оплачивается только доступ к используемым API, в зависимости от количества отправленных запросов и полученных ответов. Вы можете работать с ключами в личном кабинете [Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=sdk_react_native).
+
+### Карта
+
+Подробнее о доступных возможностях см. в инструкции [Карта](/react-native/sdk/examples/map).
+
+| <div style={{"width":"180px"}}>Функциональность</div> | API |
+| ----------------------------------------------------- | --- |
+| [Создание карты в приложении](/react-native/sdk/examples/map#creating-map)<br />(компонент [MapView](/react-native/sdk/reference/stable/method#map-view), классы [MapController](/react-native/sdk/reference/stable/class#map-controller) и [MapControllerOptions](/react-native/sdk/reference/stable/struct#map-controller-options)) | <ul><li>[Map Tiles API](/maps/others/maptiles/overview)</li><li>[Regions API](/api/search/regions/overview)</li></ul> |
+| [Отображение пробок на карте](/react-native/sdk/examples/map#traffic)<br />(класс [TrafficSource](/react-native/sdk/reference/stable/class#traffic-source)) | [Regions API](/api/search/regions/overview) |
+| [Отображение поэтажных планов зданий](/react-native/sdk/examples/map#floor-plans)<br />(класс [IndoorManager](/react-native/sdk/reference/stable/class#indoor-manager)) | [Places API](/api/search/places/overview) (доступ к планам этажей предоставляется по запросу и за дополнительную плату) |
+
+### Справочник
+
+Подробнее о доступных возможностях см. в инструкции [Справочник](/react-native/sdk/examples/directory).
+
+| <div style={{"width":"180px"}}>Функциональность</div> | API |
+| ----------------------------------------------------- | --- |
+| [Создание поискового движка](/react-native/sdk/examples/directory#creating-a-search-engine)<br />(класс [SearchManager](/react-native/sdk/reference/stable/class#search-manager)) | [Regions API](/api/search/regions/overview) |
+| [Получение результатов поиска](/react-native/sdk/examples/directory#get-search-results)<br />(метод [SearchManager.search()](/react-native/sdk/reference/stable/class#search-manager/search)) | <ul><li>[Places API](/api/search/places/overview)</li><li>[Markers API](/api/search/markers/overview)</li></ul>Получение некоторой информации об объектах доступно только при дополнительной настройке ключа за отдельную плату: см. раздел [Структура данных объекта](/react-native/sdk/examples/directory#object-data-structure). |
+| [Поиск объектов в справочнике по идентификатору](/react-native/sdk/examples/directory#create-search-query)<br />(методы [SearchManager.searchByIds()](/react-native/sdk/reference/stable/class#search-manager/search-by-ids) и [SearchManager.searchByDirectoryObjectIds()](/react-native/sdk/reference/stable/class#search-manager/search-by-directory-object-ids)) | <ul><li>[Places API](/api/search/places/overview)</li><li>[Markers API](/api/search/markers/overview)</li></ul> |
+| [Формирование поисковых подсказок](/react-native/sdk/examples/directory#search-suggestions)<br />(метод [SearchManager.suggest()](/react-native/sdk/reference/stable/class#search-manager/suggest)) | [Suggest API](/api/search/suggest/overview) |
+
+## Требования к устройствам {#system-requirements}
+
+iOS 16 и выше / iPadOS 16 и выше.
+
+## Варианты размещения {#distribution}
+
+* **Облако**: React Native SDK доступен для работы в облачной инфраструктуре <Brand />.
+* **On-Premise**: доступность React Native SDK при установке API-платформы <Brand /> в закрытом контуре зависит от версии React Native SDK и набора включённых сервисов API-платформы.
+
+Подробнее см. в разделе [API-платформа для сервера](/on-premise-api-platform/overview/summary).
+
+## Помощь {#support}
+
+* Если у вас возникли вопросы при работе с React Native SDK, задайте их AI-ассистенту (в правом нижнем углу сайта), воспользуйтесь поиском по документации или отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+* Если вы хотите обсудить возможности React Native SDK или его интеграцию с вашим продуктом, обратитесь к менеджеру.
+
+   <CtaButton href="https://dev.2gis.ru/api/mobile-sdk" target="_blank" appearance="lightFill">
+     Получить консультацию
+   </CtaButton>

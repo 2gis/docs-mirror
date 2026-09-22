@@ -1,0 +1,1164 @@
+---
+sidebar: reactnativesdk
+---
+# Справочник
+
+Вы можете искать объекты в справочнике <Brand />, обрабатывать результаты поиска, а также использовать подсказки для уточнения поисковых запросов. В справочнике вы можете найти информацию по объектам следующих типов:
+
+* компании и их филиалы;
+* здания;
+* парковки;
+* остановки общественного транспорта и станции метро;
+* дороги (улицы, перекрёстки, проезды);
+* населённые пункты разного размера (страны, города, регионы, деревни, микрорайоны и т.д.);
+* различные площадные объекты (парки, пляжи и т.д.).
+
+Полный список доступных типов объектов см. в описании класса [ObjectType](/react-native/sdk/reference/stable/enumeration#object-type).
+
+***
+
+Чтобы начать работу со справочником:
+
+1. Создайте [поисковый движок](#creating-a-search-engine).
+2. Сформируйте [поисковый запрос](#create-search-query).
+3. Получите, обработайте и отобразите на карте [результаты поиска](#get-search-results).
+
+## Создание поисковика {#creating-a-search-engine}
+
+Для поиска объектов в справочнике создайте объект [SearchManager](/react-native/sdk/reference/stable/class#search-manager) и вызовите один из методов, который определяет режим работы справочника:
+
+* [SearchManager.createOnlineManager()](/react-native/sdk/reference/stable/class#search-manager/create-online-manager) — создаёт онлайн-справочник.
+* `SearchManager.createOfflineManager()` — создаёт офлайн-справочник, работающий только с предзагруженными данными. Метод доступен в Full-версии SDK.
+* `SearchManager.createSmartManager()` — создаёт комбинированный справочник, работающий с онлайн-данными при наличии сети и с предзагруженными данными при отсутствии сети. Метод доступен в Full-версии SDK.
+
+Пример создания поисковика с онлайн-справочником:
+
+```tsx
+import { SearchManager } from '@2gis/dgis-mobile-sdk-full';
+
+const onlineSearchManager = SearchManager.createOnlineManager(context);
+```
+
+:::note[Режимы работы справочника]
+
+Некоторые методы работают только в определённом режиме справочника. Возможные ограничения указаны в описании методов.
+
+:::
+
+## Формирование поискового запроса {#create-search-query}
+
+Чтобы отправить поисковый запрос, создайте объект [SearchQuery](/react-native/sdk/reference/stable/class#search-query) с помощью [SearchQueryBuilder](/react-native/sdk/reference/stable/class#search-query-builder) и передайте его в метод [search()](/react-native/sdk/reference/stable/class#search-manager/search).
+
+Поисковый запрос должен состоять из трёх логических компонентов:
+
+* Запрос для поиска объекта (что нужно искать?). Вы можете сформулировать запрос с помощью одного из методов ниже:
+
+  * Из текстовой строки с помощью метода [setQueryText()](/react-native/sdk/reference/stable/class#search-query-builder/set-query-text). Вы можете сформулировать текстовый запрос для поиска конкретного объекта (`храм Василия Блаженного`) или для получения списка множества объектов по критерию (`магазины музыкальных инструментов`).
+  * По идентификаторам рубрик с помощью метода [setRubricIds()](/react-native/sdk/reference/stable/class#search-query-builder/set-rubric-ids). Этот способ полезен для создания выборки объектов определённого типа.
+  * По идентификатору:
+
+    * Организации с помощью метода [setOrgId()](/react-native/sdk/reference/stable/class#search-query-builder/set-org-id). Если у компании несколько филиалов, в ответе будут перечислены все точки.
+    * Зданий с помощью метода [setBuildingIds()](/react-native/sdk/reference/stable/class#search-query-builder/set-building-ids).
+    * Любых объектов с помощью методов поискового движка [searchByIds()](/react-native/sdk/reference/stable/class#search-manager/search-by-ids) и [searchByDirectoryObjectIds()](/react-native/sdk/reference/stable/class#search-manager/search-by-directory-object-ids).
+
+* Геоограничение поиска (где нужно искать?). Вы можете ограничить зону поиска с помощью одного из методов ниже:
+
+  * Поиск внутри полигона: задайте область поиска с помощью метода [setRestrictionGeometry()](/react-native/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объекта [PolygonGeometry](/react-native/sdk/reference/stable/class#polygon-geometry).
+
+  * Поиск в прямоугольной области интереса: задайте координаты с помощью метода [setAreaOfInterest()](/react-native/sdk/reference/stable/class#search-query-builder/set-area-of-interest). Этот метод задаёт приоритетную зону поиска, но не ограничивает поиск строго: если внутри области интереса результаты не найдены, поиск продолжится за пределами области.
+
+  * Поиск в радиусе вокруг точки: задайте центр поиска с помощью метода [setRestrictionGeometry()](/react-native/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объекта [PointGeometry](/react-native/sdk/reference/stable/class#point-geometry), а радиус — с помощью метода [setRadius()](/react-native/sdk/reference/stable/class#search-query-builder/set-radius).
+
+  * Произвольный запрос: если запрос для поиска объекта сформирован с помощью метода [setQueryText()](/react-native/sdk/reference/stable/class#search-query-builder/set-query-text), вы можете в этом же тексте указать и геоограничение (`цветы у Бауманской`).
+
+* (Необязательный компонент) Дополнительные ограничения результатов поиска с помощью одного или нескольких методов ниже:
+
+  * Поиск объектов только определённого типа: перечислите интересующие вас типы объектов с помощью метода [setAllowedResultTypes()](/react-native/sdk/reference/stable/class#search-query-builder/set-allowed-result-types) (например, только здания).
+  * Фильтрация результатов: задайте критерий фильтрации с помощью метода [setDirectoryFilter()](/react-native/sdk/reference/stable/class#search-query-builder/set-directory-filter) (например, по времени работы).
+  * Сортировка результатов: задайте критерий сортировки с помощью метода [setSortingType()](/react-native/sdk/reference/stable/class#search-query-builder/set-sorting-type) (например, по рейтингу).
+  * Количество результатов на странице: задайте ограничение с помощью метода [setPageSize()](/react-native/sdk/reference/stable/class#search-query-builder/set-page-size).
+  * Номер страницы поисковой выдачи: по умолчанию возвращается первая страница. Чтобы получить следующие страницы, используйте метод [fetchNextPage()](/react-native/sdk/reference/stable/class#page/fetch-next-page).
+  * Локаль для поискового запроса: задайте язык и регион с помощью метода [setLocale()](/react-native/sdk/reference/stable/class#search-query-builder/set-locale).
+
+### Примеры
+
+* Найти рестораны итальянской кухни в Пресненском районе Москвы, которые открыты сейчас, с сортировкой по рейтингу:
+
+  ```tsx
+  import {
+    DirectoryFilter,
+    IsOpenNow,
+    SearchQueryBuilder,
+    SortingType,
+    WorkTimeFilter,
+  } from '@2gis/dgis-mobile-sdk-full';
+
+  const filter = new DirectoryFilter({
+    workTime: WorkTimeFilter.isOpenNow(new IsOpenNow({})),
+    dynamic: [],
+  });
+
+  const searchQuery = SearchQueryBuilder.fromQueryText(
+    'рестораны итальянской кухни в Пресненском районе Москвы',
+  )
+    .setDirectoryFilter(filter)
+    .setSortingType(SortingType.ByRating)
+    .setPageSize(10)
+    .build();
+  ```
+
+* Найти все парковки в радиусе 1 км с сортировкой по удалённости:
+
+  ```tsx
+  import {
+    GeoPoint,
+    Latitude,
+    Longitude,
+    Meter,
+    ObjectType,
+    SearchQueryBuilder,
+    SortingType,
+  } from '@2gis/dgis-mobile-sdk-full';
+
+  const searchQuery = SearchQueryBuilder.fromQueryText('Парковки')
+    .setAllowedResultTypes([ObjectType.Parking])
+    .setGeoPoint(
+      new GeoPoint({
+        latitude: new Latitude({ value: 59.936 }),
+        longitude: new Longitude({ value: 30.351 }),
+      }),
+    )
+    .setRadius(new Meter({ value: 1000 }))
+    .setSortingType(SortingType.ByDistance)
+    .build();
+  ```
+
+* Найти все населённые пункты (города, деревни, посёлки и т.д.) внутри полигона:
+
+  ```tsx
+  import {
+    GeoPoint,
+    Latitude,
+    Longitude,
+    ObjectType,
+    PolygonGeometry,
+    SearchQueryBuilder,
+  } from '@2gis/dgis-mobile-sdk-full';
+
+  const point = (latitude: number, longitude: number) =>
+    new GeoPoint({
+      latitude: new Latitude({ value: latitude }),
+      longitude: new Longitude({ value: longitude }),
+    });
+
+  const polygon = new PolygonGeometry([
+    [
+      point(55.7, 37.5),
+      point(55.8, 37.5),
+      point(55.8, 37.7),
+      point(55.7, 37.7),
+    ],
+  ]);
+
+  const searchQuery = SearchQueryBuilder.fromQueryText('название города')
+    .setAllowedResultTypes([
+      ObjectType.AdmDivCity,
+      ObjectType.AdmDivSettlement,
+    ])
+    .setRestrictionGeometry(polygon)
+    .build();
+  ```
+
+* Найти все объекты, которые оказывают услуги печати документов, в области интереса:
+
+  ```tsx
+  import {
+    GeoPoint,
+    GeoRect,
+    Latitude,
+    Longitude,
+    SearchQueryBuilder,
+  } from '@2gis/dgis-mobile-sdk-full';
+
+  const point = (latitude: number, longitude: number) =>
+    new GeoPoint({
+      latitude: new Latitude({ value: latitude }),
+      longitude: new Longitude({ value: longitude }),
+    });
+
+  const areaOfInterest = new GeoRect({
+    southWestPoint: point(59.931, 30.344),
+    northEastPoint: point(59.936, 30.351),
+  });
+
+  const searchQuery = SearchQueryBuilder.fromQueryText('печать документов')
+    .setAreaOfInterest(areaOfInterest)
+    .build();
+  ```
+
+* Найти все компании по адресу «Новосибирск, площадь Карла Маркса, 7»:
+
+  ```tsx
+  import {
+    ObjectType,
+    SearchQueryBuilder,
+  } from '@2gis/dgis-mobile-sdk-full';
+
+  const searchQuery = SearchQueryBuilder.fromQueryText(
+    'Новосибирск, площадь Карла Маркса, 7',
+  )
+    .setAllowedResultTypes([ObjectType.Branch])
+    .setPageSize(10)
+    .build();
+  ```
+
+* Найти все филиалы компании по известному идентификатору:
+
+  ```tsx
+  import { OrgId, SearchQueryBuilder } from '@2gis/dgis-mobile-sdk-full';
+
+  const id = 4504136498310300n;
+
+  const searchQuery = SearchQueryBuilder.fromOrgId(
+    new OrgId({ value: id }),
+  ).build();
+  ```
+
+* Найти конкретный объект по известному идентификатору:
+
+  ```tsx
+  const future = searchManager.searchById('70000001006378335');
+
+  future.onComplete(
+    object => {
+      console.log(object?.title);
+      future.destroy();
+    },
+    error => {
+      console.warn(error);
+    },
+  );
+  ```
+
+### Геокодирование {#geocoding}
+
+С помощью SDK вы можете решать задачи геокодирования: определять координаты объекта на карте по его адресу ([прямое геокодирование](#direct-geocoding)) и наоборот, определять адрес объекта на карте по его координатам ([обратное геокодирование](#reverse-geocoding)).
+
+#### Прямое геокодирование {#direct-geocoding}
+
+Чтобы получить координаты объекта по его адресу, сформируйте поисковый запрос, указав следующие данные:
+
+* Адрес в текстовом запросе с помощью метода [fromQueryText()](/react-native/sdk/reference/stable/class#search-query-builder/from-query-text).
+
+  Для более точных результатов укажите в тексте город (посёлок, деревню), где выполняется поиск. Название небольшого населённого пункта (например, деревни) рекомендуется указывать вместе с названием области и другими объединениями, к которым он относится (например, сельским или городским поселением).
+
+* (Рекомендуется) Тип объекта, координаты которого нужно получить, с помощью метода [setAllowedResultTypes()](/react-native/sdk/reference/stable/class#search-query-builder/set-allowed-result-types).
+* (Рекомендуется) Область поиска с помощью метода [setAreaOfInterest()](/react-native/sdk/reference/stable/class#search-query-builder/set-area-of-interest).
+
+Например, чтобы получить координаты здания по адресу «Москва, ул. Тверская 19а»:
+
+```tsx
+const geocodingQuery = SearchQueryBuilder.fromQueryText('Москва, Тверская 19а')
+  .setAreaOfInterest(visibleRect)
+  .build();
+```
+
+В [результате поиска](#get-search-results) вы получите объект справочника [DirectoryObject](/react-native/sdk/reference/stable/class#directory-object). Координаты объекта будут представлены в поле `markerPosition` в виде объекта [GeoPointWithElevation](/react-native/sdk/reference/stable/struct#geo-point-with-elevation). Пример:
+
+```text
+markerPosition:
+  GeoPointWithElevation {
+    latitude: Latitude { value: 55.7659 },
+    longitude: Longitude { value: 37.602827 },
+    elevation: Elevation { value: 18 },
+  },
+```
+
+Подробнее о другой информации в результатах поиска см. в разделе [Структура данных объекта](#object-data-structure).
+
+#### Обратное геокодирование {#reverse-geocoding}
+
+Чтобы получить адрес объекта по его координатам, сформируйте поисковый запрос, указав координаты объекта как строгую геометрию поиска.
+Используйте метод [setRestrictionGeometry()](/react-native/sdk/reference/stable/class#search-query-builder/set-restriction-geometry) и объект [PointGeometry](/react-native/sdk/reference/stable/class#point-geometry):
+
+```tsx
+import {
+  GeoPoint,
+  Latitude,
+  Longitude,
+  PointGeometry,
+  SearchQueryBuilder,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const searchQuery = new SearchQueryBuilder()
+  .setRestrictionGeometry(
+    new PointGeometry(
+      new GeoPoint({
+        latitude: new Latitude({ value: 55.7659 }),
+        longitude: new Longitude({ value: 37.602827 }),
+      }),
+    ),
+  )
+  .build();
+```
+
+В [результате поиска](#get-search-results) вы получите объекты справочника [DirectoryObject](/react-native/sdk/reference/stable/class#directory-object). Адрес каждого объекта будет представлен в поле `address` в виде объекта [Address](/react-native/sdk/reference/stable/struct#address). Пример:
+
+```tsx
+address:
+    Address(
+        drillDown: [
+        AddressAdmDiv(type: 'country', name: 'Россия'),
+        AddressAdmDiv(type: 'region', name: 'Москва'),
+        AddressAdmDiv(type: 'city', name: 'Москва'),
+        AddressAdmDiv(type: 'district', name: 'Тверской'),
+        ],
+        components: [
+        AddressComponent(
+            AddressStreet(
+            street: 'Тверская улица',
+            number: '19а',
+            fiasCode: null,
+            ),
+        ),
+        ],
+        buildingName: null,
+        buildingId: BuildingId(value: 4504235282747324),
+        postCode: '125009',
+        buildingCode: null,
+        fiasCode: null,
+        addressComment: '1-2 этаж',
+    ),
+```
+
+Подробнее о другой информации в результатах поиска см. в разделе [Структура данных объекта](#object-data-structure).
+
+### Изменение параметров поиска {#modify-search-params}
+
+Вы можете изменять или дополнять параметры уже созданного поискового запроса. Для этого создайте новый объект [SearchQuery](/react-native/sdk/reference/stable/class#search-query), укажите существующий запрос с помощью метода [fromQuery()](/react-native/sdk/reference/stable/class#search-query-builder/from-query) и укажите параметры, которые нужно дополнительно применить. Например, изменить тип сортировки результатов при поиске парковок:
+
+```tsx
+import {
+  GeoPoint,
+  Latitude,
+  Longitude,
+  Meter,
+  ObjectType,
+  SearchQueryBuilder,
+  SortingType,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const searchQuery = SearchQueryBuilder.fromQueryText('Парковки')
+  .setAllowedResultTypes([ObjectType.Parking])
+  .setGeoPoint(
+    new GeoPoint({
+      latitude: new Latitude({ value: 59.936 }),
+      longitude: new Longitude({ value: 30.351 }),
+    }),
+  )
+  .setRadius(new Meter({ value: 1000 }))
+  .setSortingType(SortingType.ByDistance)
+  .build();
+
+const searchQueryUpdated = SearchQueryBuilder.fromQuery(searchQuery)
+  .setSortingType(SortingType.ByRating)
+  .build();
+```
+
+Остальные параметры изначального запроса сохраняются.
+
+## Получение результатов поиска {#get-search-results}
+
+Вызов метода [SearchManager.search()](/react-native/sdk/reference/stable/class#search-manager/search) возвращает отложенный результат [`Future<SearchResult>`](/react-native/sdk/reference/stable/class#search-result), содержащий список найденных объектов ([DirectoryObject](/react-native/sdk/reference/stable/class#directory-object)), разделенный на страницы. Первая страница результатов поиска доступна через свойство `firstPage`.
+
+```tsx
+const future = searchManager.search(textQuery);
+
+future.onComplete(
+  result => {
+    const firstPage = result.firstPage;
+    const objects = firstPage?.items ?? [];
+
+    objects.forEach(object => {
+      console.log(object.title, object.subtitle);
+    });
+
+    future.destroy();
+  },
+  error => {
+    console.warn(error);
+  },
+);
+```
+
+Чтобы получить следующую страницу, вызовите метод страницы [fetchNextPage()](/react-native/sdk/reference/stable/class#page/fetch-next-page), который вернёт отложенный результат [Page](/react-native/sdk/reference/stable/class#page):
+
+```tsx
+const nextPageFuture = firstPage.fetchNextPage();
+
+nextPageFuture.onComplete(
+  page => {
+    console.log(page?.items ?? []);
+    nextPageFuture.destroy();
+  },
+  error => {
+    console.warn(error);
+  },
+);
+```
+
+### Отображение результатов на карте {#display-search-results}
+
+Координаты всех найденных объектов возвращаются в поле `itemMarkerInfos` результата поиска [SearchResult](/react-native/sdk/reference/stable/class#search-result) в виде списка элементов [ItemMarkerInfo](/react-native/sdk/reference/stable/class#item-marker-info). Список может содержать не более 15000 элементов.
+
+Чтобы отобразить на карте маркеры всех найденных объектов:
+
+1. Подготовьте список объектов [Marker](/react-native/sdk/reference/stable/class#marker). Чтобы задать позицию маркера (параметр `position`), используйте координаты из поля [ItemMarkerInfo.geoPoint](/react-native/sdk/reference/stable/class#item-marker-info).
+2. Добавьте готовый набор маркеров на карту с помощью метода `addObjects()` менеджера объектов [MapObjectManager](/react-native/sdk/reference/stable/class#map-object-manager). Подробнее см. в инструкции [Добавление нескольких объектов на карту](/react-native/sdk/examples/map#add-multiple-objects).
+
+```tsx
+import {
+  ImageLoader,
+  MapObjectManager,
+  Marker,
+  MarkerOptions,
+  type ItemMarkerInfo,
+  type Map,
+  type SearchResult,
+} from '@2gis/dgis-mobile-sdk-full';
+
+async function displaySearchResultMarkers(
+  map: Map,
+  searchResult: SearchResult,
+) {
+  // Получить данные для маркеров из результатов поиска
+  const markerInfosFuture = searchResult.itemMarkerInfos;
+  const markerInfos = await new Promise<ItemMarkerInfo[] | null>(
+    (resolve, reject) => {
+      markerInfosFuture.onComplete(
+        result => {
+          markerInfosFuture.destroy();
+          resolve(result);
+        },
+        error => {
+          reject(error);
+        },
+      );
+    },
+  );
+
+  if (markerInfos === null) {
+    return;
+  }
+
+  // Загрузить иконку маркера
+  const imageLoader = new ImageLoader(context);
+  const icon = await imageLoader.loadPngFromAsset(
+    'map/marker.png',
+    48,
+    48,
+  );
+
+  // Подготовить список маркеров
+  const markers = markerInfos.map(
+    itemMarkerInfo =>
+      new Marker(
+        new MarkerOptions({
+          position: itemMarkerInfo.geoPoint,
+          icon,
+        }),
+      ),
+  );
+
+  // Создать менеджер объектов и добавить маркеры на карту
+  const mapObjectManager = new MapObjectManager(map, null);
+  mapObjectManager.addObjects(markers);
+}
+```
+
+### Структура данных объекта {#object-data-structure}
+
+Результаты поиска по справочнику представлены в виде списка объектов [DirectoryObject](/react-native/sdk/reference/stable/class#directory-object) с наборами свойств. В зависимости от типа объекта часть свойств может не содержать значений.
+
+:::note[Доступ к данным]
+
+Получение некоторой информации об объектах доступно при дополнительной настройке ключа за отдельную плату: см. описания полей объектов [DirectoryObject](/react-native/sdk/reference/stable/class#directory-object), [Address](/react-native/sdk/reference/stable/struct#address) и [ItemMarkerInfo](/react-native/sdk/reference/stable/class#item-marker-info). Чтобы обновить настройки вашего ключа доступа, обратитесь в [службу поддержки <Brand />](mailto:api@2gis.ru).
+
+:::
+
+* Основные свойства для классификации объекта:
+
+  * Тип объекта (`types`) из [ObjectType](/react-native/sdk/reference/stable/enumeration#object-type). Один объект может относиться к нескольким типам (например, ТЦ Сан Сити — это одновременно и филиал организации и здание). В этом случае все типы будут перечислены в списке, где первый элемент — основной тип объекта.
+  * Название объекта (`title`) в зависимости от его типа: название организации, достопримечательности, географического объекта. Для жилых домов без названия — адрес.
+  * Подтип объекта (`subtitle`) для уточнения. Например, кофейня как подтип организации или жилой дом как подтип здания.
+  * Описание объекта (`description`).
+  * Категории, к которым относится объект (`rubricIds`).
+  * Идентификатор организации в справочнике и информация о ней (`orgInfo`). Для компаний с множеством филиалов — информация о головной организации.
+  * (Данные по запросу) Объединение объектов разного типа в одной карточке справочника (`group`). Подробнее см. [ниже](#hybrid-objects).
+
+* Уникальный идентификатор объекта в справочнике (`id`). Для компаний с множеством филиалов — идентификатор конкретного филиала.
+
+* Географические свойства:
+
+  * Координаты для размещения маркера на карте (`markerPosition`).
+  * Полный адрес объекта (`address`). Некоторые компоненты адреса доступны только по запросу: см. описание объекта [Address](/react-native/sdk/reference/stable/struct#address).
+  * (Данные по запросу) Информация об этаже здания, на котором расположен объект (`levelId` и `buildingLevels`). Актуально для компаний, которые расположены на определённом этаже многоэтажного здания.
+  * (Данные по запросу) Информация о входах в объект (`entrances`) с координатами и другими данными. Актуально как для компаний и зданий, так и для других объектов с физически обозначенными входами (например, парков).
+  * (Данные по запросу) Дополнительная информация для уточнения адреса (`titleAddition`). Например, номер подъезда или номер квартиры.
+
+* Время работы:
+
+  * Смещение локального времени объекта от UTC в виде временной метки (`timeZoneOffset`). Например, `03:00:00` для часового пояса UTC+3.
+  * Время работы (`openingHours`) в виде списка временных промежутков или флага круглосуточной работы. Актуально для компаний.
+  * Текущий статус работы (`workStatus`). Актуально для организаций.
+
+* Прочие данные:
+
+  * (Данные по запросу) Информация о торговой лицензии организации (`tradeLicense`).
+  * Контакты для связи с организацией (`contactInfos`): номер телефона, e-mail, ссылки на сайт и соцсети и другое.
+  * Рейтинг объекта на основе отзывов пользователей (`reviews`).
+  * Дополнительные свойства парковок (`parkingInfo`).
+  * Дополнительные свойства электрозаправок (`chargingStation`).
+  * Информация о здании (`buildingInfo`).
+
+#### Объединение объектов {#hybrid-objects}
+
+Некоторые геообъекты в справочнике могут быть представлены в виде группы объектов разного типа. Например, здание суда — это одновременно и отдельно стоящее здание, и организация внутри этого здания, то есть два разных [DirectoryObject](/react-native/sdk/reference/stable/struct#directory-object) с характеристиками здания и организации соответственно. Но поскольку эти `DirectoryObject` относятся к одному и тому же геообъекту, в их структуре данных содержатся ссылки друг на друга.
+
+Информация о связанных объектах содержится в поле `group` в виде списка элементов [GroupItem](/react-native/sdk/reference/stable/struct#group-item). Для каждого связанного объекта представлен его тип и идентификатор ([DgisObjectId](/react-native/sdk/reference/stable/struct#dgis-object-id)), который вы можете в дальнейшем использовать для обращения к этому объекту.
+
+:::note[Доступ к данным]
+
+Доступ к данным в поле `group` предоставляется при дополнительной настройке ключа за отдельную плату. Чтобы обновить настройки вашего ключа доступа, обратитесь в [службу поддержки <Brand />](mailto:api@2gis.ru).
+
+:::
+
+Пример наполнения поля `group` с одним связанным объектом:
+
+```tsx
+group: [
+    GroupItem(
+    id: DgisObjectId(objectId: 70030076538159915, entranceId: 0),
+    type: ObjectType.attraction,
+    ),
+],
+```
+
+#### Примеры
+
+Ниже представлены примеры [DirectoryObject](/react-native/sdk/reference/stable/struct#directory-object) разных типов объектов справочника.
+
+* Филиал организации:
+
+  <details>
+  <summary><code>DirectoryObject</code></summary>
+
+  ```tsx
+  // Тип объекта — организация
+  types: [ObjectType.branch],
+  // Название организации
+  title: 'Шоколадница',
+  titleAddition: null,
+  // Подтип организации — кофейня
+  subtitle: 'Кофейня',
+  // ID объекта (данного филиала организации)
+  id: DgisObjectId(objectId: 4504128908451067, entranceId: 0),
+  // Координаты маркера для размещения на карте
+  markerPosition: GeoPointWithElevation(
+      latitude: Latitude(value: 55.7659),
+      longitude: Longitude(value: 37.602827),
+      elevation: Elevation(value: 18.0),
+  ),
+  // Адрес организации — Москва, ул. Тверская 19а
+  address: Address(
+      drillDown: [
+      AddressAdmDiv(type: 'country', name: 'Россия'),
+      AddressAdmDiv(type: 'region', name: 'Москва'),
+      AddressAdmDiv(type: 'city', name: 'Москва'),
+      AddressAdmDiv(type: 'district', name: 'Тверской'),
+      ],
+      components: [
+      AddressComponent(
+          AddressStreet(
+          street: 'Тверская улица',
+          number: '19а',
+          fiasCode: null,
+          ),
+      ),
+      ],
+      buildingName: null,
+      buildingId: BuildingId(value: 4504235282747324),
+      postCode: '125009',
+      buildingCode: null,
+      fiasCode: null,
+      addressComment: '1-2 этаж',
+  ),
+  attributes: [],
+  contextAttributes: [],
+  // Локальный часовой пояс — UTC+3
+  timeZoneOffset: Duration(hours: 3),
+  // Время работы филиала: понедельник-четверг с 7:00 до 23:00, пятница с 7:00 до 24:00,
+  // суббота — круглосуточно, воскресенье с 0:00 до 23:00
+  openingHours: OpeningHours(
+      weekOpeningHours: [
+      [
+          WeekTimeInterval(
+          startTime: WeekTime(weekDay: WeekDay.monday, time: DayTime(hours: 7, minutes: 0)),
+          finishTime: WeekTime(weekDay: WeekDay.monday, time: DayTime(hours: 23, minutes: 0)),
+          ),
+      ],
+      [
+          WeekTimeInterval(
+          startTime: WeekTime(weekDay: WeekDay.tuesday, time: DayTime(hours: 7, minutes: 0)),
+          finishTime: WeekTime(weekDay: WeekDay.tuesday, time: DayTime(hours: 23, minutes: 0)),
+          ),
+      ],
+      [
+          WeekTimeInterval(
+          startTime: WeekTime(weekDay: WeekDay.wednesday, time: DayTime(hours: 7, minutes: 0)),
+          finishTime: WeekTime(weekDay: WeekDay.wednesday, time: DayTime(hours: 23, minutes: 0)),
+          ),
+      ],
+      [
+          WeekTimeInterval(
+          startTime: WeekTime(weekDay: WeekDay.thursday, time: DayTime(hours: 7, minutes: 0)),
+          finishTime: WeekTime(weekDay: WeekDay.thursday, time: DayTime(hours: 23, minutes: 0)),
+          ),
+      ],
+      [
+          WeekTimeInterval(
+          startTime: WeekTime(weekDay: WeekDay.friday, time: DayTime(hours: 7, minutes: 0)),
+          finishTime: WeekTime(weekDay: WeekDay.friday, time: DayTime(hours: 24, minutes: 0)),
+          ),
+      ],
+      [
+          WeekTimeInterval(
+          startTime: WeekTime(weekDay: WeekDay.saturday, time: DayTime(hours: 0, minutes: 0)),
+          finishTime: WeekTime(weekDay: WeekDay.saturday, time: DayTime(hours: 24, minutes: 0)),
+          ),
+      ],
+      [
+          WeekTimeInterval(
+          startTime: WeekTime(weekDay: WeekDay.sunday, time: DayTime(hours: 0, minutes: 0)),
+          finishTime: WeekTime(weekDay: WeekDay.sunday, time: DayTime(hours: 23, minutes: 0)),
+          ),
+      ],
+      ],
+      isOpen24x7: false,
+  ),
+  contactInfos: [],
+  // Рейтинг 3.4 на основе 85 отзывов
+  reviews: Reviews(rating: 3.4, count: 85),
+  parkingInfo: null,
+  // В данный момент филиал открыт и работает до 23:00
+  workStatus: WorkStatus(
+      openStatus: OpenStatus.opened(Opened(null)),
+      openStatusHint: 'Открыто до 23:00',
+      scheduleHint: 'Сегодня до 23:00',
+      breakHint: null,
+  ),
+  levelId: null,
+  buildingLevels: null,
+  // У организации один вход
+  entrances: [
+      EntranceInfo(
+      id: DgisObjectId(objectId: 4504128908451067, entranceId: 70030076156031010),
+      buildingNumber: null,
+      porchName: null,
+      porchNumber: null,
+      apartmentRanges: [],
+      geometry: EntranceGeometry(
+          entrancePoints: [
+          GeoPoint(
+              latitude: Latitude(value: 55.76590646318491),
+              longitude: Longitude(value: 37.60283837242394),
+          ),
+          ],
+          entrancePolylines: [
+          [
+              GeoPoint(
+              latitude: Latitude(value: 55.765971),
+              longitude: Longitude(value: 37.602949),
+              ),
+              GeoPoint(
+              latitude: Latitude(value: 55.765906),
+              longitude: Longitude(value: 37.602838),
+              ),
+          ],
+          ],
+      ),
+      ),
+  ],
+  chargingStation: null,
+  // Объект относится к трём категориям
+  rubricIds: [
+      RubricId(value: 162),
+      RubricId(value: 1203),
+      RubricId(value: 161),
+  ],
+  // Информация о головной организации и общем количестве филиалов
+  orgInfo: OrgInfo(
+      branchCount: 225,
+      id: OrgId(value: 4504136498310300),
+      name: 'Шоколадница, кофейня',
+  ),
+  group: [],
+  ```
+
+  </details>
+
+* Жилое здание:
+
+    <details>
+    <summary><code>DirectoryObject</code></summary>
+
+  ```tsx
+  // Тип объекта — здание
+  types: [ObjectType.building],
+  // Название объекта — адрес здания
+  title: '2-я Черногрязская улица, 1',
+  titleAddition: null,
+  // Подтип объекта — жилой дом
+  subtitle: 'Жилой дом',
+  // ID объекта
+  id: DgisObjectId(objectId: 4504235282792806, entranceId: 0),
+  // Координаты маркера для размещения на карте
+  markerPosition: GeoPointWithElevation(
+      latitude: Latitude(value: 55.760651),
+      longitude: Longitude(value: 37.545995),
+      elevation: Elevation(value: 3.0),
+  ),
+  // Адрес объекта — Москва, 2-я Черногрязская улица 1
+  address: Address(
+      drillDown: [
+      AddressAdmDiv(type: 'country', name: 'Россия'),
+      AddressAdmDiv(type: 'region', name: 'Москва'),
+      AddressAdmDiv(type: 'city', name: 'Москва'),
+      AddressAdmDiv(type: 'district', name: 'Пресненский'),
+      ],
+      components: [
+      AddressComponent(
+          AddressStreet(
+          street: '2-я Черногрязская улица',
+          number: '1',
+          fiasCode: '91e0431b-5721-40b9-8bf0-5eb5377063a8',
+          ),
+      ),
+      ],
+      buildingName: null,
+      buildingId: BuildingId(value: 4504235282792806),
+      postCode: '123100',
+      buildingCode: null,
+      fiasCode: null,
+      addressComment: null,
+  ),
+  attributes: [],
+  contextAttributes: [],
+  timeZoneOffset: null,
+  openingHours: null,
+  contactInfos: [],
+  // Нет отзывов об объекте для подсчёта рейтинга
+  reviews: Reviews(rating: 0.0, count: 0),
+  parkingInfo: null,
+  workStatus: null,
+  levelId: null,
+  buildingLevels: null,
+  // У жилого здания два входа
+  entrances: [
+      EntranceInfo(
+      id: DgisObjectId(objectId: 4504235282792806, entranceId: 4504643304435799),
+      buildingNumber: null,
+      porchName: null,
+      porchNumber: null,
+      apartmentRanges: [],
+      geometry: EntranceGeometry(
+          entrancePoints: [
+          GeoPoint(
+              latitude: Latitude(value: 55.76073452440514),
+              longitude: Longitude(value: 37.54591428882596),
+          ),
+          ],
+          entrancePolylines: [
+          [
+              GeoPoint(
+              latitude: Latitude(value: 55.760822),
+              longitude: Longitude(value: 37.545949),
+              ),
+              GeoPoint(
+              latitude: Latitude(value: 55.760735),
+              longitude: Longitude(value: 37.545914),
+              ),
+          ],
+          ],
+      ),
+      ),
+      EntranceInfo(
+      id: DgisObjectId(objectId: 4504235282792806, entranceId: 70030076156588095),
+      buildingNumber: null,
+      porchName: '1 подъезд',
+      porchNumber: 1,
+      apartmentRanges: [
+          ApartmentRange(start: 1, end: 80),
+      ],
+      geometry: EntranceGeometry(
+          entrancePoints: [
+          GeoPoint(
+              latitude: Latitude(value: 55.7605167221199),
+              longitude: Longitude(value: 37.54581996572112),
+          ),
+          ],
+          entrancePolylines: [
+          [
+              GeoPoint(
+              latitude: Latitude(value: 55.760497),
+              longitude: Longitude(value: 37.545975),
+              ),
+              GeoPoint(
+              latitude: Latitude(value: 55.760517),
+              longitude: Longitude(value: 37.54582),
+              ),
+          ],
+          ],
+      ),
+      ),
+  ],
+  chargingStation: null,
+  rubricIds: [],
+  orgInfo: null,
+  group: [],
+  ```
+
+    </details>
+
+* Улица:
+
+    <details>
+    <summary><code>DirectoryObject</code></summary>
+
+  ```tsx
+  // Тип объекта — улица
+  types: [ObjectType.street],
+  // Название объекта
+  title: 'Улица Петрова',
+  titleAddition: null,
+  // Подтип объекта — улица
+  subtitle: 'Street',
+  // ID объекта
+  id: DgisObjectId(objectId: 4504338361766218, entranceId: 0),
+  // Координаты маркера для размещения на карте
+  markerPosition: GeoPointWithElevation(
+      latitude: Latitude(value: 55.643536),
+      longitude: Longitude(value: 38.053038),
+      elevation: Elevation(value: 0.0),
+  ),
+  // Адрес объекта — Московская область, пгт Удельная
+  address: Address(
+      drillDown: [
+      AddressAdmDiv(type: 'country', name: 'Россия'),
+      AddressAdmDiv(type: 'region', name: 'Московская область'),
+      AddressAdmDiv(type: 'district_area', name: 'Раменский муниципальный округ'),
+      AddressAdmDiv(type: 'settlement', name: 'пгт Удельная'),
+      ],
+      components: [],
+      buildingName: null,
+      buildingId: null,
+      postCode: null,
+      buildingCode: null,
+      fiasCode: '0d8e2b4c-eef7-4176-bbec-be9ac0ace587',
+      addressComment: null,
+  ),
+  attributes: [],
+  contextAttributes: [],
+  timeZoneOffset: null,
+  openingHours: null,
+  contactInfos: [],
+  reviews: null,
+  parkingInfo: null,
+  workStatus: null,
+  levelId: null,
+  buildingLevels: null,
+  entrances: [],
+  chargingStation: null,
+  rubricIds: [],
+  orgInfo: null,
+  group: [],
+  ```
+
+    </details>
+
+* Площадной объект (парк):
+
+  <details>
+  <summary><code>DirectoryObject</code></summary>
+
+  ```tsx
+  // Основной тип объекта — площадной объект, дополнительный — достопримечательность
+  types: [ObjectType.admDivPlace, ObjectType.attraction],
+  // Название объекта
+  title: 'Парк "Красногвардейские пруды"',
+  titleAddition: null,
+  // Подтип объекта — место
+  subtitle: 'Место',
+  // ID объекта
+  id: DgisObjectId(objectId: 4504286822138295, entranceId: 0),
+  // Координаты маркера для размещения на карте
+  markerPosition: GeoPointWithElevation(
+      latitude: Latitude(value: 55.756656),
+      longitude: Longitude(value: 37.545756),
+      elevation: Elevation(value: 0.0),
+  ),
+  // Адрес объекта — Москва
+  address: Address(
+      drillDown: [
+      AddressAdmDiv(type: 'country', name: 'Россия'),
+      AddressAdmDiv(type: 'region', name: 'Москва'),
+      AddressAdmDiv(type: 'city', name: 'Москва'),
+      ],
+      components: [],
+      buildingName: null,
+      buildingId: null,
+      postCode: null,
+      buildingCode: null,
+      fiasCode: null,
+      addressComment: null,
+  ),
+  attributes: [],
+  contextAttributes: [],
+  timeZoneOffset: null,
+  openingHours: null,
+  contactInfos: [],
+  // Рейтинг 4.8 на основе 62 отзывов
+  reviews: Reviews(rating: 4.8, count: 62),
+  parkingInfo: null,
+  workStatus: null,
+  levelId: null,
+  buildingLevels: null,
+  entrances: [],
+  chargingStation: null,
+  // Объект относится к одной категории
+  rubricIds: [RubricId(value: 168)],
+  orgInfo: null,
+  // Объект одновременно является и площадным объектом, и достопримечательностью
+  group: [
+      GroupItem(
+      id: DgisObjectId(objectId: 70030076538159915, entranceId: 0),
+      type: ObjectType.attraction,
+      ),
+  ],
+  ```
+
+  </details>
+
+## Поисковые подсказки {#search-suggestions}
+
+Вы можете формировать подсказки для пользователей при текстовом поиске объектов. Для этого создайте объект [SuggestQuery](/react-native/sdk/reference/stable/class#suggest-query) с помощью [SuggestQueryBuilder](/react-native/sdk/reference/stable/class#suggest-query-builder) и передайте его в метод [suggest()](/react-native/sdk/reference/stable/class#search-manager/suggest):
+
+```tsx
+import {
+  SuggestHandlerKind,
+  SuggestQueryBuilder,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const suggestQuery = SuggestQueryBuilder.fromQueryText('коф')
+  .setAreaOfInterest(map.camera.visibleRect)
+  .build();
+
+const future = searchManager.suggest(suggestQuery);
+
+future.onComplete(
+  result => {
+    result.suggests.forEach(suggest => {
+      switch (suggest.handler.kind) {
+        case SuggestHandlerKind.ObjectHandler:
+          console.log('Object:', suggest.handler.value.item.title);
+          break;
+        case SuggestHandlerKind.IncompleteTextHandler:
+          console.log('Complete:', suggest.handler.value.queryText);
+          break;
+        case SuggestHandlerKind.PerformSearchHandler: {
+          const searchFuture = searchManager.search(
+            suggest.handler.value.searchQuery,
+          );
+          searchFuture.onComplete(
+            searchResult => {
+              console.log(searchResult.firstPage?.items ?? []);
+              searchFuture.destroy();
+            },
+            error => {
+              console.warn(error);
+            },
+          );
+          break;
+        }
+      }
+    });
+
+    future.destroy();
+  },
+  error => {
+    console.warn(error);
+  },
+);
+```
+
+Вызов вернёт отложенный результат [SuggestResult](/react-native/sdk/reference/stable/class#suggest-result), содержащий список подсказок ([Suggest](/react-native/sdk/reference/stable/class#suggest)). Подробнее о формировании подсказок см. в документации [Suggest API](/api/search/suggest/overview).
+
+Когда пользователь выбирает одну из предложенных подсказок, вы можете настроить реакцию на это событие с помощью обработчика [SuggestHandler](/react-native/sdk/reference/stable/typeAlias#suggest-handler) одного из следующих типов:
+
+* [SuggestObjectHandler](/react-native/sdk/reference/stable/class#suggest-object-handler) — возвращает объект справочника [DirectoryObject](/react-native/sdk/reference/stable/class#directory-object).
+* [PerformSearchHandler](/react-native/sdk/reference/stable/class#perform-search-handler) — возвращает объект поискового запроса [SearchQuery](/react-native/sdk/reference/stable/class#search-query). Вы можете использовать этот объект для дальнейшего поиска: передайте его в метод [SearchManager.search()](/react-native/sdk/reference/stable/class#search-manager/search) или создайте на его основе новый [SearchQuery](/react-native/sdk/reference/stable/class#search-query) с дополнительными параметрами с помощью метода [fromQuery()](/react-native/sdk/reference/stable/class#searchquerybuilder-fromquery) (подробнее см. в разделе [Изменение параметров поиска](#modify-search-params)).
+* [IncompleteTextHandler](/react-native/sdk/reference/stable/class#incomplete-text-handler) — возвращает автоматически дополненный текст подсказки, который можно использовать для дальнейшего формирования поискового запроса с помощью метода [setQueryText()](/react-native/sdk/reference/stable/class#searchquerybuilder-setquerytext).
+
+## История поиска {#search-history}
+
+Вы можете работать с историей поиска с помощью [SearchHistory](/react-native/sdk/reference/stable/class#search-history).
+
+В истории поиска могут храниться элементы двух типов: объекты справочника ([DirectoryObject](/react-native/sdk/reference/stable/class#directory-object)) и поисковые запросы ([SearchQueryWithInfo](/react-native/sdk/reference/stable/class#search-query-with-info)).
+
+Получить экземпляр можно через `SearchHistory.instance(context)`.
+
+### Добавление элементов в историю поиска {#add-elements-to-history}
+
+Вы можете добавлять элементы в историю поиска в виде объектов [SearchHistoryItem](/react-native/sdk/reference/stable/typeAlias#search-history-item) по одному или списком. Порядок элементов в списке сохраняется при добавлении в историю.
+
+1. Создайте `SearchHistoryItem` из объекта нужного типа:
+
+    * Для поискового запроса используйте [SearchQueryWithInfo](/react-native/sdk/reference/stable/class#search-query-with-info). Помимо поискового запроса, объект может содержать заголовок и подзаголовок для отображения в истории.
+    * Для объекта справочника используйте [DirectoryObject](/react-native/sdk/reference/stable/class#directory-object).
+
+2. Получите экземпляр `SearchHistory` с помощью метода `SearchHistory.instance(context)`.
+3. Добавьте подготовленные элементы методом `addItem()` по одному или методом `addItems()` списком.
+
+```tsx
+import {
+  SearchHistory,
+  SearchHistoryItem,
+  SearchQueryWithInfo,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const history = SearchHistory.instance(context);
+
+history.addItem(SearchHistoryItem.directoryObject(directoryObject));
+history.addItem(
+  SearchHistoryItem.searchQuery(
+    new SearchQueryWithInfo(textQuery, 'Кофейни', 'Рядом со мной'),
+  ),
+);
+```
+
+Чтобы добавить сразу несколько подготовленных элементов:
+
+```tsx
+history.addItems(searchHistoryItems);
+```
+
+Если добавляемый элемент уже существует в истории, более старый дубликат будет удалён.
+
+### Отображение истории поиска {#show-history-page}
+
+Чтобы показать страницу поиска со списком элементов, создайте объект [SearchHistoryPage](/react-native/sdk/reference/stable/struct#search-history-page) и передайте её в метод `items()`. Дополнительно вы можете настроить следующие параметры:
+
+* Ограничить количество элементов на странице (параметр `limit`). Значение по умолчанию — 100.
+* Задать смещение относительно начала списка (параметр `offset`): сколько элементов с начала списка пропустить. Значение по умолчанию — 0 (смещение отсутствует, список отображается с самого начала).
+* Отфильтровать список по типу элементов (параметр `filter`). Доступные фильтры перечислены в [SearchHistoryFilter](/react-native/sdk/reference/stable/enumeration#search-history-filter). Например, чтобы показывать в истории только поисковые запросы, используйте значение `searchQuery`. По умолчанию фильтрация отсутствует.
+
+```tsx
+import { SearchHistoryPage } from '@2gis/dgis-mobile-sdk-full';
+
+const future = history.items(new SearchHistoryPage({ limit: 20n }));
+
+future.onComplete(
+  result => {
+    console.log(result.items);
+    future.destroy();
+  },
+  error => {
+    console.warn(error);
+  },
+);
+```
+
+Элементы на странице упорядочены по времени добавления: от новых к старым.
+
+### Очистка истории поиска {#clean-history}
+
+Чтобы удалить отдельные элементы из истории поиска:
+
+* Чтобы удалить один элемент, передайте нужный `SearchHistoryItem` в метод `removeItem()`. Подробнее о создании `SearchHistoryItem` см. в разделе [Добавление элементов в историю поиска](#add-elements-to-history).
+
+  ```tsx
+  history.removeItem(searchHistoryItem);
+  ```
+
+* Чтобы удалить несколько элементов, передайте список объектов `SearchHistoryItem` в метод `removeItems()`. Подробнее о создании `SearchHistoryItem` см. в разделе [Добавление элементов в историю поиска](#add-elements-to-history).
+
+  ```tsx
+  history.removeItems(searchHistoryItems);
+  ```
+
+Чтобы полностью очистить историю поиска, вызовите метод `clear()`:
+
+```tsx
+history.clear();
+```
+
+### Подписка на изменения истории {#subscribe-to-history-changes}
+
+Чтобы отслеживать добавление и удаление элементов, подпишитесь на канал `onHistoryChanged`. Обработчик получает [ChangeType](/react-native/sdk/reference/stable/enumeration#change-type), который указывает тип изменения: `Add` или `Remove`.
+
+```tsx
+const connection = history.onHistoryChanged.subscribe(change => {
+  console.log('History changed:', change);
+});
+
+connection.disconnect();
+```
+
+Когда отслеживание больше не требуется, вызовите `disconnect()` у полученного объекта подключения.
+
+## Информация о подъездах в справочнике {#entrances-in-directory}
+
+Вы можете искать адреса в справочнике с точностью до квартиры или подъезда.
+
+Например, по запросу `"Томск Кирова 17 кв 5"` вы получите объект, который содержит информацию с точностью до подъезда.
+
+[DgisObjectId](/react-native/sdk/reference/stable/struct#dgis-object-id) содержит два идентификатора:
+
+* `objectId` — стабильный числовой идентификатор объекта;
+* `entranceId` — стабильный числовой идентификатор входа или подъезда объекта.
+
+Если `entranceId` не равен `0n`, результат поиска относится к конкретному подъезду здания.
+
+Чтобы поставить маркер у найденного подъезда или получить его координаты для построения маршрута, не используйте `markerPosition`: это поле содержит позицию маркера самого здания. Найдите вход с соответствующим `entranceId` в поле `entrances` объекта [DirectoryObject](/react-native/sdk/reference/stable/class#directory-object) и используйте первую точку из `geometry.entrancePoints`. Если геометрия входа отсутствует, используйте координаты из `markerPosition`.
+
+```tsx
+import { GeoPoint, type DirectoryObject } from '@2gis/dgis-mobile-sdk-full';
+
+function getMarkerPosition(directoryObject: DirectoryObject): GeoPoint | null {
+  const entranceId = directoryObject.id?.entranceId ?? 0n;
+
+  if (entranceId === 0n) {
+    return null;
+  }
+
+  const entrance = directoryObject.entrances.find(
+    item => item.id.entranceId === entranceId,
+  );
+  const entrancePoint = entrance?.geometry?.entrancePoints[0];
+
+  if (entrancePoint !== undefined) {
+    return entrancePoint;
+  }
+
+  const markerPosition = directoryObject.markerPosition;
+
+  if (markerPosition === null) {
+    return null;
+  }
+
+  return new GeoPoint({
+    latitude: markerPosition.latitude,
+    longitude: markerPosition.longitude,
+  });
+}
+```

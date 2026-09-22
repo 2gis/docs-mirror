@@ -1,0 +1,925 @@
+---
+sidebar: reactnativesdk
+---
+# Карта
+
+## Создание карты {#creating-map}
+
+Чтобы создать карту, создайте [MapControllerOptions](/react-native/sdk/reference/stable/struct#map-controller-options), получите состояние контроллера с помощью метода [useMapController()](/react-native/sdk/reference/stable/method#use-map-controller) и передайте его в [MapView](/react-native/sdk/reference/stable/method#map-view).
+
+```tsx
+import React, { useEffect, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
+import {
+  Bearing,
+  CameraPosition,
+  DGis,
+  GeoPoint,
+  Latitude,
+  Longitude,
+  MapControllerOptions,
+  MapView,
+  Tilt,
+  useMapController,
+  Zoom,
+} from '@2gis/dgis-mobile-sdk-full';
+
+function point(latitude: number, longitude: number) {
+  return new GeoPoint({
+    latitude: new Latitude({ value: latitude }),
+    longitude: new Longitude({ value: longitude }),
+  });
+}
+
+export function MapScreen() {
+  const context = useMemo(() => DGis.createContext(), []);
+  const options = useMemo(
+    () =>
+      new MapControllerOptions({
+        position: new CameraPosition({
+          point: point(55.7522, 37.6156),
+          zoom: new Zoom({ value: 14 }),
+          tilt: new Tilt({ value: 0 }),
+          bearing: new Bearing({ value: 0 }),
+        }),
+      }),
+    [],
+  );
+  const controllerState = useMapController(context, options);
+  const mapController =
+    controllerState.status === 'ready' ? controllerState.controller : null;
+
+  useEffect(() => {
+    if (mapController === null) {
+      return;
+    }
+
+    return () => {
+      mapController.destroy();
+    };
+  }, [mapController]);
+
+  useEffect(() => {
+    return () => DGis.releaseContext(context);
+  }, [context]);
+
+  return <MapView controllerState={controllerState} style={styles.map} />;
+}
+
+const styles = StyleSheet.create({
+  map: { flex: 1 },
+});
+```
+
+### Источники данных для карты
+
+В некоторых случаях для добавления объектов на карту нужно создать источник данных. Источники данных добавляются на карту вместо объектов, выступают в роли менеджеров объектов и используются для последующей работы с ними.
+
+Типы источников данных: движущиеся маркеры, маршруты с отображением текущей загруженности дорог, произвольные геометрические фигуры и т. д. Для каждого типа данных существует свой класс. Список активных источников данных можно получить, используя свойство [Map.sources](/react-native/sdk/reference/stable/class#map).
+
+Источники данных можно передать в [MapControllerOptions](/react-native/sdk/reference/stable/struct#map-controller-options) при создании карты или добавить позже через [map.addSource()](/react-native/sdk/reference/stable/class#map/add-source).
+
+```tsx
+import {
+  DgisSource,
+  DgisSourceWorkingMode,
+  MapControllerOptions,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const source = DgisSource.createDgisSource(
+  context,
+  DgisSourceWorkingMode.Online,
+);
+
+const options = new MapControllerOptions({
+  sources: [source],
+});
+```
+
+Для реалистичных данных используйте метод [DgisSource.createImmersiveDgisSource()](/react-native/sdk/reference/stable/class#dgis-source/create-immersive-dgis-source):
+
+```tsx
+const immersiveSource = DgisSource.createImmersiveDgisSource(context);
+map.addSource(immersiveSource);
+```
+
+{/* ### Подключение растровой карты {#add-raster-map}
+
+По умолчанию в SDK используется векторная карта, тайлы для которой предоставляет [Map Tiles API](/maps/others/maptiles/overview). Если вы хотите использовать растровую карту, вы можете подключить её двумя способами:
+
+- Наложить растровые тайлы из внешнего источника поверх стандартной векторной карты: например, чтобы обогатить карту дополнительной информацией.
+- Подключить [Raster Tiles API](/maps/others/rastertiles/overview), чтобы использовать растровую карту <Brand /> вместо векторной: например, чтобы показать карту на устройстве с низкой производительностью.
+
+Чтобы подключить растровую карту:
+
+1. Если вы планируете использовать растровую карту <Brand />, убедитесь, что для вашего ключа доступен [Raster Tiles API](/maps/others/rastertiles/overview).
+2. Создайте стилевой слой:
+
+   1. Откройте [Редактор стилей](https://styles.2gis.com/).
+   2. Откройте стиль или [создайте новый](/maps/styles/create).
+   3. В разделе **Слои** нажмите значок ![Добавить слой](/img/styles/add-layer-icon.svg).
+   4. Прокрутите список вниз, включите **Динамические слои** и выберите тип **Растровый слой**.
+   5. На вкладке **Данные** выберите **JSON — добавить вручную**.
+   6. Добавьте атрибут `db_sublayer` с уникальным идентификатором слоя (например, `my_raster_layer`): вставьте следующий код в текстовое поле:
+
+      ```json
+      ["match", ["get", "db_sublayer"], ["my_raster_layer"], true, false]
+      ```
+
+      Этот идентификатор будет использован для ссылки на стилевой слой из кода.
+
+      <img src="/img/mobile-sdk/raster_layer_example.png" width="600" alt="Пример редактирования JSON" />
+
+   7. Настройте другие параметры стиля в соответствующих вкладках.
+   8. [Экспортируйте и подключите стиль](/maps/styles/connect#flutter-sdk).
+
+3. Создайте объект [RasterUrlTemplate](/react-native/sdk/reference/stable/typeAlias#raster-url-template) и передайте в него URL-адрес источника растровых тайлов в виде объекта [DefaultRasterUrlTemplate](/react-native/sdk/reference/stable/struct#default-raster-url-template) или [WmsRasterUrlTemplate](/react-native/sdk/reference/stable/struct#wms-raster-url-template) (для стандарта WMS).
+4. Создайте источник данных с помощью [RasterTileSource](/react-native/sdk/reference/stable/class#raster-tile-source), укажите идентификатор созданного слоя в параметре `sublayerName` и созданный объект `RasterUrlTemplate` в параметре `sourceTemplate`.
+5. Добавьте источник на карту c помощью метода `addSource` объекта карты.
+
+Готовый пример:
+
+```tsx
+import {
+  DefaultRasterUrlTemplate,
+  RasterTileSource,
+  RasterUrlTemplate,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const rasterSource = new RasterTileSource(
+  context,
+  'my_raster_layer',
+  RasterUrlTemplate.defaultSource(
+    new DefaultRasterUrlTemplate({
+      urlTemplate: 'https://tile{n}.maps.2gis.com/v2/tiles/{tileset}/{z}/{x}/{y}.png?key={key}',
+    }),
+  ),
+);
+
+map.addSource(rasterSource);
+``` */}
+
+{/* ### Офлайн-режим {#offline-mode}
+
+1. Выполните [подготовительные шаги](/react-native/sdk/start#offline-mode), чтобы карта могла работать с предзагруженными данными.
+
+2. Добавьте источник данных для карты. Для этого в функции [createDgisSource()](/react-native/sdk/reference/stable/class#dgis-source/create-dgis-source) установите параметру `workingMode` одно из следующих значений [DgisSourceWorkingMode](/react-native/sdk/reference/stable/enumeration#dgis-source-working-mode):
+
+   * `OFFLINE` — чтобы всегда использовать только предварительно загруженные данные.
+   * `HYBRID_ONLINE_FIRST` — чтобы преимущественно использовать онлайн-данные с серверов <Brand />. Предзагруженные данные используются, только когда они совпадают с онлайн-данными или когда данные с серверов получить невозможно.
+   * `HYBRID_OFFLINE_FIRST` — чтобы преимущественно использовать предзагруженные данные. Онлайн-данные с серверов <Brand /> используются, только когда отсутствуют предзагруженные данные.
+
+```tsx
+import { DgisSource, DgisSourceWorkingMode } from '@2gis/dgis-mobile-sdk-full';
+
+const offlineSource = DgisSource.createDgisSource(
+  context,
+  DgisSourceWorkingMode.Offline,
+);
+
+map.addSource(offlineSource);
+``` */}
+
+## Добавление объектов {#add-objects}
+
+Для добавления динамических объектов на карту (маркеров, линий, кругов, многоугольников) нужно создать менеджер объектов ([MapObjectManager](/react-native/sdk/reference/stable/class#map-object-manager)), указав объект карты. При удалении менеджера объектов удаляются все связанные с ним объекты на карте. Менеджер можно создать для слоя динамических объектов из стиля или передать `null`, чтобы разместить объекты поверх остальных слоёв.
+
+```tsx
+import { MapObjectManager, type Map } from '@2gis/dgis-mobile-sdk-full';
+
+const manager = new MapObjectManager(map, null);
+```
+
+Для добавления объектов используются методы [addObject()](/react-native/sdk/reference/stable/class#map-object-manager/add-object) и [addObjects()](/react-native/sdk/reference/stable/class#map-object-manager/add-objects). Для каждого динамического объекта можно указать поле `userData`, которое будет хранить произвольные данные, связанные с объектом. Настройки объектов можно менять после их создания.
+
+Для удаления объектов используются методы [removeObject()](/react-native/sdk/reference/stable/class#map-object-manager/remove-object) и [removeObjects()](/react-native/sdk/reference/stable/class#map-object-manager/remove-objects). Чтобы удалить все объекты, можно использовать метод `removeAll()`.
+
+:::note[Сохранение объектов на карте]
+
+[MapObjectManager](/react-native/sdk/reference/stable/class#map-object-manager) — это контейнер объектов. Пока объекты нужны на карте, `MapObjectManager` необходимо сохранять на уровне класса.
+
+:::
+
+### Маркер
+
+Чтобы добавить маркер на карту, нужно создать объект [Marker](/react-native/sdk/reference/stable/class#marker), указав нужные настройки в [MarkerOptions](/react-native/sdk/reference/stable/struct#marker-options), и передать его в вызов `addObject()` менеджера объектов.
+
+Единственный обязательный параметр — координаты маркера (`position`).
+
+```tsx
+import {
+  GeoPointWithElevation,
+  Latitude,
+  LogicalPixel,
+  Longitude,
+  Marker,
+  MarkerOptions,
+  TextStyle,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const marker = new Marker(
+  new MarkerOptions({
+    position: new GeoPointWithElevation({
+      latitude: new Latitude({ value: 55.7522 }),
+      longitude: new Longitude({ value: 37.6156 }),
+    }),
+    text: 'Офис',
+    textStyle: new TextStyle({ fontSize: new LogicalPixel({ value: 14 }) }),
+  }),
+);
+
+manager.addObject(marker);
+```
+
+Чтобы создать иконку маркера, нужно указать объект [Image](/react-native/sdk/reference/stable/class#image) в качестве параметра `icon`. Создать `Image` можно с помощью основных функций:
+
+* [loadLottieFromAsset()](/react-native/sdk/reference/stable/class#image-loader/load-lottie-from-asset)
+* [loadLottieFromFile()](/react-native/sdk/reference/stable/class#image-loader/load-lottie-from-file)
+* [loadPngFromAsset()](/react-native/sdk/reference/stable/class#image-loader/load-png-from-asset)
+* [loadPngFromFile()](/react-native/sdk/reference/stable/class#image-loader/load-png-from-file)
+* [loadSVGFromAsset()](/react-native/sdk/reference/stable/class#image-loader/load-svgfrom-asset)
+* [loadSVGFromFile()](/react-native/sdk/reference/stable/class#image-loader/load-svgfrom-file)
+
+Полный список функций см. в описании объекта [ImageLoader](/react-native/sdk/reference/stable/class#image-loader).
+
+Например, чтобы создать маркер с SVG-иконкой:
+
+```tsx
+import {
+  GeoPointWithElevation,
+  ImageLoader,
+  Latitude,
+  Longitude,
+  Marker,
+  MarkerOptions,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const imageLoader = new ImageLoader(context);
+const icon = await imageLoader.loadSVGFromAsset('assets/icons/bridge.svg');
+
+const marker = new Marker(
+  new MarkerOptions({
+    position: new GeoPointWithElevation({
+      latitude: new Latitude({ value: 55.7522 }),
+      longitude: new Longitude({ value: 37.6156 }),
+    }),
+    icon,
+  }),
+);
+```
+
+### Линия {#polyline}
+
+Чтобы нарисовать на карте линию (полилинию), создайте объект [Polyline](/react-native/sdk/reference/stable/class#polyline), укажите настройки линии в [PolylineOptions](/react-native/sdk/reference/stable/struct#polyline-options) и передайте объект в метод `addObject()` менеджера объектов.
+
+Вы можете указать координаты вершин линии и настроить её ширину, цвет и другие параметры.
+
+```tsx
+import {
+  Color,
+  LogicalPixel,
+  Polyline,
+  PolylineOptions,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const polyline = new Polyline(
+  new PolylineOptions({
+    points: [
+      point(55.7522, 37.6156),
+      point(55.758, 37.62),
+      point(55.764, 37.61),
+    ],
+    width: new LogicalPixel({ value: 4 }),
+    color: new Color({ argb: 0xff1e88e5 }),
+  }),
+);
+
+manager.addObject(polyline);
+```
+
+### Многоугольник
+
+Чтобы нарисовать на карте многоугольник, нужно создать объект [Polygon](/react-native/sdk/reference/stable/class#polygon), указав нужные настройки в [PolygonOptions](/react-native/sdk/reference/stable/struct#polygon-options), и передать его в вызов `addObject()` менеджера объектов.
+
+Координаты для многоугольника указываются в виде двумерного списка. Первый вложенный список должен содержать координаты основных вершин многоугольника. Остальные вложенные списки не обязательны и могут быть заданы для того, чтобы создать вырез внутри многоугольника (один дополнительный список — один вырез в виде многоугольника).
+
+```tsx
+import {
+  Color,
+  LogicalPixel,
+  Polygon,
+  PolygonOptions,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const polygon = new Polygon(
+  new PolygonOptions({
+    contours: [[
+      point(55.751, 37.61),
+      point(55.755, 37.619),
+      point(55.748, 37.622),
+    ]],
+    color: new Color({ argb: 0x5538bdf8 }),
+    strokeWidth: new LogicalPixel({ value: 2 }),
+    strokeColor: new Color({ argb: 0xff0284c7 }),
+  }),
+);
+
+manager.addObject(polygon);
+```
+
+### Окружность
+
+Чтобы нарисовать на карте окружность, создайте объект [Circle](/react-native/sdk/reference/stable/class#circle), указав нужные настройки в [CircleOptions](/react-native/sdk/reference/stable/struct#circle-options), и передайте его в метод `addObject()` менеджера объектов:
+
+```tsx
+import {
+  Circle,
+  CircleOptions,
+  Color,
+  LogicalPixel,
+  Meter,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const circle = new Circle(
+  new CircleOptions({
+    position: point(55.7522, 37.6156),
+    radius: new Meter({ value: 150 }),
+    color: new Color({ argb: 0x44f97316 }),
+    strokeWidth: new LogicalPixel({ value: 2 }),
+    strokeColor: new Color({ argb: 0xffea580c }),
+  }),
+);
+
+manager.addObject(circle);
+```
+
+### 3D-модели {#3d-models}
+
+#### Требования и рекомендации
+
+Для оптимальной производительности карты и корректного отображения трёхмерных моделей на карте следуйте требованиям и рекомендациям.
+
+Обязательные требования:
+
+* Формат: glTF/GLB (файлы `.gltf`, `.glb`).
+* Меш: желательно, чтобы модель содержала один [меш](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#meshes) (геометрический объект на сцене). Использование моделей с несколькими мешами снижает производительность карты.
+* Текстура:
+
+  * Меш может иметь [текстуру](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#textures) или одноцветную заливку.
+  * Разрешение текстуры должно быть кратно степени двойки (2, 4, 8, 16, 32, 64, 128 и 256). Текстуры высокого разрешения снижают производительность карты.
+  * Поддерживаются форматы изображений `.png`, `.jpg` и `.bmp`.
+  * Не поддерживается сжатие текстур.
+
+* Инстанцирование: расширения для [инстанцирования](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#instantiation) не поддерживаются.
+
+<br />
+
+Рекомендации по использованию и производительности:
+
+* Размер: оптимальный размер уникальных моделей — не более 10 000 вершин; типовых моделей (например, деревьев) — от 200 до 2000 вершин.
+* Текстура: оптимальный размер текстур для уникальных моделей — 256×256; для типовых моделей — 64×64.
+* Цвета: если вы не настраиваете собственные стили карты, а просто загружаете модели, рекомендуется, чтобы цвета текстуры моделей сочетались с цветами карты <Brand />.
+* Сжатие: рекомендуется использовать алгоритм [Draco](https://google.github.io/draco/) для сжатия моделей.
+* Матричные анимации: поддерживаются, но использование снижает производительность карты.
+* Модель освещения PBR: поддерживается, но использование снижает производительность карты.
+* Локальные трансформации: локальные [трансформации](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#transformations) (перемещения, вращения и масштабирования) поддерживаются, но снижают производительность карты.
+
+#### Добавление моделей
+
+Чтобы добавить на карту 3D-модель:
+
+1. Преобразуйте модель в объект [ModelData](/react-native/sdk/reference/stable/class#model-data), который будет использоваться в SDK, с помощью метода [ModelLoader.loadFromAsset()](/react-native/sdk/reference/stable/class#model-loader/load-from-asset).
+2. Создайте объект [ModelSize](/react-native/sdk/reference/stable/typeAlias#model-size) и укажите размер модели одним из способов:
+
+    - Чтобы задать постоянный размер модели, который не будет изменяться при изменении масштаба карты, используйте метод `logicalPixel()` и укажите размер в логических пикселях.
+    - Чтобы задать размер, который будет зависеть от масштаба карты (при отдалении модель будет становиться меньше и наоборот), используйте метод `scale()` и укажите коэффициент масштабирования модели [ModelScale](/react-native/sdk/reference/stable/struct#model-scale).
+
+3. Создайте объект [ModelMapObject](/react-native/sdk/reference/stable/class#model-map-object), указав нужные настройки в [ModelMapObjectOptions](/react-native/sdk/reference/stable/struct#model-map-object-options), и передайте его в метод `addObject()` менеджера объектов.
+
+```tsx
+import {
+  GeoPointWithElevation,
+  Latitude,
+  LogicalPixel,
+  Longitude,
+  ModelLoader,
+  ModelMapObject,
+  ModelMapObjectOptions,
+  ModelSize,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const modelLoader = new ModelLoader(context);
+const data = await modelLoader.loadFromAsset('map/model.glb');
+
+const model = new ModelMapObject(
+  new ModelMapObjectOptions({
+    position: new GeoPointWithElevation({
+      latitude: new Latitude({ value: 55.7522 }),
+      longitude: new Longitude({ value: 37.6156 }),
+    }),
+    data,
+    size: ModelSize.logicalPixel(new LogicalPixel({ value: 80 })),
+  }),
+);
+
+manager.addObject(model);
+```
+
+### Добавление нескольких объектов {#add-multiple-objects}
+
+Если на карту необходимо добавить коллекцию объектов, то добавление через метод [addObject()](/react-native/sdk/reference/stable/class#map-object-manager/add-object) в цикле по всей коллекции приведёт к потере производительности. Для добавления коллекции объектов нужно сначала подготовить всю коллекцию и добавить её через метод [addObjects()](/react-native/sdk/reference/stable/class#map-object-manager/add-objects):
+
+```tsx
+manager.addObjects([marker, polyline, polygon, circle]);
+manager.removeObjects([polyline, polygon]);
+manager.removeAll();
+```
+
+### Кластеризация
+
+Кластеризация — это визуальная группировка близко расположенных друг к другу объектов (маркеров) в один кластер при уменьшении масштаба карты. Группировка происходит постепенно: чем меньше масштаб карты, тем меньше кластеров. Кластер отображается как маркер с цифрой, соответствующей количеству объектов в кластере.
+
+Чтобы добавить на карту маркеры в режиме кластеризации, создайте менеджер объектов ([MapObjectManager](/react-native/sdk/reference/stable/class#map-object-manager)) с помощью метода [MapObjectManager.withClustering()](/react-native/sdk/reference/stable/class#map-object-manager/with-clustering) и укажите следующие свойства:
+
+* Экземпляр карты (`map`).
+* Минимальное расстояние между маркерами в логических пикселях на уровнях масштабирования, при которых работает кластеризация (`logicalPixel`).
+* Уровень масштабирования, при котором и выше видны только отдельные маркеры, без кластеров (`maxZoom`).
+* Уровень масштабирования, при котором и ниже перестают формироваться новые кластеры (`minZoom`).
+* Пользовательскую реализацию протокола [SimpleClusterRenderer](/react-native/sdk/reference/stable/interface#simple-cluster-renderer), который используется для кастомизации кластеров в [MapObjectManager](/react-native/sdk/reference/stable/class#map-object-manager).
+
+```tsx
+import {
+  LogicalPixel,
+  MapObjectManager,
+  SimpleClusterOptions,
+  TextStyle,
+  Zoom,
+  type SimpleClusterObject,
+  type SimpleClusterRenderer,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const clusterRenderer: SimpleClusterRenderer = {
+  renderCluster(cluster: SimpleClusterObject) {
+    return new SimpleClusterOptions({
+      icon: null,
+      text: String(cluster.objectCount),
+      textStyle: new TextStyle({ fontSize: new LogicalPixel({ value: 16 }) }),
+    });
+  },
+};
+
+const clusteredManager = MapObjectManager.withClustering(
+  map,
+  new LogicalPixel({ value: 80 }),
+  new Zoom({ value: 18 }),
+  clusterRenderer,
+  new Zoom({ value: 0 }),
+  null,
+);
+```
+
+После создания менеджера объектов с кластеризацией вы можете [добавлять маркеры](#add-objects) обычными способами через `addObject()` или `addObjects()`.
+
+### Генерализация
+
+Генерализация — это визуальная группировка близко расположенных друг к другу объектов (маркеров) так, что при уменьшении масштаба карты вместо нескольких маркеров отображается один «ключевой». Группировка происходит постепенно: чем меньше масштаб карты, тем меньше групп.
+
+Чтобы добавить на карту маркеры в режиме генерализации, создайте менеджер объектов ([MapObjectManager](/react-native/sdk/reference/stable/class#map-object-manager)) с помощью метода [MapObjectManager.withGeneralization()](/react-native/sdk/reference/stable/class#map-object-manager/with-generalization) и укажите следующие свойства:
+
+* Экземпляр карты (`map`).
+* Минимальное расстояние между маркерами в логических пикселях на уровнях масштабирования, при которых работает генерализация (`logicalPixel`).
+* Уровень масштабирования, при котором и выше видны только отдельные маркеры, без групп (`maxZoom`).
+* Уровень масштабирования, при котором и ниже перестают формироваться новые группы (`minZoom`).
+
+```tsx
+const generalizedManager = MapObjectManager.withGeneralization(
+  map,
+  new LogicalPixel({ value: 80 }),
+  new Zoom({ value: 18 }),
+  new Zoom({ value: 0 }),
+  null,
+);
+```
+
+После создания менеджера объектов с генерализацией вы можете [добавлять маркеры](#add-objects) обычными способами через `addObject()` или `addObjects()`.
+
+## Изменение маркера геопозиции {#custom-location-marker}
+
+Вы можете заменить стандартный маркер геопозиции на карте на пользовательскую 3D-модель. См. требования к загружаемым моделям в разделе [3D-модели](#3d-models).
+
+Чтобы установить пользовательский маркер геопозиции:
+
+1. Создайте источник данных о геопозиции с помощью объекта [MyLocationMapObjectSource](/react-native/sdk/reference/stable/class#my-location-map-object-source) и установите тип маркера `Model` в параметре `markerType`:
+2. Добавьте созданный источник на карту с помощью метода `map.addSource()`.
+
+```tsx
+import {
+  MyLocationControllerSettings,
+  MyLocationMapObjectMarkerType,
+  MyLocationMapObjectSource,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const locationSource = new MyLocationMapObjectSource(
+  context,
+  new MyLocationControllerSettings({}),
+  MyLocationMapObjectMarkerType.Model,
+);
+
+map.addSource(locationSource);
+```
+
+{/* ## Стилизация объектов
+
+Простые объекты (`Marker`, `Polyline`, `Polygon`, `Circle`) стилизуются через options и свойства самих объектов: `color`, `strokeColor`, `textStyle`, `icon`, `isVisible` и т. д. Если нужно управлять отображением через правила стиля, используйте `GeometryMapObject` и `GeometryMapObjectBuilder`: у таких объектов есть `objectAttributes`.
+
+```tsx
+import {
+  AttributeValue,
+  GeometryMapObjectBuilder,
+  parseGeoJson,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const geometry = parseGeoJson(featureCollection)[0].geometryChannel.value;
+
+const styledObject = new GeometryMapObjectBuilder()
+  .setGeometry(geometry)
+  .setObjectAttributes([
+    ['type', AttributeValue.string('pickup')],
+    ['selected', AttributeValue.boolean(false)],
+  ])
+  .createObject();
+``` */}
+
+## Выделение объектов {#selecting-objects}
+
+{/* ### Настройка стилей
+
+Выделение объектов SDK добавляет атрибут `selected`. Чтобы визуально отличать выбранные объекты, добавьте в стиль правило, которое реагирует на этот атрибут. */}
+
+### Выделение объектов по нажатию на карту {#highlight-on-tap}
+
+1. Получите информацию об объектах, попадающих в область нажатия, с помощью метода [getRenderedObjects()](/react-native/sdk/reference/stable/class#map/get-rendered-objects).
+2. Проверьте первый объект и вызовите метод [setHighlighted()](/react-native/sdk/reference/stable/class#dgis-source/set-highlighted), который получает на вход список идентификаторов справочника изменяемых объектов [DgisObjectId](/react-native/sdk/reference/stable/struct#dgis-object-id).
+
+```tsx
+import {
+  DgisMapObject,
+  DgisSource,
+  ScreenDistance,
+  ScreenPoint,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const connection = controller.gestureRecognizer.tap.subscribe(screenPoint => {
+  const future = map.getRenderedObjects(
+    new ScreenPoint({ x: screenPoint.x, y: screenPoint.y }),
+    new ScreenDistance({ value: 8 }),
+  );
+
+  future.onComplete(
+    objects => {
+      const info = objects[0];
+      const object = info?.item.item;
+      const source = info?.item.source;
+
+      if (object instanceof DgisMapObject && source instanceof DgisSource) {
+        source.setHighlighted([object.id], true);
+      }
+
+      future.destroy();
+    },
+    error => {
+      console.warn(error);
+    },
+  );
+});
+
+// Когда обработчик больше не нужен:
+connection.disconnect();
+```
+
+## Управление камерой {#controlling-the-camera}
+
+Для работы с камерой используется объект [Camera](/react-native/sdk/reference/stable/class#camera), доступный через свойство `map.camera`.
+
+### Перелёт
+
+Чтобы запустить анимацию перелёта камеры, нужно вызвать метод `moveToCameraPosition()` и указать параметры перелёта:
+
+* `position` — конечная позиция камеры (координаты и уровень приближения). Дополнительно можно указать наклон и поворот камеры ([CameraPosition](/react-native/sdk/reference/stable/struct#camera-position)).
+* `time` — продолжительность перелёта в секундах (`Duration`).
+* `animationType` — тип анимации ([CameraAnimationType](/react-native/sdk/reference/stable/enumeration#camera-animation-type)).
+
+Функция `moveToCameraPosition()` возвращает объект `Future`, который можно использовать, чтобы обработать событие завершения перелёта.
+
+```tsx
+import {
+  CameraAnimationType,
+  CameraPosition,
+  Duration,
+  Zoom,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const future = map.camera.moveToCameraPosition(
+  new CameraPosition({
+    point: point(55.7522, 37.6156),
+    zoom: new Zoom({ value: 16 }),
+  }),
+  Duration.ofMilliseconds(600),
+  CameraAnimationType.Default,
+);
+
+future.onComplete(
+  () => future.destroy(),
+  error => {
+    console.warn(error);
+  },
+);
+```
+
+Для более точного контроля над анимацией перелёта можно использовать контроллер перелёта, который будет определять позицию камеры в каждый конкретный момент времени. Для этого нужно реализовать интерфейс [CameraMoveController](/react-native/sdk/reference/stable/interface#camera-move-controller) и передать созданный объект в метод `moveToCameraPosition()` вместо параметров перелёта.
+
+### Получение состояния камеры
+
+Текущее состояние камеры (находится ли камера в полёте) можно получить, используя свойство `state`. См. [CameraState](/react-native/sdk/reference/stable/enumeration#camera-state) для списка возможных состояний камеры.
+
+```tsx
+const cameraState = map.camera.state;
+```
+
+### Получение позиции камеры
+
+Текущую позицию камеры можно получить, используя свойство `position` (см. объект [CameraPosition](/react-native/sdk/reference/stable/struct#camera-position)):
+
+```tsx
+const cameraPosition = map.camera.position;
+```
+
+### Расчёт позиции камеры
+
+Чтобы отобразить на экране объект или группу объектов, используйте метод расчёта позиции камеры [calcPositionForObjects()](/react-native/sdk/reference/stable/method#calc-position-for-objects) или [calcPositionForGeometry()](/react-native/sdk/reference/stable/method#calc-position-for-geometry):
+
+```tsx
+import { calcPositionForObjects } from '@2gis/dgis-mobile-sdk-full';
+
+const position = calcPositionForObjects(
+  map.camera,
+  [marker, polyline],
+  null,
+  null,
+  null,
+  null,
+  null,
+);
+
+map.camera.position = position;
+```
+
+### Настройка точки позиции и обзора камеры
+
+Вы можете управлять отображением карты на экране, например, менять размер области видимости карты, при этом сохраняя позицию обзора. Для этого используйте экранные точки: точку позиции камеры [BaseCamera.positionPoint](/react-native/sdk/reference/stable/class#base-camera) и точку обзора камеры [BaseCamera.viewPoint](/react-native/sdk/reference/stable/class#base-camera).
+
+Точка позиции камеры (`BaseCamera.positionPoint`) — точка экрана, к которой привязана камера, с учётом отступов `BaseCamera.padding`. Точка задаётся относительно области видимости карты:
+
+```tsx
+import { CameraPositionPoint } from '@2gis/dgis-mobile-sdk-full';
+
+map.camera.positionPoint = new CameraPositionPoint({ x: 0.5, y: 0.75 });
+```
+
+При изменении точки позиции камеры меняется область видимости карты и смещается точка наблюдения [CameraPosition.point](/react-native/sdk/reference/stable/struct#camera-position/point) — точка на местности в географических координатах, которая находится в точке позиции камеры. Угол наклона [CameraPosition.tilt](/react-native/sdk/reference/stable/struct#camera-position/tilt) и угол поворота камеры [CameraPosition.bearing](/react-native/sdk/reference/stable/struct#camera-position/bearing) не меняются:
+
+<img src="/img/mobile-sdk/camera-position-point-before.png" height="500" align="center" /> <img src="/img/mobile-sdk/camera-position-point-after.png" height="500" align="center" />
+
+<br />
+
+Точка обзора камеры (`BaseCamera.viewPoint`) — точка экрана, в которую направлен «взгляд» камеры. Точка задаётся относительно области видимости карты:
+
+```tsx
+import { CameraViewPoint } from '@2gis/dgis-mobile-sdk-full';
+
+map.camera.viewPoint = new CameraViewPoint({ x: 0.5, y: 0.5 });
+```
+
+При изменении точки обзора камеры меняется направление обзора относительно точки наблюдения. Точка наблюдения `CameraPosition.point` не смещается, также не меняется угол наклона `CameraPosition.tilt` и угол поворота камеры `CameraPosition.bearing`:
+
+<Video src="/video/MSDK.ViewPoint.mp4" width="300px" />
+
+### visibleArea и visibleRect
+
+У камеры есть два свойства, которые описывают геометрию видимой области, но делают это по-разному. [visibleRect](/react-native/sdk/reference/stable/class#base-camera/visible-rect) имеет тип [GeoRect](/react-native/sdk/reference/stable/struct#geo-rect) и всегда является прямоугольником. [visibleArea](/react-native/sdk/reference/stable/class#base-camera/visible-area) представляет собой произвольную геометрию. Проще всего увидеть на примере с разными углами наклона камеры относительно карты:
+
+* При наклоне 45° `visibleRect` и `visibleArea` не будут равны: `visibleRect` в данном случае будет больше, т.к. он должен быть прямоугольником и содержать в себе `visibleArea`.
+
+  Синим цветом изображена `visibleArea`, красным — `visibleRect`.
+
+  <img src="/img/mobile-sdk/tilt_45.gif" height="300"  />
+
+* При наклоне 0° `visibleArea` и `visibleRect` будут совпадать, как видно из изменения цвета.
+
+  <img src="/img/mobile-sdk/tilt_0.gif" height="300"  />
+
+### Определение попадания объекта в видимую область камеры
+
+С помощью свойства `visibleArea` можно получить область карты, которая попадает в камеру, в виде [Geometry](/react-native/sdk/reference/stable/class#geometry). С помощью метода [intersects()](/react-native/sdk/reference/stable/class#geometry/intersects) можно получить пересечение видимой области камеры с нужной геометрией:
+
+```tsx
+map.camera.visibleArea.intersects(geometry);
+```
+
+## Поэтажные планы зданий {#floor-plans}
+
+С помощью SDK вы можете отображать поэтажные планы зданий на карте и переключаться между этажами. Детальные поэтажные планы доступны только для определённых групп зданий (например, торговых центров). Чтобы начать работу, получите доступ к Places API и дополнительно к информации о поэтажных планах зданий. Подробнее см. в разделе [Начало работы](/react-native/sdk/start).
+
+Основной объект для работы с поэтажными планами — класс [IndoorManager](/react-native/sdk/reference/stable/class#indoor-manager), который доступен через свойство карты [indoorManager](/react-native/sdk/reference/stable/class#map/indoor-manager).
+
+### Показ и скрытие поэтажных планов
+
+Чтобы управлять отображением поэтажных планов, используйте метод `setIndoorState()` класса [IndoorManager](/react-native/sdk/reference/stable/class#indoor-manager):
+
+```tsx
+import { IndoorManagerState } from '@2gis/dgis-mobile-sdk-full';
+
+// Показать поэтажные планы
+map.indoorManager.setIndoorState(IndoorManagerState.Enabled);
+
+// Скрыть поэтажные планы
+map.indoorManager.setIndoorState(IndoorManagerState.Disabled);
+```
+
+### Переключение между этажами
+
+Чтобы получить информацию о поэтажных планах здания, которое в данный момент отображается на карте, используйте свойство `focusedBuilding` класса [IndoorManager](/react-native/sdk/reference/stable/class#indoor-manager) или подпишитесь на канал `focusedBuildingChannel`:
+
+```tsx
+const connection = map.indoorManager.focusedBuildingChannel.subscribe(building => {
+  if (building !== null) {
+    console.log('Focused building:', building.id);
+  }
+});
+```
+
+Чтобы переключаться между этажами, укажите индекс нужного этажа в свойстве `activeLevelIndex` объекта [IndoorBuilding](/react-native/sdk/reference/stable/class#indoor-building):
+
+```tsx
+map.indoorManager.focusedBuilding.activeLevelIndex = 2;
+```
+
+### Создание UI для управления этажами
+
+Чтобы создать UI-элемент управления этажами, используйте готовый компонент `IndoorControl`:
+
+```tsx
+import { IndoorControl } from '@2gis/dgis-mobile-sdk-full';
+
+<IndoorControl map={map} showOverview />;
+```
+
+### Выделение этажей
+
+Для подсветки объектов на этажах используйте [DgisSource.setHighlighted()](/react-native/sdk/reference/stable/class#dgis-source/set-highlighted).
+
+## Пробки на карте {#traffic}
+
+Чтобы отобразить слой пробок на карте, создайте источник данных [TrafficSource](/react-native/sdk/reference/stable/class#traffic-source) и передайте его в метод карты [addSource()](/react-native/sdk/reference/stable/class#map/add-source):
+
+```tsx
+import { TrafficSource } from '@2gis/dgis-mobile-sdk-full';
+
+const trafficSource = new TrafficSource(context);
+map.addSource(trafficSource);
+```
+
+## Дорожные события на карте {#road-events}
+
+Вы можете настроить отображение на карте дорожных событий из данных <Brand />, а также добавить собственные события.
+
+### Отображение событий на карте
+
+Чтобы показать слой дорожных событий на карте, создайте источник данных [RoadEventSource](/react-native/sdk/reference/stable/class#road-event-source) и добавьте его на карту с помощью метода карты [addSource()](/react-native/sdk/reference/stable/class#map/add-source):
+
+```tsx
+import { RoadEventSource } from '@2gis/dgis-mobile-sdk-full';
+
+const roadEventSource = new RoadEventSource(context);
+map.addSource(roadEventSource);
+```
+
+Чтобы удалить созданный источник данных и все связанные с ним объекты, вызовите метод карты [removeSource()](/react-native/sdk/reference/stable/class#map/remove-source):
+
+```tsx
+map.removeSource(roadEventSource);
+```
+
+### Добавление события
+
+Вы можете добавить собственное дорожное событие на карту, которое смогут увидеть все пользователи карт <Brand />. Вы можете разместить событие на карте только в радиусе 2 км от своего текущего местоположения.
+
+1. Создайте экземпляр менеджера объектов [RoadEventManager](/react-native/sdk/reference/stable/class#road-event-manager).
+
+2. Добавьте событие одного из типов ниже (каждому типу соответствует своя иконка на карте):
+
+   * ДТП. Вызовите метод [createAccident()](/react-native/sdk/reference/stable/class#road-event-manager/create-accident) и укажите координаты события ([GeoPoint](/react-native/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/react-native/sdk/reference/stable/class#enum-set)) и текстовое описание события.
+   * Камера ГИБДД. Вызовите метод [createCamera()](/react-native/sdk/reference/stable/class#road-event-manager/create-camera) и укажите координаты события ([GeoPoint](/react-native/sdk/reference/stable/struct#geo-point)) и текстовое описание.
+   * Перекрытие дорожного движения. Вызовите метод [createRoadRestriction()](/react-native/sdk/reference/stable/class#road-event-manager/create-road-restriction) и укажите координаты события ([GeoPoint](/react-native/sdk/reference/stable/struct#geo-point)) и текстовое описание:
+   * Дорожные работы. Вызовите метод [createRoadWorks()](/react-native/sdk/reference/stable/class#road-event-manager/create-road-works) и укажите координаты события ([GeoPoint](/react-native/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/react-native/sdk/reference/stable/class#enum-set)) и текстовое описание события.
+   * Комментарий. Вызовите метод [createComment()](/react-native/sdk/reference/stable/class#road-event-manager/create-comment) и укажите координаты события ([GeoPoint](/react-native/sdk/reference/stable/struct#geo-point)) и текстовое описание.
+   * Другое событие. Вызовите метод [createOther()](/react-native/sdk/reference/stable/class#road-event-manager/create-other) и укажите координаты события ([GeoPoint](/react-native/sdk/reference/stable/struct#geo-point)), затронутые полосы движения ([Lane](/react-native/sdk/reference/stable/class#enum-set)) и текстовое описание события.
+
+Пример добавления дорожных работ:
+
+```tsx
+import { EnumSet, Lane, RoadEventManager } from '@2gis/dgis-mobile-sdk-full';
+
+const roadEventManager = RoadEventManager.instance(context);
+const future = roadEventManager.createRoadWorks(
+  point(55.7522, 37.6156),
+  EnumSet.of(Lane),
+  'Ремонт дороги',
+);
+
+future.onComplete(
+  result => {
+    console.log('Road event created:', result);
+    future.destroy();
+  },
+  error => {
+    console.warn(error);
+  },
+);
+```
+
+## Получение объектов по экранным координатам {#getting-objects-using-screen-coordinates}
+
+Информацию об объектах на карте можно получить, используя пиксельные координаты. Для этого нужно вызвать метод карты [getRenderedObjects()](/react-native/sdk/reference/stable/class#map/get-rendered-objects), указав координаты в пикселях и радиус в экранных миллиметрах (не более 30). Метод вернет отложенный результат, содержащий информацию обо всех найденных объектах в указанном радиусе на видимой области карты (список `List<RenderedObjectInfo>`).
+
+```tsx
+import { ScreenDistance, ScreenPoint } from '@2gis/dgis-mobile-sdk-full';
+
+const future = map.getRenderedObjects(
+  new ScreenPoint({ x: 120, y: 240 }),
+  new ScreenDistance({ value: 12 }),
+);
+
+future.onComplete(
+  objects => {
+    console.log(objects[0]?.closestMapPoint);
+    future.destroy();
+  },
+  error => {
+    console.warn(error);
+  },
+);
+```
+
+## Работа с жестами управления картой {#working-with-map-control-gestures}
+
+Вы можете кастомизировать работу с жестами управления картой через [MapController.gestureRecognizer](/react-native/sdk/reference/stable/class#map-controller/gesture-recognizer). 
+
+Из коробки управлять картой можно при помощи следующих жестов:
+
+* сдвиг карты в любом направлении одним пальцем;
+* сдвиг карты в любом направлении несколькими пальцами;
+* вращение карты двумя пальцами;
+* масштабирование карты двумя пальцами (щипок);
+* приближение карты двойным тапом;
+* отдаление карты тапом двумя пальцами;
+* масштабирование карты при помощи тап-тап-свайп жеста одним пальцем;
+* наклон камеры свайпом двумя пальцами вверх или вниз.
+
+По умолчанию включены все жесты. При необходимости можно отключить какие-либо жесты при помощи [GestureManager](/react-native/sdk/reference/stable/class#gesture-manager).
+
+```tsx
+const tapConnection = controller.gestureRecognizer.tap.subscribe(point => {
+  console.log('Tap:', point.x, point.y);
+});
+
+const longTouchConnection = controller.gestureRecognizer.longTouch.subscribe(point => {
+  console.log('Long touch:', point.x, point.y);
+});
+```
+
+Для жестов доступны методы:
+
+* `enableGesture()` — включение жестов;
+* `disableGesture()` — отключение жестов;
+* `gestureEnabled()` — проверка, включён или отключён жест.
+
+```tsx
+import { TransformGesture } from '@2gis/dgis-mobile-sdk-full';
+
+const gestureManager = controller.gestureRecognizer.gestureManager;
+
+gestureManager?.disableGesture(TransformGesture.Rotation);
+gestureManager?.enableGesture(TransformGesture.Scaling);
+```
+
+Для изменения настроек или получения информации о нескольких жестах за раз можно работать напрямую со свойством [enabledGestures](/react-native/sdk/reference/stable/class#gesture-manager/enabled-gestures).
+
+У некоторых жестов есть свой перечень настроек:
+
+* [MultiTouchRecognizeSettings](/react-native/sdk/reference/stable/struct#multi-touch-recognize-settings) для сдвига несколькими пальцами;
+* [RotationRecognizeSettings](/react-native/sdk/reference/stable/struct#rotation-recognize-settings) для вращения;
+* [ScalingRecognizeSettings](/react-native/sdk/reference/stable/struct#scaling-recognize-settings) для масштабирования;
+* [TiltRecognizeSettings](/react-native/sdk/reference/stable/struct#tilt-recognize-settings) для наклона.
+
+Подробнее о настройках можно прочитать на соответствующих страницах в документации. Объекты этих настроек доступны через свойства [GestureManager](/react-native/sdk/reference/stable/class#gesture-manager).

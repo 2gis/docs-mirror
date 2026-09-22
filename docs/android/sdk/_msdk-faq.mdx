@@ -2,7 +2,7 @@
 
 <AccordionItem title="Как начать работать с мобильным SDK и подключить его к проекту?">
 
-Чтобы работать с мобильным SDK, получите ключ доступа dgissdk.key:
+Чтобы работать с мобильным SDK, получите ключ доступа `dgissdk.key`:
 
 1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
 
@@ -10,10 +10,10 @@
     В кабинет
     </CtaButton>
 
-2. Купите подписку для доступа к необходимым API. Набор API зависит от нужных функциональностей и версии SDK — см. раздел **API для работы SDK** для [iOS](/ios/sdk/overview#api-list), [Android](/android/sdk/overview#api-list) или [Flutter](/flutter/sdk/overview#api-list).
+2. Купите подписку для доступа к необходимым API. Набор API зависит от нужных функциональностей и версии SDK — см. раздел **API для работы SDK** для [iOS](/ios/sdk/overview#api-list), [Android](/android/sdk/overview#api-list), [Flutter](/flutter/sdk/overview#api-list) или [React Native](/react-native/sdk/overview#api-list).
 3. Создайте ключ доступа и скачайте файл ключа.
 
-После получения ключа доступа установите и инициализируйте SDK. Подробнее см. в разделе **Начало работы** для [iOS](/ios/sdk/start), [Android](/android/sdk/start) или [Flutter](/flutter/sdk/start).
+После получения ключа доступа установите и инициализируйте SDK. Подробнее см. в разделе **Начало работы** для [iOS](/ios/sdk/start), [Android](/android/sdk/start), [Flutter](/flutter/sdk/start) или [React Native](/react-native/sdk/start).
 
 </AccordionItem>
 
@@ -25,7 +25,7 @@
 
 <AccordionItem title="Как рассчитывается стоимость использования SDK?">
 
-В зависимости от функциональностей для работы SDK требуются ключи доступа к API карт, поиска и навигации: оплачивается только доступ к используемым API. Полный список API и функциональностей, которые они обеспечивают, см. в разделе **API для работы SDK** для [iOS](/ios/sdk/overview#api-list), [Android](/android/sdk/overview#api-list) или [Flutter](/flutter/sdk/overview#api-list). Стоимость API см. в разделе [Тарифы](/platform-manager/subscription/pricing) в документации личного кабинета.
+В зависимости от функциональностей для работы SDK требуются ключи доступа к API карт, поиска и навигации: оплачивается только доступ к используемым API. Полный список API и функциональностей, которые они обеспечивают, см. в разделе **API для работы SDK** для [iOS](/ios/sdk/overview#api-list), [Android](/android/sdk/overview#api-list), [Flutter](/flutter/sdk/overview#api-list) или [React Native](/react-native/sdk/overview#api-list). Стоимость API см. в разделе [Тарифы](/platform-manager/subscription/pricing) в документации личного кабинета.
 
 </AccordionItem>
 
@@ -36,7 +36,7 @@
 * **Full** — карта, справочник, построение маршрутов и навигатор, а также офлайн-данные.
 * **Map** — облегчённая версия: только карта и справочник.
 
-Подробнее см. в разделе **Версии SDK** для [iOS](/ios/sdk/overview#sdk-versions), [Android](/android/sdk/overview#sdk-versions) или [Flutter](/flutter/sdk/overview#sdk-versions).
+Подробнее см. в разделе **Версии SDK** для [iOS](/ios/sdk/overview#sdk-versions), [Android](/android/sdk/overview#sdk-versions), [Flutter](/flutter/sdk/overview#sdk-versions) или [React Native](/react-native/sdk/overview#sdk-versions).
 
 </AccordionItem>
 
@@ -57,15 +57,16 @@
 
 <AccordionItem title="Как оптимизировать производительность карты?">
 
-* Настройте графический режим карты с помощью `GraphicsPreset` (подробнее см. в справочнике для [iOS](/ios/sdk/reference/stable/enumeration#graphics-preset), [Android](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.map.graphics-preset) или [Flutter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GraphicsPreset.html)): 
+* Настройте графический режим карты с помощью `GraphicsPreset` (подробнее см. в справочнике для [iOS](/ios/sdk/reference/stable/enumeration#graphics-preset), [Android](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.map.graphics-preset), [Flutter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GraphicsPreset.html) или [React Native](/react-native/sdk/reference/stable/enumeration#graphics-preset)): 
+
     * `LITE` — отключает по возможности тяжёлые графические эффекты;
     * `NORMAL` — соблюдает баланс между качеством изображения и потребляемыми ресурсами;
     * `IMMERSIVE` — включает все эффекты и может значительно снижать производительность на слабых устройствах.
     
-    Для iOS и Android доступно свойство `Map.graphicsPresetHint` — рекомендуемый графический режим для конкретного устройства (см. справочник для [iOS](/ios/sdk/reference/stable/class#map/var-graphics-preset-hint) или [Android](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map/val-graphics-preset-hint)).
+    Для iOS и Android доступно свойство `Map.graphicsPresetHint` — рекомендуемый графический режим для конкретного устройства (см. справочник для [iOS](/ios/sdk/reference/stable/class#map/var-graphics-preset-hint), [Android](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map/val-graphics-preset-hint) или [React Native](/react-native/sdk/reference/stable/class#map/var-graphics-preset-hint)).
 
 * Если режима `LITE` недостаточно, используйте растровую карту вместо векторной: см. раздел **Подключение растровой карты** для [iOS](/ios/sdk/examples/map#add-raster-map), [Android](/android/sdk/examples/map#add-raster-map) или [Flutter](/flutter/sdk/examples/map#add-raster-map).
-* Для пользовательских динамических 3D-моделей уменьшите количество мешей и разрешение текстур: матричные анимации и PBR-освещение снижают производительность карты. Подробнее см. в разделе **3D-модели** для [iOS](/ios/sdk/examples/map#3d-models), [Android](/android/sdk/examples/map#3d-models) или [Flutter](/flutter/sdk/examples/map#3d-models).
+* Для пользовательских динамических 3D-моделей уменьшите количество мешей и разрешение текстур: матричные анимации и PBR-освещение снижают производительность карты. Подробнее см. в разделе **3D-модели** для [iOS](/ios/sdk/examples/map#3d-models), [Android](/android/sdk/examples/map#3d-models), [Flutter](/flutter/sdk/examples/map#3d-models) или [React Native](/react-native/sdk/examples/map#3d-models).
 * Включите кеширование HTTP-запросов, чтобы уменьшить количество повторных загрузок данных.
 
 </AccordionItem>
@@ -73,9 +74,9 @@
 <AccordionItem title="Как настроить внешний вид карты?">
 
 * Измените стиль карты в Редакторе стилей: цвета объектов, иконки, подписи, видимость слоёв, цвет фона карты, освещение и отображение неба и тумана. Настроенный стиль подключается в SDK в виде набора слоёв, иконок и шрифтов при сборке приложения. Подробнее см. в разделе **Стили карты** для [iOS](/ios/sdk/examples/map_styles), [Android](/android/sdk/examples/map_styles) или [Flutter](/flutter/sdk/examples/map_styles).
-* Добавьте собственные объекты на карту: маркеры, геометрические фигуры, 3D-модели. Подробнее см. в разделе **Добавление объектов на карту** для [iOS](/ios/sdk/examples/map#add-objects), [Android](/android/sdk/examples/map#add-objects) или [Flutter](/flutter/sdk/examples/map#add-objects).
-* Настройте UI-элементы карты и навигатора — готовые элементы можно заменить на собственные. Подробнее см. в разделе **UI-элементы** для [iOS](/ios/sdk/examples/controls/uikit), [Android](/android/sdk/examples/controls/view) или [Flutter](/flutter/sdk/examples/controls).
-* Настройте поведение навигатора (звуковые оповещения, альтернативные маршруты) и справочника (структура выдачи поиска). Подробнее см. в разделе **Навигация** для [iOS](/ios/sdk/examples/navigation), [Android](/android/sdk/examples/navigation) или [Flutter](/flutter/sdk/examples/navigation) и **Справочник** для [iOS](/ios/sdk/examples/directory), [Android](/android/sdk/examples/directory) или [Flutter](/flutter/sdk/examples/directory).
+* Добавьте собственные объекты на карту: маркеры, геометрические фигуры, 3D-модели. Подробнее см. в разделе **Добавление объектов на карту** для [iOS](/ios/sdk/examples/map#add-objects), [Android](/android/sdk/examples/map#add-objects), [Flutter](/flutter/sdk/examples/map#add-objects) или [React Native](/react-native/sdk/examples/map#add-objects).
+* Настройте UI-элементы карты, поиска и навигатора — готовые элементы можно заменить на собственные. Подробнее см. в разделе **UI-элементы** для [iOS](/ios/sdk/examples/controls/uikit), [Android](/android/sdk/examples/controls/view), [Flutter](/flutter/sdk/examples/controls) или [React Native](/react-native/sdk/examples/controls).
+* Настройте поведение навигатора (звуковые оповещения, альтернативные маршруты) и справочника (структура выдачи поиска). Подробнее см. в разделе **Навигация** для [iOS](/ios/sdk/examples/navigation), [Android](/android/sdk/examples/navigation) или [Flutter](/flutter/sdk/examples/navigation) и **Справочник** для [iOS](/ios/sdk/examples/directory), [Android](/android/sdk/examples/directory), [Flutter](/flutter/sdk/examples/directory) или [React Native](/react-native/sdk/examples/directory).
 
 </AccordionItem>
 
@@ -86,6 +87,7 @@
 * iOS: [`copyrightAlignment()`](/ios/sdk/reference/stable/interface#imap-uiview/var-copyright-alignment) и [`copyrightInsets()`](/ios/sdk/reference/stable/interface#imap-uiview/var-copyright-insets) в `IMapUIView`.
 * Android: [`setCopyrightMargins()`](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view/set-copyright-margins) в `MapView`.
 * Flutter: [`copyrightAlignment`](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidgetController/copyrightAlignment.html) и [`copyrightEdgeInsets`](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidgetController/copyrightEdgeInsets.html) в `MapWidgetController`.
+* React Native: `copyrightAlignment` и `copyrightEdgeInsets` в [MapViewProps](/react-native/sdk/reference/stable/interface#map-view-props).
 
 </AccordionItem>
 
@@ -97,25 +99,25 @@
 
 <AccordionItem title="Какие версии iOS и Android поддерживаются?">
 
-Посмотрите требования к устройствам для [iOS](/ios/sdk/overview#system-requirements) и [Android](/android/sdk/overview#system-requirements). Flutter SDK работает на устройствах iOS, Android и ОС Аврора и наследует требования базовой платформы.
+Посмотрите требования к устройствам для [iOS](/ios/sdk/overview#system-requirements) и [Android](/android/sdk/overview#system-requirements). Flutter SDK работает на устройствах iOS, Android и ОС Аврора и наследует требования базовой платформы. React Native SDK работает на устройствах iOS и Android, см. [требования к устройствам](/react-native/sdk/overview#system-requirements).
 
 </AccordionItem>
 
 <AccordionItem title="Какие языки интерфейса поддерживаются?">
 
-В приложении поддерживаются русский, английский и арабский языки. Голосовые оповещения навигатора поддерживаются на русском, английском, арабском, армянском, киргизском, казахском, узбекском, грузинском, азербайджанском и таджикском языках. Чтобы изменить язык приложения, используйте `LocaleManager`: подробнее см. в разделе **Язык приложения** для [iOS](/ios/sdk/start#application-language), [Android](/android/sdk/start#application-language) или [Flutter](/flutter/sdk/start#application-language).
+В приложении поддерживаются русский, английский и арабский языки. Голосовые оповещения навигатора поддерживаются на русском, английском, арабском, армянском, киргизском, казахском, узбекском, грузинском, азербайджанском и таджикском языках. Чтобы изменить язык приложения, используйте `LocaleManager`: подробнее см. в разделе **Язык приложения** для [iOS](/ios/sdk/start#application-language), [Android](/android/sdk/start#application-language), [Flutter](/flutter/sdk/start#application-language) или [React Native](/react-native/sdk/start#application-language).
 
 </AccordionItem>
 
 <AccordionItem title="Как следить за обновлениями и новыми возможностями SDK?">
 
-Изучайте раздел **Релизы** в документации: [iOS](/ios/sdk/releases/latest), [Android](/android/sdk/releases/latest) или [Flutter](/flutter/sdk/releases/latest) — в нём перечислены новые возможности, исправления и изменения, влияющие на обратную совместимость.
+Изучайте раздел **Релизы** в документации: [iOS](/ios/sdk/releases/latest), [Android](/android/sdk/releases/latest), [Flutter](/flutter/sdk/releases/latest) или [React Native](/react-native/sdk/releases/latest) — в нём перечислены новые возможности, исправления и изменения, влияющие на обратную совместимость.
 
 </AccordionItem>
 
 <AccordionItem title="Как обновить версию SDK?">
 
-Изучите последние релизы и установите обновлённую версию SDK по инструкции для [iOS](/ios/sdk/start#install), [Android](/android/sdk/start#install) или [Flutter](/flutter/sdk/start#install). Для миграции на мажорные версии могут потребоваться дополнительные шаги, см. инструкцию по миграции для [iOS](/ios/sdk/releases/migration), [Android](/android/sdk/releases/migration) или [Flutter](/flutter/sdk/releases/migration).
+Изучите последние релизы и установите обновлённую версию SDK по инструкции для [iOS](/ios/sdk/start#install), [Android](/android/sdk/start#install), [Flutter](/flutter/sdk/start#install) или [React Native](/react-native/sdk/start#install). Для миграции на мажорные версии могут потребоваться дополнительные шаги, см. инструкцию по миграции для [iOS](/ios/sdk/releases/migration), [Android](/android/sdk/releases/migration) или [Flutter](/flutter/sdk/releases/migration).
 
 </AccordionItem>
 

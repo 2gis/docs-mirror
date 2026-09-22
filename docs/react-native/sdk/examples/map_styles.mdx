@@ -1,0 +1,216 @@
+---
+sidebar: reactnativesdk
+---
+# Стили карты
+
+React Native SDK предоставляет доступ к текущему стилю карты и к стилевым атрибутам через свойства `styleChannel`, `map.style`, `map.attributes` и метод `sublayerAttributes()` класса [Map](/react-native/sdk/reference/stable/class#map) и свойство `styleAttributes` класса [Style](/react-native/sdk/reference/stable/class#style). Тема карты (светлая или тёмная) настраивается отдельно через [MapAppearance](/react-native/sdk/reference/stable/typeAlias#map-appearance).
+
+:::note[Работа со стилями]
+
+Загрузка пользовательского файла стиля в текущей версии React Native SDK не поддерживается. Чтобы использовать собственный стиль, подготовьте его на нативном уровне или через конфигурацию SDK, а в коде React Native управляйте доступными атрибутами.
+
+:::
+
+## Подключение стиля к карте {#connect-style}
+
+По умолчанию карта создаётся с базовым стилем SDK. Чтобы применить стиль одной карты к другой, получите текущий стиль из свойства `styleChannel` исходной карты и присвойте его свойству `style` целевой карты.
+
+```tsx
+import type { Map } from '@2gis/dgis-mobile-sdk-full';
+
+function copyStyle(sourceMap: Map, targetMap: Map) {
+  const style = sourceMap.styleChannel.value;
+  targetMap.style = style;
+}
+```
+
+## Изменение стиля карты {#change-style}
+
+Чтобы изменить отображение карты без замены стиля, задайте значения атрибутов карты, стиля или отдельного подслоя. Имена атрибутов должны соответствовать условиям и параметрам, заданным в стиле.
+
+```tsx
+import { AttributeValue, type Map } from '@2gis/dgis-mobile-sdk-full';
+
+function setNavigatorMode(map: Map, enabled: boolean) {
+  map.attributes.setAttributeValue(
+    'navigatorOn',
+    AttributeValue.boolean(enabled),
+  );
+}
+```
+
+## Переключение темы {#switch-theme}
+
+Стиль карты может содержать светлую и тёмную темы. Объект [MapTheme](/react-native/sdk/reference/stable/struct#map-theme) описывает конкретную тему карты, а [MapAppearance](/react-native/sdk/reference/stable/typeAlias#map-appearance) определяет, как SDK выбирает тему:
+
+* `BySystem` содержит светлую и тёмную темы. SDK выбирает одну из них в соответствии с системной темой устройства и автоматически переключает тему карты при изменении системных настроек.
+* `Fixed` содержит одну тему. Карта использует её независимо от системной темы устройства.
+
+<Tabs>
+<TabItem value="system" label="Системная" default>
+
+<span id="map-appearance-system"></span>
+
+В режиме приложения `system` передайте в `BySystem` светлую тему ([MapTheme.defaultTheme](/react-native/sdk/reference/stable/struct#map-theme/default-theme)) в параметре `light`, а тёмную ([MapTheme.defaultDarkTheme](/react-native/sdk/reference/stable/struct#map-theme/default-dark-theme)) — в параметре `dark`.
+
+```tsx
+import { BySystem, MapAppearance, MapTheme } from '@2gis/dgis-mobile-sdk-full';
+
+const mapAppearance = MapAppearance.bySystem(
+  new BySystem({
+    light: MapTheme.defaultTheme,
+    dark: MapTheme.defaultDarkTheme,
+  }),
+);
+```
+
+</TabItem>
+<TabItem value="light" label="Светлая">
+
+<span id="map-appearance-light"></span>
+
+Чтобы установить фиксированную светлую тему, вызовите `MapAppearance.fixed()` и передайте [MapTheme.defaultTheme](/react-native/sdk/reference/stable/struct#map-theme/default-theme).
+
+Тема карты не изменится при переключении системной темы устройства.
+
+```tsx
+import { Fixed, MapAppearance, MapTheme } from '@2gis/dgis-mobile-sdk-full';
+
+const mapAppearance = MapAppearance.fixed(
+  new Fixed({ theme: MapTheme.defaultTheme }),
+);
+```
+
+</TabItem>
+<TabItem value="dark" label="Тёмная">
+
+<span id="map-appearance-dark"></span>
+
+Чтобы установить фиксированную тёмную тему, вызовите `MapAppearance.fixed()` и передайте [MapTheme.defaultDarkTheme](/react-native/sdk/reference/stable/struct#map-theme/default-dark-theme).
+
+Тема карты не изменится при переключении системной темы устройства.
+
+```tsx
+import { Fixed, MapAppearance, MapTheme } from '@2gis/dgis-mobile-sdk-full';
+
+const mapAppearance = MapAppearance.fixed(
+  new Fixed({ theme: MapTheme.defaultDarkTheme }),
+);
+```
+
+</TabItem>
+</Tabs>
+
+Если приложение хранит выбранный режим строковым значением, преобразуйте его в [MapAppearance](/react-native/sdk/reference/stable/typeAlias#map-appearance) с помощью общей функции:
+
+```tsx
+import {
+  BySystem,
+  Fixed,
+  MapAppearance,
+  MapTheme,
+} from '@2gis/dgis-mobile-sdk-full';
+import type { MapAppearance as SdkMapAppearance } from '@2gis/dgis-mobile-sdk-full';
+
+type MapThemeMode = 'system' | 'light' | 'dark';
+
+function createMapAppearance(mode: MapThemeMode): SdkMapAppearance {
+  const lightTheme = MapTheme.defaultTheme;
+  const darkTheme = MapTheme.defaultDarkTheme;
+
+  switch (mode) {
+    case 'system':
+      return MapAppearance.bySystem(
+        new BySystem({ light: lightTheme, dark: darkTheme }),
+      );
+    case 'light':
+      return MapAppearance.fixed(new Fixed({ theme: lightTheme }));
+    case 'dark':
+      return MapAppearance.fixed(new Fixed({ theme: darkTheme }));
+  }
+}
+```
+
+### При создании карты {#switch-theme-on-map-creation}
+
+Чтобы задать начальную тему карты, передайте `mapAppearance` в `MapControllerOptions`. Тема будет применена при создании карты, в том числе к фону загрузочного слоя `MapView`.
+
+```tsx
+import { MapControllerOptions } from '@2gis/dgis-mobile-sdk-full';
+
+const options = new MapControllerOptions({
+  mapAppearance: createMapAppearance('system'),
+});
+```
+
+### После создания карты {#switch-theme-after-map-creation}
+
+Чтобы изменить тему после создания карты, присвойте новый объект `MapAppearance` свойству `map.appearance`.
+
+```tsx
+import type { Map } from '@2gis/dgis-mobile-sdk-full';
+
+function setSystemTheme(map: Map) {
+  map.appearance = createMapAppearance('system');
+}
+
+function setLightTheme(map: Map) {
+  map.appearance = createMapAppearance('light');
+}
+
+function setDarkTheme(map: Map) {
+  map.appearance = createMapAppearance('dark');
+}
+```
+
+### Определение текущей темы и режима {#map-appearance-kind}
+
+Свойство `map.appearance` содержит правило выбора темы. Чтобы определить вариант объекта `MapAppearance`, используйте свойство `mapAppearance.kind`.
+
+Для `MapAppearanceKind.BySystem` доступны светлая и тёмная темы в свойствах `mapAppearance.value.light` и `mapAppearance.value.dark`. Для `MapAppearanceKind.Fixed` выбранная тема доступна в свойстве `mapAppearance.value.theme`.
+
+```tsx
+import { MapAppearanceKind } from '@2gis/dgis-mobile-sdk-full';
+import type { Color, MapAppearance } from '@2gis/dgis-mobile-sdk-full';
+import type { ColorSchemeName } from 'react-native';
+
+function getLoadingBackground(
+  mapAppearance: MapAppearance,
+  colorScheme: ColorSchemeName,
+): Color {
+  switch (mapAppearance.kind) {
+    case MapAppearanceKind.BySystem:
+      return colorScheme === 'dark'
+        ? mapAppearance.value.dark.loadingBackground
+        : mapAppearance.value.light.loadingBackground;
+    case MapAppearanceKind.Fixed:
+      return mapAppearance.value.theme.loadingBackground;
+  }
+}
+```
+
+Текущая тема карты доступна в канале `map.themeChannel`. В системном режиме `MapAppearance.bySystem()` содержит обе темы, а `themeChannel` возвращает конкретную тему `MapTheme`, которую SDK использует в данный момент.
+
+## Управление стилевыми слоями {#manage-style-layers}
+
+Чтобы изменить атрибуты отдельного подслоя, получите объект [Attributes](/react-native/sdk/reference/stable/class#attributes) с помощью метода `map.sublayerAttributes(name)`. Через этот объект можно задавать, заменять и удалять атрибуты подслоя.
+
+```tsx
+import { AttributeValue, type Map } from '@2gis/dgis-mobile-sdk-full';
+
+function hideCustomSublayer(map: Map) {
+  const attributes = map.sublayerAttributes('custom_objects');
+
+  attributes.setAttributeValues(
+    [
+      ['visible', AttributeValue.boolean(false)],
+      ['opacity', AttributeValue.number(0.35)],
+    ],
+    [],
+  );
+}
+
+function resetCustomSublayer(map: Map) {
+  map.sublayerAttributes('custom_objects').removeAttribute('visible');
+}
+```

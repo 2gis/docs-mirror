@@ -1,0 +1,181 @@
+---
+sidebar: reactnativesdk
+---
+# UI–элементы
+
+## Карта {#map}
+
+Все варианты поставки SDK содержат стандартный набор React-компонентов для управления картой. Компоненты добавляются поверх [MapView](/react-native/sdk/reference/stable/method#map-view) в обычной разметке React Native и получают экземпляр `map` из [MapController](/react-native/sdk/reference/stable/class#map-controller).
+
+Стандартный набор включает:
+
+1. [IndoorControl](/react-native/sdk/reference/stable/method#indoor-control) для переключения этажей.
+2. [TrafficControl](/react-native/sdk/reference/stable/method#traffic-control) для отображения уровня пробок и управления видимостью пробок на карте.
+3. [ZoomControl](/react-native/sdk/reference/stable/method#zoom-control) для масштабирования карты.
+4. [CompassControl](/react-native/sdk/reference/stable/method#compass-control) для отображения текущего угла поворота карты относительно севера.
+5. [MyLocationControl](/react-native/sdk/reference/stable/method#my-location-control) для перелёта к текущему местоположению пользователя.
+6. [CopyrightControl](/react-native/sdk/reference/stable/method#copyright-control) для отображения копирайта внутри [MapView](/react-native/sdk/reference/stable/method#map-view). Копирайт появляется автоматически, а его положение можно настроить через свойства `copyrightAlignment` и `copyrightEdgeInsets` объекта [MapViewProps](/react-native/sdk/reference/stable/interface#map-view-props).
+
+```tsx
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import {
+  CompassControl,
+  IndoorControl,
+  MapView,
+  MyLocationControl,
+  TrafficControl,
+  ZoomControl,
+  type MapControllerState,
+} from '@2gis/dgis-mobile-sdk-full';
+
+export function MapWithControls({
+  controllerState,
+  requestLocationPermission,
+}: {
+  controllerState: MapControllerState;
+  requestLocationPermission: () => void;
+}) {
+  const map =
+    controllerState.status === 'ready' ? controllerState.controller.map : null;
+
+  return (
+    <View style={styles.root}>
+      <MapView controllerState={controllerState} style={styles.map} />
+      {map !== null && (
+        <>
+          <View style={styles.rightControls}>
+            <TrafficControl map={map} />
+            <CompassControl map={map} />
+            <ZoomControl map={map} />
+          </View>
+          <View style={styles.leftControls}>
+            <IndoorControl map={map} />
+            <MyLocationControl
+              map={map}
+              onPermissionRequest={requestLocationPermission}
+            />
+          </View>
+        </>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+  map: { flex: 1 },
+  rightControls: {
+    position: 'absolute',
+    right: 16,
+    bottom: 32,
+    gap: 8,
+  },
+  leftControls: {
+    position: 'absolute',
+    left: 16,
+    bottom: 32,
+    gap: 8,
+  },
+});
+```
+
+Чтобы изменить цвета компонентов, используйте фабрики из SDK:
+
+```tsx
+import {
+  makeTrafficControlColors,
+  makeZoomControlColors,
+} from '@2gis/dgis-mobile-sdk-full';
+
+const palette = {
+  background: '#1F2937',
+  transparentBackground: 'rgba(31,41,55,0.6)',
+  primaryContent: '#FFFFFF',
+  tertiaryContent: '#9CA3AF',
+  quaternaryContent: '#4B5563',
+  activeContent: '#38BDF8',
+  lowAlert: '#22C55E',
+  mediumAlert: '#F59E0B',
+  highAlert: '#EF4444',
+};
+
+<TrafficControl map={map} colors={makeTrafficControlColors(palette)} />;
+<ZoomControl map={map} colors={makeZoomControlColors(palette)} />;
+```
+
+## Справочник {#directory}
+
+В текущем React Native SDK готовый поисковый виджет не экспортируется. Вы можете создать поисковую строку и список результатов на стороне приложения, используя [SearchManager.suggest()](/react-native/sdk/reference/stable/class#search-manager/suggest) и [SearchManager.search()](/react-native/sdk/reference/stable/class#search-manager/search).
+
+```tsx
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FlatList, Text, TextInput, View } from 'react-native';
+import {
+  SearchManager,
+  SuggestQueryBuilder,
+  type Context,
+  type Suggest,
+} from '@2gis/dgis-mobile-sdk-full';
+
+export function SearchBox({ context }: { context: Context }) {
+  const searchManager = useMemo(
+    () => SearchManager.createOnlineManager(context),
+    [context],
+  );
+  const [suggests, setSuggests] = useState<Suggest[]>([]);
+  const futureRef = useRef<ReturnType<SearchManager['suggest']> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      futureRef.current?.destroy();
+      searchManager.destroy();
+    };
+  }, [searchManager]);
+
+  const onChangeText = (text: string) => {
+    if (text.trim() === '') {
+      setSuggests([]);
+      return;
+    }
+
+    futureRef.current?.destroy();
+
+    const query = SuggestQueryBuilder.fromQueryText(text).build();
+    const future = searchManager.suggest(query);
+    futureRef.current = future;
+
+    future.onComplete(
+      result => {
+        if (futureRef.current !== future) {
+          return;
+        }
+
+        futureRef.current = null;
+        setSuggests(result.suggests);
+        future.destroy();
+      },
+      error => {
+        if (futureRef.current !== future) {
+          return;
+        }
+
+        futureRef.current = null;
+        console.warn(error);
+        future.destroy();
+      },
+    );
+  };
+
+  return (
+    <View>
+      <TextInput onChangeText={onChangeText} />
+      <FlatList
+        data={suggests}
+        keyExtractor={(item, index) => `${item.title.text}-${index}`}
+        renderItem={({ item }) => <Text>{item.title.text}</Text>}
+      />
+    </View>
+  );
+}
+```

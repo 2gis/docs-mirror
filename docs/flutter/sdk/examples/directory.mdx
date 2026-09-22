@@ -737,7 +737,7 @@ import 'package:dgis_mobile_sdk/dgis.dart';
 
 #### Объединение объектов {#hybrid-objects}
 
-Некоторые геообъекты в справочнике могут быть представлены в виде группы объектов разного типа. Например, здание суда — это одновременно и отдельно стоящее здание, и организация внутри этого здания, то есть, два разных [DirectoryObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject-class.html) с характеристиками здания и организации соответственно. Но поскольку эти `DirectoryObject` относятся к одному и тому же геообъекту, в их структуре данных содержатся ссылки друг на друга.
+Некоторые геообъекты в справочнике могут быть представлены в виде группы объектов разного типа. Например, здание суда — это одновременно и отдельно стоящее здание, и организация внутри этого здания, то есть два разных [DirectoryObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject-class.html) с характеристиками здания и организации соответственно. Но поскольку эти `DirectoryObject` относятся к одному и тому же геообъекту, в их структуре данных содержатся ссылки друг на друга.
 
 Информация о связанных объектах содержится в поле `group` в виде списка элементов [GroupItem](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/GroupItem-class.html). Для каждого связанного объекта представлен его тип и идентификатор ([DgisObjectId](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisObjectId-class.html)), который вы можете в дальнейшем использовать для обращения к этому объекту.
 
@@ -1340,7 +1340,7 @@ searchHistory.onHistoryChanged.listen((changeType) {
 });
 ```
 
-## Информация о подъездах в справочнике
+## Информация о подъездах в справочнике {#entrance-in-directory}
 
 Вы можете искать адреса в справочнике с точностью до квартиры или подъезда.
 

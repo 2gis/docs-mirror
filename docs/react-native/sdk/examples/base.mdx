@@ -1,0 +1,96 @@
+---
+sidebar: reactnativesdk
+---
+# Общие принципы
+
+## Отложенные результаты {#deferred-results}
+
+Некоторые методы SDK, например запросы к справочнику или маршрутизатору, возвращают отложенный результат `Future<T>`. Для работы с ним сохраните ссылку на [Future](/react-native/sdk/reference/stable/class#future) до завершения операции и подпишитесь через [onComplete()](/react-native/sdk/reference/stable/class#future/on-complete).
+
+Вызов [destroy()](/react-native/sdk/reference/stable/class#future/destroy) можно использовать для явной ранней очистки native-ресурсов, например после получения результата или при размонтировании экрана. Это необязательный шаг для объектов SDK, но он полезен для долгих операций и экранов с частым созданием запросов.
+
+Пример получения объекта из справочника:
+
+```tsx
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  SearchManager,
+  type Context,
+  type DirectoryObject,
+  type Future,
+} from '@2gis/dgis-mobile-sdk-full';
+
+function useDirectoryObject(context: Context, id: string) {
+  const searchManager = useMemo(
+    () => SearchManager.createOnlineManager(context),
+    [context],
+  );
+  const futureRef = useRef<Future<DirectoryObject | null> | null>(null);
+  const [object, setObject] = useState<DirectoryObject | null>(null);
+
+  useEffect(() => {
+    return () => searchManager.destroy();
+  }, [searchManager]);
+
+  useEffect(() => {
+    const future = searchManager.searchById(id);
+    futureRef.current = future;
+
+    future.onComplete(
+      result => {
+        future.destroy();
+        futureRef.current = null;
+        setObject(result);
+      },
+      error => {
+        future.destroy();
+        futureRef.current = null;
+        console.warn(error);
+      },
+    );
+
+    return () => {
+      futureRef.current?.destroy();
+      futureRef.current = null;
+    };
+  }, [id, searchManager]);
+
+  return object;
+}
+```
+
+Подробнее про работу со справочником см. в разделе [Справочник](/react-native/sdk/examples/directory).
+
+## Потоки значений {#data-channels}
+
+Некоторые объекты SDK предоставляют потоки значений. На поток можно подписаться через [Channel.subscribe()](/react-native/sdk/reference/stable/class#channel/subscribe) и отписаться через [Connection.disconnect()](/react-native/sdk/reference/stable/class#connection/disconnect). Ссылку на [Connection](/react-native/sdk/reference/stable/class#connection) нужно хранить, пока подписка активна: если ссылка потеряется, сборщик мусора может удалить JavaScript-объект, и подписка отключится. Подробнее см. в описании класса [Connection](/react-native/sdk/reference/stable/class#connection).
+
+Пример подписки на изменение параметров камеры:
+
+```tsx
+import { useEffect } from 'react';
+import type { Map } from '@2gis/dgis-mobile-sdk-full';
+
+function useCameraChanges(map: Map | null) {
+  useEffect(() => {
+    if (map === null) {
+      return;
+    }
+
+    const connection = map.camera.changed.subscribe(change => {
+      console.log('Camera changed:', change);
+    });
+
+    return () => {
+      connection.disconnect();
+    };
+  }, [map]);
+}
+```
+
+Если канал относится к типу `StatefulChannel<T>`, текущее значение доступно сразу через `value`:
+
+```tsx
+const currentPosition = map.camera.position;
+const currentLoadingState = map.dataLoadingStateChannel.value;
+```
