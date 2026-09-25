@@ -1,0 +1,195 @@
+---
+sidebar: monitoring
+---
+# Мониторинг
+
+Вы можете получать актуальное местоположение агентов и историю их перемещений с событиями входа в геозоны и потери сигнала. Подробнее о мониторинге агентов см. в разделе [Мониторинг](/monitoring/administrator/monitoring) Руководства администратора.
+
+## Получение последних местоположений агентов {#last-locations}
+
+Вы можете получить последние известные координаты местоположения агентов и статус GPS-сигнала на источнике данных о местоположении.
+
+Метод предназначен для поллинга данных: чтобы проверить наличие новых данных, отправьте запрос. Вы можете запрашивать местоположения агентов только за последние 24 часа.
+
+Статусы сигнала могут быть следующими:
+
+* `online` — сигнал и данные о местоположении доступны.
+* `signal_lost` — сигнал потерян, данные о местоположении недоступны.
+
+Чтобы получить последние местоположения агентов, отправьте GET-запрос к [/v1/monitoring/agents/last-locations](/monitoring/api/reference/monitoring#tag/monitoring/operation/listAgentLastLocations) с параметром `last_update_at` — датой и временем в формате RFC 3339. В ответе вернутся местоположения, обновлённые после этого момента.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/monitoring/agents/last-locations?last_update_at=2026-09-16T12:00:00Z' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "agent_id": "56ca1414-3d9b-4167-9fa1-646576fe9227",
+            "location": {
+                "lat": 55.7558,
+                "lon": 37.6173
+            },
+            "status": "online",
+            "server_received_at": "2026-09-17T09:15:32.501Z",
+            "icon": {
+                "name": "car",
+                "color": "blue"
+            }
+        },
+        {
+            "agent_id": "a2e633f5-a6be-4895-8386-b560669f8918",
+            "location": {
+                "lat": 55.7601,
+                "lon": 37.6184
+            },
+            "status": "signal_lost",
+            "server_received_at": "2026-09-17T08:42:10.118Z",
+            "icon": {
+                "name": "walk",
+                "color": "orange"
+            }
+        }
+    ]
+}
+```
+
+</details>
+
+## Получение истории перемещений агента {#agent-timeline}
+
+Чтобы получить историю перемещений агента в заданном интервале, отправьте GET-запрос к [`/v1/monitoring/agents/{id}/timeline`](/monitoring/api/reference/monitoring#tag/monitoring/operation/getAgentTimeline), где `{id}` — идентификатор агента, со следующими параметрами:
+
+* `from` (обязательный параметр) — дата и время начала интервала в формате RFC 3339.
+* `to` (обязательный параметр) — дата и время окончания интервала в формате RFC 3339.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/monitoring/agents/018f2e6b-1c2a-7b3e-9c4d-5e6f7a8b9c0d/timeline?from=2026-09-17T00%3A00%3A00Z&to=2026-09-17T23%3A59%3A59Z' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "distance_meters": 12500.5,
+    "duration_seconds": 3600,
+    "initial_state": {
+        "availability": "online",
+        "motion": "on_way",
+        "geofences": [],
+        "is_gap": false
+    },
+    "geofences": [
+        {
+            "id": "37a41c1e-3f28-49b1-a0a5-31081e954bfc",
+            "name": "Геозона 1",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [37.6173, 55.7558],
+                        [37.6183, 55.7558],
+                        [37.6183, 55.7568],
+                        [37.6173, 55.7568],
+                        [37.6173, 55.7558]
+                    ]
+                ]
+            }
+        }
+    ],
+    "timeline": [
+        {
+            "from": "2026-09-17T09:00:00Z",
+            "to": "2026-09-17T09:20:00Z",
+            "distance_meters": 5200.0,
+            "duration_seconds": 1200,
+            "state": {
+                "availability": "online",
+                "motion": "on_way",
+                "geofences": [],
+                "is_gap": false
+            },
+            "events": [
+                {
+                    "type": "entered_geofence",
+                    "timestamp": "2026-09-17T09:15:32Z",
+                    "payload": {
+                        "event_type": "entered_geofence",
+                        "geofence_id": "37a41c1e-3f28-49b1-a0a5-31081e954bfc",
+                        "point": {
+                            "lat": 55.7558,
+                            "lon": 37.6173
+                        }
+                    }
+                }
+            ],
+            "waypoints": [
+                {
+                    "lat": 55.7540,
+                    "lon": 37.6150,
+                    "ts": "2026-09-17T09:00:00Z"
+                },
+                {
+                    "lat": 55.7558,
+                    "lon": 37.6173,
+                    "ts": "2026-09-17T09:15:32Z"
+                }
+            ]
+        },
+        {
+            "from": "2026-09-17T09:20:00Z",
+            "to": "2026-09-17T09:35:00Z",
+            "distance_meters": 0,
+            "duration_seconds": 900,
+            "state": {
+                "availability": "online",
+                "motion": "idle",
+                "geofences": ["37a41c1e-3f28-49b1-a0a5-31081e954bfc"],
+                "is_gap": false
+            },
+            "events": [
+                {
+                    "type": "motion",
+                    "timestamp": "2026-09-17T09:20:00Z",
+                    "payload": {
+                        "event_type": "motion",
+                        "type": "stopped",
+                        "from": "on_way",
+                        "to": "idle",
+                        "point": {
+                            "lat": 55.7558,
+                            "lon": 37.6173
+                        }
+                    }
+                }
+            ],
+            "waypoints": [
+                {
+                    "lat": 55.7558,
+                    "lon": 37.6173,
+                    "ts": "2026-09-17T09:20:00Z"
+                }
+            ]
+        }
+    ]
+}
+```
+
+</details>

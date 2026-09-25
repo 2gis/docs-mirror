@@ -1,0 +1,82 @@
+---
+sidebar: logistics
+---
+# Склады
+
+**Склады** — это точки, в которых агенты могут забирать заказы или груз. Склады используются при создании задач в маршрутных планах. Агенты могут начинать или заканчивать работу на складе, также склад может быть промежуточной точкой. Подробнее о складах см. в разделе [Склады](/logistics/administrator/managing/depots) Руководства администратора.
+
+## Получение списка складов {#getting-depots-list}
+
+Вы можете получить список складов с данными о них: ID, названием, адресом, графиком работы, датой и временем создания и обновления.
+
+Чтобы получить список складов, отправьте GET-запрос к [/v1/depots](/logistics/api/reference/depots#tag/depots/operation/listDepots) с параметром `limit` — максимальным количеством складов в ответе от 1 до 100.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/depots?limit=2' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "id": "8fa2a2bc-4156-491c-b455-460de6eb1632",
+            "name": "Склад 1",
+            "address": {
+                "name": "Новосибирск, Сан Сити, многофункциональный комплекс",
+                "point": {
+                    "lat": 54.98030090332031,
+                    "lon": 82.89828491210938
+                }
+            },
+            "work_time_settings": {
+                "timezone": "Asia/Novosibirsk",
+                "rrule": "RRULE:BYDAY=MO,TU,WE,TH,FR,SA,SU",
+                "time_windows": [
+                    {
+                        "from": "07:00",
+                        "to": "22:00"
+                    }
+                ]
+            },
+            "created_at": "2026-06-15T08:39:25.069017Z",
+            "updated_at": "2026-09-15T13:50:49.029653Z"
+        },
+        {
+            "id": "f910207c-b6f2-4ee2-9b8c-cdf9d867efb4",
+            "name": "Склад 2",
+            "address": {
+                "name": "Бердск, ЗимаЛето, спортивный комплекс",
+                "point": {
+                    "lat": 54.74105453491211,
+                    "lon": 83.06428527832031
+                }
+            },
+            "work_time_settings": {
+                "timezone": "Asia/Novosibirsk",
+                "rrule": "RRULE:BYDAY=MO,TU,WE,TH,FR,SA,SU",
+                "is_hard_time_window": true,
+                "time_windows": [
+                    {
+                        "from": "08:00",
+                        "to": "20:00"
+                    }
+                ]
+            },
+            "created_at": "2026-08-20T08:15:07.030706Z",
+            "updated_at": "2026-08-20T08:15:07.030706Z"
+        }
+    ],
+    "cursor": {}
+}
+```
+
+</details>

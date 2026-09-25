@@ -1,0 +1,320 @@
+---
+sidebar: monitoring
+---
+# Смены
+
+**Смена** — это период для планирования работы агентов, например дневная или ночная смена. Вы можете указать время начала и окончания, периодичность смены, списки задач и агентов. Смены могут пересекаться: несколько смен с агентами (в том числе с одними и теми же) могут проходить одновременно. Подробнее о сменах см. в разделе [Смены](/monitoring/administrator/shifts) Руководства администратора.
+
+## Получение списка смен {#getting-shifts-list}
+
+Вы можете получить список смен за заданный период с данными о них: ID, названием, датой и временем создания и обновления, часовым поясом, признаком, что смена продолжается сутки, датой и временем начала и окончания смены.
+
+Чтобы получить список смен, отправьте GET-запрос к [/v1/shifts](/monitoring/api/reference/shifts#tag/shifts/operation/listShifts) со следующими параметрами:
+
+* `from` — дата и время начала периода в формате RFC 3339.
+* `to` — дата и время окончания периода в формате RFC 3339.
+* `limit` — максимальное число смен в ответе, от 1 до 100.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/shifts?from=2026-09-15T00:00:00Z&to=2026-09-17T00:00:00Z&limit=10' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "id": "75692d4b-8da0-442e-a5a2-1c6ef561c7ad",
+            "name": "Смена-1789456582",
+            "start_at": "2026-09-15T07:16:25Z",
+            "end_at": "2026-09-15T15:16:22Z",
+            "timezone": "Asia/Novosibirsk",
+            "full_day": false,
+            "created_at": "2026-09-15T07:16:22.03358Z",
+            "updated_at": "2026-09-15T07:16:34.400014Z"
+        },
+        {
+            "id": "014c49db-76c5-43c4-9cd6-e7578b1dc573",
+            "name": "Смена-1789456710",
+            "start_at": "2026-09-15T07:18:32Z",
+            "end_at": "2026-09-15T15:18:29Z",
+            "timezone": "Asia/Novosibirsk",
+            "full_day": false,
+            "created_at": "2026-09-15T07:18:29.289052Z",
+            "updated_at": "2026-09-15T07:18:41.726039Z"
+        },
+        {
+            "id": "e820bf1f-9edd-4b76-a423-62b700efa92a",
+            "name": "Смена-1789456828",
+            "start_at": "2026-09-15T07:20:30Z",
+            "end_at": "2026-09-15T15:20:27Z",
+            "timezone": "Asia/Novosibirsk",
+            "full_day": false,
+            "created_at": "2026-09-15T07:20:27.251107Z",
+            "updated_at": "2026-09-15T07:20:39.597549Z"
+        },
+        {
+            "id": "a494744d-44b8-41ac-a3a9-80d37299b398",
+            "name": "Смена-1789566599",
+            "start_at": "2026-09-16T13:50:01Z",
+            "end_at": "2026-09-16T21:49:58Z",
+            "timezone": "Asia/Novosibirsk",
+            "full_day": false,
+            "created_at": "2026-09-16T13:49:58.004265Z",
+            "updated_at": "2026-09-16T13:50:01.591082Z"
+        }
+    ],
+    "cursor": {}
+}
+```
+
+</details>
+
+## Получение смены по ID {#getting-shift}
+
+Вы можете получить данные смены по её идентификатору: название, дату и время создания и обновления, часовой пояс, дату и время начала смены, дату и время окончания смены и флаг, что смена продолжается сутки.
+
+Чтобы получить данные смены, отправьте GET-запрос к [`/v1/shifts/{id}`](/monitoring/api/reference/shifts#tag/shifts/operation/getShift), где `{id}` — идентификатор смены.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/shifts/26307c36-6aad-47d5-8e8b-0425f96f9b27' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "26307c36-6aad-47d5-8e8b-0425f96f9b27",
+    "name": "Утренняя смена",
+    "start_at": "2026-09-18T10:00:00Z",
+    "end_at": "2026-09-18T18:00:00Z",
+    "timezone": "Europe/Moscow",
+    "full_day": false,
+    "created_at": "2026-09-17T09:32:53.603679Z",
+    "updated_at": "2026-09-17T09:32:53.603679Z"
+}
+```
+
+</details>
+
+## Создание смены {#creating-shift}
+
+Чтобы создать смену, отправьте POST-запрос к [/v1/shifts](/monitoring/api/reference/shifts#tag/shifts/operation/createShift) со следующими параметрами:
+
+* `name` (обязательный параметр) — название смены.
+* `timezone` (обязательный параметр) — часовой пояс в формате IANA (например, `Europe/Moscow`).
+* `start_at` — дата и время начала смены в формате RFC 3339.
+* `end_at` — дата и время окончания смены в формате RFC 3339.
+* `full_day` — признак, что смена продолжается сутки (соответствует чекбоксу **Весь день** в веб-панели администратора).
+
+**Пример запроса:**
+
+```bash
+curl --request POST \
+   --url 'https://geoflow.2gis.ru/public/api/v1/shifts' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "name": "Утренняя смена",
+      "timezone": "Europe/Moscow",
+      "start_at": "2026-09-18T10:00:00Z",
+      "end_at": "2026-09-18T18:00:00Z",
+      "full_day": false
+   }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "26307c36-6aad-47d5-8e8b-0425f96f9b27",
+    "name": "Утренняя смена",
+    "start_at": "2026-09-18T10:00:00Z",
+    "end_at": "2026-09-18T18:00:00Z",
+    "timezone": "Europe/Moscow",
+    "full_day": false,
+    "created_at": "2026-09-17T09:32:53.603679Z",
+    "updated_at": "2026-09-17T09:32:53.603679Z"
+}
+```
+
+</details>
+
+## Обновление смены {#updating-shift}
+
+Чтобы обновить данные смены, отправьте PUT-запрос к [`/v1/shifts/{id}`](/monitoring/api/reference/shifts#tag/shifts/operation/updateShift), где `{id}` — идентификатор смены, и передайте в теле запроса новые данные.
+
+**Пример запроса:**
+
+```bash
+curl --request PUT \
+   --url 'https://geoflow.2gis.ru/public/api/v1/shifts/26307c36-6aad-47d5-8e8b-0425f96f9b27' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "name": "Дневная смена",
+      "timezone": "Europe/Moscow",
+      "start_at": "2026-09-20T12:00:00Z",
+      "end_at": "2026-09-20T17:00:00Z",
+      "full_day": false
+   }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "26307c36-6aad-47d5-8e8b-0425f96f9b27",
+    "name": "Дневная смена",
+    "start_at": "2026-09-20T12:00:00Z",
+    "end_at": "2026-09-20T17:00:00Z",
+    "timezone": "Europe/Moscow",
+    "full_day": false,
+    "created_at": "2026-09-17T09:32:53.603679Z",
+    "updated_at": "2026-09-17T09:41:47.02996Z"
+}
+```
+
+</details>
+
+## Удаление смены {#deleting-shift}
+
+:::warning
+
+Восстановить смену после удаления невозможно.
+
+:::
+
+Чтобы удалить смену, отправьте DELETE-запрос к [`/v1/shifts/{id}`](/monitoring/api/reference/shifts#tag/shifts/operation/deleteShift), где `{id}` — идентификатор смены.
+
+**Пример запроса:**
+
+```bash
+curl --request DELETE \
+   --url 'https://geoflow.2gis.ru/public/api/v1/shifts/26307c36-6aad-47d5-8e8b-0425f96f9b27' \
+   --header 'Authorization: Bearer <token>'
+```
+
+При успешном удалении вернётся ответ со статусом `204 No Content`.
+
+## Получение назначений смены {#getting-shift-assignments}
+
+Вы можете получить список агентов, добавленных в смену, и список задач смены с назначенными агентами.
+
+Чтобы получить назначения смены, отправьте GET-запрос к [`/v1/shifts/{id}/assignments`](/monitoring/api/reference/shifts#tag/shifts/operation/getShiftAssignments), где `{id}` — идентификатор смены.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/shifts/75692d4b-8da0-442e-a5a2-1c6ef561c7ad/assignments' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "shift_id": "75692d4b-8da0-442e-a5a2-1c6ef561c7ad",
+    "agent_assignments": [
+        {
+            "agent_id": "2b1e3b65-2c04-4fa2-a2d7-467901e98978"
+        }
+    ],
+    "task_assignments": [
+        {
+            "task_id": "736fde4d-9029-4915-8189-01353d6982cb",
+            "agent_id": "2b1e3b65-2c04-4fa2-a2d7-467901e98978",
+            "created_at": "2026-09-15T07:20:39.597549Z",
+            "updated_at": "2026-09-15T07:20:39.597549Z"
+        }
+    ]
+}
+```
+
+</details>
+
+## Обновление назначений смены {#updating-shift-assignments}
+
+Вы можете обновить назначения смены: список агентов и задач.
+
+Чтобы обновить назначения смены, отправьте POST-запрос к [`/v1/shifts/{id}/assignments`](/monitoring/api/reference/shifts#tag/shifts/operation/updateShiftAssignments), где `{id}` — идентификатор смены, со следующими параметрами:
+
+* `agent_ids` — список идентификаторов агентов, которых нужно добавить в смену.
+* `task_assignments` — список назначений задач:
+
+   * `task_id` (обязательный параметр) — идентификатор задачи.
+   * `agent_id` — идентификатор агента, назначенного на задачу.
+
+**Пример запроса:**
+
+```bash
+curl --request POST \
+   --url 'https://geoflow.2gis.ru/public/api/v1/shifts/75692d4b-8da0-442e-a5a2-1c6ef561c7ad/assignments' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "agent_ids": [
+         "82fb1fd7-9a98-4f49-81fa-2f380a8cba0e"
+      ],
+      "task_assignments": [
+         {
+            "task_id": "736fde4d-9029-4915-8189-01353d6982cb",
+            "agent_id": "2b1e3b65-2c04-4fa2-a2d7-467901e98978"
+         }
+      ]
+   }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+   "shift_id": "75692d4b-8da0-442e-a5a2-1c6ef561c7ad",
+   "agent_assignments": [
+      {
+         "agent_id": "82fb1fd7-9a98-4f49-81fa-2f380a8cba0e"
+      },
+      {
+         "agent_id": "2b1e3b65-2c04-4fa2-a2d7-467901e98978"
+      }
+   ],
+   "task_assignments": [
+      {
+         "task_id": "736fde4d-9029-4915-8189-01353d6982cb",
+         "agent_id": "2b1e3b65-2c04-4fa2-a2d7-467901e98978",
+         "created_at": "2026-09-18T09:42:11Z",
+         "updated_at": "2026-09-18T09:42:11Z"
+      }
+   ]
+   }
+```
+
+</details>

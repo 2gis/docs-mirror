@@ -1,0 +1,557 @@
+---
+sidebar: logistics
+---
+# Задачи
+
+Вы можете создавать **задачи** для агентов, например: доставить груз, провести инспекцию и т. д. Подробнее о задачах см. в разделе [Задачи](/logistics/administrator/tasks) Руководства администратора.
+
+## Получение списка задач {#getting-tasks-list}
+
+Вы можете получить список задач с данными о них: ID задачи, ID шаблона, статусом, датой и временем создания и обновления и списком атрибутов.
+
+Чтобы получить список задач, отправьте GET-запрос к [/v1/tasks](/logistics/api/reference/tasks#tag/tasks/operation/listTasks) с параметром `limit` — максимальным количеством задач в ответе от 1 до 100.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/tasks?limit=2' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "id": "d86f6491-d873-4802-bdb5-ba354245d33e",
+            "template_id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+            "attributes": [
+                {
+                    "data": {
+                        "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+                        "type": "name",
+                        "value": "Задача 814"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "9aa20ffb-e130-44a4-8fdf-03ae30ba226b",
+                        "type": "description",
+                        "value": "Продукты"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "5969d0f4-397f-4f82-8398-0c0dd81910ed",
+                        "type": "destination"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "bc53e352-f052-4a40-bea6-8c5267541430",
+                        "type": "time_windows_settings",
+                        "value": {
+                            "timezone": "Asia/Novosibirsk",
+                            "time_windows": [
+                                {
+                                    "from": "2026-08-25T05:22:00.000Z",
+                                    "to": "2026-08-25T15:22:00.000Z"
+                                }
+                            ],
+                            "is_hard": false
+                        }
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "8027b583-767f-4d95-ab24-27185a98add9",
+                        "type": "depot_info",
+                        "value": {
+                            "depot_id": "f910207c-b6f2-4ee2-9b8c-cdf9d867efb4",
+                            "depot_duration_sec": 1500
+                        }
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "8bc4e8b0-3409-44d5-aad9-069ed1033b5f",
+                        "type": "phone",
+                        "value": "+7 (999) 999-99-99"
+                    }
+                }
+            ],
+            "status_alias": "created",
+            "created_at": "2026-06-15T08:40:34.201829Z",
+            "updated_at": "2026-08-24T08:10:03.423399Z"
+        },
+        {
+            "id": "782700da-3370-444e-9cae-f13c80cf6cf2",
+            "template_id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+            "attributes": [
+                {
+                    "data": {
+                        "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+                        "type": "name",
+                        "value": "Задача 815"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "bc53e352-f052-4a40-bea6-8c5267541430",
+                        "type": "time_windows_settings",
+                        "value": {
+                            "timezone": "Asia/Novosibirsk",
+                            "time_windows": [
+                                {
+                                    "from": "2026-08-25T05:22:00.000Z",
+                                    "to": "2026-08-25T08:55:00.000Z"
+                                }
+                            ],
+                            "is_hard": false
+                        }
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "5969d0f4-397f-4f82-8398-0c0dd81910ed",
+                        "type": "destination"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "8027b583-767f-4d95-ab24-27185a98add9",
+                        "type": "depot_info",
+                        "value": {
+                            "depot_id": "8fa2a2bc-4156-491c-b455-460de6eb1632",
+                            "depot_ready_time": "18:32",
+                            "depot_expiring_time": "18:55",
+                            "depot_duration_sec": 11
+                        }
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "9aa20ffb-e130-44a4-8fdf-03ae30ba226b",
+                        "type": "description",
+                        "value": "Продукты 2"
+                    }
+                }
+            ],
+            "status_alias": "created",
+            "created_at": "2026-06-15T08:40:34.210945Z",
+            "updated_at": "2026-08-24T08:10:34.501092Z"
+        }
+    ],
+    "cursor": {}
+}
+```
+
+</details>
+
+Каждый атрибут содержит ID, тип и значение.
+
+## Получение задачи по ID {#getting-task}
+
+Вы можете получить данные задачи по её идентификатору: ID шаблона, статус, дату и время создания и обновления и список атрибутов.
+
+Чтобы получить данные задачи, отправьте GET-запрос к [`/v1/tasks/{id}`](/logistics/api/reference/tasks#tag/tasks/operation/getTask), где `{id}` — идентификатор задачи.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/tasks/402ed0c2-e7a5-404e-bee2-e1695ec65bb2' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "402ed0c2-e7a5-404e-bee2-e1695ec65bb2",
+    "template_id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+    "attributes": [
+        {
+            "data": {
+                "attribute_id": "8c8c5809-3cdf-41a3-bf19-9c47bf45aad9",
+                "type": "text",
+                "value": "Задача 12136"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+                "type": "name",
+                "value": "Доставка"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "9aa20ffb-e130-44a4-8fdf-03ae30ba226b",
+                "type": "description",
+                "value": "Продукты"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "5969d0f4-397f-4f82-8398-0c0dd81910ed",
+                "type": "destination"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "bc53e352-f052-4a40-bea6-8c5267541430",
+                "type": "time_windows_settings",
+                "value": {
+                    "timezone": "Asia/Novosibirsk",
+                    "time_windows": [
+                        {
+                            "from": "2026-08-26T05:22:00.000Z",
+                            "to": "2026-08-26T08:06:00.000Z"
+                        }
+                    ],
+                    "is_hard": false
+                }
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "8027b583-767f-4d95-ab24-27185a98add9",
+                "type": "depot_info",
+                "value": {
+                    "depot_id": "8fa2a2bc-4156-491c-b455-460de6eb1632",
+                    "depot_ready_time": "18:20",
+                    "depot_expiring_time": "20:30",
+                    "depot_duration_sec": 1500
+                }
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "8bc4e8b0-3409-44d5-aad9-069ed1033b5f",
+                "type": "phone",
+                "value": "+7 (999) 999-99-99"
+            }
+        }
+    ],
+    "status_alias": "created",
+    "created_at": "2026-06-15T08:40:34.216738Z",
+    "updated_at": "2026-08-24T08:10:53.13097Z"
+}
+```
+
+</details>
+
+Каждый атрибут содержит ID, тип и значение.
+
+## Создание задачи {#creating-task}
+
+Чтобы создать задачу, отправьте POST-запрос к [/v1/tasks](/logistics/api/reference/tasks#tag/tasks/operation/createTask) со следующими параметрами:
+
+* `template_id` (обязательный параметр) — ID [шаблона задачи](/logistics/api/examples/templates).
+* `attributes` (обязательный параметр) — список атрибутов задачи. Каждый объект `data` должен содержать:
+
+   * `attribute_id` (обязательный параметр) — ID атрибута, указанный в [шаблоне задачи](/logistics/api/examples/templates#getting-task-template).
+   * `type` (обязательный параметр) — тип атрибута, указанный в [шаблоне задачи](/logistics/api/examples/templates#getting-task-template).
+   * `value` — значение атрибута.
+
+**Пример запроса:**
+
+```bash
+curl --request POST \
+   --url 'https://geoflow.2gis.ru/public/api/v1/tasks' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "template_id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+      "attributes": [
+         {
+            "data": {
+               "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+               "type": "name",
+               "value": "Задача"
+            }
+         },
+         {
+            "data": {
+               "attribute_id": "bc53e352-f052-4a40-bea6-8c5267541430",
+               "type": "time_windows_settings",
+               "value": {
+                  "timezone": "Europe/Moscow",
+                  "time_windows": [
+                     {
+                        "from": "2026-09-22T09:00:00Z",
+                        "to": "2026-09-22T12:00:00Z"
+                     }
+                  ]
+               }
+            }
+         },
+         {
+            "data": {
+               "attribute_id": "5969d0f4-397f-4f82-8398-0c0dd81910ed",
+               "type": "destination",
+               "value": {
+                  "sub_type": "address",
+                  "address": {
+                     "name": "Новосибирск, ул. Ленина, 1",
+                     "point": {
+                        "lat": 55.030204,
+                        "lon": 82.920430
+                     }
+                  }
+               }
+            }
+         },
+         {
+            "data": {
+               "attribute_id": "8027b583-767f-4d95-ab24-27185a98add9",
+               "type": "depot_info",
+               "value": {
+                  "depot_id": "f910207c-b6f2-4ee2-9b8c-cdf9d867efb4",
+                  "depot_ready_time": "08:00",
+                  "depot_expiring_time": "18:00",
+                  "depot_duration_sec": 1500
+               }
+            }
+         }
+      ]
+   }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "3a1bc176-b27b-4068-b0a0-e7405dd874b1",
+    "template_id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+    "attributes": [
+        {
+            "data": {
+                "attribute_id": "8c8c5809-3cdf-41a3-bf19-9c47bf45aad9",
+                "type": "text",
+                "value": "T-317"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+                "type": "name",
+                "value": "Задача"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "bc53e352-f052-4a40-bea6-8c5267541430",
+                "type": "time_windows_settings",
+                "value": {
+                    "timezone": "Europe/Moscow",
+                    "time_windows": [
+                        {
+                            "from": "2026-09-22T09:00:00Z",
+                            "to": "2026-09-22T12:00:00Z"
+                        }
+                    ],
+                    "is_hard": false
+                }
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "5969d0f4-397f-4f82-8398-0c0dd81910ed",
+                "type": "destination",
+                "value": {
+                    "sub_type": "address",
+                    "address": {
+                        "name": "Новосибирск, ул. Ленина, 1",
+                        "point": {
+                            "lat": 55.03020477294922,
+                            "lon": 82.9204330444336
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "8027b583-767f-4d95-ab24-27185a98add9",
+                "type": "depot_info",
+                "value": {
+                    "depot_id": "f910207c-b6f2-4ee2-9b8c-cdf9d867efb4",
+                    "depot_ready_time": "08:00",
+                    "depot_expiring_time": "18:00",
+                    "depot_duration_sec": 1500
+                }
+            }
+        }
+    ],
+    "status_alias": "created",
+    "created_at": "2026-09-21T14:16:31.781406Z",
+    "updated_at": "2026-09-21T14:16:31.781406Z"
+}
+```
+
+</details>
+
+## Обновление задачи {#updating-task}
+
+Чтобы обновить данные задачи, отправьте PUT-запрос к [`/v1/tasks/{id}`](/logistics/api/reference/tasks#tag/tasks/operation/updateTask), где `{id}` — идентификатор задачи, и передайте в теле запроса новые данные.
+
+**Пример запроса:**
+
+```bash
+curl --request PUT \
+   --url 'https://geoflow.2gis.ru/public/api/v1/tasks/da6e2e9b-3152-4425-a330-abb1fca5956b' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "id": "da6e2e9b-3152-4425-a330-abb1fca5956b",
+      "attributes": [
+         {
+            "data": {
+               "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+               "type": "name",
+               "value": "Задача 1"
+            }
+         }
+      ]
+   }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "da6e2e9b-3152-4425-a330-abb1fca5956b",
+    "template_id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+    "attributes": [
+        {
+            "data": {
+                "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+                "type": "name",
+                "value": "Задача 1"
+            }
+        }
+    ],
+    "status_alias": "created",
+    "created_at": "2026-09-22T13:01:10.648376Z",
+    "updated_at": "2026-09-22T13:01:54.321587Z"
+}
+```
+
+</details>
+
+## Изменение статуса задачи {#updating-task-status}
+
+Чтобы изменить статус задачи, отправьте PUT-запрос к [`/v1/tasks/{id}/status`](/logistics/api/reference/tasks#tag/tasks/operation/setTaskStatus), где `{id}` — идентификатор задачи, с параметром `status_alias` — новым статусом задачи.
+
+Возможные статусы задач:
+
+* `created` — создана,
+* `ready` — готова к выполнению,
+* `in_progress` — выполняется,
+* `completed` — выполнена,
+* `cancelled` — отменена.
+
+**Пример запроса:**
+
+```bash
+curl --request PUT \
+   --url 'https://geoflow.2gis.ru/public/api/v1/tasks/3a1bc176-b27b-4068-b0a0-e7405dd874b1/status' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+    "status_alias": "completed"
+  }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "3a1bc176-b27b-4068-b0a0-e7405dd874b1",
+    "template_id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+    "attributes": [
+        {
+            "data": {
+                "attribute_id": "8c8c5809-3cdf-41a3-bf19-9c47bf45aad9",
+                "type": "text",
+                "value": "T-317"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+                "type": "name",
+                "value": "Задача"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "bc53e352-f052-4a40-bea6-8c5267541430",
+                "type": "time_windows_settings",
+                "value": {
+                    "timezone": "Europe/Moscow",
+                    "time_windows": [
+                        {
+                            "from": "2026-09-22T09:00:00Z",
+                            "to": "2026-09-22T12:00:00Z"
+                        }
+                    ],
+                    "is_hard": false
+                }
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "5969d0f4-397f-4f82-8398-0c0dd81910ed",
+                "type": "destination",
+                "value": {
+                    "sub_type": "address",
+                    "address": {
+                        "name": "Новосибирск, ул. Ленина, 1",
+                        "point": {
+                            "lat": 55.03020477294922,
+                            "lon": 82.9204330444336
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "8027b583-767f-4d95-ab24-27185a98add9",
+                "type": "depot_info",
+                "value": {
+                    "depot_id": "f910207c-b6f2-4ee2-9b8c-cdf9d867efb4",
+                    "depot_ready_time": "08:00",
+                    "depot_expiring_time": "18:00",
+                    "depot_duration_sec": 1500
+                }
+            }
+        }
+    ],
+    "status_alias": "completed",
+    "created_at": "2026-09-21T14:16:31.781406Z",
+    "updated_at": "2026-09-21T14:19:46.566536Z"
+}
+```
+
+</details>

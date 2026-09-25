@@ -1,0 +1,414 @@
+---
+sidebar: logistics
+---
+# Агенты
+
+**Агенты** выполняют рабочие задачи и используются при создании маршрутных планов. Агентами могут быть мобильные сотрудники (например, операторы и курьеры), спецтехника и т. д. Подробнее об агентах см. в разделе [Агенты](/logistics/administrator/managing/agents) Руководства администратора.
+
+## Получение списка агентов {#getting-agents-list}
+
+Вы можете получить список агентов с данными о них: ID агента, ID шаблона, датой и временем создания и обновления, источниками данных о местоположении агента и атрибутами.
+
+Чтобы получить список агентов, отправьте GET-запрос к [/v1/agents](/logistics/api/reference/agents#tag/agents/operation/listAgents) с параметром `limit` — максимальным количеством агентов в ответе от 1 до 500.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/agents?limit=2' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "id": "82fb1fd7-9a98-4f49-81fa-2f380a8cba0e",
+            "template_id": "ab836921-2273-4f3a-b4a9-e16bc1bc2b32",
+            "attributes": [
+                {
+                    "data": {
+                        "attribute_id": "1b9c78db-a18a-48b5-a18d-9c9e226bf4f3",
+                        "type": "text",
+                        "value": "Агент 1"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "c481e304-6703-4613-acfc-396827093900",
+                        "type": "transport_type",
+                        "value": "driving"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "c8c71b26-5f28-4483-9b11-8af3dbde1646",
+                        "type": "phone"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "3e5f4c07-ad6e-46bb-9fb9-494455730fc9",
+                        "type": "email"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "4810aee3-fa00-424b-9447-3c4040774bc3",
+                        "type": "text"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "c73e85cb-55e6-4034-8e1e-4082a5f7ec41",
+                        "type": "number"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "9e355c34-b3b9-44e3-a74c-85ee92fc9a0c",
+                        "type": "dictionary"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "4c09a015-490b-4632-b6ca-459c7425b349",
+                        "type": "skill"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "e10f2a50-ee03-4342-924a-75c86f965a20",
+                        "type": "boolean",
+                        "value": false
+                    }
+                }
+            ],
+            "data_sources": [
+                {
+                    "type": "mobile",
+                    "value": {
+                        "type": "mobile",
+                        "user_id": "1781787890"
+                    }
+                }
+            ],
+            "created_at": "2026-08-28T07:17:45.198058Z",
+            "updated_at": "2026-09-15T10:16:01.684857Z"
+        },
+        {
+            "id": "06999587-d9d0-4ad9-b1a5-11ab8e140b4c",
+            "template_id": "ab836921-2273-4f3a-b4a9-e16bc1bc2b32",
+            "attributes": [
+                {
+                    "data": {
+                        "attribute_id": "1b9c78db-a18a-48b5-a18d-9c9e226bf4f3",
+                        "type": "text",
+                        "value": "Агент 2"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "c481e304-6703-4613-acfc-396827093900",
+                        "type": "transport_type",
+                        "value": "driving"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "c8c71b26-5f28-4483-9b11-8af3dbde1646",
+                        "type": "phone"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "3e5f4c07-ad6e-46bb-9fb9-494455730fc9",
+                        "type": "email"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "4810aee3-fa00-424b-9447-3c4040774bc3",
+                        "type": "text"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "c73e85cb-55e6-4034-8e1e-4082a5f7ec41",
+                        "type": "number"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "9e355c34-b3b9-44e3-a74c-85ee92fc9a0c",
+                        "type": "dictionary"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "4c09a015-490b-4632-b6ca-459c7425b349",
+                        "type": "skill"
+                    }
+                },
+                {
+                    "data": {
+                        "attribute_id": "e10f2a50-ee03-4342-924a-75c86f965a20",
+                        "type": "boolean",
+                        "value": false
+                    }
+                }
+            ],
+            "data_sources": [
+                {
+                    "type": "mobile",
+                    "value": {
+                        "type": "mobile",
+                        "user_id": "1234567890"
+                    }
+                }
+            ],
+            "created_at": "2026-08-28T07:18:36.883661Z",
+            "updated_at": "2026-09-15T10:14:38.975109Z"
+        }
+    ],
+    "cursor": {}
+}
+```
+
+</details>
+
+Каждый источник данных содержит тип источника и ID пользователя или устройства трекинга. Каждый атрибут содержит ID, тип и значение.
+
+## Получение агента по ID {#getting-agent}
+
+Вы можете получить данные агента по его идентификатору: ID шаблона, дату и время создания и обновления, источники данных о местоположении агента и атрибуты.
+
+Чтобы получить данные агента, отправьте GET-запрос к [`/v1/agents/{id}`](/logistics/api/reference/agents#tag/agents/operation/getAgent), где `{id}` — идентификатор агента.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/agents/56ca1414-3d9b-4167-9fa1-646576fe9227' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "56ca1414-3d9b-4167-9fa1-646576fe9227",
+    "template_id": "af5e5d63-10f0-4ea0-b520-ddb36af1a59c",
+    "attributes": [
+        {
+            "data": {
+                "attribute_id": "6653466e-1f20-485c-928e-c18b4bffedbc",
+                "type": "text",
+                "value": "Иван Иванов"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "1efd0fb1-7216-4d69-8baf-4470570de40b",
+                "type": "transport_type",
+                "value": "walking"
+            }
+        }
+    ],
+    "data_sources": [
+        {
+            "type": "mobile",
+            "value": {
+                "type": "mobile",
+                "user_id": "590cef82-d71f-48a1-8f81-3118db444b92"
+            }
+        }
+    ],
+    "created_at": "2026-09-17T13:39:03.456105Z",
+    "updated_at": "2026-09-17T13:39:03.456105Z"
+}
+```
+
+</details>
+
+Каждый источник данных содержит тип источника и ID пользователя или устройства трекинга. Каждый атрибут содержит ID, тип и значение.
+
+## Создание агента {#creating-agent}
+
+Чтобы создать агента, отправьте POST-запрос к [/v1/agents](/logistics/api/reference/agents#tag/agents/operation/createAgent) со следующими параметрами:
+
+* `template_id` (обязательный параметр) — ID [шаблона агента](/logistics/api/examples/templates).
+* `attributes` — список атрибутов агента. Каждый объект `data` должен содержать:
+
+   * `attribute_id` (обязательный параметр) — ID атрибута, указанный в [шаблоне агента](/logistics/api/examples/templates#getting-agent-template).
+   * `type` (обязательный параметр) — тип атрибута, указанный в [шаблоне агента](/logistics/api/examples/templates#getting-agent-template).
+   * `value` — значение атрибута.
+
+* `data_sources` — список источников данных о местоположении агента. Каждый объект `value` должен содержать:
+
+   * `type` (обязательный параметр) — тип источника данных: `mobile` (мобильное приложение) или `device` (устройство трекинга). Чтобы привязать к агенту устройство, используйте решение [2ГИС ГеоПоток: Мониторинг](/monitoring/overview) вместе с 2ГИС ГеоПоток: Логистикой.
+   * `user_id` или `device_id` (обязательный параметр) — в зависимости от типа источника данных: ID пользователя в мобильном приложении или ID устройства трекинга.
+
+**Пример запроса:**
+
+```bash
+curl --request POST \
+   --url 'https://geoflow.2gis.ru/public/api/v1/agents' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "template_id": "af5e5d63-10f0-4ea0-b520-ddb36af1a59c",
+      "attributes": [
+         {
+            "data": {
+               "attribute_id": "6653466e-1f20-485c-928e-c18b4bffedbc",
+               "type": "text",
+               "value": "Иван Иванов"
+            }
+         },
+         {
+            "data": {
+               "attribute_id": "1efd0fb1-7216-4d69-8baf-4470570de40b",
+               "type": "transport_type",
+               "value": "walking"
+            }
+         }
+      ],
+      "data_sources": [
+         {
+            "type": "mobile",
+            "value": {
+               "type": "mobile",
+               "user_id": "590cef82-d71f-48a1-8f81-3118db444b92"
+            }
+         }
+      ]
+   }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "56ca1414-3d9b-4167-9fa1-646576fe9227",
+    "template_id": "af5e5d63-10f0-4ea0-b520-ddb36af1a59c",
+    "attributes": [
+        {
+            "data": {
+                "attribute_id": "6653466e-1f20-485c-928e-c18b4bffedbc",
+                "type": "text",
+                "value": "Иван Иванов"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "1efd0fb1-7216-4d69-8baf-4470570de40b",
+                "type": "transport_type",
+                "value": "walking"
+            }
+        }
+    ],
+    "data_sources": [
+        {
+            "type": "mobile",
+            "value": {
+                "type": "mobile",
+                "user_id": "590cef82-d71f-48a1-8f81-3118db444b92"
+            }
+        }
+    ],
+    "created_at": "2026-09-17T13:39:03.456105Z",
+    "updated_at": "2026-09-17T13:39:03.456105Z"
+}
+```
+
+</details>
+
+## Обновление агента {#updating-agent}
+
+Чтобы обновить данные агента, отправьте PUT-запрос к [`/v1/agents/{id}`](/logistics/api/reference/agents#tag/agents/operation/updateAgent), где `{id}` — идентификатор агента, и передайте в теле запроса новые данные.
+
+**Пример запроса:**
+
+```bash
+curl --request PUT \
+   --url 'https://geoflow.2gis.ru/public/api/v1/agents/b70ebe82-6af7-4731-a4c7-7f2f5acc3387' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "template_id": "af5e5d63-10f0-4ea0-b520-ddb36af1a59c",
+      "attributes": [
+         {
+            "data": {
+               "attribute_id": "6653466e-1f20-485c-928e-c18b4bffedbc",
+               "type": "text",
+               "value": "Иван Петров"
+            }
+         }
+      ]
+   }'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "b70ebe82-6af7-4731-a4c7-7f2f5acc3387",
+    "template_id": "af5e5d63-10f0-4ea0-b520-ddb36af1a59c",
+    "attributes": [
+        {
+            "data": {
+                "attribute_id": "6653466e-1f20-485c-928e-c18b4bffedbc",
+                "type": "text",
+                "value": "Иван Петров"
+            }
+        },
+        {
+            "data": {
+                "attribute_id": "1efd0fb1-7216-4d69-8baf-4470570de40b",
+                "type": "transport_type",
+                "value": "walking"
+            }
+        }
+    ],
+    "data_sources": [],
+    "created_at": "2026-09-17T12:18:07.608161Z",
+    "updated_at": "2026-09-17T12:20:32.277239Z"
+}
+```
+
+</details>
+
+## Удаление агента {#deleting-agent}
+
+:::warning
+
+Агент будет исключён из маршрутных планов и задач. Восстановить агента после удаления невозможно.
+
+:::
+
+Чтобы удалить агента, отправьте DELETE-запрос к [`/v1/agents/{id}`](/logistics/api/reference/agents#tag/agents/operation/deleteAgent), где `{id}` — идентификатор агента.
+
+**Пример запроса:**
+
+```bash
+curl --request DELETE \
+   --url 'https://geoflow.2gis.ru/public/api/v1/agents/b70ebe82-6af7-4731-a4c7-7f2f5acc3387' \
+   --header 'Authorization: Bearer <token>'
+```
+
+При успешном удалении вернётся ответ со статусом `204 No Content`.

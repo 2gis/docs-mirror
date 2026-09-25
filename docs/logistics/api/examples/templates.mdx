@@ -1,0 +1,1134 @@
+---
+sidebar: logistics
+---
+# Шаблоны
+
+**Шаблоны** — это подготовленные наборы атрибутов для создания агентов и задач. Подробнее о шаблонах см. в разделе [Шаблоны](/logistics/administrator/managing/templates) Руководства администратора.
+
+С помощью Публичного API вы можете получить список шаблонов. Чтобы создать или изменить шаблон, используйте веб-панель администратора 2ГИС ГеоПоток: Логистика.
+
+## Получение списка шаблонов агентов {#getting-agent-templates-list}
+
+Вы можете получить список шаблонов агентов с данными о шаблонах: ID, названием, иконкой агентов на карте, датой и временем создания и обновления и списком атрибутов.
+
+Чтобы получить список шаблонов агентов, отправьте GET-запрос к [/v1/agent-templates](/logistics/api/reference/agent-templates#tag/agent-templates/operation/listAgentTemplates) с параметром `limit` — максимальным количеством шаблонов в ответе от 1 до 100.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/agent-templates?limit=2' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "id": "af5e5d63-10f0-4ea0-b520-ddb36af1a59c",
+            "name": "Пеший курьер",
+            "icon": {
+                "name": "walk"
+            },
+            "attributes": [
+                {
+                    "id": "6653466e-1f20-485c-928e-c18b4bffedbc",
+                    "name": "Наименование",
+                    "type": "text",
+                    "is_required": true,
+                    "is_identifier": true,
+                    "show_in_list": false,
+                    "sort_order": 0,
+                    "meta": {
+                        "alias": "identifier",
+                        "is_sortable": false,
+                        "is_deletable": false
+                    }
+                },
+                {
+                    "id": "1efd0fb1-7216-4d69-8baf-4470570de40b",
+                    "name": "Транспорт",
+                    "type": "transport_type",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 1,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": false
+                    }
+                },
+                {
+                    "id": "af5e5d63-10f0-4ea0-b520-ddb36af1a59c",
+                    "name": "Рабочее время",
+                    "type": "work_time_settings",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 0
+                }
+            ],
+            "created_at": "2026-08-18T10:14:34.425838Z",
+            "updated_at": "2026-08-26T12:51:00.641843Z"
+        },
+        {
+            "id": "ab836921-2273-4f3a-b4a9-e16bc1bc2b32",
+            "name": "Курьер для доставки",
+            "icon": {
+                "name": "walk"
+            },
+            "attributes": [
+                {
+                    "id": "1b9c78db-a18a-48b5-a18d-9c9e226bf4f3",
+                    "name": "Идентификатор",
+                    "type": "text",
+                    "is_required": true,
+                    "is_identifier": true,
+                    "show_in_list": false,
+                    "sort_order": 0,
+                    "meta": {
+                        "alias": "identifier",
+                        "is_sortable": false,
+                        "is_deletable": false
+                    }
+                },
+                {
+                    "id": "c481e304-6703-4613-acfc-396827093900",
+                    "name": "Транспорт",
+                    "type": "transport_type",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 1,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": false
+                    }
+                },
+                {
+                    "id": "c8c71b26-5f28-4483-9b11-8af3dbde1646",
+                    "name": "Номер телефона",
+                    "type": "phone",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 2,
+                    "meta": {
+                        "is_sortable": true,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "3e5f4c07-ad6e-46bb-9fb9-494455730fc9",
+                    "name": "E-mail",
+                    "type": "email",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 3,
+                    "meta": {
+                        "is_sortable": true,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "4810aee3-fa00-424b-9447-3c4040774bc3",
+                    "name": "Номер автомобиля",
+                    "type": "text",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 4,
+                    "meta": {
+                        "is_sortable": true,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "4c09a015-490b-4632-b6ca-459c7425b349",
+                    "name": "Навыки",
+                    "type": "skill",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 9,
+                    "meta": {
+                        "is_sortable": true,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "ab836921-2273-4f3a-b4a9-e16bc1bc2b32",
+                    "name": "Рабочее время",
+                    "type": "work_time_settings",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 0
+                }
+            ],
+            "created_at": "2026-06-15T08:42:02.308191Z",
+            "updated_at": "2026-08-28T07:18:21.251005Z"
+        }
+    ],
+    "cursor": {}
+}
+```
+
+</details>
+
+Каждый атрибут содержит ID, название, тип и другие данные.
+
+## Получение шаблона агента по ID {#getting-agent-template}
+
+Вы можете получить данные шаблона агента по его идентификатору: название, иконку агента на карте, дату и время создания и обновления и список атрибутов.
+
+Чтобы получить данные шаблона агента, отправьте GET-запрос к [`/v1/agent-templates/{id}`](/logistics/api/reference/agent-templates#tag/agent-templates/operation/getAgentTemplate), где `{id}` — идентификатор шаблона агента.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/agent-templates/ab836921-2273-4f3a-b4a9-e16bc1bc2b32' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "ab836921-2273-4f3a-b4a9-e16bc1bc2b32",
+    "name": "Курьер",
+    "icon": {
+        "name": "walk"
+    },
+    "attributes": [
+        {
+            "id": "1b9c78db-a18a-48b5-a18d-9c9e226bf4f3",
+            "name": "Идентификатор",
+            "type": "text",
+            "is_required": true,
+            "is_identifier": true,
+            "show_in_list": false,
+            "sort_order": 0,
+            "meta": {
+                "alias": "identifier",
+                "is_sortable": false,
+                "is_deletable": false
+            }
+        },
+        {
+            "id": "c481e304-6703-4613-acfc-396827093900",
+            "name": "Транспорт",
+            "type": "transport_type",
+            "is_required": true,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 1,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": false
+            }
+        },
+        {
+            "id": "c8c71b26-5f28-4483-9b11-8af3dbde1646",
+            "name": "Номер телефона",
+            "type": "phone",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 2,
+            "meta": {
+                "is_sortable": true,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "3e5f4c07-ad6e-46bb-9fb9-494455730fc9",
+            "name": "E-mail",
+            "type": "email",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 3,
+            "meta": {
+                "is_sortable": true,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "4810aee3-fa00-424b-9447-3c4040774bc3",
+            "name": "Номер автомобиля",
+            "type": "text",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 4,
+            "meta": {
+                "is_sortable": true,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "ab836921-2273-4f3a-b4a9-e16bc1bc2b32",
+            "name": "Рабочее время",
+            "type": "work_time_settings",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 0
+        }
+    ],
+    "created_at": "2026-06-15T08:42:02.308191Z",
+    "updated_at": "2026-08-28T07:18:21.251005Z"
+}
+```
+
+</details>
+
+Каждый атрибут содержит ID, название, тип и другие данные.
+
+## Получение списка шаблонов задач {#getting-task-templates-list}
+
+Вы можете получить список шаблонов задач с данными о шаблонах: ID, названием, датой и временем создания и обновления и списком атрибутов.
+
+Чтобы получить список шаблонов задач, отправьте GET-запрос к [/v1/task-templates](/logistics/api/reference/task-templates#tag/task-templates/operation/listTaskTemplates) с параметром `limit` — максимальным количеством шаблонов в ответе от 1 до 100.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/task-templates?limit=2' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "id": "eaacda1f-251e-40a5-9d2d-b4cba2d462c3",
+            "name": "Задачи по доставке",
+            "attributes": [
+                {
+                    "id": "8c8c5809-3cdf-41a3-bf19-9c47bf45aad9",
+                    "name": "Идентификатор",
+                    "type": "text",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 0,
+                    "meta": {
+                        "alias": "identifier",
+                        "is_sortable": false,
+                        "is_deletable": false
+                    }
+                },
+                {
+                    "id": "d227f3d3-0c17-409e-9820-8e4f713be6e6",
+                    "name": "Название",
+                    "type": "name",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 1,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "9aa20ffb-e130-44a4-8fdf-03ae30ba226b",
+                    "name": "Описание",
+                    "type": "description",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 2,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "5969d0f4-397f-4f82-8398-0c0dd81910ed",
+                    "name": "Местоположение",
+                    "type": "destination",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 3,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "bc53e352-f052-4a40-bea6-8c5267541430",
+                    "name": "Дата и время",
+                    "type": "time_windows_settings",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 4,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": false
+                    },
+                    "extra": {
+                        "is_multi": false,
+                        "is_time_limited_field": false,
+                        "is_time_limited_field_required": false,
+                        "is_units_field": false,
+                        "is_units_field_required": false,
+                        "is_weight_field": false,
+                        "is_weight_field_required": false,
+                        "is_volume_field": false,
+                        "is_volume_field_required": false,
+                        "is_dimensions_field": false,
+                        "is_dimensions_field_required": false,
+                        "is_depot_ready_time_field": false,
+                        "is_depot_ready_time_field_required": false,
+                        "is_depot_duration_field": false,
+                        "is_depot_duration_field_required": false,
+                        "is_name_field": false,
+                        "is_name_field_required": false,
+                        "is_job_title_field": false,
+                        "is_job_title_field_required": false,
+                        "is_phone_field": false,
+                        "is_phone_field_required": false,
+                        "is_email_field": false,
+                        "is_email_field_required": false,
+                        "is_comment_field": false,
+                        "is_comment_field_required": false,
+                        "is_camera_only": false,
+                        "is_required_for_completion_result": false
+                    }
+                },
+                {
+                    "id": "8027b583-767f-4d95-ab24-27185a98add9",
+                    "name": "Склад",
+                    "type": "depot_info",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 5,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    },
+                    "extra": {
+                        "is_multi": false,
+                        "is_time_limited_field": false,
+                        "is_time_limited_field_required": false,
+                        "is_units_field": false,
+                        "is_units_field_required": false,
+                        "is_weight_field": false,
+                        "is_weight_field_required": false,
+                        "is_volume_field": false,
+                        "is_volume_field_required": false,
+                        "is_dimensions_field": false,
+                        "is_dimensions_field_required": false,
+                        "is_depot_ready_time_field": true,
+                        "is_depot_ready_time_field_required": false,
+                        "is_depot_duration_field": true,
+                        "is_depot_duration_field_required": false,
+                        "is_name_field": false,
+                        "is_name_field_required": false,
+                        "is_job_title_field": false,
+                        "is_job_title_field_required": false,
+                        "is_phone_field": false,
+                        "is_phone_field_required": false,
+                        "is_email_field": false,
+                        "is_email_field_required": false,
+                        "is_comment_field": false,
+                        "is_comment_field_required": false,
+                        "is_camera_only": false,
+                        "is_required_for_completion_result": false
+                    }
+                },
+                {
+                    "id": "8bc4e8b0-3409-44d5-aad9-069ed1033b5f",
+                    "name": "Номер телефона",
+                    "type": "phone",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 6,
+                    "meta": {
+                        "is_sortable": true,
+                        "is_deletable": true
+                    }
+                }
+            ],
+            "created_at": "2026-06-15T08:38:33.800094Z",
+            "updated_at": "2026-08-19T13:00:57.798391Z"
+        },
+        {
+            "id": "6d49204c-8361-456b-b902-c095c9f783ba",
+            "name": "Логистические задачи",
+            "attributes": [
+                {
+                    "id": "c8f807d3-c39c-440c-981f-1079b8a8542a",
+                    "name": "Идентификатор",
+                    "type": "text",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 0,
+                    "meta": {
+                        "alias": "identifier",
+                        "is_sortable": false,
+                        "is_deletable": false
+                    }
+                },
+                {
+                    "id": "6ec390f2-815f-42de-af6f-2f919709077b",
+                    "name": "Название",
+                    "type": "name",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 1,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "595845d5-6e4a-4cd0-b01b-8a21e9a8a4ee",
+                    "name": "Описание",
+                    "type": "description",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 2,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "32b3fb5b-4b94-4536-815f-ba97568b24d1",
+                    "name": "Местоположение",
+                    "type": "destination",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 3,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "a83970c7-f76b-4b29-ba27-00e1b398b137",
+                    "name": "Дата и время",
+                    "type": "time_windows_settings",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 4,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": false
+                    },
+                    "extra": {
+                        "is_multi": false,
+                        "is_time_limited_field": true,
+                        "is_time_limited_field_required": false,
+                        "is_units_field": false,
+                        "is_units_field_required": false,
+                        "is_weight_field": false,
+                        "is_weight_field_required": false,
+                        "is_volume_field": false,
+                        "is_volume_field_required": false,
+                        "is_dimensions_field": false,
+                        "is_dimensions_field_required": false,
+                        "is_depot_ready_time_field": false,
+                        "is_depot_ready_time_field_required": false,
+                        "is_depot_duration_field": false,
+                        "is_depot_duration_field_required": false,
+                        "is_name_field": false,
+                        "is_name_field_required": false,
+                        "is_job_title_field": false,
+                        "is_job_title_field_required": false,
+                        "is_phone_field": false,
+                        "is_phone_field_required": false,
+                        "is_email_field": false,
+                        "is_email_field_required": false,
+                        "is_comment_field": false,
+                        "is_comment_field_required": false,
+                        "is_camera_only": false,
+                        "is_required_for_completion_result": false
+                    }
+                },
+                {
+                    "id": "7d076b10-6217-4310-9eb5-6d3fd698e84c",
+                    "name": "Размер груза",
+                    "type": "shipment_size",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 5,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    },
+                    "extra": {
+                        "is_multi": false,
+                        "is_time_limited_field": false,
+                        "is_time_limited_field_required": false,
+                        "is_units_field": true,
+                        "is_units_field_required": false,
+                        "is_weight_field": true,
+                        "is_weight_field_required": false,
+                        "is_volume_field": false,
+                        "is_volume_field_required": false,
+                        "is_dimensions_field": true,
+                        "is_dimensions_field_required": false,
+                        "is_depot_ready_time_field": false,
+                        "is_depot_ready_time_field_required": false,
+                        "is_depot_duration_field": false,
+                        "is_depot_duration_field_required": false,
+                        "is_name_field": false,
+                        "is_name_field_required": false,
+                        "is_job_title_field": false,
+                        "is_job_title_field_required": false,
+                        "is_phone_field": false,
+                        "is_phone_field_required": false,
+                        "is_email_field": false,
+                        "is_email_field_required": false,
+                        "is_comment_field": false,
+                        "is_comment_field_required": false,
+                        "is_camera_only": false,
+                        "is_required_for_completion_result": false
+                    }
+                },
+                {
+                    "id": "5a409c49-776d-4320-a9eb-93317fbf5833",
+                    "name": "Склад",
+                    "type": "depot_info",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 6,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    },
+                    "extra": {
+                        "is_multi": false,
+                        "is_time_limited_field": false,
+                        "is_time_limited_field_required": false,
+                        "is_units_field": false,
+                        "is_units_field_required": false,
+                        "is_weight_field": false,
+                        "is_weight_field_required": false,
+                        "is_volume_field": false,
+                        "is_volume_field_required": false,
+                        "is_dimensions_field": false,
+                        "is_dimensions_field_required": false,
+                        "is_depot_ready_time_field": false,
+                        "is_depot_ready_time_field_required": false,
+                        "is_depot_duration_field": true,
+                        "is_depot_duration_field_required": false,
+                        "is_name_field": false,
+                        "is_name_field_required": false,
+                        "is_job_title_field": false,
+                        "is_job_title_field_required": false,
+                        "is_phone_field": false,
+                        "is_phone_field_required": false,
+                        "is_email_field": false,
+                        "is_email_field_required": false,
+                        "is_comment_field": false,
+                        "is_comment_field_required": false,
+                        "is_camera_only": false,
+                        "is_required_for_completion_result": false
+                    }
+                },
+                {
+                    "id": "5f714148-eefb-4b0a-a006-3e10c7db1991",
+                    "name": "Навыки",
+                    "type": "skill",
+                    "is_required": true,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 7,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "c6d558ee-96db-4f4e-9cb3-4da37f2fbc28",
+                    "name": "Клиент",
+                    "type": "customer_info",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 8,
+                    "meta": {
+                        "is_sortable": false,
+                        "is_deletable": true
+                    },
+                    "extra": {
+                        "is_multi": false,
+                        "is_time_limited_field": false,
+                        "is_time_limited_field_required": false,
+                        "is_units_field": false,
+                        "is_units_field_required": false,
+                        "is_weight_field": false,
+                        "is_weight_field_required": false,
+                        "is_volume_field": false,
+                        "is_volume_field_required": false,
+                        "is_dimensions_field": false,
+                        "is_dimensions_field_required": false,
+                        "is_depot_ready_time_field": false,
+                        "is_depot_ready_time_field_required": false,
+                        "is_depot_duration_field": false,
+                        "is_depot_duration_field_required": false,
+                        "is_name_field": true,
+                        "is_name_field_required": false,
+                        "is_job_title_field": false,
+                        "is_job_title_field_required": false,
+                        "is_phone_field": true,
+                        "is_phone_field_required": false,
+                        "is_email_field": true,
+                        "is_email_field_required": false,
+                        "is_comment_field": false,
+                        "is_comment_field_required": false,
+                        "is_camera_only": false,
+                        "is_required_for_completion_result": false
+                    }
+                },
+                {
+                    "id": "460690bd-0894-4d82-9028-c8fc77245207",
+                    "name": "Номер телефона",
+                    "type": "phone",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 9,
+                    "meta": {
+                        "is_sortable": true,
+                        "is_deletable": true
+                    }
+                },
+                {
+                    "id": "231a27b8-a5ec-4ade-a5e8-10510ea1c705",
+                    "name": "Справочник",
+                    "type": "dictionary",
+                    "is_required": false,
+                    "is_identifier": false,
+                    "show_in_list": false,
+                    "sort_order": 11,
+                    "meta": {
+                        "is_sortable": true,
+                        "is_deletable": true
+                    },
+                    "extra": {
+                        "dictionary_id": "dfabe370-91df-4dab-9f01-9ebc7329cbf5",
+                        "is_multi": true,
+                        "is_time_limited_field": false,
+                        "is_time_limited_field_required": false,
+                        "is_units_field": false,
+                        "is_units_field_required": false,
+                        "is_weight_field": false,
+                        "is_weight_field_required": false,
+                        "is_volume_field": false,
+                        "is_volume_field_required": false,
+                        "is_dimensions_field": false,
+                        "is_dimensions_field_required": false,
+                        "is_depot_ready_time_field": false,
+                        "is_depot_ready_time_field_required": false,
+                        "is_depot_duration_field": false,
+                        "is_depot_duration_field_required": false,
+                        "is_name_field": false,
+                        "is_name_field_required": false,
+                        "is_job_title_field": false,
+                        "is_job_title_field_required": false,
+                        "is_phone_field": false,
+                        "is_phone_field_required": false,
+                        "is_email_field": false,
+                        "is_email_field_required": false,
+                        "is_comment_field": false,
+                        "is_comment_field_required": false,
+                        "is_camera_only": false,
+                        "is_required_for_completion_result": false
+                    }
+                }
+            ],
+            "created_at": "2026-08-19T07:54:08.752555Z",
+            "updated_at": "2026-08-24T12:06:06.013284Z"
+        }
+    ],
+    "cursor": {}
+}
+```
+
+</details>
+
+Каждый атрибут содержит ID, название, тип и другие данные.
+
+## Получение шаблона задачи по ID {#getting-task-template}
+
+Вы можете получить данные шаблона задачи по её идентификатору: название, дату и время создания и обновления и список атрибутов.
+
+Чтобы получить данные шаблона задачи, отправьте GET-запрос к [`/v1/task-templates/{id}`](/logistics/api/reference/task-templates#tag/task-templates/operation/getTaskTemplate), где `{id}` — идентификатор шаблона задачи.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/task-templates/6d49204c-8361-456b-b902-c095c9f783ba' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "6d49204c-8361-456b-b902-c095c9f783ba",
+    "name": "Логистические задачи",
+    "attributes": [
+        {
+            "id": "c8f807d3-c39c-440c-981f-1079b8a8542a",
+            "name": "Идентификатор",
+            "type": "text",
+            "is_required": true,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 0,
+            "meta": {
+                "alias": "identifier",
+                "is_sortable": false,
+                "is_deletable": false
+            }
+        },
+        {
+            "id": "6ec390f2-815f-42de-af6f-2f919709077b",
+            "name": "Название",
+            "type": "name",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 1,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "595845d5-6e4a-4cd0-b01b-8a21e9a8a4ee",
+            "name": "Описание",
+            "type": "description",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 2,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "32b3fb5b-4b94-4536-815f-ba97568b24d1",
+            "name": "Местоположение",
+            "type": "destination",
+            "is_required": true,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 3,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "a83970c7-f76b-4b29-ba27-00e1b398b137",
+            "name": "Дата и время",
+            "type": "time_windows_settings",
+            "is_required": true,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 4,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": false
+            },
+            "extra": {
+                "is_multi": false,
+                "is_time_limited_field": true,
+                "is_time_limited_field_required": false,
+                "is_units_field": false,
+                "is_units_field_required": false,
+                "is_weight_field": false,
+                "is_weight_field_required": false,
+                "is_volume_field": false,
+                "is_volume_field_required": false,
+                "is_dimensions_field": false,
+                "is_dimensions_field_required": false,
+                "is_depot_ready_time_field": false,
+                "is_depot_ready_time_field_required": false,
+                "is_depot_duration_field": false,
+                "is_depot_duration_field_required": false,
+                "is_name_field": false,
+                "is_name_field_required": false,
+                "is_job_title_field": false,
+                "is_job_title_field_required": false,
+                "is_phone_field": false,
+                "is_phone_field_required": false,
+                "is_email_field": false,
+                "is_email_field_required": false,
+                "is_comment_field": false,
+                "is_comment_field_required": false,
+                "is_camera_only": false,
+                "is_required_for_completion_result": false
+            }
+        },
+        {
+            "id": "7d076b10-6217-4310-9eb5-6d3fd698e84c",
+            "name": "Размер груза",
+            "type": "shipment_size",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 5,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": true
+            },
+            "extra": {
+                "is_multi": false,
+                "is_time_limited_field": false,
+                "is_time_limited_field_required": false,
+                "is_units_field": true,
+                "is_units_field_required": false,
+                "is_weight_field": true,
+                "is_weight_field_required": false,
+                "is_volume_field": false,
+                "is_volume_field_required": false,
+                "is_dimensions_field": true,
+                "is_dimensions_field_required": false,
+                "is_depot_ready_time_field": false,
+                "is_depot_ready_time_field_required": false,
+                "is_depot_duration_field": false,
+                "is_depot_duration_field_required": false,
+                "is_name_field": false,
+                "is_name_field_required": false,
+                "is_job_title_field": false,
+                "is_job_title_field_required": false,
+                "is_phone_field": false,
+                "is_phone_field_required": false,
+                "is_email_field": false,
+                "is_email_field_required": false,
+                "is_comment_field": false,
+                "is_comment_field_required": false,
+                "is_camera_only": false,
+                "is_required_for_completion_result": false
+            }
+        },
+        {
+            "id": "5a409c49-776d-4320-a9eb-93317fbf5833",
+            "name": "Склад",
+            "type": "depot_info",
+            "is_required": true,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 6,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": true
+            },
+            "extra": {
+                "is_multi": false,
+                "is_time_limited_field": false,
+                "is_time_limited_field_required": false,
+                "is_units_field": false,
+                "is_units_field_required": false,
+                "is_weight_field": false,
+                "is_weight_field_required": false,
+                "is_volume_field": false,
+                "is_volume_field_required": false,
+                "is_dimensions_field": false,
+                "is_dimensions_field_required": false,
+                "is_depot_ready_time_field": false,
+                "is_depot_ready_time_field_required": false,
+                "is_depot_duration_field": true,
+                "is_depot_duration_field_required": false,
+                "is_name_field": false,
+                "is_name_field_required": false,
+                "is_job_title_field": false,
+                "is_job_title_field_required": false,
+                "is_phone_field": false,
+                "is_phone_field_required": false,
+                "is_email_field": false,
+                "is_email_field_required": false,
+                "is_comment_field": false,
+                "is_comment_field_required": false,
+                "is_camera_only": false,
+                "is_required_for_completion_result": false
+            }
+        },
+        {
+            "id": "5f714148-eefb-4b0a-a006-3e10c7db1991",
+            "name": "Навыки",
+            "type": "skill",
+            "is_required": true,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 7,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "c6d558ee-96db-4f4e-9cb3-4da37f2fbc28",
+            "name": "Клиент",
+            "type": "customer_info",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 8,
+            "meta": {
+                "is_sortable": false,
+                "is_deletable": true
+            },
+            "extra": {
+                "is_multi": false,
+                "is_time_limited_field": false,
+                "is_time_limited_field_required": false,
+                "is_units_field": false,
+                "is_units_field_required": false,
+                "is_weight_field": false,
+                "is_weight_field_required": false,
+                "is_volume_field": false,
+                "is_volume_field_required": false,
+                "is_dimensions_field": false,
+                "is_dimensions_field_required": false,
+                "is_depot_ready_time_field": false,
+                "is_depot_ready_time_field_required": false,
+                "is_depot_duration_field": false,
+                "is_depot_duration_field_required": false,
+                "is_name_field": true,
+                "is_name_field_required": false,
+                "is_job_title_field": false,
+                "is_job_title_field_required": false,
+                "is_phone_field": true,
+                "is_phone_field_required": false,
+                "is_email_field": true,
+                "is_email_field_required": false,
+                "is_comment_field": false,
+                "is_comment_field_required": false,
+                "is_camera_only": false,
+                "is_required_for_completion_result": false
+            }
+        },
+        {
+            "id": "460690bd-0894-4d82-9028-c8fc77245207",
+            "name": "Номер телефона",
+            "type": "phone",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 9,
+            "meta": {
+                "is_sortable": true,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "4a4f605f-404f-433d-a9ee-b862ba9e9b33",
+            "name": "E-mail",
+            "type": "email",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 10,
+            "meta": {
+                "is_sortable": true,
+                "is_deletable": true
+            }
+        },
+        {
+            "id": "231a27b8-a5ec-4ade-a5e8-10510ea1c705",
+            "name": "Справочник",
+            "type": "dictionary",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 11,
+            "meta": {
+                "is_sortable": true,
+                "is_deletable": true
+            },
+            "extra": {
+                "dictionary_id": "dfabe370-91df-4dab-9f01-9ebc7329cbf5",
+                "is_multi": true,
+                "is_time_limited_field": false,
+                "is_time_limited_field_required": false,
+                "is_units_field": false,
+                "is_units_field_required": false,
+                "is_weight_field": false,
+                "is_weight_field_required": false,
+                "is_volume_field": false,
+                "is_volume_field_required": false,
+                "is_dimensions_field": false,
+                "is_dimensions_field_required": false,
+                "is_depot_ready_time_field": false,
+                "is_depot_ready_time_field_required": false,
+                "is_depot_duration_field": false,
+                "is_depot_duration_field_required": false,
+                "is_name_field": false,
+                "is_name_field_required": false,
+                "is_job_title_field": false,
+                "is_job_title_field_required": false,
+                "is_phone_field": false,
+                "is_phone_field_required": false,
+                "is_email_field": false,
+                "is_email_field_required": false,
+                "is_comment_field": false,
+                "is_comment_field_required": false,
+                "is_camera_only": false,
+                "is_required_for_completion_result": false
+            }
+        },
+        {
+            "id": "9905096b-b679-4239-a631-0526eaedd9f8",
+            "name": "double",
+            "type": "number",
+            "is_required": false,
+            "is_identifier": false,
+            "show_in_list": false,
+            "sort_order": 12,
+            "meta": {
+                "is_sortable": true,
+                "is_deletable": true
+            }
+        }
+    ],
+    "created_at": "2026-08-19T07:54:08.752555Z",
+    "updated_at": "2026-08-24T12:06:06.013284Z"
+}
+```
+
+</details>
+
+Каждый атрибут содержит ID, название, тип и другие данные.

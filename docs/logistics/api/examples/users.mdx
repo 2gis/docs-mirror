@@ -1,0 +1,193 @@
+---
+sidebar: logistics
+---
+# Пользователи
+
+Подробнее о пользователях см. в разделе [Пользователи](/logistics/administrator/managing/users) Руководства администратора.
+
+## Получение списка пользователей {#getting-users-list}
+
+Вы можете получить список пользователей с данными о них: ID, логином, ролью, статусом учётной записи и другими данными, если они были указаны (например, имя, фамилия, отчество, телефон и т. д.).
+
+Чтобы получить список пользователей, отправьте GET-запрос к [/v1/users](/logistics/api/reference/users#tag/users/operation/listUsers) с параметром `limit` — максимальным количеством пользователей в ответе от 1 до 500.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/users?limit=3' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "items": [
+        {
+            "id": "0d359647-af89-43f6-9721-a18e24a726c5",
+            "username": "ivanov",
+            "first_name": "Иван",
+            "last_name": "Иванов",
+            "roles": [
+                "super_admin"
+            ],
+            "status": "active"
+        },
+        {
+            "id": "a62cc015-a4a4-405f-a972-3754e436474e",
+            "username": "petrov",
+            "first_name": "Пётр",
+            "last_name": "Петров",
+            "roles": [
+                "user"
+            ],
+            "status": "active"
+        },
+        {
+            "id": "a2e633f5-a6be-4895-8386-b560669f8918",
+            "username": "ivanpetrov",
+            "first_name": "Иван",
+            "last_name": "Петров",
+            "second_name": "Сергеевич",
+            "phone": "+7 (999) 999-99-99",
+            "roles": [
+                "user"
+            ],
+            "status": "active"
+        }
+    ],
+    "cursor": {}
+}
+```
+
+</details>
+
+Соответствие ролей в ответе названиям [ролей](/logistics/administrator/overview#role-model) в веб-панели администратора:
+
+* `super_admin` — Главный администратор,
+* `admin` — Администратор компании,
+* `dispatcher` — Диспетчер,
+* `user` — Сотрудник.
+
+## Получение пользователя по ID {#getting-user}
+
+Вы можете получить данные пользователя по его идентификатору: логин, роль, статус учётной записи и другие данные, если они были указаны (например, имя, фамилия, отчество, телефон и т. д.).
+
+Чтобы получить данные пользователя, отправьте GET-запрос к [`/v1/users/{id}`](/logistics/api/reference/users#tag/users/operation/getUser), где `{id}` — идентификатор пользователя.
+
+**Пример запроса:**
+
+```bash
+curl --request GET \
+   --url 'https://geoflow.2gis.ru/public/api/v1/users/590cef82-d71f-48a1-8f81-3118db444b92' \
+   --header 'Authorization: Bearer <token>'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "590cef82-d71f-48a1-8f81-3118db444b92",
+    "username": "ivanpetrov",
+    "first_name": "Иван",
+    "last_name": "Петров",
+    "second_name": "Сергеевич",
+    "roles": [
+        "user"
+    ],
+    "status": "active"
+}
+```
+
+</details>
+
+Соответствие ролей в ответе названиям [ролей](/logistics/administrator/overview#role-model) в веб-панели администратора:
+
+* `super_admin` — Главный администратор,
+* `admin` — Администратор компании,
+* `dispatcher` — Диспетчер,
+* `user` — Сотрудник.
+
+## Создание пользователя {#adding-user}
+
+Чтобы создать пользователя мобильного приложения с ролью **Сотрудник** (`user`), отправьте POST-запрос к [/v1/users](/logistics/api/reference/users#tag/users/operation/createUser) со следующими параметрами:
+
+* `first_name` (обязательный параметр) — имя пользователя.
+* `second_name` — отчество пользователя.
+* `last_name` (обязательный параметр) — фамилия пользователя.
+* `username` (обязательный параметр) — логин пользователя.
+
+**Пример запроса:**
+
+```bash
+curl --request POST \
+   --url 'https://geoflow.2gis.ru/public/api/v1/users' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "first_name": "Иван",
+      "second_name": "Сергеевич",
+      "last_name": "Петров",
+      "username": "ivanpetrov"
+}'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "590cef82-d71f-48a1-8f81-3118db444b92",
+    "username": "ivanpetrov",
+    "first_name": "Иван",
+    "last_name": "Петров",
+    "second_name": "Сергеевич",
+    "roles": [
+        "user"
+    ],
+    "status": "pending"
+}
+```
+
+</details>
+
+## Приглашение пользователя {#inviting-user}
+
+Чтобы отправить пользователю приглашение в мобильное приложение со временным паролем для входа, отправьте POST-запрос к [/v1/users/invite/by-login](/logistics/api/reference/users#tag/users/operation/inviteUserByLogin) с параметром `username` — логином пользователя.
+
+**Пример запроса:**
+
+```bash
+curl --request POST \
+   --url 'https://geoflow.2gis.ru/public/api/v1/users/invite/by-login' \
+   --header 'Authorization: Bearer <token>' \
+   --header 'Content-Type: application/json' \
+   --data '{
+      "username": "ivanpetrov"
+}'
+```
+
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "id": "590cef82-d71f-48a1-8f81-3118db444b92",
+    "username": "ivanpetrov",
+    "temporary_password": "OY!iA25Q#CP8R6Mv",
+    "status": "pending"
+}
+```
+
+</details>
