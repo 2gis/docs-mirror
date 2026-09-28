@@ -3,6 +3,20 @@ sidebar: iossdk
 ---
 # Релизы
 
+## 14.1.0 (2026-09-25)
+
+### 🌟 Новые возможности
+
+* [ISourceFactory.createReliefSource()](/ios/sdk/reference/stable/interface#isource-factory/create-relief-source) и `DgisSource.createReliefDgisSource()` — создание источника рельефа из публичного API. Рельеф автоматически включается только для регионов, где он поддерживается.
+* В [IDirectoryViewsFactory](/ios/sdk/reference/stable/interface#idirectory-views-factory) добавлен вариант создания [DirectorySearchView](/ios/sdk/reference/stable/struct#directory-search-view) с отдельным callback `onObjectSuggestTap` для нажатия на объектную подсказку.
+* [PackageInfo.description](/ios/sdk/reference/stable/struct#package-info/var-description) — локализованное развёрнутое описание пакета, в том числе для голосовых пакетов и пакетов территорий.
+
+### 🛠 Исправления
+
+* Исправлена работа рельефа: источник включает слой только в регионах, где рельеф действительно поддерживается.
+* Улучшена потокобезопасность карты: обновление кластеризации при добавлении и удалении объектов.
+* Исправлено поведение подсказок в [DirectorySearchView](/ios/sdk/reference/stable/struct#directory-search-view): текст запроса дополняется по словам, а объектные подсказки открывают объект через отдельный callback.
+
 ## 14.0.0 (2026-08-11)
 
 ### 🌟 Новые возможности

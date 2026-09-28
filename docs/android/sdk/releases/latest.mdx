@@ -3,6 +3,23 @@ sidebar: androidsdk
 ---
 # Релизы
 
+## 14.1.0 (2026-09-25)
+
+### 🌟 Новые возможности
+
+* [DgisSource.createReliefDgisSource()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.dgis-source/create-relief-dgis-source) — создание источника рельефа из публичного API. Рельеф автоматически включается только для регионов, где он поддерживается.
+* [MapView](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view) снова можно объявлять в XML-разметке: добавлен конструктор с `AttributeSet`, поддержаны атрибуты `dgis_renderMode` и `dgis_copyrightInsetsSides`.
+* [MapControl](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-control) и [SnapToMapLayout](/android/sdk/reference/stable/class#ru.dgis.sdk.map.snap-to-map-layout), вложенные в [MapView](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-view), теперь автоматически привязываются к карте и перепривязываются при смене [MapController](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-controller).
+* [PublicTransportRouteComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.routeeditor.publictransport/-public-transport-route-composable.html), [PublicTransportRouteViewModel](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.routeeditor.publictransport/-public-transport-route-view-model/index.html), [PublicTransportRouteContent](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.routeeditor.publictransport/-public-transport-route-content/index.html) и [DefaultPublicTransportRouteContent](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.routeeditor.publictransport/-default-public-transport-route-content/index.html) — детальная карточка маршрута общественного транспорта в [Android Compose](/android/sdk/examples/controls/compose) с кастомизируемыми блоками заголовка, точек отправления и прибытия, сегментов и кнопки начала маршрута.
+* В [Android Compose](/android/sdk/examples/controls/compose) обновлены компоненты маршрутов общественного транспорта: добавлены данные расстояния для пеших сегментов, названия остановок посадки и высадки, промежуточные остановки и отдельные UI-компоненты для линии маршрута, бейджей, пеших и транспортных сегментов.
+* Добавлен `TimePoint.toUiString()` для форматирования конкретного момента времени в UI с учётом локали и часового пояса.
+* [PackageInfo.description](/android/sdk/reference/stable/class#ru.dgis.sdk.update.package-info/val-description) — локализованное развёрнутое описание пакета, в том числе для голосовых пакетов и пакетов территорий.
+
+### 🛠 Исправления
+
+* Улучшена потокобезопасность карты: обновление кластеризации при добавлении и удалении объектов.
+* Исправлены сценарии в [RouteEditorComposable](https://2gis.github.io/android-compose-docs/compose-navigation/ru.dgis.sdk.compose.routeeditor/-route-editor-composable.html): синхронизация горизонтального и вертикального списков маршрутов, индикатор выбранной карточки, пересчёт высоты строки транспорта и ограничения ширины карточек.
+
 ## 14.0.0 (2026-09-03)
 
 ### 🌟 Новые возможности
