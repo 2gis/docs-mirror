@@ -3,66 +3,337 @@ sidebar: categoriesAPI
 ---
 # Примеры
 
-## Поиск категории по названию
+Перед началом работы с категориями необходимо получить ID нужного региона — он передаётся в параметре `region_id` во всех последующих запросах.
 
-Шаг 1. Получение `id` региона:
+## Получите ID региона {#get-region-id}
 
-```http
-https://catalog.api.2gis.com/2.0/region/search?q=Москва&key=YOUR_KEY
-```
+:::note[Доступ]
 
-Шаг 2. Поиск категории:
+Для использования метода [/2.0/region/search](/api/search/regions/reference/2.0/region/search) нужен доступ к Regions API.
 
-```http
-https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&key=YOUR_KEY
-```
+:::
 
-***
+Отправьте GET-запрос к [/2.0/region/search](/api/search/regions/reference/2.0/region/search):
 
-## Получение списка категорий в регионе
+* `q` — название города или региона, например `q=Москва`.
+* `locale` (необязательный) — язык поиска и ответа, например `locale=ru_RU`. По умолчанию используется язык региона.
+* `key` — ваш ключ API.
 
-Шаг 1. Получение `id` региона:
+**Пример запроса:**
 
 ```http
-https://catalog.api.2gis.com/2.0/region/search?q=Москва&key=YOUR_KEY
+https://catalog.api.2gis.com/2.0/region/search?q=Москва&locale=ru_RU&key=API_KEY
 ```
 
-Шаг 2. Получение списка категорий:
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "2.0.21656",
+        "code": 200,
+        "issue_date": "20260925"
+    },
+    "result": {
+        "items": [
+            {
+                "id": "32",
+                "name": "Москва",
+                "type": "region"
+            }
+        ],
+        "total": 1
+    }
+}
+```
+
+</details>
+
+Скопируйте ID региона из поля `result.items.id`.
+
+## Поиск категории по названию {#search-category-by-name}
+
+Чтобы найти категорию по ключевому слову, отправьте GET-запрос к [/2.0/catalog/rubric/search](/api/search/categories/reference/2.0/catalog/rubric/search):
+
+* `q` — название категории, например `q=кафе`.
+* `region_id` — [ID региона](#get-region-id), например `region_id=32`.
+* `page` (необязательный) — номер страницы результатов, по умолчанию `1`.
+* `page_size` (необязательный) — количество результатов на странице: от 1 до 50 (по умолчанию `20`).
+* `locale` (необязательный) — язык поиска и ответа, например `locale=ru_RU`. По умолчанию используется язык региона.
+* `key` — ваш ключ API.
+
+**Пример запроса:**
 
 ```http
-https://catalog.api.2gis.com/2.0/catalog/rubric/list?region_id=32&key=YOUR_KEY
+https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&locale=ru_RU&key=API_KEY
 ```
 
-***
+**Пример ответа:**
 
-## Получение списка дочерних категорий
+<details>
+<summary><code>response.json</code></summary>
 
-Шаг 1. Получение `id` региона:
+```json
+{
+    "meta": {
+        "api_version": "2.0.21656",
+        "code": 200,
+        "issue_date": "20260927"
+    },
+    "result": {
+        "items": [
+            {
+                "alias": "kafe",
+                "branch_count": 6539,
+                "caption": "Кафе",
+                "id": "161",
+                "keyword": "Кафе",
+                "name": "Кафе",
+                "org_count": 5262,
+                "parent_id": "2",
+                "title": "Кафе",
+                "type": "rubric"
+            },
+           ...
+        ],
+        "total": 9
+    }
+}
+```
+
+</details>
+
+Параметры ответа:
+
+* `result.items` — список найденных категорий:
+   * `alias` — псевдоним категории.
+   * `branch_count` — количество филиалов в категории.
+   * `id` — ID категории. 
+   * `keyword` — ключевые слова категории.
+   * `name`, `caption`, `title` — название категории.
+   * `org_count` — количество организаций в категории.
+   * `parent_id` — ID объединяющей категории.
+   * `type` — тип категории: `rubric` (обычная) или `general_rubric` (объединяющая).
+* `result.total` — общее количество найденных категорий.
+
+Подробнее о параметрах см. в [Справочнике API](/api/search/categories/reference/2.0/catalog/rubric/search).
+
+## Получение списка категорий {#category-list-in-region}
+
+Чтобы получить полный каталог категорий в выбранном регионе, отправьте GET-запрос к [/2.0/catalog/rubric/list](/api/search/categories/reference/2.0/catalog/rubric/list):
+
+* `region_id` — [ID региона](#get-region-id), например `region_id=32`.
+* `sort` (необязательный) — сортировка: `name` (по алфавиту, по умолчанию) или `popularity` (по популярности).
+* `page_size` (необязательный)— количество результатов на странице: от 1 до 10000 (по умолчанию `10000`).
+* `locale` (необязательный) — язык поиска и ответа, например `locale=ru_RU`. По умолчанию используется язык региона.
+* `key` — ваш ключ API.
+
+**Пример запроса:**
 
 ```http
-https://catalog.api.2gis.com/2.0/region/search?q=Москва&key=YOUR_KEY
+https://catalog.api.2gis.com/2.0/catalog/rubric/list?region_id=32&locale=ru_RU&key=API_KEY
 ```
 
-Шаг 2. Получение списка дочерних категорий.
+**Пример ответа:**
 
-Вариант 1.
+<details>
+<summary><code>response.json</code></summary>
 
-1. Получение списка объединяющих категорий:
+```json
+{
+    "meta": {
+        "api_version": "2.0.21656",
+        "code": 200,
+        "issue_date": "20260927"
+    },
+    "result": {
+        "items": [
+            {
+                "alias": "avarijjnye_spravochnye_ehkstrennye_sluzhby",
+                "branch_count": 1942,
+                "id": "5419",
+                "name": "Аварийные / справочные / экстренные службы",
+                "org_count": 1530,
+                "type": "general_rubric"
+            },
+          ...
+        ],
+        "total": 28
+    }
+}
+```
+
+</details>
+
+Параметры ответа:
+
+* `result.items` — список категорий:
+   * `alias` — псевдоним категории.
+   * `branch_count` — количество филиалов в категории.
+   * `id` — ID категории.
+   * `name` — название категории.
+   * `org_count` — количество организаций в категории.
+   * `type` — тип категории: `rubric` (обычная) или `general_rubric` (объединяющая).
+* `result.total` — общее количество категорий.
+
+Подробнее о параметрах см. в [Справочнике API](/api/search/categories/reference/2.0/catalog/rubric/list).
+
+## Получение списка дочерних категорий {#child-categories}
+
+Возвращает список дочерних категорий внутри объединяющей категории.
+
+### Через ID родительской категории {#via-parent-id}
+
+Получите [ID объединяющей категории](#category-list-in-region) и отправьте GET-запрос к [/2.0/catalog/rubric/list](/api/search/categories/reference/2.0/catalog/rubric/list):
+
+* `parent_id` — ID объединяющей категории, например `parent_id=2`.
+* `region_id` — [ID региона](#get-region-id), например `region_id=32`.
+* `locale` (необязательный) — язык поиска и ответа, например `locale=ru_RU`. По умолчанию используется язык региона.
+* `key` — ваш ключ API.
+
+**Пример запроса:**
 
 ```http
-https://catalog.api.2gis.com/2.0/catalog/rubric/list?region_id=32&key=YOUR_KEY
+https://catalog.api.2gis.com/2.0/catalog/rubric/list?parent_id=2&region_id=32&locale=ru_RU&key=API_KEY
 ```
 
-2. Получение списка дочерних категорий
+**Пример ответа:**
+
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "2.0.21656",
+        "code": 200,
+        "issue_date": "20260927"
+    },
+    "result": {
+        "items": [
+            {
+                "alias": "ehkskursii",
+                "branch_count": 232,
+                "caption": "Экскурсии",
+                "id": "9281",
+                "name": "Экскурсии",
+                "org_count": 199,
+                "parent_id": "2",
+                "seo_name": "Экскурсии",
+                "title": "Экскурсии",
+                "type": "rubric"
+            },
+          ...
+        ],
+        "total": 97
+    }
+}
+```
+
+</details>
+
+Параметры ответа:
+
+* `result.items` — массив объединяющих категорий:
+   * `alias` — псевдоним дочерней категории.
+   * `branch_count` — количество филиалов в категории.
+   * `id` — ID дочерней категории.
+   * `name`, `caption`, `title` — название дочерней категории.
+   * `org_count` — количество организаций в категории.
+   * `parent_id` — ID объединяющей категории.
+   * `seo_name` — SEO-заголовок категории.
+   * `type` — тип категории: `rubric` (обычная) или `general_rubric` (объединяющая).
+* `result.total` — общее количество категорий.
+
+Подробнее о параметрах см. в [Справочнике API](/api/search/categories/reference/2.0/catalog/rubric/list).
+
+### Через параметр `fields` {#via-fields-parameter}
+
+Список объединяющих и дочерних категорий также можно получить с помощью параметра `fields`. Для этого отправьте GET-запрос к [/2.0/catalog/rubric/list](/api/search/categories/reference/2.0/catalog/rubric/list):
+
+* `region_id` — [ID региона](#get-region-id), например `region_id=32`.
+* `fields` (необязательный)— дополнительные поля. Для получения дочерних категорий передайте `fields=items.rubrics`.
+* `locale` (необязательный) — язык поиска и ответа, например `locale=ru_RU`. По умолчанию используется язык региона.
+* `key` — ваш ключ API.
+
+**Пример запроса:**
 
 ```http
-https://catalog.api.2gis.com/2.0/catalog/rubric/list?parent_id=2&region_id=32&key=YOUR_KEY
+https://catalog.api.2gis.com/2.0/catalog/rubric/list?region_id=32&fields=items.rubrics&locale=ru_RU&key=API_KEY
 ```
 
-Вариант 2. Можно получить дочерние категории, добавив параметр `fields=items.rubrics` при запросе на получение списка объединяющих категорий.
+**Пример ответа:**
 
-```http
-https://catalog.api.2gis.com/2.0/catalog/rubric/list?region_id=32&fields=items.rubrics&key=YOUR_KEY
+<details>
+<summary><code>response.json</code></summary>
+
+```json
+{
+    "meta": {
+        "api_version": "2.0.21656",
+        "code": 200,
+        "issue_date": "20260927"
+    },
+    "result": {
+        "items": [
+            {
+                "alias": "avarijjnye_spravochnye_ehkstrennye_sluzhby",
+                "branch_count": 1942,
+                "id": "5419",
+                "name": "Аварийные / справочные / экстренные службы",
+                "org_count": 1530,
+                "rubrics": [
+                    {
+                        "alias": "avarijjnye_komissary",
+                        "branch_count": 23,
+                        "caption": "Аварийные комиссары",
+                        "id": "16182",
+                        "name": "Аварийные комиссары",
+                        "org_count": 14,
+                        "parent_id": "5419",
+                        "seo_name": "Аварийные комиссары (аваркомы)",
+                        "title": "Аварийные комиссары",
+                        "type": "rubric"
+                    },
+                    {
+                        "alias": "avarijjnye_sluzhby",
+                        "branch_count": 145,
+                        "caption": "Аварийные службы",
+                        "id": "122",
+                        "name": "Аварийные службы",
+                        "org_count": 121,
+                        "parent_id": "5419",
+                        "seo_name": "Аварийные (аварийно-диспетчерские) службы",
+                        "title": "Аварийные службы",
+                        "type": "rubric"
+                    }
+                ],
+                "type": "general_rubric"
+            },
+          ...
+        ],
+        "total": 28
+    }
+}
 ```
 
+</details>
 
+Параметры ответа:
+
+* `result.items` — массив объединяющих категорий.
+* `result.items.rubrics` — массив дочерних категорий (возвращается при `fields=items.rubrics`):
+   * `alias` — псевдоним дочерней категории.
+   * `branch_count` — количество филиалов в категории.
+   * `id` — ID дочерней категории.
+   * `name`, `caption`, `title` — название дочерней категории.
+   * `org_count` — количество организаций в категории.
+   * `parent_id` — ID объединяющей категории.
+   * `seo_name` — SEO-заголовок категории.
+   * `type` — тип категории: `rubric` (обычная) или `general_rubric` (объединяющая).
+* `result.total` — общее количество категорий.
+
+Подробнее о параметрах см. в [Справочнике API](/api/search/categories/reference/2.0/catalog/rubric/list).

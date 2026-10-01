@@ -38,15 +38,19 @@ Categories API предоставляет информацию о категор
 
 ## Формат запроса {#request-format}
 
+Чтобы найти категорию, отправьте GET-запрос к [/2.0/catalog/rubric/search](https://docs.2gis.com/api/search/categories/reference/2.0/catalog/rubric/search).
+
+**Пример запроса:**
+
 ```http
-https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&key=YOUR_KEY
+https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&key=API_KEY
 ```
+Параметры запроса:
 
-В запросе используются следующие параметры:
-
-* `q=кафе` — поиск выполняется по названию категории «кафе»;
-* `region_id=32` — идентификатор региона, в котором выполняется поиск;
-* `key=YOUR_KEY` — ваш ключ API.
+* `q=кафе` — поиск выполняется по названию категории «кафе».
+* `region_id=32` — идентификатор региона, в котором выполняется поиск.
+* `locale` (необязательный) — язык поиска и ответа, например `locale=ru_RU`. По умолчанию используется язык региона (например, для Казахстана — казахский).
+* `key=API_KEY` — ваш ключ API.
 
 ## Формат ответа {#response-format}
 
@@ -72,45 +76,55 @@ https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&k
                 "parent_id": "2",
                 "title": "Кофейни",
                 "type": "rubric"
-            }
+            },
+         ...
         ],
         "total": 16
     }
 }
 ```
+Параметры ответа:
+
+* `result.items` — список найденных категорий:
+   * `alias` — псевдоним категории.
+   * `branch_count` — количество филиалов в категории.
+   * `id` — ID категории. 
+   * `keyword` — ключевые слова категории.
+   * `name`, `caption`, `title` — название категории.
+   * `org_count` — количество организаций в категории.
+   * `parent_id` — ID объединяющей категории.
+   * `type` — тип категории: `rubric` (обычная) или `general_rubric` (объединяющая).
+* `result.total` — общее количество найденных категорий.
+
+Подробнее о параметрах см. в [Справочнике API](/api/search/categories/reference/2.0/catalog/rubric/search).
 
 ## Пример использования {#usage-example}
 
 Например, чтобы получить список компаний в определённой категории, вы можете использовать Categories API совместно с [Places API](/api/search/places/overview):
 
-1. Отправьте запрос к Categories API на получение ID категории:
+1 Отправьте запрос к Categories API на получение ID категории:
 
-   * Вариант 1. Поиск по названию категории:
+ * Вариант 1. Поиск по названию категории:
+```http
+     https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&key=API_KEY
+```
+ * Вариант 2. Получение списка категорий и выбор нужной категории из списка:
+```http
+     https://catalog.api.2gis.com/2.0/catalog/rubric/list?region_id=32&key=API_KEY
+```
 
-     ```http
-     https://catalog.api.2gis.com/2.0/catalog/rubric/search?q=кафе&region_id=32&key=YOUR_KEY
-     ```
+2 Отправьте запрос к Places API на получение списка компаний в выбранной категории. В запрос можно передать несколько категорий через запятую:
 
-   * Вариант 2. Получение списка категорий и выбор нужной категории из списка:
+ * Вариант 1. Поиск компаний по ключевому слову с фильтром по категории:
 
-     ```http
-     https://catalog.api.2gis.com/2.0/catalog/rubric/list?region_id=32&key=YOUR_KEY
-     ```
+```http
+     https://catalog.api.2gis.com/3.0/items?q=Буше&rubric_id=162&location=37.627798,55.755355&key=API_KEY
+```
+ * Вариант 2. Получение всех компаний в категории:
 
-2. Отправьте запрос к Places API на получение списка компаний в выбранной категории. В запрос можно передать несколько категорий через запятую:
-
-   * Вариант 1. Поиск компаний по ключевому слову с фильтром по категории:
-
-     ```http
-     https://catalog.api.2gis.com/3.0/items?q=Буше&rubric_id=162&location=37.627798,55.755355&key=YOUR_KEY
-     ```
-
-   * Вариант 2. Получение всех компаний в категории:
-
-     ```http
-     https://catalog.api.2gis.com/3.0/items?rubric_id=162&location=37.627798,55.755355&key=YOUR_KEY
-     ```
-
+```http
+     https://catalog.api.2gis.com/3.0/items?rubric_id=162&location=37.627798,55.755355&key=API_KEY
+```
 ## Тарифы и лимиты {#tariffs}
 
 * Стоимость сервиса рассчитывается исходя из количества успешных запросов в месяц. Успешным запросом к API считается запрос, который возвращает HTTP-код 200 в поле `meta.code` в теле ответа, например:
