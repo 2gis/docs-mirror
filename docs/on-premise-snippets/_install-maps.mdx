@@ -464,13 +464,10 @@
 
     api:
       publicHost: raster-js-api.example.com
-      protocol: 'https:'
+      protocol: 'https'
       tileServerUrl: https://tiles-api.example.com
-      trafficTileServerUrl: https://traffic-proxy-map.example.com
-      trafficTimestampServerUrl: https://traffic-proxy-map.example.com
-      trafficScoreServerUrl: https://traffic-proxy-map.example.com
-      webApiServerUrl: https://catalog-api.example.com
-      webApiKey: CATALOG_KEY
+      catalogApiServerUrl: https://catalog-api.example.com
+      catalogApiKey: CATALOG_KEY
       key: TILES_RASTER_KEY
       keyServerUrl: keys-api.example.com
 
@@ -507,10 +504,10 @@
    * `api`: настройки сервиса RasterJS API.
 
      * `publicHost`: хост, на котором будет доступен сервис.
-     * `protocol`: протокол для обращения к сервисам, используемым RasterJS API. Возможные значения: `http:`, `https:`.
+     * `protocol`: протокол для обращения к сервисам, используемым RasterJS API. Возможные значения: `http`, `https`.
      * `tileServerUrl`: URL сервиса Tiles API.
-     * `webApiServerUrl`: URL сервиса Catalog API.
-     * `webApiKey`: API-ключ для доступа к сервису Catalog API. Хранится в [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) и монтируется в контейнер через `secretKeyRef`.
+     * `catalogApiServerUrl`: URL сервиса Catalog API.
+     * `catalogApiKey`: API-ключ для доступа к сервису Catalog API. Хранится в [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) и монтируется в контейнер через `secretKeyRef`.
      * `key`: необязательный API-ключ, который будет добавляться к запросам тайлов. Хранится в [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) и монтируется в контейнер через `secretKeyRef`.
      * `keyServerUrl`: URL сервиса API-ключей.
 

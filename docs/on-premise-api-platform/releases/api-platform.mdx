@@ -5,6 +5,42 @@ sidebar: on-premise-api-platform
 
 Чтобы установить сервисы API-платформы версии 2.44.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-api-platform/releases/dgcli-releases#v3) и следуйте инструкциям по обновлению.
 
+## 2.59.0
+
+Дата релиза: 2026-09-29
+
+<h3 id="dependencies_v2.59.0">Зависимости</h3>
+
+Перед обновлением любого сервиса в составе API-платформы версии 2.59.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.11.1](/on-premise-api-platform/releases/core#2111)  |
+
+Подробнее см. в разделе **Обновление** текущей документации.
+
+<h3 id="new_v2.59.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| API карт<br />(MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1781) с версии 1.77.0 по версию 1.78.1. |
+| API карт<br />(RasterJS API) | Удалены параметры `api.trafficTileServerUrl`, `api.trafficTimestampServerUrl` и `api.trafficScoreServerUrl`. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.59.0/charts/raster-js-api/values.yaml). |
+
+<h3 id="breaking_v2.59.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| API поиска<br />(Search API v8) | <ul><li>Блок настроек `worker` переименован в `unisearcher`.</li><li>Переименованы параметры: <ul><li>`head.head.workerQueriesCount` в `head.head.unisearcherQueriesCount`,</li><li>`head.head.workerRetryAttempts` в `head.head.unisearcherRetryAttempts`,</li><li>`head.head.workerTimeoutMs` в `head.head.unisearcherTimeoutMs`,</li><li>`head.envoy.faultInjection.clients.worker` в `head.envoy.faultInjection.clients.unisearcher`,</li><li>`service.worker.port` в `service.unisearcher.port`,</li><li>`sentry.workerDsn` в `sentry.unisearcherDsn`.</li></ul></li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.59.0/charts/search-api-v8/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/advanced/search-v8#install-search-api-v8). |
+| API карт<br />(RasterJS API) | <ul><li>Переименованы параметры:<ul><li>`webApiKey` в `catalogApiKey`,</li><li>`webApiServerUrl` в `catalogApiServerUrl`.</li></ul></li><li>Теперь в параметре `api.protocol` протокол нужно указывать без двоеточия.</li></ul>См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.59.0/charts/raster-js-api/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/installation#install-rasterjs-api). |
+
+<h3 id="bugfix_v2.59.0">Исправленные ошибки/Улучшения</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Менеджер Платформы | <ul><li>Исправлена ошибка, из-за которой не отображалась статистика распределения запросов на вкладке **Статистика**.</li><li>Обновлён дизайн песочниц на вкладке **Песочницы**.</li></ul> | 
+| API поиска<br />(Catalog APIs) | Оптимизирован импорт сегментов в параллельных потоках. Инициализация партиций и копирование данных теперь выполняются в разных транзакциях, и блокировки удерживаются меньше. Это устраняет взаимные задержки между процессами и ускоряет импорт. |
+
 ## 2.58.0
 
 Дата релиза: 2026-09-09
@@ -18,7 +54,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.11.0](/on-premise-api-platform/releases/core#2110)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.58.0">Новое</h3>
 
@@ -41,7 +77,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.10.0](/on-premise-api-platform/releases/core#2100)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.57.0">Новое</h3>
 
@@ -67,7 +103,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.9.0](/on-premise-api-platform/releases/core#290) |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.56.0">Новое</h3>
 
@@ -90,7 +126,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.8.0](/on-premise-api-platform/releases/core#280)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.55.0">Новое</h3>
 
@@ -120,7 +156,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.7.0](/on-premise-api-platform/releases/core#270)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.54.0">Новое</h3>
 
@@ -151,7 +187,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.6.0](/on-premise-api-platform/releases/core#260)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.53.0">Новое</h3>
 
@@ -184,7 +220,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.4.0](/on-premise-api-platform/releases/core#240)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.52.0">Новое</h3>
 
@@ -207,7 +243,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.4.0](/on-premise-api-platform/releases/core#240)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.51.0">Новое</h3>
 
@@ -235,7 +271,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.4.0](/on-premise-api-platform/releases/core#240)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.50.0">Новое</h3>
 
@@ -268,7 +304,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.2.0](/on-premise-api-platform/releases/core#220)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.49.0">Новое</h3>
 
@@ -296,7 +332,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.2.0](/on-premise-api-platform/releases/core#220)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.48.0">Новое</h3>
 
@@ -330,7 +366,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.1.0](/on-premise-api-platform/releases/core#210)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="bugfix_v2.47.1">Исправленные ошибки/Улучшения</h3>
 
@@ -351,7 +387,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.1.0](/on-premise-api-platform/releases/core#210)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.47.0">Новое</h3>
 
@@ -386,7 +422,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.46.0">Новое</h3>
 
@@ -417,7 +453,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.45.0">Новое</h3>
 
@@ -445,7 +481,7 @@ sidebar: on-premise-api-platform
 | Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
 | Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
 
-Подробнее см. в разделе **Руководство администратора → Обновление**.
+Подробнее см. в разделе **Обновление** текущей документации.
 
 <h3 id="new_v2.44.0">Новое</h3>
 
