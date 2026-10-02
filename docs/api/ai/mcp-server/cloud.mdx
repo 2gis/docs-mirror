@@ -1,0 +1,320 @@
+---
+sidebar: aiapi
+---
+# Облачный MCP-сервер
+
+Облачный MCP-сервер предоставляет ИИ-агентам доступ к сервисам 2ГИС по протоколу Streamable HTTP. MCP-сервер доступен по адресу `https://mcp-2gis.api.2gis.com/mcp`.
+
+## Требования {#prerequisites}
+
+Для работы MCP-сервера требуются следующие компоненты:
+
+* [Ключ доступа](#get-access-key) к API 2ГИС.
+* MCP-клиент с поддержкой Streamable HTTP и статических пользовательских заголовков. Клиенты с поддержкой только Plain SSE и `stdio` не подходят.
+* Возможность исходящих HTTPS-соединений из вашей сети к адресу MCP-сервера.
+
+## Доступные инструменты и API {#available-apis}
+
+MCP-сервер предоставляет следующие инструменты для работы:
+
+| Инструмент | Функция | <div style={{"width":"200px"}}>Сервис</div> |
+|------------|---------| -------------------|
+| `search_places` | Поиск мест, организаций и адресов | [Places API](/api/search/places/overview) |
+| `geocode_address` | Прямое геокодирование: преобразование адреса в координаты | [Geocoder API](/api/search/geocoder/overview) |
+| `build_route` | Построение маршрутов на разных видах транспорта, расчёт времени в пути и расстояния | [Routing API](/api/navigation/routing/overview) |
+| `calculate_distance_matrix` | Расчёт времени в пути и расстояния между парами точек | [Distance Matrix API](/api/navigation/distance-matrix/overview) |
+| `render_static_map` | Создание статической карты с маркерами в формате PNG | [Static API](/maps/others/static/overview) |
+| `auth_probe` | Проверка ключа доступа и доступности API | Все сервисы выше |
+
+Также MCP-сервер предоставляет служебные инструменты, для работы которых не требуется ключ доступа:
+
+| Инструмент | Функция |
+|------------|---------|
+| `server_info` | Проверка метаданных сервера и его готовности к работе |
+| `list_resources`, `read_resource` | Получение справочной документации по параметрам API |
+
+## 1. Получите ключ доступа {#get-access-key}
+
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=ai_docs" target="_blank">
+      В кабинет
+   </CtaButton>
+
+2. Получите ключ для доступа к нужным API:
+
+   - Оформите бесплатный [демо-ключ](/platform-manager/subscription/keys#demo) (действует 30 дней, есть [ограничения по количеству запросов](/platform-manager/subscription/pricing#demo-limits)). В демо-ключе автоматически подключены все нужные API для работы с MCP-сервером.
+   - Купите [подписку](/platform-manager/subscription/purchase). При оформлении укажите все нужные API для работы с MCP-сервером. Первый ключ доступа создастся автоматически после активации подписки.
+   
+   Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
+
+Подробнее о стоимости сервисов см. в разделе [Тарифы](/platform-manager/subscription/pricing).
+
+## 2. Подключите MCP-сервер к агенту {#connect}
+
+Укажите адрес сервера `https://mcp-2gis.api.2gis.com/mcp` и ваш API-ключ в настройках среды разработки. Ниже представлен порядок настройки для распространённых ИИ-агентов.
+
+### ChatGPT {#chatgpt}
+
+Добавьте новый плагин в интерфейсе ChatGPT:
+
+1. На вкладке **Плагины** выбирите **Добавить > Создать MCP-приложение**.
+
+    <img src="/img/ai/chatgpt-create-mcp-app.png" alt="Создать MCP-приложение на вкладке Плагины" />
+
+2. В окне создания плагина введите его название и URL MCP-сервера:
+
+    ```bash
+    https://mcp-2gis.api.2gis.com/mcp?key=YOUR_API_KEY
+    ```
+
+    Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+    <img src="/img/ai/chatgpt-add-plugin.png" alt="Добавить новый плагин" width="500" />
+
+3. Нажмите **Создать**.
+
+Теперь при диалоге с ChatGPT вы можете выбрать добавленный плагин из списка ресурсов:
+
+<img src="/img/ai/chatgpt-select-plugin.png" alt="Выбрать плагин в чате" width="650" />
+
+### Claude {#claude}
+
+### Claude Desktop {#claude-desktop}
+
+Добавьте MCP-сервер в конфигурацию Claude Desktop одним из способов:
+
+* Добавьте новый коннектор в интерфейсе Claude Desktop:
+
+    1. В меню настроек откройте вкладку **Connectors** и выберите **Add > Add custom connector**.
+    
+        <img src="/img/ai/claude-add-connector.png" alt="Добавить новый коннектор" />
+
+    2. В окне создания коннектора введите его название и URL MCP-сервера:
+
+        ```bash
+        https://mcp-2gis.api.2gis.com/mcp?key=YOUR_API_KEY
+        ```
+
+        Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+        <img src="/img/ai/claude-add-connector-2.png" alt="Добавить адрес коннектора" width="500" />
+
+    3. Нажмите **Continue** и завершите создание коннектора.
+
+* Добавьте конфигурацию в файл `claude_desktop_config.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "2GIS": {
+          "type": "http",
+          "url": "https://mcp-2gis.api.2gis.com/mcp",
+          "headers": { "Authorization": "Bearer <YOUR_API_KEY>" }
+        }
+      }
+    }
+    ```
+
+    Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+Теперь при диалоге с Claude вы можете выбрать добавленный коннектор из списка ресурсов:
+
+<img src="/img/ai/claude-use-connector.png" alt="Выбрать коннектор в чате" width="550" />
+
+#### Claude Code {#claude-code}
+
+Добавьте MCP-сервер в конфигурацию Claude Code:
+
+```
+claude mcp add --transport http 2gis https://mcp-2gis.api.2gis.com/mcp \
+--header "Authorization: Bearer $YOUR_API_KEY"
+```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+
+### Cursor {#cursor}
+
+Добавьте конфигурацию MCP-сервера в глобальный файл `claude_desktop_config.json` или в файл `.cursor/mcp.json` в корне отдельного проекта:
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "url": "https://mcp-2gis.api.2gis.com/mcp",
+      "headers": { "Authorization": "Bearer <YOUR_API_KEY>" }
+    }
+  }
+}
+```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+### VS Code (GitHub Copilot) {#vscode}
+
+Создайте файл `.vscode/mcp.json` в корне рабочей директории и добавьте конфигурацию MCP-сервера 2ГИС:
+
+```json
+{
+  "servers": {
+    "2gis": {
+      "type": "http",
+      "url": "https://mcp-2gis.api.2gis.com/mcp",
+      "headers": { "Authorization": "Bearer ${input:YOUR_API_KEY}" }
+    }
+  },
+  "inputs": [
+    {
+      "id": "YOUR_API_KEY",
+      "type": "promptString",
+      "description": "2GIS API key",
+      "password": true
+    }
+  ]
+}
+```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+### Windsurf {#windsurf}
+
+Добавьте конфигурацию MCP-сервера 2ГИС в файл `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "serverUrl": "https://mcp-2gis.api.2gis.com/mcp",
+      "headers": { "X-2GIS-API-Key": "<YOUR_API_KEY>" }
+    }
+  }
+}
+```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+### Cline / Roo Code {#cline-roo-code}
+
+Добавьте конфигурацию MCP-сервера 2ГИС в файл `mcp_settings.json`. Укажите тип подключения `streamableHttp` явно, иначе запись может быть интерпретирована как устаревший SSE.
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "type": "streamableHttp",
+      "url": "https://mcp-2gis.api.2gis.com/mcp",
+      "headers": { "Authorization": "Bearer <YOUR_API_KEY>" },
+      "autoApprove": []
+    }
+  }
+}
+```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+### Gemini CLI {#gemini-cli}
+
+Добавьте конфигурацию MCP-сервера 2ГИС одним из способов:
+
+* Выполните команду:
+
+    ```bash
+    gemini mcp add --transport http 2gis https://mcp-2gis.api.2gis.com/mcp \
+      -H "Authorization: Bearer $YOUR_API_KEY" --timeout 30000
+
+    ```
+
+* Добавьте конфигурацию в файл `~/.gemini/settings.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "2gis": {
+          "httpUrl": "https://mcp-2gis.api.2gis.com/mcp",
+          "headers": { "Authorization": "Bearer <YOUR_API_KEY>" },
+          "timeout": 30000
+        }
+      }
+    }
+    ```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+### ГигаЧат и платформы для создания ИИ-ассистентов {#gigachat}
+
+Вы можете подключить любой клиент с поддержкой протокола Streamable HTTP и статических пользовательских заголовков к серверу, указав его конфигурацию:
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "type": "streamable_http",
+      "url": "https://mcp-2gis.api.2gis.com/mcp",
+      "headers": { "X-2GIS-API-Key": "<YOUR_API_KEY>" }
+    }
+  }
+}
+```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+Используйте `X-2GIS-API-Key`, если `Authorization` зарезервирован: инструмент `auth_probe` показывает, какой заголовок фактически дошел до сервера.
+
+### Собственный клиент (Python) {#python-client}
+
+Пример подключения к MCP-серверу 2ГИС:
+
+```python
+import os
+import httpx
+from mcp import ClientSession
+from mcp.client.streamable_http import streamable_http_client
+
+headers = {"Authorization": f"Bearer {os.environ['YOUR_API_KEY']}"}
+async with httpx.AsyncClient(headers=headers, timeout=30) as http_client:
+    async with streamable_http_client("https://mcp-2gis.api.2gis.com/mcp", http_client=http_client) as (read, write, _):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            tools = (await session.list_tools()).tools
+            print([t.name for t in tools])
+```
+
+Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
+
+### Другой хост {#other-host}
+
+Пример ручного запроса к MCP-серверу 2ГИС:
+
+```bash
+curl -sS https://mcp-2gis.api.2gis.com/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"my-client","version":"1.0"}}}'
+```
+
+## 3. Проверьте работоспособность {#test}
+
+1. Отправьте ИИ-агенту запрос на проверку ключа и доступности каждого из сервисов по очереди, например:
+
+    ```
+    Проверь, что ключ работает и какие инструменты мне доступны
+    ```
+
+    Агент должен вызвать цепочку инструментов `tools/list` > `server_info` > `auth_probe`.
+
+2. Отправьте конкретный запрос, чтобы проверить работу инструментов, например:
+
+    ```
+    Найди три кофейни рядом с Красной площадью в Москве и проложи маршрут к ближайшей пешком
+    ```
+
+    Агент должен вызвать цепочку инструментов `search_places` > `build_route`.
+
+## Ошибки {#errors}
+
+| Ошибка | Причина | Возможное решение |
+|--------|---------|-------------------|
+| `MCP_API_KEY_REQUIRED` | API-ключ не указан | [Получите API-ключ](#get-access-key) и укажите его при [подключении MCP-сервера к агенту](#connect) |
+| `MCP_API_KEY_INVALID` | Указанный API-ключ недействителен | Проверьте подключённые сервисы в ключе и лимиты подписки или демо-ключа в [личном кабинете Менеджер Платформы](https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=ai_docs) |
+| `MCP_2GIS_API_UNAVAILABLE` | Сервис 2ГИС временно недоступен | Попробуйте повторить запрос позже |

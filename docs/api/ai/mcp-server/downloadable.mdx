@@ -1,0 +1,198 @@
+---
+sidebar: aiapi
+---
+# Локальный MCP-сервер
+
+Скачиваемый дистрибутив MCP-сервера позволяет развернуть сервер локально и использовать его с ИИ-агентами.
+
+## Требования {#prerequisites}
+
+Для работы локального MCP-сервера требуются следующие компоненты:
+
+* [Ключ доступа](#get-access-key) к API 2ГИС.
+* ИИ-клиент с поддержкой протокола MCP для взаимодействия с локальным сервером.
+
+## Доступные инструменты и API {#available-apis}
+
+MCP-сервер предоставляет следующие инструменты для работы:
+
+| Инструмент | Функция | <div style={{"width":"200px"}}>Сервис</div> |
+|------------|---------| -------------------|
+| `search_poi` | Поиск мест и организаций по запросу и координатам | [Places API](/api/search/places/overview), [Geocoder API](/api/search/geocoder/overview) |
+| `calculate_route` | Построение маршрутов на разных видах транспорта, расчёт времени в пути и расстояния | [Routing API](/api/navigation/routing/overview) |
+| `geocode` | Прямое геокодирование: преобразование адреса в координаты | [Geocoder API](/api/search/geocoder/overview) |
+| `reverse_geocode` | Обратное геокодирование: преобразование координат в адрес | [Geocoder API](/api/search/geocoder/overview) |
+| `create_map_view` | Создание статической карты с маркерами в формате PNG | [Static API](/maps/others/static/overview) |
+| `calculate_isochrone` | Построение областей, которые достижимы от начальной точки за определённое время (изохрон) | [Isochrone API](/api/navigation/isochrone/overview) |
+
+## 1. Получите ключ доступа {#get-access-key}
+
+1. Зарегистрируйтесь в личном кабинете Менеджер Платформы.
+
+   <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=ai_docs" target="_blank">
+      В кабинет
+   </CtaButton>
+
+2. Получите ключ для доступа к нужным API:
+
+   - Оформите бесплатный [демо-ключ](/platform-manager/subscription/keys#demo) (действует 30 дней, есть [ограничения по количеству запросов](/platform-manager/subscription/pricing#demo-limits)). В демо-ключе автоматически подключены все нужные API для работы с MCP-сервером.
+   - Купите [подписку](/platform-manager/subscription/purchase) и создайте ключи для доступа к API. Рекомендуется создать два ключа для работы с MCP-сервером, чтобы отдельно контролировать использование API карт и поиска и API навигации. Количество ключей не влияет на стоимость подписки. Рекомендуемое распределение API по ключам:
+
+      - Ключ для работы с картами и поиском: Static API, Geocoder API, Places API.
+      - Ключ для работы с навигацией: Routing API, Isochrone API.
+
+   Если вы создаёте только один ключ, убедитесь, что в нём подключены все нужные API для работы с MCP-сервером. Подробнее о работе с ключами и подписками см. в [документации личного кабинета](/platform-manager/overview).
+
+Подробнее о стоимости сервисов см. в разделе [Тарифы](/platform-manager/subscription/pricing).
+
+## 2. Установите и настройте MCP-сервер {#install}
+
+1. Клонируйте [репозиторий MCP-сервера](https://github.com/2gis/2gis-mcp).
+2. Установите зависимости:
+
+   ```bash
+   npm install
+   ```
+
+3. Запустите сборку MCP-сервера:
+
+   ```bash
+   npm run build
+   ```
+
+   После сборки в корне репозитория будет создан файл `dist/index.js`, путь до которого нужно указать в конфигурации запуска на следующем шаге.
+
+## 3. Подключите MCP-сервер к агенту {#connect}
+
+### Claude Desktop {#claude-desktop}
+
+В файл настроек `claude_desktop_config.json` добавьте конфигурацию MCP-сервера 2ГИС:
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "command": "node",
+      "args": ["PATH_TO_REPO/dist/index.js"],
+      "env": {
+        "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+        "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Где:
+
+- `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится файл `dist/index.js`.
+- `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+- `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+Если сервер развёрнут удалённо (с доступом по HTTP), используйте Supergateway:
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--streamableHttp",
+        "https://YOUR_HOST/mcp"
+      ]
+    }
+  }
+}
+```
+
+### LM Studio {#lm-studio}
+
+LM Studio позволяет работать с MCP-сервером полностью локально: без облачных LLM-провайдеров. Модель работает на вашем компьютере, а MCP-сервер обращается только к API 2ГИС.
+
+Подключите MCP-сервер по [инструкции](https://lmstudio.ai/docs/app/mcp). В файл настроек `mcp.json` добавьте конфигурацию MCP-сервера 2ГИС:
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "command": "node",
+      "args": ["PATH_TO_REPO/dist/index.js"],
+      "env": {
+        "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+        "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Где:
+
+- `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится собранный файл `dist/index.js`.
+- `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+- `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+### Cursor {#cursor}
+
+В файл настроек `.cursor/mcp.json` добавьте конфигурацию MCP-сервера 2ГИС:
+
+```json
+{
+  "mcpServers": {
+    "2gis": {
+      "command": "node",
+      "args": ["PATH_TO_REPO/dist/index.js"],
+      "env": {
+        "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+        "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Где:
+
+- `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится собранный файл `dist/index.js`.
+- `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+- `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+### VS Code (GitHub Copilot) {#vscode}
+
+Создайте файл `.vscode/mcp.json` в корне рабочей директории и добавьте конфигурацию MCP-сервера 2ГИС:
+
+```json
+{
+  "servers": {
+    "2gis": {
+      "command": "node",
+      "args": ["PATH_TO_REPO/dist/index.js"],
+      "env": {
+        "MAPGL_API_KEY": "YOUR_MAPS_API_KEY",
+        "ROUTING_API_KEY": "YOUR_ROUTING_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Где:
+
+- `PATH_TO_REPO` — путь к папке с репозиторием MCP-сервера, в которой находится собранный файл `dist/index.js`.
+- `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+- `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
+
+### Любой MCP-совместимый клиент {#any-mcp-client}
+
+MCP-сервер 2ГИС работает по стандартному MCP-протоколу через `stdio`. Любое приложение, поддерживающее протокол MCP, может подключиться к серверу, указав команду запуска:
+
+```bash
+MAPGL_API_KEY=YOUR_MAPS_API_KEY ROUTING_API_KEY=YOUR_ROUTING_API_KEY node dist/index.js
+```
+
+Где:
+
+- `YOUR_MAPS_API_KEY` — ваш API-ключ для работы с картами и поиском.
+- `YOUR_ROUTING_API_KEY` — ваш API-ключ для работы с навигацией. Если вы используете один ключ для всех API, укажите его в обеих переменных.
