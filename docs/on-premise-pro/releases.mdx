@@ -5,6 +5,37 @@ sidebar: on-premise-pro
 
 Чтобы установить <Brand /> Про версии 2.0.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-pro/overview/2gis-cli/releases#v3) и следуйте [инструкциям по обновлению](/on-premise-pro/update).
 
+## 2.6.0 {#v2.6.0}
+
+Дата релиза: 2026-10-07
+
+<h3 id="dependencies_v2.6.0">Зависимости</h3>
+
+Перед обновлением любого сервиса в составе <Brand /> Про до версии 2.6.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.11.1](/on-premise-api-platform/releases/core#2111)  |
+| API-платформа                            | [2.59.0](/on-premise-api-platform/releases/api-platform#2590) |
+
+Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
+
+<h3 id="breaking_v2.6.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Pro API | В параметре `api.settings.corsOrigins` больше не поддерживается значение `*`. Если CORS настроен в Ingress или прокси, убедитесь, что `cors-allow-credentials` включён, а `cors-allow-origin` передаёт источник запроса. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.6.0/charts/pro-api/values.yaml). | 
+| Pro UI | Удалён параметр `ui.immersiveModels`. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.6.0/charts/pro-ui/values.yaml). |
+
+<h3 id="new_v2.6.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| Pro API | Добавлены параметры:<ul><li>`tasks.settings.features.assetChangesNotification.enabled` — включает уведомления об изменениях наборов данных через webhook.</li><li>`pagerenderer.settings.maxParallelRenders` — максимальное количество одновременных рендеров в одном поде.</li><li>`pagerenderer.settings.renderMemoryBudgetMb` — объём памяти для одного рендера. Новый рендер запускается, только если такой объём памяти доступен.</li><li>`pagerenderer.settings.memorySafetyFactor` — доля лимита памяти пода, которую могут занимать рендеры.</li><li>`pagerenderer.settings.memoryAdmissionTimeoutSeconds` — время ожидания свободной памяти. Если за это время память не освободится, рендер будет отклонён.</li><li>`pagerenderer.settings.releaseWebGlAfterMapScreen` — освобождать ли ресурсы WebGL после снимка экрана карты. Текстуры карты остаются в памяти до завершения рендера.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.6.0/charts/pro-api/values.yaml). |
+
+Полный список продуктовых изменений см. в разделе [Релизы](/pro/releases) с июля по август 2026 г.
+
 ## 2.5.0 {#v2.5.0}
 
 Дата релиза: 2026-07-27
@@ -15,9 +46,9 @@ sidebar: on-premise-pro
 
 | <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.8.0  |
-| API-платформа                            | 2.55.0 |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.8.0](/on-premise-api-platform/releases/core#280)  |
+| API-платформа                            | [2.55.0](/on-premise-api-platform/releases/api-platform#2550) |
 
 Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
 
@@ -45,9 +76,9 @@ sidebar: on-premise-pro
 
 | <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.1.0 |
-| API-платформа                            | 2.47.0 |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.1.0](/on-premise-api-platform/releases/core#210) |
+| API-платформа                            | [2.47.0](/on-premise-api-platform/releases/api-platform#2470) |
 
 Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
 
@@ -75,9 +106,9 @@ sidebar: on-premise-pro
 
 | <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.1.0 |
-| API-платформа                            | 2.47.0 |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.1.0](/on-premise-api-platform/releases/core#210) |
+| API-платформа                            | [2.47.0](/on-premise-api-platform/releases/api-platform#2470) |
 
 Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
 
@@ -111,9 +142,9 @@ sidebar: on-premise-pro
 
 | <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.1.0  |
-| API-платформа                            | 2.47.0 |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.1.0](/on-premise-api-platform/releases/core#210)  |
+| API-платформа                            | [2.47.0](/on-premise-api-platform/releases/api-platform#2470) |
 
 Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
 
@@ -140,9 +171,9 @@ sidebar: on-premise-pro
 
 | <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.0.0  |
-| API-платформа                            | 2.44.0 |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
+| API-платформа                            | [2.44.0](/on-premise-api-platform/releases/api-platform#2440) |
 
 Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
 
@@ -176,9 +207,9 @@ sidebar: on-premise-pro
 
 | <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
 | ---------------------------------------- | ------ |
-| Утилита 2GIS CLI                         | 3      |
-| Базовые сервисы                          | 2.0.0  |
-| API-платформа                            | 2.44.0 |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.0.0](/on-premise-api-platform/releases/core#200)  |
+| API-платформа                            | [2.44.0](/on-premise-api-platform/releases/api-platform#2440) |
 
 Подробнее см. в разделе [Обновление <Brand /> Про](/on-premise-pro/update).
 

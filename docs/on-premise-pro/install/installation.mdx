@@ -180,6 +180,7 @@ sidebar: on-premise-pro
          nginx.ingress.kubernetes.io/proxy-send-timeout: '120'
          nginx.ingress.kubernetes.io/enable-cors: 'true'
          nginx.ingress.kubernetes.io/cors-allow-credentials: 'true'
+         nginx.ingress.kubernetes.io/cors-allow-origin: 'https://pro-ui.example.com'
          nginx.ingress.kubernetes.io/cors-allow-methods: 'GET, PUT, POST, DELETE, PATCH, OPTIONS'
          nginx.ingress.kubernetes.io/cors-allow-headers: 'DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-share-token,x-auth-token,x-brand,pragma'
          nginx.ingress.kubernetes.io/proxy-buffer-size: 256k
@@ -379,11 +380,14 @@ sidebar: on-premise-pro
    * `api`: переменные окружения.
 
       * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведённую конфигурацию для используемого вами Ingress. **URL, указанный в параметре `api.ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
-         * `annotations`: [аннотации Kubernetes](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md), предназначенные для настройки поведения nginx Ingress-контроллера.
+         * `annotations`: [аннотации Kubernetes](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md), предназначенные для настройки поведения nginx Ingress-контроллера. 
+            
+            Если CORS обрабатывается Ingress-контроллером, настройте его независимо от `settings.corsOrigins`. Для этого укажите для `nginx.ingress.kubernetes.io/cors-allow-credentials` значение `true`, а в `nginx.ingress.kubernetes.io/cors-allow-origin` укажите источник запроса.
+      
       * `pod.imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
       * `pod.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-pro/requirements#resources).
       * `settings.licenseKey`: лицензионный ключ <Brand /> Про. Чтобы получить ключ, обратитесь к менеджеру <Brand /> или вашему поставщику.
-      * `settings.corsOrigins`: политика CORS. Если значение пустое, любому источнику разрешается выполнять запросы к сервису Pro API.
+      * `settings.corsOrigins`: политика CORS. Если значение пустое, любому источнику разрешается выполнять запросы к сервису Pro API. Значение `*` не поддерживается. Если CORS настраивается в Ingress или прокси, настройте разрешённые источники там: см. блок настроек `api.ingress.annotations`.
       * `settings.auth`: настройки сервиса аутентификации.
          * `url`: URL сервиса аутентификации.
          * `apiKey`: API-ключ для доступа к сервису аутентификации.
