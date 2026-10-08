@@ -7,15 +7,18 @@ sidebar: iossdk
 
 ### 🌟 Новые возможности
 
-* [ISourceFactory.createReliefSource()](/ios/sdk/reference/stable/interface#isource-factory/create-relief-source) и `DgisSource.createReliefDgisSource()` — создание источника рельефа из публичного API. Рельеф автоматически включается только для регионов, где он поддерживается.
-* В [IDirectoryViewsFactory](/ios/sdk/reference/stable/interface#idirectory-views-factory) добавлен вариант создания [DirectorySearchView](/ios/sdk/reference/stable/struct#directory-search-view) с отдельным callback `onObjectSuggestTap` для нажатия на объектную подсказку.
-* [PackageInfo.description](/ios/sdk/reference/stable/struct#package-info/var-description) — локализованное развёрнутое описание пакета, в том числе для голосовых пакетов и пакетов территорий.
+* [ISourceFactory.createReliefSource()](/ios/sdk/reference/14.1/interface#isource-factory/create-relief-source) и [DgisSource.createReliefDgisSource()](/ios/sdk/reference/14.1/class#dgis-source/create-relief-dgis-source) — методы для создания источника 3D-рельефа из данных 2ГИС. Рельеф включается автоматически при [добавлении источника на карту](/ios/sdk/examples/map#data-sources).
+
+    Источник работает только в регионах, где поддерживаются данные рельефа от 2ГИС: см. список в разделе [Источник данных о 3D-рельефе](/android/sdk/examples/map#relief-data-source).
+
+* В [IDirectoryViewsFactory](/ios/sdk/reference/14.1/interface#idirectory-views-factory) добавлен вариант создания [DirectorySearchView](/ios/sdk/reference/14.1/struct#directory-search-view) с отдельной функцией обратного вызова `onObjectSuggestTap` для обработки нажатия на объектную подсказку.
+* [PackageInfo.description](/ios/sdk/reference/14.1/struct#package-info/var-description) — локализованное развёрнутое описание пакета данных, в том числе голосовых пакетов и пакетов территорий.
 
 ### 🛠 Исправления
 
-* Исправлена работа рельефа: источник включает слой только в регионах, где рельеф действительно поддерживается.
+* Исправлена работа источника рельефа: слой включается только в регионах, где поддерживаются данные рельефа от 2ГИС.
 * Улучшена потокобезопасность карты: обновление кластеризации при добавлении и удалении объектов.
-* Исправлено поведение подсказок в [DirectorySearchView](/ios/sdk/reference/stable/struct#directory-search-view): текст запроса дополняется по словам, а объектные подсказки открывают объект через отдельный callback.
+* Исправлено поведение подсказок в [DirectorySearchView](/ios/sdk/reference/14.1/struct#directory-search-view): текст запроса дополняется по словам, а объектные подсказки открывают объект через отдельный callback.
 
 ## 14.0.0 (2026-08-11)
 
