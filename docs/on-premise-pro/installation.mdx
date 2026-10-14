@@ -9,35 +9,88 @@ sidebar: on-premise-pro
 
 :::
 
-## 1. Перед установкой {#before-installing}
+## 1. Подготовьтесь к установке {#preparation}
 
-1. Ознакомьтесь с основной информацией:
+import Preparation from '../on-premise-snippets/_preparation.mdx';
 
-   * [Архитектура сервисов <Brand /> Про](/on-premise-pro/architecture/pro-architecture)
-   * [Архитектура программного комплекса <Brand />](/on-premise-pro/architecture/solution-architecture)
-   * [Системные требования](/on-premise-pro/requirements)
+<Preparation />
 
-2. Выполните предварительные шаги:
+## 2. Выполните предварительные шаги {#before-installing}
 
-   1. [Подготовка к установке](/on-premise-pro/preparation)
-   2. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)
-   3. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)
-   4. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)
-   5. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search)
-   6. [Установка API для работы с навигацией](/on-premise-api-platform/installation#install-navi)
+1. Ознакомьтесь с:
 
-3. Соберите необходимые данные, заданные или полученные на предыдущих шагах:
+   * [архитектурой сервисов <Brand /> Про](/on-premise-pro/architecture/pro-architecture);
+   * [архитектурой программного комплекса <Brand />](/on-premise-pro/architecture/solution-architecture);
+   * [системными требованиями](/on-premise-pro/requirements).
+
+2. Установите сервисы API-платформы:
+
+    1. [Сервис лицензий](/on-premise-api-platform/installation#install-license).
+
+        После установки получите лицензию, проверьте её статус и сохраните endpoint сервиса лицензий.
+
+    2. [Сервис API-ключей](/on-premise-api-platform/installation#install-keys).
+
+        После установки получите:
+
+        * cервисные токены для сервисов Tiles API, Catalog APIs, Isochrone API и <Brand /> Про;
+        * API-ключ c доступом к сервисам MapGL JS API, Catalog APIs, Search API и Isochrone API.
+
+          | Сервис | Что получить | Где используется |
+          | --- | --- | --- |
+          | Tiles API | Сервисный токен | Конфигурация Tiles API. |
+          | MapGL JS API | API-ключ | Параметр `ui.mapgl.key` в Pro UI. |
+          | Catalog APIs | Сервисный токен и API-ключ | Конфигурация Catalog APIs и параметр `catalog.key` в Pro API. |
+          | Isochrone API | Сервисный токен и API-ключ | Параметр `navi.key` в Pro API |
+          | <Brand /> Про | Сервисный токен | Конфигурация Pro API. |
+
+    3. [API карт](/on-premise-api-platform/installation#install-maps).
+
+        Установите обязательные компоненты:
+        * Tiles API — при установке задайте `types[0].kind: web` и укажите сервисный токен Map Tiles API для доступа к векторным данным, полученный на предыдущем шаге.
+        * MapGL JS API — после установки сохраните endpoint сервиса и API-ключ для настройки Pro UI.
+
+    4. [API поиска](/on-premise-api-platform/installation#install-search).
+
+        Установите обязательные компоненты:  
+        * Search API — после установки сохраните endpoint сервиса настройки Pro API.
+        * Catalog APIs — укажите сервисный токен, полученный на предыдущем шаге. После установки сохраните endpoint сервиса и ключ Catalog APIs для настройки Pro API.
+
+    5. [API навигации](/on-premise-api-platform/installation#install-navi).
+
+        * Убедитесь, что в [файле правил](/on-premise-api-platform/installation#rules-file) `rules.yaml` есть правило для Isochrone API. В параметре `queries` укажите тип запроса `get_hull`, а в `routing` — типы транспорта, для которых нужно рассчитывать зоны доступности. Можно добавить эти значения в подходящее существующее правило или создать отдельное:
+
+          ```yaml
+          - name: isochrone
+            queries: ["get_hull"]
+            routing: ["driving", "pedestrian"]
+          ```
+
+        * Установите обязательные компоненты:  
+
+          * Navi-Castle;
+          * Navi-Back;
+          * Navi-Router — в параметре `keys.apis.isochrone-api` укажите сервисный токен Isochrone API;
+          * Navi-Front.
+      
+        * После установки сохраните:
+
+          * endpoint сервиса Navi-Front;
+          * API-ключ для Isochrone API для настройки Pro API.
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
 
    | Объект                                                  | Пример значения                                | Как получить значение                                                             |
    | ------------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------- |
-   | Endpoint реестра Docker для хранения образов сервисов             | `docker.registry.example.com`            | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts) |
-   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                      | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
+   | Endpoint реестра Docker для хранения образов сервисов   | `docker.registry.example.com`                  | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts) |
+   | Endpoint S3-совместимого хранилища артефактов установки | `artifacts.example.com`                        | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
    | Имя бакета для хранения артефактов                      | `onpremise-artifacts`                          | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
    | Идентификатор ключа для доступа к артефактам установки  | `AKIAIOSFODNN7EXAMPLE`                         | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
    | Секрет ключа для доступа к артефактам установки         | `wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY`       | См. [Получение артефактов установки](/on-premise-api-platform/installation#artifacts)         |
    | Endpoint сервиса лицензий                               | `https://license`                              | См. [Установка сервиса лицензий](/on-premise-api-platform/installation#install-license)               |
    | Endpoint MapGL JS API                                   | `http://mapgl-js-api`                          | См. [Установка API для работы с картами](/on-premise-api-platform/installation#install-maps)          |
    | Endpoint Catalog APIs                                   | `http://catalog-api`                           | См. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search)        |
+   | Endpoint Search API                                     | `http://search-api`                            | См. [Установка API для работы с поиском](/on-premise-api-platform/installation#install-search) |
    | Endpoint API навигации                                  | `http://navi-front`                            | См. [Установка API для работы с навигацией](/on-premise-api-platform/installation#install-navi) |
    | API-ключи                                               | `MAPGL_KEY` <br /> `CATALOG_KEY` <br /> `NAVI_KEY` | См. [Установка сервиса API-ключей](/on-premise-api-platform/installation#install-keys)                |
 
@@ -60,7 +113,7 @@ sidebar: on-premise-pro
    * Доменное имя для Permissions UI: `pro-permissions-api.example.com`
    * Доменное имя для фронтенда: `pro-ui.example.com`
 
-## 2. Подготовьте инфраструктуру {#prepare-infrastructure}
+## 3. Подготовьте инфраструктуру {#prepare-infrastructure}
 
 :::note[Настройка аналогов из реестра Минцифры]
 
@@ -145,7 +198,7 @@ sidebar: on-premise-pro
    
    Полное описание настроек см. в [документации Apache Kafka](https://kafka.apache.org/documentation/).
 
-## 3. Установите <Brand /> Про {#install-services}
+## 4. Установите <Brand /> Про {#install-services}
 
 ### Установите Pro API {#install-pro-api}
 
@@ -391,7 +444,7 @@ sidebar: on-premise-pro
       * `settings.auth`: настройки сервиса аутентификации.
          * `url`: URL сервиса аутентификации.
          * `apiKey`: API-ключ для доступа к сервису аутентификации.
-         * `type`: тип аутентификации. Возможные значения: `openid10` для протокола [OpenId 1.0/OAuth 2.0](https://openid.net/specs/openid-connect-core-1_0.html); `urbi` для внутреннего протокола Urbi.
+         * `type`: тип аутентификации. Возможные значения: `openid10` для протокола [OpenID 1.0/OAuth 2.0](https://openid.net/specs/openid-connect-core-1_0.html); `urbi` для внутреннего протокола Urbi.
          * `userInfoEndpoint`: путь к endpoint-у [Userinfo](https://openid.net/specs/openid-connect-core-1_0.html#UserInfo).
          * `autoRegisterUsers`: регистрировать ли новых пользователей автоматически при первом входе.
 
@@ -421,7 +474,7 @@ sidebar: on-premise-pro
 
       * `enabled`: использовать ли поставщика аутентификации. Значение параметра должно быть согласовано со значением `permissions.settings.auth.enabled`: либо оба со значением `true`, либо оба со значением `false`. 
       * `host`: адрес хоста поставщика аутентификации. Должен указывать на URL Permissions Ingress. Обязателен, если у параметра `authProvider.enabled` значение `true`.
-      * `schema`: схема аутентификации. Поддерживаемые значения: `Basic`, `Oidc`. Подробнее о настройке OIDC-поставщика см. в разделе [Настройка внешнего поставщика аутентификации](/on-premise-pro/install/authentication). Обязателен, если у параметра `authProvider.enabled` значение `true`.
+      * `schema`: схема аутентификации. Поддерживаемые значения: `Basic`, `Oidc`. Подробнее о настройке OIDC-поставщика см. в разделе [Настройка внешнего поставщика аутентификации](#authentication). Обязателен, если у параметра `authProvider.enabled` значение `true`.
       * `allowedHosts`: список разрешённых хостов. Значение `['*']` предоставляет доступ со всех хостов.
       * `basic`: настройки базовой аутентификации. Используется, если в параметре `authProvider.schema` указано `Basic`.
 
@@ -685,7 +738,7 @@ sidebar: on-premise-pro
 
    :::
 
-## 4. Проверьте работоспособность установленных сервисов {#test}
+## 5. Проверьте работоспособность установленных сервисов {#test}
 
 Выполните запрос с использованием cURL или аналогичного инструмента:
 
@@ -700,15 +753,71 @@ curl -X 'GET' \
 
 Ответ должен иметь код состояния `HTTP 200` и содержать список элементов в формате JSON.
 
-## 5. Настройте аутентификацию пользователей
+## 6. Настройте аутентификацию пользователей {#authentication}
 
-Настройте [внешнего поставщика OpenID Connect (OIDC)](/on-premise-pro/install/authentication) для аутентификации конечных пользователей в <Brand /> Про.
+Чтобы работать с продуктом <Brand /> Про, конечные пользователи должны проходить аутентификацию. Программный комплекс <Brand /> не предоставляет готовый сервис аутентификации для установки в закрытом контуре. Поэтому вам нужно использовать собственного поставщика OpenID Connect (OIDC) для авторизации пользователей по технологии единого входа (SSO).
 
-## 6. После установки
+Аутентифицироваться и авторизоваться в <Brand /> Про могут пользователи, зарегистрированные в базе внешнего поставщика OIDC. Управление пользователями также осуществляется на стороне этого поставщика.
 
-После установки <Brand /> Про в вашем контуре и настройки доступов конечные пользователи могут начать работу с продуктом.
+Настройте поставщика OIDC, выполнив следующие условия:
 
-Подробные инструкции см. в [Руководстве пользователя](/pro/overview).
+1. Определите обязательные утверждения (claims) о данных пользователя. Следующие данные гарантированно должны быть заполнены в ответе `user-info`:
+
+   * `sub` — идентификатор пользователя.
+   * `email` — email пользователя.
+   * `email_verified` — флаг, указывающий на то, был ли email подтверждён пользователем.
+   * `name` — полное имя пользователя.
+   * `phone_number` — номер телефона пользователя.
+
+2. Настройте области видимости (scopes), по которым можно получать заданные утверждения (claims). Стандартно используются следующие scopes:
+
+   * `openid` — обязательный параметр, указывающий на использование OpenID Connect для аутентификации пользователя.
+   * `email` — email пользователя.
+   * `profile` — ссылка на профиль пользователя.
+   * `phone` — номер телефона пользователя.
+
+3. Создайте клиента в вашем поставщике OIDC:
+
+   1. Настройте идентификатор (`client_id`) и cекрет (`client_secret`) клиента.
+
+   2. Укажите Callback URL и Logout URL для сервиса:
+
+        * Callback URL: `https://{application_host}/api/auth/code`;
+        * Logout URL: `https://{application_host}/api/auth/after_sign_out_openid`.
+
+   3. Настройте работу клиента с заданными на предыдущем шаге scopes.
+
+
+4. Настройте передачу ролей для авторизации.
+
+   Сервисы, использующие поставщика OIDC (`authProvider.schema: Oidc`), проверяют права доступа на основе ролей, переданных в `id_token`. Если `id_token` не содержит утверждение (claim) с ролями, пользователь не сможет получить доступ к таким сервисам даже после авторизации.
+
+   Чтобы авторизация работала корректно, настройте вашего поставщика OIDC:
+
+     1. Назначьте пользователям нужные роли.
+     2. Настройте маппинг ролей в отдельный claim токена (например, `roles`).
+     3. Убедитесь, что claim размещён на верхнем уровне JSON (не во вложенной структуре).
+     4. Укажите тип значения claim — массив строк.
+     5. Убедитесь, что claim включён в `id_token`.
+
+   Пример `id_token`:
+
+   ```json
+   {
+     "sub": "123456",
+     "name": "Иван Иванов",
+     "roles": ["admin", "editor"],
+     "iss": "https://idp.example.com",
+     "aud": "client_id",
+     "exp": 1710000000
+   }
+   ```
+
+   Если поставщик по умолчанию формирует вложенные claims, настройте преобразование в плоский claim.
+
+## 7. После установки {#after-installing}
+
+После установки <Brand /> Про в вашем контуре и настройки доступов конечные пользователи могут начать работу с продуктом. Подробные инструкции см. в [Руководстве пользователя](/pro/overview).
 
 :::note[Доступность наборов данных]
 
