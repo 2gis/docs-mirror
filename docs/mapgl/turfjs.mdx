@@ -534,7 +534,7 @@ const nearest = turf.nearestPoint(target, points);
 
 Документация на метод: [@turf/nearestPoint](https://turfjs.org/docs/api/nearestPoint)
 
-Особенностью метода является работа только с множеством точек. Чтобы преобразовать произвольный объект в множество точек, воспользуйтесь методом [@turf/explode](https://turfjs.org/docs/api/explode).
+Особенностью метода является работа только с множеством точек. Чтобы преобразовать произвольный объект в множество точек, воспользуйтесь методом [turf.explode](#explode).
 
 **Пример использования**
 
@@ -954,6 +954,252 @@ const simplifiedTrack = turf.simplify(gpsTrack, { tolerance: 0.2 });
                             [true], 3,
                             5
                         ]
+                    }
+                });
+            })
+        </script>
+    </body>
+</html>
+`}
+</HtmlExampleWithSrcCode>
+
+## Разбиение на вершины (explode) {#explode}
+
+Метод `turf.explode` разбивает геометрию любого типа (полигон, линию или группу объектов) на набор точек — её вершин.
+
+```js
+const polygon = turf.polygon([
+    [
+      [36.803769, 56.009657],
+      [37.142487, 56.164165],
+      [37.841187, 56.120356],
+      [38.199158, 55.907578],
+      [36.803769, 56.009657],
+    ],
+]);
+const polygonPoints = turf.explode(polygon); // FeatureCollection точек
+
+const line = turf.lineString([
+    [32.013931, 55.491648],
+    [35.491901, 56.392901],
+    [37.144102, 55.491648],
+]);
+const linePoints = turf.explode(line); // FeatureCollection точек
+```
+
+Документация на метод: [@turf/explode](https://turfjs.org/docs/api/explode)
+
+Обратите внимание: так как полигон замкнут (первая и последняя вершины совпадают), `turf.explode` возвращает две одинаковые точки. При необходимости удалите дубликаты.
+
+**Примеры использования**
+
+* Отрисовать вершины полигона или линии отдельным слоем точек ([point](/mapgl/styles-specification#style-for-point)): например, при редактировании геометрии — чтобы показать манипуляторы для перетаскивания вершин.
+* Преобразовать произвольную геометрию в вид, удобный для методов, которые работают только с множеством точек (см. [nearestPoint](#nearest-point)).
+
+На примере ниже исходные полигон и линия дополнены их вершинами, отрисованными слоем точек.
+
+<HtmlExampleWithSrcCode iframeStyles={{ height: '300px' }}>
+{`
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MapGL JS API</title>
+        <meta name="description" content="Разбиение на вершины (explode)" />
+        <style>
+            html,
+            body,
+            #container {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+        <script src="__MAPGL_API_URL__"></script>
+        <script>
+            const polygon = turf.polygon([[
+                [36.803769, 56.009657],
+                [37.142487, 56.164165],
+                [37.841187, 56.120356],
+                [38.199158, 55.907578],
+                [38.202972, 55.591507],
+                [37.834930, 55.311997],
+                [37.131653, 55.305538],
+                [36.586609, 55.484630],
+                [36.365356, 55.818146],
+                [36.803769, 56.009657],
+            ]]);
+            const line = turf.lineString([[32.013931, 55.491648], [35.491901, 56.392901], [37.144102, 55.491648], [40.371536, 56.392901], [42.128462, 55.491648]]);
+
+            const polygonPoints = turf.explode(polygon);
+            polygonPoints.features.forEach((feature) => {
+                feature.properties.origin = 'вершина полигона';
+            });
+
+            const linePoints = turf.explode(line);
+            linePoints.features.forEach((feature) => {
+                feature.properties.origin = 'вершина линии';
+            });
+
+            const geojson = turf.featureCollection([polygon, line, ...polygonPoints.features, ...linePoints.features]);
+
+            const map = new mapgl.Map('container', {
+                center: turf.getCoord(turf.center(geojson)),
+                zoom: 6.5,
+                key: 'Your API access key',
+            });
+
+            new mapgl.GeoJsonSource(map, {
+                data: geojson,
+                attributes: {
+                    foo: 'bar'
+                }
+            });
+            map.on('styleload', () => {
+                map.addLayer({
+                    id: 'polygons',
+                    type: 'polygon',
+                    filter: ['==', ['sourceAttr', 'foo'], 'bar'],
+                    style: {
+                        color: '#00B2DD50'
+                    }
+                });
+                map.addLayer({
+                    id: 'lines',
+                    type: 'line',
+                    filter: ['==', ['sourceAttr', 'foo'], 'bar'],
+                    style: {
+                        color: '#00B2DDA0',
+                        width: 3
+                    }
+                });
+                map.addLayer({
+                    id: 'points',
+                    type: 'point',
+                    filter: ['==', ['sourceAttr', 'foo'], 'bar'],
+                    style: {
+                        iconImage: 'ent_i',
+                        iconWidth: 16,
+                        iconPriority: 100,
+                        textFont: 'Noto_Sans',
+                        textFontSize: 12,
+                        textField: ['get', 'origin'],
+                        textPriority: 100
+                    }
+                });
+            })
+        </script>
+    </body>
+</html>
+`}
+</HtmlExampleWithSrcCode>
+
+## Полигон в линию (polygonToLine) {#polygon-to-line}
+
+Метод `turf.polygonToLine` преобразует полигон в линию (LineString) по его контуру. Если у полигона есть вырезы, возвращается MultiLineString: линия по внешнему контуру и линия по каждому вырезу.
+
+```js
+const polygon = turf.polygon([
+    [
+      [36.803769, 56.009657],
+      [37.142487, 56.164165],
+      [37.841187, 56.120356],
+      [38.199158, 55.907578],
+      [36.803769, 56.009657],
+    ],
+]);
+const outline = turf.polygonToLine(polygon);
+```
+
+Документация на метод: [@turf/polygonToLine](https://turfjs.org/docs/api/polygonToLine)
+
+**Пример использования**
+
+Собственная обводка полигона всегда сплошная. Если нужна штриховая обводка (например, для обозначения предварительной или спорной границы), преобразуйте полигон в линию и отрисуйте её слоем [dashedLine](/mapgl/styles-specification#style-for-dashedline), а полигон используйте только для заливки.
+
+На примере ниже заливаемый полигон с вырезом отображается исходной геометрией, а его штриховая граница — результатом `turf.polygonToLine`: она проходит и по внешнему контуру, и по вырезу.
+
+<HtmlExampleWithSrcCode iframeStyles={{ height: '300px' }}>
+{`
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MapGL JS API</title>
+        <meta name="description" content="Полигон в линию (polygonToLine)" />
+        <style>
+            html,
+            body,
+            #container {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+        <script src="__MAPGL_API_URL__"></script>
+        <script>
+            const polygon = turf.polygon([[
+                [36.803769, 56.009657],
+                [37.142487, 56.164165],
+                [37.841187, 56.120356],
+                [38.199158, 55.907578],
+                [38.202972, 55.591507],
+                [37.834930, 55.311997],
+                [37.131653, 55.305538],
+                [36.586609, 55.484630],
+                [36.365356, 55.818146],
+                [36.803769, 56.009657],
+            ], [
+                [37.054724, 55.842769],
+                [37.433937, 55.837212],
+                [37.439494, 55.654777],
+                [37.060281, 55.660334],
+                [37.054724, 55.842769],
+            ]]);
+            const outline = turf.polygonToLine(polygon);
+
+            const geojson = turf.featureCollection([polygon, outline]);
+
+            const map = new mapgl.Map('container', {
+                center: turf.getCoord(turf.center(polygon)),
+                zoom: 8,
+                key: 'Your API access key',
+            });
+
+            new mapgl.GeoJsonSource(map, {
+                data: geojson,
+                attributes: {
+                    foo: 'bar'
+                }
+            });
+            map.on('styleload', () => {
+                map.addLayer({
+                    id: 'polygons',
+                    type: 'polygon',
+                    filter: ['==', ['sourceAttr', 'foo'], 'bar'],
+                    style: {
+                        color: '#00B2DD50'
+                    }
+                });
+                map.addLayer({
+                    id: 'dashed-lines',
+                    type: 'dashedLine',
+                    filter: ['==', ['sourceAttr', 'foo'], 'bar'],
+                    style: {
+                        color: '#FF9387',
+                        width: 3,
+                        dashLength: 10,
+                        gapLength: 5
                     }
                 });
             })
