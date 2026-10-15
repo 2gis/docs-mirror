@@ -58,7 +58,7 @@ MCP-сервер предоставляет следующие инструме�
 
 Добавьте новый плагин в интерфейсе ChatGPT:
 
-1. На вкладке **Плагины** выбирите **Добавить > Создать MCP-приложение**.
+1. На вкладке **Плагины** выберите **Добавить > Создать MCP-приложение**.
 
     <img src="/img/ai/chatgpt-create-mcp-app.png" alt="Создать MCP-приложение на вкладке Плагины" />
 
@@ -222,7 +222,6 @@ claude mcp add --transport http 2gis https://mcp-2gis.api.2gis.com/mcp \
     ```bash
     gemini mcp add --transport http 2gis https://mcp-2gis.api.2gis.com/mcp \
       -H "Authorization: Bearer $YOUR_API_KEY" --timeout 30000
-
     ```
 
 * Добавьте конфигурацию в файл `~/.gemini/settings.json`:
@@ -241,7 +240,7 @@ claude mcp add --transport http 2gis https://mcp-2gis.api.2gis.com/mcp \
 
 Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
 
-### ГигаЧат и платформы для создания ИИ-ассистентов {#gigachat}
+### GigaCode и платформы для создания ИИ-ассистентов {#gigachat}
 
 Вы можете подключить любой клиент с поддержкой протокола Streamable HTTP и статических пользовательских заголовков к серверу, указав его конфигурацию:
 
@@ -260,6 +259,12 @@ claude mcp add --transport http 2gis https://mcp-2gis.api.2gis.com/mcp \
 Где `YOUR_API_KEY` — ваш API-ключ для доступа к сервисам 2ГИС.
 
 Используйте `X-2GIS-API-Key`, если `Authorization` зарезервирован: инструмент `auth_probe` показывает, какой заголовок фактически дошел до сервера.
+
+См. инструкции по подключению MCP-сервера к платформе GigaCode:
+
+- [GigaCode CLI](https://gitverse.ru/docs/ai/ai-assistant-gigacode/gigacode-cli/mcp),
+- [Плагин GigaCode для GigaIDE](https://gitverse.ru/docs/ai/ai-assistant-gigacode/gigacode-for-gigaide/mcp),
+- [Плагин GigaCode для Visual Studio Code](https://gitverse.ru/docs/ai/ai-assistant-gigacode/gigacode-for-vscode/mcp).
 
 ### Собственный клиент (Python) {#python-client}
 
