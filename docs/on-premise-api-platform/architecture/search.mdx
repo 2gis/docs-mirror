@@ -23,13 +23,19 @@ sidebar: on-premise-api-platform
 
 </TabItem>
 
-<TabItem value="v8" label="С Search API v8" default>
+<TabItem value="v8" label="С Search API v8" >
 
 <NoInvert>
-![search-architecture](/img/on-premise/search8-architecture-773.svg)
+![search-architecture](/img/on-premise/search-8-architecture-776.svg)
 </NoInvert>
 
-Search API v8 — обновлённая версия Search API с повышенной точностью поисковой выдачи, которая находится на стадии бета-тестирования.
+Search API v8 — обновлённая версия Search API с повышенной точностью поисковой выдачи. Search API v8 находится на стадии бета-тестирования.
+
+**Взаимодействие компонентов Search API v8**
+
+**Catalog APIs** отправляет HTTP-запрос в **IngressRouter**. **IngressRouter** отправляет запрос в **SegmentDetector**, который дополняет его данными из запрашиваемых сегментов, а затем передаёт в **Head**. **Head** разбивает запрос на части и отправляет их группе **Unisearcher**. Каждый **Unisearcher** в группе ищет данные в доступных ему индексах и возвращает результат в **Head**. **Head** собирает ответы и передаёт их в **IngressRouter**, который возвращает результат в **Catalog APIs**.
+
+**Controller** проверяет наличие новых версий фидов (исходных данных) и выдаёт задания на индексацию. **DataAdapter** и **Indexer** обращаются к **Object Storage** (S3-совместимому хранилищу, в котором находятся исходные фиды), получают оттуда фиды и индексируют их. Готовые индексы сохраняются в **FilesStorage**, откуда их получают остальные сервисы. Индексы обновляются в реальном времени, без перезапуска сервисов.
 
 Подробнее об установке сервисов поиска с обновлённой версией Search API см. в разделе [Установка API для работы с поиском (с Search API v8)](/on-premise-api-platform/advanced/search-v8).
 </TabItem>
@@ -39,9 +45,7 @@ Search API v8 — обновлённая версия Search API с повыше
 
 * **Для Search API и Search API v8**
 
-  * Общая инфраструктура:
-
-    * Хранилище артефактов установки.
+  * Хранилище артефактов установки.
 
 * **Для Catalog APIs**
 
