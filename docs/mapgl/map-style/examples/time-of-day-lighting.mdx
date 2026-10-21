@@ -1,0 +1,267 @@
+---
+sidebar: mapgljsapi
+---
+
+# Динамическое освещение по времени суток и точке на карте
+
+Освещение в стиле карты (`light`) — это **глобальный** параметр: его источники вычисляются один раз на кадр и не зависят от отдельных объектов. Поэтому «солнце над точкой» задаётся не положением объекта, а временем суток, которое вы вычисляете в стилевом выражении. Меняя это время при перемещении карты, можно получить реалистичную картину: в Москве день, а на востоке — вечер, с соответствующим положением теней.
+
+В этой инструкции показано, как собрать такое освещение из двух глобальных стилевых переменных:
+
+* `timeOffsetMinutes` — смещение таймзоны относительно UTC (в минутах к востоку) для текущей геоточки;
+* `dynamicLightingEnabled` — флаг, включающий динамическое освещение.
+
+:::note
+
+Освещение — общий параметр кадра, поэтому «включить разное освещение одновременно для разных точек экрана» нельзя: свет соответствует **центру** карты. При перемещении карта полностью переключается в локальное время новой точки.
+
+:::
+
+## Как это работает
+
+Минуты суток в точке вычисляются комбинацией трёх выражений:
+
+* `["time", ["utc-time"], "day-minutes"]` — текущие минуты от полуночи по UTC (диапазон `0…1439`). Обратите внимание: `utc-time` обязательно оборачивается в `time(...)` — без обёртки выражение возвращает метку времени в миллисекундах, а не минуты суток.
+* `["global", "timeOffsetMinutes"]` — смещение таймзоны точки, которое вы передаёте из кода карты.
+
+Итоговый ключ времени:
+
+```json
+["time", ["utc-time", ["global", "timeOffsetMinutes"]], "day-minutes"]
+```
+
+Знак смещения — **минуты к востоку от UTC**: Москва (`UTC+3`) → `180`, Екатеринбург (`UTC+5`) → `300`, Якутск (`UTC+9`) → `540`.
+
+## Настройка стиля
+
+Все выражения освещения задаются в объекте `light` стиля. Ниже — пример для источников `sun` (направленный, отвечает в том числе за тени) и `atmosphere` (рассеянный). Возьмите эти фрагменты за основу в [Редакторе стилей](https://styles.2gis.com/).
+
+Цвет и интенсивность солнца меняются по времени суток, азимут и высота — положение солнца, которое определяет направление теней:
+
+```json
+{
+  "sun": {
+    "type": "directional",
+    "color": ["interpolate", ["linear"], ["zoom"],
+      16, "#FFFFFF",
+      17,
+      ["when", ["global", "dynamicLightingEnabled"],
+        ["interpolate", ["linear"],
+          ["time", ["utc-time", ["global", "timeOffsetMinutes"]], "day-minutes"],
+          0, "#8FA6D8",
+          360, "#FFB27A",
+          720, "#FFFFFF",
+          1080, "#FF9E6E",
+          1440, "#8FA6D8"
+        ],
+        "#FFFFFF"
+      ]
+    ],
+    "azimuth": ["when", ["global", "dynamicLightingEnabled"],
+      ["interpolate", ["linear"],
+        ["time", ["utc-time", ["global", "timeOffsetMinutes"]], "day-minutes"],
+        0, 0,
+        360, 90,
+        720, 180,
+        1080, 270,
+        1440, 360
+      ],
+      230
+    ],
+    "altitude": ["when", ["global", "dynamicLightingEnabled"],
+      ["interpolate", ["linear"],
+        ["time", ["utc-time", ["global", "timeOffsetMinutes"]], "day-minutes"],
+        0, 5,
+        720, 50,
+        1440, 5
+      ],
+      50
+    ]
+  },
+  "atmosphere": {
+    "type": "ambient",
+    "color": ["interpolate", ["linear"], ["zoom"],
+      16, "#FFFFFF",
+      17,
+      ["when", ["global", "dynamicLightingEnabled"],
+        ["interpolate", ["linear"],
+          ["time", ["utc-time", ["global", "timeOffsetMinutes"]], "day-minutes"],
+          0, "#AFC0DE",
+          360, "#FFD9C0",
+          720, "#FFFFFF",
+          1080, "#FFCBB0",
+          1440, "#AFC0DE"
+        ],
+        "#FFFFFF"
+      ]
+    ]
+  }
+}
+```
+
+Разбор конструкции:
+
+* `interpolate` по `["zoom"]` сохраняет текущее поведение на малых зумах и включает динамику только на крупном масштабе (`17` и выше). При необходимости уберите внешний `interpolate` и оставьте только ветку по времени.
+* `when` выбирает между динамическим (флаг `true`) и статичным (флаг `false` или глобальная переменная не задана) значением. `when` работает и как обёртка над **всей** веткой зума, и над одним свойством.
+* `azimuth` и `altitude` — положение солнца по времени. Азимут отсчитывается от севера: `90` — восток (восход), `180` — юг (полдень), `270` — запад (закат). Именно эти значения задают направление теней.
+* Тени включаются привязкой источника к теням в секции `shadows` (`"shadows": { "source": "sun" }`) — тогда направление теней следует за `azimuth`/`altitude`.
+
+## Расчёт смещения времени в коде
+
+Значение `timeOffsetMinutes` нужно вычислять для центра карты и передавать в стиль через метод [map.patchStyleState()](/mapgl/reference/class#map/patch-style-state). Пересчитывайте его при завершении перемещения карты (`moveend`) и раз в минуту — на случай смены суток или перехода на летнее время.
+
+### Приближённо, по долготе
+
+Самый простой вариант без зависимостей: часовой пояс оценивается по долготе (15° = 1 час). Не учитывает переход на летнее время и «сдвинутые» зоны (Китай, Индия), но для визуального эффекта этого обычно достаточно.
+
+```js
+function offsetMinutesForLng(lng) {
+    return Math.round(lng / 15) * 60;
+}
+
+function updatePointTimeOffset(map) {
+    const [lng] = map.getCenter();
+    map.patchStyleState({ timeOffsetMinutes: offsetMinutesForLng(lng) });
+}
+```
+
+### Точно, по IANA-зоне
+
+Если важны политические границы зон и переход на летнее время, определите IANA-зону по координатам (например, с помощью пакета [`tz-lookup`](https://www.npmjs.com/package/tz-lookup)) и получите смещение через `Intl`:
+
+```js
+function zoneOffsetMinutes(timeZone, date = new Date()) {
+    const name = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'longOffset' })
+        .formatToParts(date)
+        .find((part) => part.type === 'timeZoneName').value;
+    const match = /GMT([+-])(\d{2}):(\d{2})/.exec(name);
+    return match ? (match[1] === '-' ? -1 : 1) * (+match[2] * 60 + +match[3]) : 0;
+}
+
+function updatePointTimeOffset(map) {
+    const [lng, lat] = map.getCenter();
+    const timeZone = tzlookup(lat, lng);
+    map.patchStyleState({ timeOffsetMinutes: zoneOffsetMinutes(timeZone) });
+}
+```
+
+### Инициализация и подписки
+
+```js
+function enableDynamicLighting(map) {
+    let lastOffset = NaN;
+
+    const refresh = () => {
+        const [lng] = map.getCenter();
+        const offset = offsetMinutesForLng(lng);
+        if (offset === lastOffset) {
+            return;
+        }
+        lastOffset = offset;
+        map.patchStyleState({ timeOffsetMinutes: offset });
+    };
+
+    document.querySelector('#lighting-toggle').addEventListener('change', (event) => {
+        map.patchStyleState({ dynamicLightingEnabled: event.target.checked });
+    });
+
+    map.on('moveend', refresh);
+    setInterval(refresh, 60 * 1000);
+    refresh();
+}
+
+enableDynamicLighting(map);
+```
+
+## Пример использования
+
+В примере чекбокс включает и выключает динамическое освещение через глобальную переменную `dynamicLightingEnabled`. Само освещение должно быть предварительно настроено в стиле (см. раздел [Настройка стиля](#настройка-стиля)). Перемещая карту, вы увидите, как меняется свет и направление теней.
+
+<HtmlExampleWithSrcCode iframeStyles={{ height: '400px' }}>
+{`
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MapGL JS API</title>
+        <meta name="description" content="Динамическое освещение" />
+        <link rel="stylesheet" type="text/css" href="/css/switch.css" />
+        <style>
+            html,
+            body,
+            #container {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            #buttons {
+                position: absolute;
+                z-index: 2;
+                top: 0;
+                left: 0;
+                margin: 8px;
+                padding: 2px 4px;
+                display: flex;
+                align-items: center;
+                background-color: white;
+                border-radius: 8px;
+                font: 13px sans-serif;
+            }
+
+            #buttons label {
+                padding: 0 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <div id="buttons">
+            <label>Динамическое освещение</label>
+            <input type="checkbox" role="switch" id="lighting-toggle" checked="true" />
+        </div>
+        <script src="__MAPGL_API_URL__"></script>
+        <script>
+            const map = new mapgl.Map('container', {
+                center: [37.620987, 55.752824],
+                zoom: 17,
+                pitch: 45,
+                rotation: -30,
+                maxPitch: 80,
+                lowZoomMaxPitch: 80,
+                key: 'Your API access key',
+                style: 'afd48a17-e36c-4eeb-b50c-d64cb981015a',
+                styleState: {
+                    dynamicLightingEnabled: true,
+                    timeOffsetMinutes: 0,
+                },
+            });
+
+            function offsetMinutesForLng(lng) {
+                return Math.round(lng / 15) * 60;
+            }
+
+            function updatePointTimeOffset() {
+                const [lng] = map.getCenter();
+                map.patchStyleState({ timeOffsetMinutes: offsetMinutesForLng(lng) });
+            }
+
+            document.getElementById('lighting-toggle').addEventListener('change', (event) => {
+                map.patchStyleState({ dynamicLightingEnabled: event.target.checked });
+            });
+
+            map.on('moveend', updatePointTimeOffset);
+            setInterval(updatePointTimeOffset, 60 * 1000);
+
+            updatePointTimeOffset();
+        </script>
+    </body>
+</html>
+`}
+</HtmlExampleWithSrcCode>
+
+## Ограничения
+
+* **Один свет на кадр.** Освещение — глобальный параметр, поэтому одновременно «день в Москве и вечер в Якутске» на одном экране не отобразить. Свет всегда соответствует центру карты.
+* **Точность часового пояса.** Приближение по долготе (`lng / 15`) игнорирует границы зон и переход на летнее время. Для точного результата используйте IANA-зону и `Intl` (см. выше).
