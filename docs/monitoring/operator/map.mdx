@@ -3,13 +3,11 @@ sidebar: monitoring
 ---
 # Карта
 
-На вкладке **Карта** мобильного приложения отображается карта со [сменами](/monitoring/administrator/shifts), [объектами](/monitoring/administrator/managing/objects) и [агентами](/monitoring/administrator/managing/agents): мобильными сотрудниками, транспортом и т. д.
+На вкладке **Карта** мобильного приложения отображается карта со [сменами](/monitoring/administrator/shifts), [геозонами](/monitoring/administrator/managing/geofences), [объектами](/monitoring/administrator/managing/objects) и [агентами](/monitoring/administrator/managing/agents): мобильными сотрудниками, транспортом и т. д.
 
 Вы можете:
 
-* [просматривать информацию о сменах](#viewing-shift-information),
-* [просматривать информацию об объектах](#viewing-object-information),
-* [просматривать информацию об агентах](#viewing-agent-information),
+* просматривать информацию о [сменах](#viewing-shift-information), [геозонах](#viewing-geofence-information), [объектах](#viewing-object-information) и [агентах](#viewing-agent-information),
 * [выбирать тему карты](#map-theme).
 
 <img src="/img/monitoring/operator-map-744.png" alt="Вкладка Карта" width="300"/>
@@ -29,20 +27,33 @@ sidebar: monitoring
 
 <img src="/img/monitoring/operator-agents-698.png" alt="Агенты смены" width="300"/>
 
+## Просмотр информации о геозонах {#viewing-geofence-information}
+
+1. Чтобы выбрать геослои (группы геозон), которые отображаются на карте, откройте смену, нажмите значок ![Слои](/img/pro/layers-icon.svg) в правом верхнем углу и выберите типы:
+
+   <img src="/img/monitoring/operator-layers-769.png" alt="Выбор слоёв" width="300"/>
+
+2. Чтобы открыть карточку геозоны, нажмите на неё на карте.
+
+   В карточке геозоны отображаются:
+
+      * Название геозоны.
+      * **Местоположение**: координаты или адрес геозоны.
+
+   <img src="/img/monitoring/operator-geofence-data.png" alt="Данные геозоны" width="300"/>
+
 ## Просмотр информации об объектах {#viewing-object-information}
 
 1. Чтобы выбрать типы объектов, которые отображаются на карте, откройте смену, нажмите значок ![Слои](/img/pro/layers-icon.svg) в правом верхнем углу и выберите типы:
 
-   <img src="/img/monitoring/operator-object-types-744.png" alt="Выбор типов объектов" width="300"/>
+   <img src="/img/monitoring/operator-layers-769.png" alt="Выбор слоёв" width="300"/>
 
 2. Чтобы открыть карточку объекта, нажмите на его иконку на карте.
 
    В карточке объекта отображаются:
 
       * Название объекта.
-      * **Местоположение**:
-         * **Координаты**: координаты объекта.
-         * **Адрес**: адрес объекта.
+      * **Местоположение**: координаты или адрес объекта.
       * **Дополнительно**: здесь могут отображаться другие атрибуты, если они были указаны в [шаблоне объекта](/monitoring/administrator/managing/templates#creating-object-template).
 
    <img src="/img/monitoring/operator-object-data-744.png" alt="Данные объекта" width="300"/>
@@ -76,7 +87,7 @@ sidebar: monitoring
 1. Нажмите значок ![Слои](/img/pro/layers-icon.svg) в правом верхнем углу.
 2. Выберите тему:
 
-   * **Авто** (по умолчанию): тема карты будет меняться в зависимости от темы браузера.
+   * **Авто** (по умолчанию): тема карты будет меняться в зависимости от темы устройства.
    * **Дневная**.
    * **Ночная**.
 
