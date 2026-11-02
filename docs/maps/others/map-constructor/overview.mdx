@@ -1,0 +1,60 @@
+# Обзор
+
+[Конструктор карт](https://platform.2gis.ru/ru/my-maps/?utm_source=docs&utm_medium=referral&utm_campaign=map_constructor) — бесплатный инструмент в Менеджере Платформы для создания виджета с интерактивной растровой картой. Для работы не нужны ключ доступа и подписка.
+
+На карту можно добавить:
+
+* маркеры — например, чтобы отметить дом, офис или место встречи;
+* линии — например, чтобы отобразить маршрут между точками или границу территории;
+* круглые, прямоугольные или многоугольные области — например, чтобы выделить зону доставки или территорию жилого комплекса.
+
+Карту с добавленными объектами можно разместить на сайте.
+
+## Начало работы {#start}
+
+1. Войдите в личный кабинет Менеджер Платформы или зарегистрируйтесь в нём.
+
+    <CtaButton href="https://platform.2gis.ru/ru/?utm_source=docs&utm_medium=referral&utm_campaign=map_constructor" target="_blank">
+    В кабинет
+    </CtaButton>
+
+2. Перейдите на вкладку **Конструктор карт** в левом меню.
+3. Добавьте объекты на карту:
+
+    * Чтобы добавить маркер, используйте один из способов:
+
+        * Введите в строке поиска адрес и выберите его в результатах. Маркер установится на выбранный адрес.
+        * Нажмите значок ![Маркер](/img/map-constructor/point.svg) на панели инструментов и поставьте точку на карте.
+    
+        Настройте вид маркера, добавьте подпись и введите текст подсказки, которая появится при нажатии на маркер.
+
+    * Чтобы добавить прямую или ломаную линию, нажмите значок ![Линия](/img/map-constructor/line.svg) на панели инструментов и поставьте точки на карте. Чтобы завершить линию, нажмите на последнюю точку или _Enter_. Настройте цвет, толщину и прозрачность линии и введите текст подсказки, которая появится при нажатии на линию.
+    * Чтобы добавить круг, нажмите значок ![Круг](/img/map-constructor/circle.svg) на панели инструментов, зажмите точку на карте и потяните, чтобы задать диаметр круга. Настройте заливку и контур и введите текст подсказки, которая появится при нажатии на круг.
+    * Чтобы добавить прямоугольник, нажмите значок ![Прямоугольник](/img/map-constructor/rectangle.svg) на панели инструментов, зажмите точку на карте и потяните, чтобы задать размер прямоугольника. Настройте заливку и контур и введите текст подсказки, которая появится при нажатии на прямоугольник.
+    * Чтобы добавить многоугольник, нажмите значок ![Многоугольник](/img/map-constructor/polygon.svg) на панели инструментов и поставьте точки (вершины) на карте. Чтобы завершить многоугольник, нажмите на последнюю точку или _Enter_. Настройте заливку и контур и введите текст подсказки, которая появится при нажатии на многоугольник.
+
+    Чтобы выйти из режима создания объекта (например, чтобы переместить карту), нажмите значок ![Рука](/img/map-constructor/hand.svg) на панели инструментов.
+
+4. (Опционально) Чтобы изменить объект, выберите его в списке слева или на карте. Можно удалить объект, изменить его свойства или порядок отображения слоёв с фигурами. От порядка слоёв зависит, какие фигуры будут отображаться поверх других.
+
+    ![Редактирование объектов](/img/map-constructor/edit_map.png)
+
+5. (Опционально) Задайте размер карты в правом верхнем углу. По умолчанию указано значение «100%»: карта будет занимать всю ширину и высоту контейнера, в который вы вставите код. Чтобы задать фиксированный размер в пикселях, введите в полях ширину и высоту.
+6. Нажмите **Получить код бесплатно**. Скопируйте код `<iframe>` и вставьте его в HTML-код страницы.
+
+Карта с объектами сохранится на вкладке **Конструктор карт** — вы можете вернуться к ней позднее, изменить и выгрузить новый код.
+
+## Пример карты на сайте {#example}
+
+Карта появится в том месте страницы, куда вы вставили код.
+
+<iframe width="100%" height="376" loading="lazy" class="rounded-[12px] border-none" src="https://platform.2gis.ru/api/map-constructor/widget?data=eJy1Wl1TU8kW_S-5j1JOf39Q5QM3cRBvYEjGqhmu5QOQQ4yiocIBBi3_-6xO770PErAUgj6IO3369P5Ya6_d4Wtvvpg0i2ay3cw_Ne1i1pz3Nt9-7bXXZ01vs_d7c9heLJreRu9sMT9rFu3y86-9SXN-vJidtbP5Z6zaf7X1TL0-GV22_ayGW1M1fIOft_-rDoaj873-tRouRhf9wfh929dqaMfTdntLDQeji7y9i_-X576ooZuqg0FZ79Uwji4n_av9fr7an754gdeft4v5x6Y_P50v8ML_5JNj7aPY_5pN2ve9TcP__-Ps8HjWXvc29UbvZHZ6uvpcscoq9dxu9L7sfJ40_-CRbxu9aQ3GdXGVIrE_P72ewtuN3vEcIZt9PmyXoXr71sbnQUfr84b3z2O0Jr_bqEbtbCSjUpqsymXtqtXoVI0-h2z10ogfLC31KXtfjc55z0bvdVhaPTaybLU51g3wqUpi1dourS6k6GSHoEy16qTkZSHYarXZJs-nVTrXHawzwYpnMVWjStaQ0fhIR7AK5yWrjVGRVUc2upQoXDYlxVZvraFzGW8CW53KNQrYVEWxhlyj4BCHxFZvyOpxGsfWkE3Ng8dZZC1-thTHrOUMIXLMdXLyNh9qyoJNnRMZYajWZAMf12IDSrqOmY9gFaJLSQ8SRvxouGq0RMxYZahALF7HIf--wt69Q5nOJr1NH1GwT4PX2fvXB9PdD1eXxwN3BwabfHjs7a9j8ERNjqL_IQbNAzDoCwZqjJMCyKisUSmxJjS5HI0AI1CtAnCe12ZkKVCWABK2Oi6UqHJkwGWUBNVETlqglaxLBNnkBFq0EoUaIts0AR6FbORY3hHYEmMYWFOqbmmysfw40K7qUp2zHDXZmGuRaOUNs0DEy2pJahQ184iHu_VYxnguX3ALQcVwPXqXrK9HNfCA_Xcof-IAY6xYvSJcg7DYaFMmBohANht9IqyrIIGyjr1yXid53mSiEK-c2JBvQjpCIM8bSraP2bIDhYIoKXBUDgCizQRfbXhfZzIlC_Qgb3OIgbnN2Q6eUw0h6XxYz0UYnZXnb5emoDemJ0bvl_vQm44Pm5P06-hFBR2dqFX0mg699iEd1OrAjUaBOIUhDZW-j6v8iFxFgUlWtj5vUhbiRi-MtAMaDXcq7QKRPCrL2VVrAgzY6lUia8wdKPFiOkOxs9XYxEixDL-gcsqGrZ7LL-dAPdSgxYoOMGjUFarocLdZQSsdOhmgUkWqyrZjFcCpnkvhgFx-GbivRrQRblQK0oA2sIF5BeoEEK1WdFAODV4VKzEqSA7eARsQMYAgk4QGyLa0AzIpYUye32akX-uoU3UX7zVerNzqVKFJSXCOtEMwLq0Ug0Lr5USAHQjxoEEmJ_RuR5yrXGBsgsUtaQaF2Ik6AEzpuCB6ER2eXwbPRaCAU9g1JIOtkDjsmmdFF1COiV1jJgp4GZWNiqgVsQZiSJVScmI1notBuc7KXIZuweeCtrC1cnXSWrY1UnfBSNLQCyKhz6jO6rkakVMvVpNUXBGK3ih6G2xdxKAPuaOBkznkSCbv6yLHxilj5QwinErFES3AObbeIgvhU4ONn5RQ9wb3EWpojk6O9AMIlZ-7Xw65hxCqj1SVwYruQZ0kAn0IznZZ8gRvTAkSeg_R6rm_cTMNkN3cyaLwA9QCETUkr-EsRc90GDG08BEwcRBx4QyyFrqJAHejb4aULcs0Ie8y9NCohH252DPKz1CPt9zNi7IiOsSbhOO6tdB2Scu-2dHskJTt3uZJOwHmAmOsJAh40JK8DaBnnWJ4XoM6NJqUTkKPYmumDVxRUmwEfdBQUzqJbJto2yJE5WWIE0ktiAh5GQQsYRO6VNb6QFm3pXPJDtm7FRTmlDpsGjpuVEoRfSNPHBxwmDM88fEcCV6ixggt6W_bnA7ycFamOmsgn3il0jzdGhWYTPF6nciqtTAkYshiVaUuAtobFsbSr1FHpEExznZJsFzMkMXCm9iVpjIMrDKrJQyEtG-I3IUDemyktaglWasjydCiEwQkmHlpLZLDJ4sOBVStpsMeHqQS1dplwR5ySt0DhZvE6kiLYDyJndVQcLRKMp0C9ZmtWWZLCHASHakjdNAGwb8bD0pP4e6RjDwOIcBsnEVfeAgcKi9Bky-BpuIKXZMQUgJTdVQls7yDMrNiTeQAyj92UztVfRnxurEfExiNCEYaqE88t_kSW7FWB6Beur7-PYF2PQYF-7Si_c19PebYHakmP-DayyV1dPxD0e4fMnKDgYm1oZg5cLAmkgKoeJk3wWJUTylA0ZIVJV9zhMmZV2Ik1nVlhm5haQsKJ34GJ8vaBMaMZLU8BnZjcAYSZY7XrN4wud6Y423iDQSUCpKYTmCEsXAoR90oQzlxmRignbYFZck1ULnm43Px0BtKH-UjOMtvs9E5torCyYxJ9CXpkiBkSzHAfM67utIzqxX8ztWr-SYiW3Oj_2djVxxDFGkDkH_sWAGirVpt6sRqcORCMkYOhk7NO2jTXdIVmFOrN7ZTiobmIRRPJypZPqJHyejUOQF2FA7AU3RLAK7mZuACX4DeuI8B1DX5UOYDuZNES-Z7nk6uGKuJcG5KENCkIqvNcnmIqnU8-1upu-z5ogKaXa5fEBG-z4MeYett6Ai9lCuQn6CXdtaels_xwR1M879X42nbf6aGl6N2sr1TLtkv9vqhXKyfzwajy9zX5bIdnw3KGrBS2Bm8_OfGhfsxc4e1h0lPejcuyBX_uY8yZp_bFcJYAggqjHJk0ec70W5cfrTLr3-DOyDSg5Pyb1YHr0YXbd-p4UeQbfmsfOfw93ia-7GE4WK2pXb2CgHvPLXbjodcD09z5zVa7OO9_lLaBzwajD9cD0afl9-svBnPcmkzi9F5f-v6jz8H4-lku3_jJvcpvMRcmmUABL2ymwZC8PFuojvmkszibqnnRannZSfd_bCThnbr2U23miZj7l-HW8CpoRukIva6mjUYmh7v1iuuy1HbEjyLKCiZ29ve31m6OBidTxiufVOgvPxs8NJQ_aq76neNIUA_JSEHZu7qt2j-dSQW5JMKWpf_FmSWbwW_R-94ugcyK2sKcQ0X4-lsyyP5T5l49G2aT6wu44W4nU1cB1lV1bfk522qZ4-E_1YSfbn8ohREBvhSkq_vSrKC-Dgx6yEprxLPNxh22F3EIJnHt6O_q7s1q1fqIE33BgeXuzNipi-rzLRG1zT-8lWr00Zcs9r9zGXRT3TaAmEU7uQOCA9W2ck2h5PcrMU16Cq6s7YOw3DnGsbZx7u2HE2WfQQFiexdji7-LOKhugs2smo4mu6i71x8eHl1Fx7X6CokKMlGH5S1natZr6FAl3rpqv4CwpJ4x6WlTieFkgbllxFybbFb1yhaiIfB6OOP2ur63C4ynO7mQg5d8Tpr11C8Q9DO9u9qOKzt9AY-d99stbtvdsC-c30X9USomWO1HqbFlEZSOERMhuJi1O7xTLtfXIvqgJrIcFiyWnGa-892BqMndi9YiH6ajTDYdu55ZX-lkSw9yUgOknU52R7W1hjH7_fQJg9evrgnwx9Gl8sFQ8LwHX21qI_cV6Aq-yNFfGIQkbUwsnfliw7CsnZdUWfM4t_ebfQ-HZ7tz89n1ZGvvdPDtrdZ71Ux8alyR40Jf6N3Wj5eas_oEtRZzhjXNA44n3_C8cpv8iAg89PTv943zen_l9Z2cdF8-xeZjriz" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"></iframe>
+
+## Помощь {#support}
+
+* Если у вас возникли вопросы при работе с API, задайте их AI-ассистенту (в правом нижнем углу сайта), используйте поиск по документации или отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+* Если вы хотите обсудить возможности API или его интеграцию с вашим продуктом, обратитесь к менеджеру.
+
+   <CtaButton href="https://dev.2gis.ru/api/map" target="_blank" appearance="lightFill">
+     Получить консультацию
+   </CtaButton>
