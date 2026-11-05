@@ -48,7 +48,7 @@ sidebar: rasterjsapi
 </body>
 ```
 
-Чтобы инициализировать карту, вызовите метод [DG.map()](/maps/others/rasterjs/reference/map), укажите идентификатор контейнера и ваш ключ доступа. Вы также можете указать начальные координаты карты и нужный масштаб:
+Чтобы инициализировать карту, вызовите метод [DG.map()](/maps/others/rasterjs/reference/map) и укажите идентификатор контейнера. Ключ доступа уже передан в `loader.js` на шаге 2. Вы также можете указать начальные координаты карты и нужный масштаб:
 
 ```html
 <script type="text/javascript">
@@ -58,7 +58,6 @@ sidebar: rasterjsapi
         map = DG.map('map', {
             center: [54.98, 82.89],
             zoom: 13,
-            key: 'Your API access key',
         });
     });
 </script>
@@ -102,7 +101,6 @@ DG.marker([54.98, 82.89]).addTo(map).bindPopup('Вы кликнули по мн�
                 map = DG.map('map', {
                     center: [54.98, 82.89],
                     zoom: 13,
-                    key: 'Your API access key',
                 });
 
                 DG.marker([54.98, 82.89]).addTo(map).bindPopup('Вы кликнули на маркер');
