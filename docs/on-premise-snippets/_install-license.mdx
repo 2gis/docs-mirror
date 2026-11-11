@@ -256,6 +256,18 @@
 
    Если вы используете On-Premise версии 1.16.0 и ниже, добавьте аргумент `--with-license-v1` в конец команды.
 
+    1. Если вы получили ошибку `failed to get license type file: not found`, заново загрузите файлы лицензии:
+
+        ```bash
+        docker run --rm \
+          -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
+          --user $(id -u):$(id -g) \
+          2gis/dgctl:3 \
+          pull --only-license --config=/dgctl-config.yaml
+        ```
+
+        После этого снова запросите лицензию.
+
 3. Снова установите сервис с помощью Helm:
 
    ```bash

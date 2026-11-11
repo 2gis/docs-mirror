@@ -5,6 +5,42 @@ sidebar: on-premise-api-platform
 
 Чтобы установить сервисы API-платформы версии 2.44.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-api-platform/releases/dgcli-releases#v3) и следуйте инструкциям по обновлению.
 
+## 2.60.0
+
+Дата релиза: 2026-10-29
+
+<h3 id="dependencies_v2.60.0">Зависимости</h3>
+
+Перед обновлением любого сервиса в составе API-платформы версии 2.60.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"200px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------- | ------ |
+| Утилита 2GIS CLI                         | [3](/on-premise-api-platform/releases/dgcli-releases#v3)      |
+| Базовые сервисы                          | [2.12.0](/on-premise-api-platform/releases/core#2120)  |
+
+Подробнее см. в разделе **Обновление** текущей документации.
+
+<h3 id="new_v2.60.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| API карт<br />(MapGL JS API) | См. [полный список изменений](/mapgl/releases#v1800) с версии 1.78.1 по версию 1.80.0. |
+| API карт<br />(RasterJS API) | <ul><li>Обновлён внутренний адрес, по которому сервис формирует запросы к Tiles API.</li><li>Добавлен параметр `api.tileSet` для указания типа набора тайлов.</li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.60.0/charts/raster-js-api/values.yaml). |
+
+<h3 id="breaking_v2.60.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| | Менеджер Платформы и Styles API стали частью базовых сервисов. Обновите базовые сервисы до версии [2.12.0](/on-premise-api-platform/releases/core#2120) одновременно с API-платформой. |
+| API навигации <br /> (Navi-Back) | Добавлен параметр `naviback.restrictions.indexName` для выбора индекса перекрытий. Возможные значения: `restrictions_index` для получения информации о перекрытиях от <Brand /> и `default` для получения только пользовательских перекрытий из сервиса Restrictions API. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.60.0/charts/navi-back/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/installation#install-navi-back). |
+| API карт<br />(Tiles API) | Если CORS настроен на ingress или прокси, добавьте заголовок `X-Session-ID` в список разрешённых заголовков запросов: `nginx.ingress.kubernetes.io/cors-allow-headers` для nginx или `accessControlAllowHeaders` для Traefik. Иначе браузеры будут блокировать запросы тайлов, даже если на preflight-запрос возвращается HTTP-код `204`. |
+
+<h3 id="bugfix_v2.60.0">Исправленные ошибки/Улучшения</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Изменения |
+| --- | --- |
+| API поиска<br />(Search API v8) | Улучшен внутренний алгоритм поиска и исправлены уязвимости. |
+
 ## 2.59.0
 
 Дата релиза: 2026-09-29
