@@ -1,4 +1,4 @@
-### 6.1. Перед установкой {#before-installing-maps}
+### 9.1. Перед установкой {#before-installing-maps}
 
 1. Ознакомьтесь с:
 
@@ -31,8 +31,7 @@
 4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в Helm-чартах:
 
    * [MapGL JS API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/mapgl-js-api/values.yaml),
-   * [Tiles API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/tiles-api/values.yaml),
-   * [Styles API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/styles-api/values.yaml).
+   * [Tiles API](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/tiles-api/values.yaml).
 
    Подробнее о том, как это сделать, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
 
@@ -48,17 +47,14 @@
 
    * Доменное имя для MapGL JS API: `mapgl-js-api.example.com`.
    * Доменное имя для Tiles API: `tiles-api.example.com`.
-   * Доменное имя для Styles API: `styles.example.com`.
 
-### 6.2. Подготовьте инфраструктуру {#prepare-infrastructure-maps}
+### 9.2. Подготовьте инфраструктуру {#prepare-infrastructure-maps}
 
 :::note[Настройка аналогов из реестра Минцифры]
 
-Если вместо Apache Cassandra, PostgreSQL и Redis вы используете аналоги из реестра Минцифры, для инструкций по их настройке обратитесь к официальной документации этих сервисов.
+Если вместо Apache Cassandra вы используете аналог из реестра Минцифры, для инструкций по его настройке обратитесь к официальной документации этого сервиса.
 
 :::
-
-#### Для установки Tiles API {#for-tiles-api}
 
 Разместите один или несколько инстансов хранилища Apache Cassandra в приватной сети.
 
@@ -77,48 +73,7 @@
 * Имя пользователя для JMX: `jmxuser`.
 * Пароль для JMX: `JMXPASSWORD-MNZLQTFH0MDDHIX8`.
 
-#### Для установки Styles API {#for-styles-api}
-
-Сервис Styles API необходим для подключения пользовательских стилей карты. Styles API является опциональным сервисом и не обязателен для работы API-платформы.
-
-Если вы планируете устанавливать Styles API, выполните дополнительные шаги:
-
-1. Настройте доступ к S3-совместимому хранилищу:
-
-   1. Разместите S3-совместимое хранилище с доменным именем `s3.storage.example.local` в приватной сети. Предполагается, что хранилище работает на стандартном порту `80`.
-
-   2. Создайте ключи для подключения к сервису. Запомните реквизиты.
-
-      **Пример:**
-
-      * Ключ доступа: `PHEI4AHTHEETHAHXEEGE`.
-      * Секретный ключ: `aiw6ahlaeshahngaiJaebie6aeth0aiV2pucuey1`.
-
-   3. Определите название бакета, который будет использоваться для сервиса.
-
-      **Пример:** `styles`.
-
-      Бакет должен быть публичным и иметь настроенный [CORS](https://developer.mozilla.org/ru/docs/Web/HTTP/CORS), чтобы файлы из него были доступны для загрузки из браузера с произвольного хоста.
-
-2. Настройте PostgreSQL:
-
-   1. Разместите кластер PostgreSQL с доменным именем `styles-postgresql.storage.example.local` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
-
-   2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
-
-   3. Создайте пользователя базы данных и установите пароль для него:
-
-      ```sql
-      create user dbuser_styles password 'wNgJamrIym8UAcdX';
-      ```
-
-   4. Создайте базу данных, принадлежащую этому пользователю:
-
-      ```sql
-      create database onpremise_styles owner dbuser_styles;
-      ```
-
-### 6.3. Установите сервисы карт {#install-maps-services}
+### 9.3. Установите сервисы карт {#install-maps-services}
 
 #### Установите сервис Tiles API {#install-tiles-api}
 
@@ -632,144 +587,7 @@
 
       :::
 
-#### Установите сервис Styles API (опционально) {#install-styles-api}
-
-1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/styles-api/README.md).
-
-   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
-
-     <details>
-     <summary><code>values-styles.yaml</code></summary>
-
-   ```yaml
-   dgctlDockerRegistry: docker.registry.example.com
-
-   imagePullSecrets: [onpremise-registry-creds]
-
-   log:
-     level: info
-
-   postgres:
-     host: 'styles-postgresql.storage.example.local'
-     name: 'onpremise_styles'
-     username: dbuser_styles
-     password: wNgJamrIym8UAcdX
-
-   s3:
-     host: 's3.storage.example.local:80'
-     secure: false
-     bucket: 'styles'
-     accessKey: PHEI4AHTHEETHAHXEEGE
-     secretKey: aiw6ahlaeshahngaiJaebie6aeth0aiV2pucuey1
-     publicDomain: ''
-     region: ''
-     verifySsl: false
-
-   api:
-     resources:
-       requests:
-         cpu: 50m
-         memory: 128Mi
-       limits:
-         cpu: 1
-         memory: 256Mi
-
-     ingress:
-       enabled: true
-       className: nginx
-       hosts:
-         - host: styles.example.com
-         paths:
-           - path: /
-             pathType: Prefix
-       tls: []
-       # - hosts:
-       #   - styles-api.example.com
-       #   secretName: secret.tls
-
-   keys:
-     enabled: true
-     url: http://keys-service-api
-     token: STYLES_API_TOKEN
-
-   dgctlStorage:
-     host: artifacts.example.com
-     secure: true
-     bucket: onpremise-artifacts
-     accessKey: AKIAIOSFODNN7EXAMPLE
-     secretKey: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY
-     region: ''
-     manifest: manifests/api-platform/1640661259.json
-
-   stylesImport:
-     startOnDeploy: true
-   ```
-
-     </details>
-
-   Где:
-
-   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
-
-   * `imagePullSecrets`: [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) для доступа к реестру Docker, в котором находятся образы сервисов программного комплекса <Brand />.
-
-   * `log.level`: уровень логирования.
-
-   * `postgres`: настройки доступа к серверу PostgreSQL.
-
-     * `host`: имя или IP-адрес хоста PostgreSQL.
-     * `name`: имя базы данных.
-     * `username`: имя пользователя базы данных PostgreSQL.
-     * `password`: пароль для подключения к базе данных PostgreSQL.
-
-   * `s3`: настройки доступа к S3-совместимому хранилищу.
-
-     * `host`: endpoint S3-совместимого хранилища в формате `HOST:PORT`.
-     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
-     * `bucket`: имя бакета S3 для хранения и публикации стилей.
-     * `accessKey`: идентификатор ключа для доступа к бакету S3.
-     * `secretKey`: секретный ключ для доступа к бакету S3.
-     * `publicDomain`: домен для публичного доступа к S3-совместимому хранилищу по протоколу HTTPS.
-     * `region`: регион S3-совместимого хранилища.
-     * `verifySsl`: включить ли проверку SSL-сертификатов при подключении. Значение по умолчанию: `false`.
-
-   * `api.resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
-
-   * `api.ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
-
-   * `keys`: настройки проверки ключей доступа для импорта стилей карт.
-
-     * `enabled`: включить ли проверку ключей доступа для импорта стилей карт.
-     * `url`: URL сервиса API-ключей. Обязателен, если для параметра `keys.enabled` задано значение `true`.
-     * `token`: сервисный токен для аутентификации в сервисе API-ключей. Обязателен, если для параметра `keys.enabled` задано значение `true`.
-
-   * `dgctlStorage`: настройки доступа к хранилищу артефактов установки, из которого задание импорта стилей скачивает данные со стилями карты по умолчанию. Обязателен, если для параметра `stylesImport.startOnDeploy` задано значение `true`.
-
-     * `host`: endpoint S3-совместимого хранилища артефактов установки в формате `HOST:PORT`.
-     * `secure`: использовать ли HTTPS для работы с S3-совместимым хранилищем. Значение по умолчанию: `false`.
-     * `bucket`: имя бакета S3.
-     * `accessKey`: идентификатор ключа для доступа к бакету S3.
-     * `secretKey`: секретный ключ для доступа к бакету S3.
-     * `region`: регион S3-совместимого хранилища.
-     * `manifest`: путь до файла с манифестом в формате `manifests/api-platform/1640661259.json`. Этот файл содержит в себе описания фрагментов данных, в том числе стилей карты по умолчанию, которые требуются сервису для работы. См. [Жизненный цикл артефактов установки](/on-premise-api-platform/overview/lifecycle).
-
-   * `stylesImport.startOnDeploy`: включить ли автоматический запуск задания импорта стилей карты по умолчанию при установке или обновлении сервиса.
-
-2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-styles.yaml`:
-
-   ```bash
-   helm upgrade --install --version=VERSION --atomic --values ./values-styles.yaml styles-api 2gis-on-premise/styles-api
-   ```
-
-   В параметре `--version` укажите нужную версию API-платформы. Список версий см. в разделе [Релизы API-платформы](/on-premise-api-platform/releases/api-platform).
-
-   :::warning
-
-   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
-
-   :::
-
-### 6.4. Проверьте работоспособность сервисов карт {#test-maps}
+### 9.4. Проверьте работоспособность сервисов карт {#test-maps}
 
 #### Проверьте сервис Tiles API {#test-tiles-api}
 
@@ -881,7 +699,3 @@
     * `key` — API-ключ для доступа к сервису (если для параметра `app.access.enabled` указано значение `true`).
   
 3. Откройте сформированную ссылку в браузере. При успешном ответе вы получите изображение карты в формате PNG.
-
-#### Проверьте сервис Styles API {#test-styles-api}
-
-Чтобы подключить пользовательский стиль карты, установите [Менеджер Платформы](#install-pm) и выполните шаги по [загрузке и применению стиля](/on-premise-api-platform/user-guide/platform-manager#adding-map-style).

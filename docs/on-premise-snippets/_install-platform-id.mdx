@@ -1,0 +1,238 @@
+### 6.1. Перед установкой {#before-installing-platform-id}
+
+1. Ознакомьтесь с:
+
+   * [документацией Platform ID](/on-premise-api-platform/architecture/platform-id);
+   * [архитектурой программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture);
+   * [системными требованиями](/on-premise-api-platform/requirements) к программному обеспечению и вычислительным ресурсам.
+
+2. Убедитесь, что выполнены предварительные шаги:
+
+   1. [Подготовка к установке](#preparation).
+   2. [Установка Менеджера Платформы](#install-pm).
+
+3. Соберите данные, заданные или полученные на предыдущих шагах:
+
+   | Объект                                                | Пример значения               | Как получить значение                            |
+   | ----------------------------------------------------- | ----------------------------- | ------------------------------------------------ |
+   | Endpoint реестра Docker для хранения образов сервисов | `docker.registry.example.com` | См. [Получение артефактов установки](#artifacts) |
+
+4. Убедитесь, что удовлетворены требования к ресурсам, приведённые в [Helm-чарте](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform-id/values.yaml). Подробнее о том, как это сделать, см. в разделе [Системные требования](/on-premise-api-platform/requirements).
+
+   :::note[Используйте подходящий чарт]
+
+   Содержание Helm-чарта, описанное в этом разделе, актуально для последней версии базовых сервисов (см. [Релизы базовых сервисов](/on-premise-api-platform/releases/core)). Чтобы изучить параметры для предыдущих версий, откройте [values.yaml в GitHub](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform-id/values.yaml) и в списке тегов слева выберите тег `Core-<версия>`.
+
+   :::
+
+5. Определите доменное имя для Platform ID. Например, `platform-id.example.com`.
+
+### 6.2. Подготовьте инфраструктуру {#prepare-infrastructure-platform-id}
+
+:::note[Настройка аналогов из реестра Минцифры]
+
+Если вместо PostgreSQL вы используете [аналог из реестра Минцифры](/on-premise-api-platform/requirements), для инструкции по его настройке обратитесь к официальной документации этого сервиса.
+
+:::
+
+#### Настройте PostgreSQL {#configure-postgresql-platform-id}
+
+Platform ID хранит пользователей, сессии и конфигурацию realm-ов в PostgreSQL.
+
+1. Разместите кластер PostgreSQL с доменным именем `postgres.example.com` в приватной сети. Предполагается, что кластер работает на стандартном порту `5432`.
+
+2. Подключитесь к кластеру от имени суперпользователя (обычно это `postgres`).
+
+3. Создайте пользователя базы данных и установите пароль для него:
+
+   ```sql
+   CREATE USER platform_id PASSWORD 'DB_PASSWORD';
+   ```
+
+4. Создайте базу данных, принадлежащую этому пользователю:
+
+   ```sql
+   CREATE DATABASE platform_id OWNER platform_id;
+   ```
+
+   Используйте стандартную схему `public` (значение по умолчанию для параметра `externalDatabase.schema`). Создавать её отдельно не нужно.
+
+Укажите реквизиты пользователя и название базы данных в [конфигурации сервиса](#install-platform-id-service): параметры `externalDatabase.user`, `externalDatabase.password` и `externalDatabase.database`.
+
+:::note
+
+При использовании типовой установки эти команды выполняет installer в initdb-скриптах своего PostgreSQL (`platform_id.sql`).
+
+:::
+
+### 6.3. Установите Platform ID {#install-platform-id-service}
+
+1. Создайте конфигурационный файл для Helm. Подробное описание доступных параметров см. [здесь](https://github.com/2gis/on-premise-helm-charts/blob/master/charts/platform-id/values.yaml).
+
+   Пример файла уже заполнен всеми необходимыми данными, собранными на предыдущих этапах.
+
+   <details>
+   <summary><code>values-platform-id.yaml</code></summary>
+
+   ```yaml
+   dgctlDockerRegistry: docker.registry.example.com
+
+   auth:
+     adminUser: admin
+     adminPassword: ADMIN_PASSWORD
+     # existingSecret: my-secret
+
+   production: true
+
+   httpEnabled: true
+
+   ingress:
+     enabled: true
+     ingressClassName: nginx
+     hostname: platform-id.example.com
+     # annotations:
+     #   nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+     #   nginx.ingress.kubernetes.io/affinity: "cookie"
+     #   nginx.ingress.kubernetes.io/session-cookie-name: "platform-id-cookie"
+     #   nginx.ingress.kubernetes.io/session-cookie-expires: "86400"
+     #   nginx.ingress.kubernetes.io/session-cookie-max-age: "86400"
+     # extraTls:
+     # - hosts:
+     #     - platform-id.example.com
+     #   secretName: secret.tls
+
+   externalDatabase:
+     host: postgres.example.com
+     port: 5432
+     user: platform_id
+     password: DB_PASSWORD
+     database: platform_id
+     schema: public
+
+   realmImport:
+     enabled: true
+
+   replicaCount: 1
+
+   logging:
+     output: default
+     level: INFO
+
+   resources:
+     requests:
+       cpu: 100m
+       memory: 2Gi
+     limits:
+       cpu: 2
+       memory: 4Gi
+
+   # Опционально:
+   # defaultUser:
+   #   enabled: true
+   #   name: admin-user
+   #   email: admin@example.com
+   #   firstName: Admin
+   #   lastName: User
+   #   password: USER_PASSWORD
+   ```
+
+   </details>
+
+   Где:
+
+   * `dgctlDockerRegistry`: endpoint вашего реестра Docker, в котором находятся образы сервисов программного комплекса <Brand /> в формате `HOST:PORT`.
+
+   * `auth`: учётные данные администратора (realm `master`).
+
+     * `adminUser`: имя администратора.
+     * `adminPassword`: пароль администратора.
+     * `existingSecret`: имя существующего секрета Kubernetes с учётными данными администратора. Этот параметр можно использовать вместо `adminPassword`.
+
+   * `production`: запускать ли Keycloak в production-режиме.
+
+   * `httpEnabled`: включить ли принудительно HTTP-endpoint пода (порт `8080`). Укажите `true`, если Ingress терминирует TLS и обращается к поду по HTTP (параметр `ingress.servicePort: http`).
+
+   * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведённую конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hostname`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+     * `enabled`: включить ли Ingress.
+     * `ingressClassName`: класс Ingress-контроллера.
+     * `hostname`: доменное имя Platform ID.
+     * `annotations`: аннотации Ingress. Если вы запускаете несколько реплик (`replicaCount` больше `1`), настройте sticky-сессии, как показано в примере.
+     * `extraTls`: настройки TLS для Ingress. Укажите список доменных имён (`hosts`) и имя секрета Kubernetes с сертификатом (`secretName`).
+
+   * `externalDatabase`: настройки доступа к внешнему серверу PostgreSQL.
+
+     * `host`: имя хоста или IP-адрес сервера.
+     * `port`: порт, на котором слушает сервер.
+     * `user`: имя пользователя базы данных (не суперпользователя), от имени которого Keycloak подключается к базе.
+     * `password`: пароль пользователя базы данных.
+     * `database`: имя базы данных Keycloak.
+     * `schema`: схема базы данных Keycloak.
+
+   * `realmImport.enabled`: включить ли импорт realm-ов при запуске сервиса (`--import-realm`).
+
+   * `replicaCount`: количество реплик сервиса. Распределённый кеш между репликами включён в Helm-чарте по умолчанию (параметр `cache.enabled`, стек `jdbc-ping`).
+
+   * `logging`: настройки логирования.
+
+     * `output`: формат вывода логов. Возможные значения: `default`, `json`.
+     * `level`: уровень логирования. Например, `INFO`.
+
+   * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
+
+   * `defaultUser`: (опционально) настройки стартового пользователя, который создаётся в realm-ах Helm-чарта (например, в realm `Platform`).
+
+     * `enabled`: создавать ли пользователя.
+     * `name`: имя пользователя.
+     * `email`: email пользователя.
+     * `firstName`: имя.
+     * `lastName`: фамилия.
+     * `password`: пароль пользователя.
+
+2. Установите сервис с помощью Helm, используя подготовленный конфигурационный файл `values-platform-id.yaml`:
+
+    ```bash
+    helm upgrade --install --version=VERSION --atomic --values ./values-platform-id.yaml platform-id 2gis-on-premise/platform-id
+    ```
+
+    Чтобы обновить ранее установленный сервис, выполните команду:
+
+    ```bash
+    helm upgrade --version=VERSION --atomic --values ./values-platform-id.yaml platform-id 2gis-on-premise/platform-id
+    ```
+
+    В параметре `--version` укажите нужную версию базовых сервисов. Список версий см. в разделе [Релизы базовых сервисов](/on-premise-api-platform/releases/core).
+
+    :::warning
+
+    Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+    :::
+
+### 6.4. Проверьте работоспособность Platform ID {#test-platform-id}
+
+1. Убедитесь, что доступна публичная OIDC-конфигурация:
+
+   ```bash
+   curl -sk https://platform-id.example.com/realms/Platform/.well-known/openid-configuration
+   ```
+
+   В ответ вы должны получить JSON с полями `issuer`, `authorization_endpoint` и `token_endpoint`.
+
+2. Откройте в браузере форму входа:
+
+   ```text
+   https://platform-id.example.com/realms/Platform/account
+   ```
+
+   Должна открыться страница входа с темой <Brand /> (вход по email).
+
+3. Откройте в браузере консоль администратора:
+
+   ```text
+   https://platform-id.example.com
+   ```
+
+   Перейдите в **Administrative Console** и войдите с учётными данными, указанными в параметрах `auth.adminUser` и `auth.adminPassword` (realm `master`).
+
+4. Проверьте вход в Менеджер Платформы: откройте `https://platform.example.com`. Вы должны быть перенаправлены на форму входа Platform ID. После входа вы должны попасть в Менеджер Платформы.

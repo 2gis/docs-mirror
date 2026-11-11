@@ -43,12 +43,6 @@ sidebar: on-premise-api-platform
 
 Предоставляет JavaScript-библиотеку для интеграции двумерной карты <Brand /> на сайт.
 
-### Styles API
-
-Предоставляет API для подключения пользовательских стилей карты. Вы можете создать собственный стиль в [Редакторе стилей](https://styles.2gis.com/), загрузить его в контур On-Premise через интерфейс [Менеджера Платформы](/on-premise-api-platform/architecture/platform) и подключить к своей карте в настройках MapGL JS API. Подробнее см. в инструкции [Загрузка и применение стиля карты](/on-premise-api-platform/user-guide/platform-manager#adding-map-style).
-
-Если Styles API не установлен, к карте применится стиль по умолчанию.
-
 ### Сервис лицензий
 
 Предоставляет лицензию для доступа к сервису карт. Подробнее см. [архитектуру сервиса лицензий](/on-premise-api-platform/architecture/license).
@@ -79,7 +73,6 @@ sidebar: on-premise-api-platform
 
 * [Прокси для API пробок](/on-premise-api-platform/architecture/trafficproxy). Конфигурации с MapGL JS API и с Mobile SDK используют отдельные экземпляры.
 * Веб-сервер nginx, необходимый для загрузки стилей и иконок.
-* Сервис Styles API, необходимый для загрузки пользовательских стилей, созданных в [Редакторе стилей](https://styles.2gis.com/). Для работы Styles API необходимо настроить PostgreSQL и S3-совместимое хранилище.
 
 Подробнее о том, как проверить требования для каждого сервиса, см. в документе [Системные требования](/on-premise-api-platform/requirements).
 

@@ -30,12 +30,7 @@
 
    :::
 
-5. Определите доменные имена для сервиса API-ключей.
-
-   **Пример:**
-
-   * Веб-интерфейс администратора: `keys-admin.example.com`.
-   * API backend: `keys-api.example.com`.
+5. Определите доменное имя для API backend, например: `keys-api.example.com`.
 
 ### 3.2. Подготовьте инфраструктуру {#prepare-infrastructure-keys}
 
@@ -72,23 +67,6 @@
    ALTER DEFAULT PRIVILEGES FOR ROLE keys_superuser_rw IN SCHEMA public GRANT SELECT ON TABLES TO keys_user_ro;
    ALTER DEFAULT PRIVILEGES FOR ROLE keys_superuser_rw IN SCHEMA public GRANT SELECT ON SEQUENCES TO keys_user_ro;
    ```
-
-#### Настройте LDAP {#configure-ldap}
-
-Чтобы сервисы могли выполнять аутентификацию администраторов сервиса API-ключей, рекомендуется использовать LDAP-сервер (например, Microsoft Active Directory). Этот шаг можно пропустить, если у вас нет возможности развернуть LDAP-сервер и вы собираетесь использовать аутентификацию по plaintext-паролям в конфигурационном файле.
-
-Разместите LDAP-сервер с доменным именем `keys-ldap.storage.example.local` в приватной сети. Предполагается, что сервер работает на стандартном порту `3268`.
-
-1. Получите значения настроек LDAP:
-
-   | Настройка                                                                                                                                                  | Пример значения                            |
-   | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-   | Пользователь для подключения к службе LDAP                                                                                                                 | `keys_ldap_user`                           |
-   | Пароль пользователя для подключения к службе LDAP                                                                                                          | `KEYS_LDAP_PaSSw0rd_8901`                  |
-   | Основное уникальное имя ([base relative distinguished name](https://ldap.com/ldap-dns-and-rdns/)), относительно которого выполняется поиск в каталоге LDAP | `dc=2gis`                                  |
-   | [Фильтр LDAP](https://ldap.com/ldap-filters/), используемый для идентификации записей в поисковых запросах                                                 | `(&(objectClass=user)(sAMAccountName=%s))` |
-
-2. Добавьте в LDAP пользователя `admin`, которому будет назначена роль администратора в сервисе API-ключей.
 
 #### Настройте Apache Kafka {#configure-kafka}
 
@@ -182,26 +160,6 @@
       preloader:
         refreshTick: 10s
 
-    ldap:
-      host: ldap.keys.example.com
-      port: 3268
-
-      useStartTLS: false
-      useLDAPS: false
-      skipServerCertificateVerify: false
-      serverName: ldap.keys.example.com
-      clientCertificatePath: /home/user/certificates/cert.crt
-      clientKeyPath: /home/user/certificates/cert.key
-      rootCertificateAuthoritiesPath: /home/user/certificates/root.cer
-
-      bind:
-        dn: keys_ldap_user
-        password: KEYS_LDAP_PaSSw0rd_8901
-
-      search:
-        baseDN: dc=2gis
-        filter: (&(objectClass=user)(sAMAccountName=%s))
-
     statApi:
       enabled: false
       url: ''
@@ -219,30 +177,12 @@
 
       delay: 30s
 
-    admin:
-      host: https://keys-admin.example.com
-
-      ingress:
-        enabled: true
-        className: nginx
-        hosts:
-          - host: keys-admin.example.com
-            paths:
-              - path: /
-                pathType: Prefix
-        tls: []
-        #- hosts:
-        #  - keys-admin.example.com
-        #  secretName: secret.tls
-
     api:
-      adminUsers: 'admin:8k7RVCP8m3AABDzD'
-
       oidc:
         enabled: true
         enableSinglePartnerMode: true
         enableExternalProvider: true
-        url: https://keycloak.example.com/realms/platform
+        url: https://platform-id.example.com/realms/Platform
         defaultPartner:
           id: 1
           name: 'Partner'
@@ -252,14 +192,22 @@
         enabled: true
         className: nginx
         hosts:
-            - host:  keys-api.example.com
-            paths:
-                - path: /
-                    pathType: Prefix
+        - host:  keys-api.example.com
+          paths:
+          - path: /
+            pathType: Prefix
         tls: []
         # - hosts:
         #   - keys-api.example.com
         #   secretName: secret.tls
+
+    bootstrap:
+      enabled: true
+      logLevel: info
+      ttlSecondsAfterFinished: 86400
+
+    admin:
+      enabled: false
 
     customCAs:
         bundle: ''
@@ -329,32 +277,6 @@
      * `enabled`: включить ли сервис. Значение по умолчанию: `false`.
      * `preloader.refreshTick`: период (в секундах), с которым сервис будет обновлять кеш с информацией о лимитах.
 
-   * `ldap`: настройки доступа к серверу LDAP.
-
-     * `host`: имя хоста или IP-адрес сервера.
-
-     * `port`: порт, на котором слушает сервер.
-
-     * Группа настроек для обеспечения защищенного соединения с сервером LDAP:
-
-       * `useStartTLS`: использовать StartTLS.
-       * `useLDAPS`: использовать Secure LDAP.
-       * `skipServerCertificateVerify`: не проверять сертификат сервера.
-       * `serverName`: строка с именем сервера. Используется при проверке сертификата сервера.
-       * `clientCertificatePath`: путь к сертификату клиента.
-       * `clientKeyPath`: путь к ключу клиента.
-       * `rootCertificateAuthoritiesPath`: путь к файлу с корневыми сертификатами от центров сертификации (root certificate authorities).
-
-     * `bind`: реквизиты для доступа к серверу LDAP:
-
-       * `dn`: уникальное имя пользователя (distinguished name).
-       * `password`: пароль пользователя.
-
-     * `search`: настройки поиска LDAP:
-
-       * `baseDN`: основное относительное уникальное имя ([base relative distinguished name](https://ldap.com/ldap-dns-and-rdns/)).
-       * `filter`: [фильтр LDAP](https://ldap.com/ldap-filters/), используемый для идентификации записей в поисковых запросах.
-
    * `statApi`: настройки доступа к сервису Stat API.
 
      * `enabled`: включён ли сервис. Значение по умолчанию: `false`.
@@ -367,25 +289,9 @@
      * `resources`: настройки вычислительных ресурсов для сервиса. Чтобы узнать рекомендуемые значения ресурсов, см. [Вычислительные ресурсы](/on-premise-api-platform/requirements#resources).
      * `delay`: период (в секундах). Эта настройка определяет, с каким периодом проверять задачи, которые связаны с настроенными отложенными действиями (например, блокировкой API-ключа).
 
-   * `admin`: настройки веб-сервиса администратора (предоставляет доступ к веб-интерфейсу для администрирования сервиса).
-
-     * `host`: URL фронтенда сервиса API-ключей. **Этот URL должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
-
-     * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
-
    * `api`: настройки API сервиса.
-
-      * `adminUsers`: список реквизитов пользователей с административными правами в формате `username1:password1,username2:password2,...`.
-
-        Для хранения этой настройки Helm-чарт использует [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
-
-        :::note
-
-        Если у вас есть сервер LDAP, то рекомендуется использовать его для аутентификации, а настройку `api.adminUsers` пропустить.
-
-        :::
       
-      * `oidc`: настройки внешнего поставщика OpenID Connect (OIDC). Необходимы для работы со статистикой по API-ключам в Менеджере Платформы.
+      * `oidc`: настройки внешнего поставщика OpenID Connect (OIDC). Необходимы для работы с API-ключами, пользователями и статистикой по API-ключам в Менеджере Платформы. В примере конфигурационного файла указаны значения для [Platform ID](/on-premise-api-platform/architecture/platform-id). Если вы используете собственного поставщика OIDC, укажите его значения.
 
         * `enabled`: включить ли аутентификацию через OIDC.
         * `enableSinglePartnerMode`: включить режим одного партнёра — все пользователи привязываются к сконфигурированному партнёру (компании). Статистика по API-ключам будет отображаться только для компании, указанной в параметре `defaultPartner`.
@@ -394,6 +300,14 @@
         * `defaultPartner`: параметры партнёра.
 
       * `ingress`: конфигурация ресурса [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). Адаптируйте приведенную конфигурацию для соответствия используемому вами Ingress. **URL, указанный в параметре `ingress.hosts.host`, должен быть доступен извне вашего кластера Kubernetes, чтобы пользователи из приватного сегмента сети могли получить доступ к ресурсам по этому URL.**
+
+   * `admin.enabled`: включён ли веб-сервис администратора (предоставляет доступ к веб-интерфейсу для администрирования сервиса). Веб-интерфейс администратора устарел: для управления ключами доступа установите значение `false` и используйте Менеджер Платформы.
+
+   * `bootstrap`: настройки задания, которое при первом развёртывании создаёт данные для начала работы с сервисом: партнёра по умолчанию, безлимитную подписку и API-ключ.
+     
+     * `enabled`: включить ли задание.
+     * `logLevel`: уровень логирования для задания `bootstrap`. Установите значение `info` или ниже, чтобы увидеть созданный API-ключ.
+     * `ttlSecondsAfterFinished`: количество секунд, в течение которых сохраняется завершённое задание, после чего автоматически удаляется. Значение по умолчанию `86400`.
 
    * `customCAs`: настройки пользовательских сертификатов.
 
@@ -414,14 +328,6 @@
 
    :::
 
-3. Добавьте пользователей в сервис с помощью утилиты `keysctl`. Этим пользователям будет назначена роль администратора сервиса API-ключей.
-
-   Чтобы добавить одного пользователя, выполните эту команду из любого пода `keys-api`:
-
-   ```bash
-   keysctl users add admin 'Keys Service Admin'
-   ```
-
 ### 3.4. Получите сервисные токены {#fetch-service-keys}
 
 Каждый сервис, который интегрируется с сервисом API-ключей, обязан отправлять информацию об использовании ключей конечными пользователями на бэкенд сервиса API-ключей. Чтобы сервис мог взаимодействовать с этим бэкендом, во время его конфигурации задайте сервисный токен.
@@ -434,16 +340,42 @@ keysctl services
 
 ### 3.5. Проверьте работоспособность сервиса API-ключей {#test-keys-api}
 
-1. Откройте в браузере веб-интерфейс для администрирования сервиса (используйте значение настройки `admin.host` из конфигурационного файла `values-keys.yaml`):
+Выполните запрос к адресу, указанному в параметре `ingress.hosts[0].host` в конфигурационном файле `values-keys.yaml`:
 
-   ```text
-   https://keys-admin.example.com
+   ```bash
+   curl http://keys-api.example.com/healthcheck
    ```
 
-2. Войдите в веб-интерфейс с учётными данными администратора — пользователя, которому назначена роль администратора с помощью утилиты `keysctl`. Вы должны увидеть [веб-интерфейс для управления API-ключами](/on-premise-api-platform/keys).
+Вы должны получить ответ, который выглядит следующим образом:
 
-### 3.6. Создайте API-ключ
+```json
+{
+  "status": "ok",
+  "checks": {
+    "postgres.ro": {
+      "status": "ok",
+      "required": false
+    },
+    "postgres.rw": {
+      "status": "ok",
+      "required": false
+    },
+    "redis": {
+      "status": "ok",
+      "required": false
+    }
+  }
+}
+```
 
-Для работы с сервисами добавьте первого партнёра, оформите для него подписку и выпустите API-ключ. Без корректного API-ключа Catalog APIs не пройдёт проверку работоспособности, а другие сервисы не будут возвращать ответы. Подробнее о создании подписки и API-ключа см. в разделе [Управление доступом к API](/on-premise-api-platform/keys).
+### 3.6. Создайте API-ключ {#create-api-key}
 
-Можно использовать один API-ключ для нескольких сервисов. Для этого убедитесь, что необходимые сервисы включены в настройках ключа.
+Для работы с сервисами нужно создать партнёра, оформить для него подписку и выпустить API-ключ. Без корректного API-ключа Catalog APIs не пройдёт проверку работоспособности, а другие сервисы не будут возвращать ответы.
+
+При первой установке сервиса API-ключей задание `bootstrap` создаёт партнёра по умолчанию, безлимитную подписку и API-ключ (если таблица ключей пуста). Чтобы увидеть созданный API-ключ, убедитесь, что для параметра `bootstrap.logLevel` установлено значение `info` или ниже и выполните команду:
+
+```bash
+kubectl logs job/<bootstrap-job>
+```
+
+Можно использовать один API-ключ для нескольких сервисов. Для этого убедитесь, что эти сервисы включены в [настройках ключа](/on-premise-api-platform/platform-manager#managing-services).

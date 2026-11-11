@@ -1,0 +1,33 @@
+# Styles API
+
+Сервис предоставляет стили карты по умолчанию и API для подключения пользовательских стилей. Вы можете создать собственный стиль в [Редакторе стилей](https://styles.2gis.com/), загрузить его в контур On-Premise через интерфейс [Менеджера Платформы](/on-premise-api-platform/architecture/platform) и подключить к своей карте в настройках MapGL JS API. Подробнее см. в инструкции [Загрузка и применение стиля карты](/on-premise-api-platform/platform-manager#adding-map-style).
+
+Если Styles API не установлен, к карте применится стиль по умолчанию, поставляемый с MapGL JS API.
+
+<NoInvert>
+![Архитектура сервиса Styles API](/img/on-premise/styles-api-architecture.svg)
+</NoInvert>
+
+## Зависимости {#dependencies}
+
+* Сервисы On-Premise:
+
+    * [Сервис лицензий](/on-premise-api-platform/architecture/license).
+    * [Сервис API-ключей](/on-premise-api-platform/architecture/keys).
+    * [Менеджер Платформы](/on-premise-api-platform/architecture/platform).
+
+* Общая инфраструктура:
+
+    * S3-совместимое хранилище.
+    * PostgreSQL.
+
+## Что дальше? {#whats-next}
+
+* Узнайте, как установить сервис: [Установка Styles API](/on-premise-api-platform/installation#install-styles-api).
+
+* Узнайте больше о программном комплексе <Brand />:
+
+  * [Архитектура программного комплекса <Brand />](/on-premise-api-platform/architecture/solution-architecture)
+  * [Системные требования](/on-premise-api-platform/requirements)
+
+

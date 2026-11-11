@@ -2,6 +2,35 @@
 
 Чтобы установить базовые сервисы версии 2.0.0 и выше, установите [утилиту 2GIS CLI версии 3](/on-premise-api-platform/releases/dgcli-releases#v3) и следуйте инструкциям по обновлению.
 
+## 2.12.0
+
+Дата релиза: 2026-10-29
+
+<h3 id="dependencies_v2.12.0">Зависимости</h3>
+
+Перед обновлением любого базового сервиса до версии 2.12.0 убедитесь, что установлены компоненты-зависимости нужных версий:
+
+| <div style={{"width":"170px"}}>Компонент</div> | Минимальная версия |
+| ---------------------------------------------- | ------------------ |
+| Утилита 2GIS CLI                               | [3](/on-premise-api-platform/releases/dgcli-releases#v3)                  |
+
+Подробнее см. в разделе **Обновление** текущей документации.
+
+<h3 id="breaking_v2.12.0">Изменения, влияющие на обратную совместимость</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Описание |
+| --- | --- |
+| Сервис API-ключей | <ul><li>Добавлен блок параметров `bootstrap` для настройки задания, которое при первом развёртывании создаёт партнёра по умолчанию, безлимитную подписку и API-ключ.</li><li>Веб-интерфейс сервиса API-ключей устарел. Для работы с ключами используйте [Менеджер Платформы](/on-premise-api-platform/platform-manager). Добавлен параметр `admin.enabled`, с помощью которого можно отключить веб-интерфейс.</li></ul> |
+| Platform ID | <ul><li>Выпущен Platform ID — сервис для аутентификации и управления пользователями на базе Keycloak. Сервис Keycloak заменён на Platform ID. Helm-чарт и Helm-релиз `keycloak` переименованы в `platform-id`.</li><li>Задание `keycloak-config-cli` заменено на встроенный импорт realm-ов при запуске сервиса (`kc.sh start --import-realm`). Realm-ы из Helm-чарта применяются только при первом развёртывании — после этого конфигурация realm-ов хранится в самой установке, и изменять её нужно через Admin API или Administrative Console.</li><li>Образы `keycloak`, `keycloak-config-cli` и `keycloak-themes` больше не используются. Вместо них используется один образ `platform-id`.</li><li>Удалён блок параметров `keycloakThemes`. Параметр `keycloakConfigCli.enabled` теперь управляет обычным заданием `config-cli` с пустой конфигурацией.</li><li>Существующие realm-ы сохраняют текущую тему входа. В новых установках используется тема `platform-id-2gis` (вход по email).</li></ul>Подробнее см. в разделах [Архитектура Platform ID](/on-premise-api-platform/architecture/platform-id) и [Установка Platform ID](/on-premise-api-platform/installation#install-platform-id). |
+| Менеджер Платформы | Менеджер Платформы стал частью базовых сервисов. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.12.0/charts/platform/values.yaml), а также см. обновлённую [инструкцию по установке](/on-premise-api-platform/installation#install-pm). |
+| Styles API | Сервис Styles API стал частью базовых сервисов. См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.12.0/charts/styles-api/values.yaml), а также см. обновлённую [инструкцию по установке](/on-premise-api-platform/installation#install-styles). |
+
+<h3 id="new_v2.12.0">Новое</h3>
+
+| <div style={{"width":"170px"}}>Сервис</div> | Описание |
+| --- | --- |
+| Сервис API-ключей | <ul><li>В блоки параметров `import`, `migrate` и `dispatcher.cleaner` добавлены параметры:<ul><li>`annotations` — [аннотации](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Kubernetes для задания;</li><li>`labels` — [метки](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Kubernetes для задания;</li><li>`podAnnotations` — [аннотации](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) Kubernetes для пода задания;</li><li>`podLabels` — [метки](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) Kubernetes для пода задания.</li></ul></li></ul> См. [пример values.yaml на GitHub](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.12.0/charts/keys/values.yaml), а также см. [обновлённый конфигурационный файл](/on-premise-api-platform/installation#install-keys). |
+
 ## 2.11.1
 
 Дата релиза: 2026-09-17

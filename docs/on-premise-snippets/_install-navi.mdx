@@ -1,4 +1,4 @@
-### 8.1. Перед установкой {#before-installing-navi}
+### 11.1. Перед установкой {#before-installing-navi}
 
 1. Ознакомьтесь с:
 
@@ -71,7 +71,7 @@
    * Доменное имя для Distance Matrix Async API: `navi-async-matrix.example.com`.
    * Доменное имя для Restrictions API: `navi-restrictions.example.com`.
 
-### 8.2. Подготовьте инфраструктуру {#prepare-infrastructure-navi}
+### 11.2. Подготовьте инфраструктуру {#prepare-infrastructure-navi}
 
 :::note[Настройка аналогов из реестра Минцифры]
 
@@ -192,7 +192,7 @@
    create database onpremise_restrictions owner dbuser_restrictions;
    ```
 
-### 8.3. Создайте файл правил {#rules-file}
+### 11.3. Создайте файл правил {#rules-file}
 
 Navi-Back использует файл правил, чтобы указать, какие типы запросов он может обрабатывать. Это позволяет инстансу Navi-Back запрашивать и хранить минимальный набор данных от Navi-Castle, достаточный для обработки указанных типов запросов.
 
@@ -320,7 +320,7 @@ rules:
       routing: ["driving"]
 ```
 
-### 8.4. Установите сервисы навигации {#install-navi-services}
+### 11.4. Установите сервисы навигации {#install-navi-services}
 
 #### Установите сервис Navi-Castle {#install-navi-castle}
 
@@ -1656,7 +1656,7 @@ rules:
    * `dm`: настройки доступа к Distance Matrix Async API.
 
      * `url`: URL сервиса Distance Matrix Async API.
-     * `key`: API-ключ для доступа к сервису. См. инструкцию [Управление доступом к API](/on-premise-api-platform/keys).
+     * `key`: API-ключ для доступа к сервису. См. инструкцию [Управление API-ключами](/on-premise-api-platform/platform-manager#managing-keys).
 
    * `cities.linkToCitiesFile`: URL файла `cities.conf` c информацией о городах, доступных для VRP Task Manager.
 
@@ -1827,7 +1827,7 @@ rules:
 
    В параметре `--version` укажите ту же версию API-платформы, что и при прошлом выполнении команды.
 
-### 8.5. Проверьте работоспособность сервисов навигации {#test-navi}
+### 11.5. Проверьте работоспособность сервисов навигации {#test-navi}
 
 #### Проверьте сервис Navi-Castle {#test-navi-castle}
 

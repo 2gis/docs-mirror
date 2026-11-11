@@ -1,0 +1,32 @@
+---
+sidebar: on-premise-api-platform
+---
+# Обновление Platform ID
+
+1. (Рекомендуется) Выполните резервное копирование базы данных PostgreSQL, которую использует сервис.
+
+2. Получите новые артефакты для установки.
+
+   1. Укажите в конфигурационном файле 2GIS CLI новую версию компонента `core` (см. [Релизы базовых сервисов](/on-premise-api-platform/releases/core)).
+
+   2. [Выполните команду загрузки](/on-premise-api-platform/installation#fetch-artifacts).
+
+      Дополнительные настройки см. в [справке по командам и аргументам 2GIS CLI](/on-premise-api-platform/overview/2gis-cli/help).
+
+3. Ознакомьтесь со [списком критических изменений](/on-premise-api-platform/releases/core). Если необходимо, обновите настройки в конфигурационном файле `values-platform-id.yaml`. Подробнее см. в [руководстве по установке](/on-premise-api-platform/installation#install-platform-id-service).
+
+4. Выполните команду для обновления сервиса:
+
+   ```bash
+   helm upgrade --version=VERSION --atomic --values ./values-platform-id.yaml platform-id 2gis-on-premise/platform-id
+   ```
+
+   В параметр `--version` подставьте новую версию компонента `core`, которую вы указывали в конфигурационном файле 2GIS CLI.
+
+   :::warning
+
+   Версии сервисов внутри компонента должны быть одинаковыми и совпадать с версией компонента.
+
+   :::
+
+5. [Проверьте работоспособность сервиса](/on-premise-api-platform/installation#test-platform-id).
