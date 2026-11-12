@@ -717,7 +717,7 @@ https://catalog.api.2gis.com/3.0/items/byservicing?building_id=4504235282736775&
 
 ### По сайту {#bysite}
 
-Чтобы найти организацию по адресу сайта, отправьте GET-запрос к [/3.0/items/bysite](/api/search/places/reference/3.0/items/bysite) с параметром `site` — адрес сайта организации, например `site=2gis.ru`.
+Чтобы найти организацию по адресу сайта, отправьте GET-запрос к [/3.0/items/bysite](/api/search/places/reference/3.0/items/bysite) с параметром `site` — адрес сайта организации, например `site=2gis.ru`. Протокол `http(s)://` и поддомен `www.` можно не указывать.
 
 **Пример запроса:**
 
@@ -787,12 +787,12 @@ https://catalog.api.2gis.com/3.0/items/bysite?site=2gis.ru&key=API_KEY
 
 ### По номеру телефона {#byphone}
 
-Чтобы найти организацию по номеру телефона, отправьте GET-запрос к [/3.0/items/byphone](/api/search/places/reference/3.0/items/byphone) с параметром `phone` — номер телефона организации, например `phone=+7(495)1234567`.
+Чтобы найти организацию по номеру телефона, отправьте GET-запрос к [/3.0/items/byphone](/api/search/places/reference/3.0/items/byphone) с параметром `phone` — номер телефона организации, например `phone=+74951234567`.
 
 **Пример запроса:**
 
 ```bash
-https://catalog.api.2gis.com/3.0/items/byphone?phone=+7(495)1234567&key=API_KEY
+https://catalog.api.2gis.com/3.0/items/byphone?phone=+74951234567&key=API_KEY
 ```
 
 **Пример ответа:**
