@@ -3,6 +3,24 @@ sidebar: iossdk
 ---
 # Релизы
 
+## 14.3.0 (2026-11-10)
+
+### 🌟 Новые возможности
+
+* [MapObjectManager.setPreRenderProcessor()](/ios/sdk/reference/stable/class#map-object-manager/set-pre-render-processor) — метод для подключения обработчика покадрового перемещения объектов. Чтобы отключить обработку и вернуть объекты в положения, заданные их геометрией, передайте в метод `nil`.
+* Добавлен встроенный экран настроек навигации в UIKit-элементы навигатора, ранее доступный только в SwiftUI. Для подключения используйте [NavigationViewOptions.navigationSettings](/ios/sdk/reference/stable/struct#navigation-view-options/var-navigation-settings). Вы можете открыть экран из дашборда навигатора, применять настройки во время навигации и использовать собственный обработчик [onSettingsClick](/ios/sdk/reference/stable/struct#navigation-settings-configuration/var-on-settings-click). Если в конфигурации не заданы репозиторий и обработчик, создаётся стандартный репозиторий с хранением настроек в `UserDefaults.standard`.
+* [RouteEditorView.navigationSettings()](/ios/sdk/reference/stable/struct#route-editor-view/navigation-settings) — метод для отображения кнопки параметров маршрута и встроенного экрана настроек в SwiftUI-элементе для редактирования маршрутов. Вы можете использовать собственную тему и обработчик открытия настроек.
+* [NavigationSettingsKeys.soundDuckOtherAudio](/ios/sdk/reference/stable/enumeration#navigation-settings-keys/static-let-sound-duck-other-audio), [SoundSettingsViewModel.duckOtherAudioEnabled](/ios/sdk/reference/stable/interface#sound-settings-view-model/var-duck-other-audio-enabled) и [SoundSettingsViewModel.setDuckOtherAudioEnabled()](/ios/sdk/reference/stable/interface#sound-settings-view-model/set-duck-other-audio-enabled) — приглушение звука других приложений во время голосовых подсказок навигатора. Настройка применяется через [AudioSettings.audioFocusPolicy](/ios/sdk/reference/stable/class#audio-settings/var-audio-focus-policy).
+* [RouteEditorViewTheme.Icons.parameters](/ios/sdk/reference/stable/struct#route-editor-view-theme) — свойство для настройки иконки кнопки параметров маршрута.
+* [NavigationSettingsViewTheme.Fonts.selectedVoiceName](/ios/sdk/reference/stable/struct#navigation-settings-view-theme) — свойство для настройки шрифта названия выбранного голосового пакета.
+
+### 🛠 Исправления
+
+* Исправлено обновление кластеризации объектов при их одновременном добавлении и удалении, изменении атрибутов и видимости. Теперь пересчёт кластеров и завершение загрузки объектов учитывают все незавершённые операции, в том числе при подключении источника к другой карте.
+* Исправлено отображение [DirectorySearchView](/ios/sdk/reference/stable/struct#directory-search-view) в альбомной ориентации: результаты поиска отображаются в боковой панели, поле ввода запроса раскрывается на весь экран, а отступы видимой области карты обновляются при смене ориентации и фокуса.
+* Исправлены анимации раскрытия нижней панели в [RouteEditorView](/ios/sdk/reference/stable/struct#route-editor-view), синхронизация горизонтального и вертикального списков маршрутов и размещение кнопки параметров маршрута.
+* Исправлены ошибки на экранах настроек навигации: переключение звуковых режимов и предупреждений, отображение выбранного голосового пакета, фильтры общественного транспорта и дублирование разделов транспорта. Обновлены разделители, размеры галочек и шрифты.
+
 ## 14.2.0 (2026-10-13)
 
 ### 🌟 Новые возможности
