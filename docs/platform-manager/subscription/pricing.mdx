@@ -1,17 +1,198 @@
 ---
 sidebar: platform-manager
 ---
-# Тарифы и правила тарификации
+# Тарифы и лимиты
 
-На этой странице представлена информация о деталях тарификации, лимитах и стоимости [сервисов](/platform-manager/subscription/services) в подписке.
+На этой странице представлена информация о [стоимости сервисов в подписке](#pricing), [деталях тарификации](#billable-units) и [лимитах](#limits) для демо-ключей и ключей в оплаченной подписке.
 
 Тарификация основана на количестве успешно обработанных запросов или полученных единиц тарификации (маршрутов, тайлов и т. д.). Доступ к сервисам приобретается пакетами с фиксированным количеством единиц тарификации и лимитом запросов.
 
-Вы также можете посмотреть информацию о ценах на покупку и докупку сервисов на странице **Стоимость** в Менеджере Платформы.
+Вы также можете посмотреть цены на странице **Стоимость** в Менеджере Платформы.
 
 <CtaButton href="https://platform.2gis.ru/ru/tariffs?utm_source=docs&utm_medium=referral&utm_campaign=account" target="_blank">
   В кабинет
 </CtaButton>
+
+## Сервисы и стоимость {#pricing}
+
+Ниже указана стоимость покупки и докупки сервисов для количества единиц тарификации за платёжный месяц. Цены указаны в российских рублях (RUB). При покупке подписки на год действует скидка 10 % на стоимость сервисов.
+
+:::note[Map Tiles API]
+
+   Условия годовой оплаты Map Tiles API приведены на вкладке **Годовые тарифы**.
+
+:::
+
+Администрация сервиса вправе создавать и распространять промокоды на скидку, которые вы вводите при оплате (либо промокод валидируется через ссылку). Скидка по промокоду может суммироваться с годовой скидкой. Скидка по нескольким промокодам одновременно не допускается.
+
+Докупка сервисов позволяет в рамках текущей подписки приобрести доступ к сервисам, которые не были подключены при оформлении подписки, или увеличить лимиты для подключённых сервисов. Подробнее см. в разделе [Покупка дополнительных лимитов и сервисов](/platform-manager/subscription/purchase#upgrading).
+
+### Карты {#pricing-maps}
+
+| <div style={{"width":"150px"}}>Сервис</div> | Возможности |
+| ------ | ----------- |
+| [Map Tiles API](/maps/others/maptiles/overview) | Векторные тайлы и доступ к библиотеке [MapGL JS API](/mapgl/overview/features) для добавления трёхмерной интерактивной карты на сайт или в веб-приложение. |
+| [Raster Tiles API](/maps/others/rastertiles/overview) | Растровые тайлы и встроенная библиотека [RasterJS API](/maps/others/rasterjs/overview) для добавления двумерной карты на сайт или в веб-приложение. |
+| [Static API](/maps/others/static/overview) | Статичное изображение карты без использования JavaScript-библиотек. |
+
+<Tabs>
+<TabItem value="maps-main" label="Тарифы на покупку сервисов" default>
+
+| <div style={{"width":"150px"}}>Сервис</div> | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц | 130&nbsp;млн&nbsp;единиц |
+| ------ | ---------------- | ---------------- | ---------------- | ---------------- | ------------------ | ------------------ | ------------ | ------------------ | ------------------ |
+| Map&nbsp;Tiles&nbsp;API¹ | 8&nbsp;000&nbsp;₽ | 19&nbsp;200&nbsp;₽ | 32&nbsp;000&nbsp;₽ | 42&nbsp;000&nbsp;₽ | 56&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 120&nbsp;000&nbsp;₽ | ✗ | 200&nbsp;000&nbsp;₽ |
+| Raster&nbsp;Tiles&nbsp;API | ✗ | ✗ | 3&nbsp;500&nbsp;₽ | 4&nbsp;200&nbsp;₽ | 5&nbsp;600&nbsp;₽ | 7&nbsp;400&nbsp;₽ | 14&nbsp;700&nbsp;₽ | 24&nbsp;500&nbsp;₽ | ✗ |
+| Static&nbsp;API | ✗ | ✗ | 12&nbsp;500&nbsp;₽ | 13&nbsp;200&nbsp;₽ | 17&nbsp;500&nbsp;₽ | 18&nbsp;800&nbsp;₽ | 37&nbsp;500&nbsp;₽ | 62&nbsp;500&nbsp;₽ | ✗ |
+
+¹ Покупка Map Tiles API включает безлимитный доступ к MapGL JS API.
+
+</TabItem>
+<TabItem value="maps-additional" label="Тарифы на докупку сервисов">
+
+| <div style={{"width":"150px"}}>Сервис</div> | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц | 130&nbsp;млн&nbsp;единиц |
+| ------ | ---------------- | ---------------- | ---------------- | ---------------- | ------------------ | ------------------ | ------------ | ------------------ | ------------------ |
+| Map&nbsp;Tiles&nbsp;API¹ | 8&nbsp;001&nbsp;₽ | 19&nbsp;201&nbsp;₽ | 32&nbsp;001&nbsp;₽ | 42&nbsp;001&nbsp;₽ | 56&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 120&nbsp;001&nbsp;₽ | ✗ | 200&nbsp;001&nbsp;₽ |
+| Raster&nbsp;Tiles&nbsp;API | ✗ | ✗ | 3&nbsp;501&nbsp;₽ | 4&nbsp;201&nbsp;₽ | 5&nbsp;601&nbsp;₽ | 7&nbsp;401&nbsp;₽ | 14&nbsp;701&nbsp;₽ | 24&nbsp;501&nbsp;₽ | ✗ |
+| Static&nbsp;API | ✗ | ✗ | 12&nbsp;501&nbsp;₽ | 13&nbsp;201&nbsp;₽ | 17&nbsp;501&nbsp;₽ | 18&nbsp;801&nbsp;₽ | 37&nbsp;501&nbsp;₽ | 62&nbsp;501&nbsp;₽ | ✗ |
+
+¹ Покупка Map Tiles API включает безлимитный доступ к MapGL JS API.
+
+</TabItem>
+<TabItem value="maps-annual" label="Годовые тарифы">
+
+Для Map Tiles API при оплате сразу за год действуют цены из таблицы ниже, они уже включают скидки. Для Raster Tiles API и Static API доступны те же пакеты, что и при оплате за месяц, со скидкой 10 %.
+
+| <div style={{"width":"150px"}}>Сервис</div> | 100&nbsp;000&nbsp;единиц | 130&nbsp;млн&nbsp;единиц |
+| ------ | ---------------- | ------------------ |
+| Map&nbsp;Tiles&nbsp;API¹ | 86&nbsp;400&nbsp;₽ | 200&nbsp;000&nbsp;₽ |
+
+¹ Покупка Map Tiles API включает безлимитный доступ к MapGL JS API.
+
+</TabItem>
+</Tabs>
+
+### Поиск {#pricing-search}
+
+| <div style={{"width":"150px"}}>Сервис</div> | Возможности |
+| ------ | ----------- |
+| [Places API](/api/search/places/overview) | Поиск организаций, зданий и мест по различным критериям. |
+| [Geocoder API](/api/search/geocoder/overview) | Определение координат по адресу и адреса по координатам, получение сведений об объекте. |
+| [Suggest API](/api/search/suggest/overview) | Подсказки при вводе названий и категорий объектов. |
+| [Categories API](/api/search/categories/overview) | Категории организаций для использования совместно с Places API. |
+| [Regions API](/api/search/regions/overview) | Выбор территории поиска для других API. |
+| [Markers API](/api/search/markers/overview) | Поиск организаций, зданий и мест для отображения маркеров на карте. |
+
+Некоторые методы и поля Places API, Geocoder API и Suggest API оплачиваются отдельно: см. [Дополнительные платные данные](#additional-data).
+
+<Tabs>
+<TabItem value="search-main" label="Тарифы на покупку сервисов" default>
+
+| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
+| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
+| Places&nbsp;API     | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Geocoder&nbsp;API   | 4&nbsp;700&nbsp;₽ | 10&nbsp;500&nbsp;₽ | 14&nbsp;000&nbsp;₽ | 21&nbsp;000&nbsp;₽ | 32&nbsp;700&nbsp;₽ | 44&nbsp;400&nbsp;₽ | 55&nbsp;500&nbsp;₽ | 70&nbsp;000&nbsp;₽ | 96&nbsp;900&nbsp;₽ | 128&nbsp;400&nbsp;₽ | 175&nbsp;000&nbsp;₽ |
+| Suggest&nbsp;API    | ✗       | ✗        | ✗        | 7&nbsp;000&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 26&nbsp;700&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 45&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 75&nbsp;000&nbsp;₽ |
+| Categories&nbsp;API | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Regions&nbsp;API    | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Markers&nbsp;API    | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+
+</TabItem>
+<TabItem value="search-additional" label="Тарифы на докупку сервисов">
+
+| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
+| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
+| Places&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Geocoder&nbsp;API | 4&nbsp;701&nbsp;₽ | 10&nbsp;501&nbsp;₽ | 14&nbsp;001&nbsp;₽ | 21&nbsp;001&nbsp;₽ | 32&nbsp;701&nbsp;₽ | 44&nbsp;401&nbsp;₽ | 55&nbsp;501&nbsp;₽ | 70&nbsp;001&nbsp;₽ | 96&nbsp;901&nbsp;₽ | 128&nbsp;401&nbsp;₽ | 175&nbsp;001&nbsp;₽ |
+| Suggest&nbsp;API | ✗ | ✗ | ✗ | 7&nbsp;001&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 26&nbsp;701&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 45&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 75&nbsp;001&nbsp;₽ |
+| Categories&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Regions&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Markers&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+
+</TabItem>
+</Tabs>
+
+#### Дополнительные платные данные {#additional-data}
+
+Часть информации об объектах доступна только по отдельному запросу и за дополнительную плату. Чтобы приобрести доступ к методам и полям ниже, свяжитесь с [отделом продаж <Brand />](https://dev.2gis.ru/api#form):
+
+* Методы Places API:
+
+   * [/3.0/items/bysite](/api/search/places/reference/3.0/items/bysite) — поиск компаний по сайту;
+   * [/3.0/items/byphone](/api/search/places/reference/3.0/items/byphone) — поиск компаний по номеру телефона;
+   * [/3.0/items/byitin](/api/search/places/reference/3.0/items/byitin) — поиск компаний по ИНН;
+   * [/3.0/items/bytradelicense](/api/search/places/reference/3.0/items/bytradelicense) — поиск компаний по торговой лицензии;
+   * [/3.0/items/byfias](/api/search/places/reference/3.0/items/byfias) — поиск компаний по ФИАС-коду.
+
+* Поля в Places API, Geocoder API и Suggest API (указываются с помощью параметра `fields`):
+
+   * `items.contact_groups` — контакты компании;
+   * `items.floors` — количество этажей;
+   * `items.floor_plans` — планы этажей;
+   * `items.links.database_entrances.apartments_info` — информация о квартирах в доме;
+   * `items.employees_org_count` — численность сотрудников организации;
+   * `items.itin` — индивидуальный номер налогоплательщика;
+   * `items.trade_license` — лицензия филиала;
+   * `items.fias_code` — код ФИАС улиц и административных территорий;
+   * `items.address.components.fias_code` — код ФИАС зданий;
+   * `items.fns_code` — код ФНС административных территорий;
+   * `items.okato` — код ОКАТО улиц и административных территорий;
+   * `items.address.components.okato` — код ОКАТО зданий;
+   * `items.oktmo` — код ОКТМО улиц и административных территорий;
+   * `items.address.components.oktmo` — код ОКТМО зданий;
+   * `items.structure_info.material` — материал здания;
+   * `items.structure_info.apartments_count` — количество квартир;
+   * `items.structure_info.porch_count` — количество подъездов;
+   * `items.structure_info.floor_type` — тип перекрытий в здании;
+   * `items.structure_info.gas_type` — тип газоснабжения здания;
+   * `items.structure_info.year_of_construction` — год постройки здания;
+   * `items.structure_info.elevators_count` — количество лифтов в здании;
+   * `items.structure_info.is_in_emergency_state` — факт признания дома аварийным;
+   * `items.structure_info.project_type` — серия или проект постройки здания;
+   * `items.structure_info.chs_name` — название объекта культурного наследия;
+   * `items.structure_info.chs_category` — категория объекта культурного наследия.
+
+### Навигация {#pricing-navigation}
+
+| <div style={{"width":"150px"}}>Сервис</div> | Возможности |
+| ------ | ----------- |
+| [Routing API](/api/navigation/routing/overview) | Маршруты на автомобиле, грузовом транспорте, такси, велосипеде, самокате, мотоцикле, общественном транспорте, для экстренных служб и пешеходов. В мобильном SDK используется только для маршрутов на общественном транспорте. |
+| [Distance Matrix API](/api/navigation/distance-matrix/overview) | Расчёт расстояний и времени в пути для множества точек. |
+| [TSP API](/api/navigation/tsp/overview) | Кратчайший по времени или расстоянию маршрут обхода точек: решение задачи коммивояжёра (TSP/VRP). |
+| [Isochrone API](/api/navigation/isochrone/overview) | Зоны доступности для автомобильных, велосипедных, пешеходных маршрутов и маршрутов на общественном транспорте. |
+| [Map Matching API](/api/navigation/map-matching/overview) | Автомобильный маршрут по набору точек, записанных транспортным средством. |
+| [Radar API](/api/navigation/radar/overview) | Определение приблизительного местоположения устройства по точкам доступа Wi-Fi и сотовым вышкам. |
+| [Directions API](/api/navigation/directions/overview) | Маршруты на автомобиле, такси, велосипеде, самокате, мотоцикле, грузовике и пешеходные маршруты. Доступен только для работы с мобильным SDK. |
+
+<Tabs>
+<TabItem value="navi-main" label="Тарифы на покупку сервисов" default>
+
+| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
+| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
+| Routing&nbsp;API         | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Distance&nbsp;Matrix&nbsp;API | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| TSP&nbsp;API             | 14&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 40&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 93&nbsp;400&nbsp;₽ | 126&nbsp;800&nbsp;₽ | 158&nbsp;400&nbsp;₽ | 200&nbsp;000&nbsp;₽ | 276&nbsp;800&nbsp;₽ | 366&nbsp;800&nbsp;₽ | 500&nbsp;000&nbsp;₽ |
+| Directions&nbsp;API | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Truck&nbsp;Directions&nbsp;API | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Isochrone&nbsp;API       | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Map&nbsp;Matching&nbsp;API    | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
+| Radar&nbsp;API           | ✗        | ✗        | ✗        | 7&nbsp;000&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 26&nbsp;700&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 45&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 75&nbsp;000&nbsp;₽ |
+
+</TabItem>
+<TabItem value="navi-additional" label="Тарифы на докупку сервисов">
+
+| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
+| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
+| Routing&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Distance&nbsp;Matrix&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| TSP&nbsp;API | 14&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 40&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 93&nbsp;401&nbsp;₽ | 126&nbsp;801&nbsp;₽ | 158&nbsp;401&nbsp;₽ | 200&nbsp;001&nbsp;₽ | 276&nbsp;801&nbsp;₽ | 366&nbsp;801&nbsp;₽ | 500&nbsp;001&nbsp;₽ |
+| Directions&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Truck&nbsp;Directions&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Isochrone&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Map&nbsp;Matching&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
+| Radar&nbsp;API | ✗ | ✗ | ✗ | 7&nbsp;001&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 26&nbsp;701&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 45&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 75&nbsp;001&nbsp;₽ |
+
+</TabItem>
+</Tabs>
 
 ## Единицы тарификации {#billable-units}
 
@@ -76,17 +257,19 @@ HTTP-код ответа API содержится в поле `meta.code` в т�
 
 В рамках подписки действуют лимиты на использование [единиц тарификации](#billable-units) двух видов:
 
-* В течение платёжного месяца. Этот лимит определяется при [оформлении подписки](/platform-manager/subscription/purchase#purchasing) и расходуется всеми ключами в подписке. См. доступные пакеты единиц тарификации в разделе [Стоимость](#pricing).
-    
-    При превышении этого лимита доступ к сервису будет временно ограничен для всех ключей в подписке. Вы можете дополнительно уменьшить этот лимит для отдельных ключей: см. раздел [Настройка лимитов для сервисов](/platform-manager/subscription/managing-keys#configuring-limits). Чтобы увеличить этот лимит, вы можете докупить дополнительные единицы тарификации: см. раздел [Покупка дополнительных лимитов и сервисов](/platform-manager/subscription/purchase#upgrading). 
+* В течение платёжного месяца. Этот лимит определяется при [оформлении подписки](/platform-manager/subscription/purchase#purchasing) и расходуется всеми ключами в подписке. См. доступные пакеты единиц тарификации в разделе [Сервисы и стоимость](#pricing).
+
+    При превышении этого лимита доступ к сервису будет временно ограничен для всех ключей в подписке. Вы можете дополнительно уменьшить этот лимит для отдельных ключей: см. раздел [Настройка лимитов для сервисов](/platform-manager/subscription/managing-keys#configuring-limits). Чтобы увеличить этот лимит, вы можете докупить дополнительные единицы тарификации: см. раздел [Покупка дополнительных лимитов и сервисов](/platform-manager/subscription/editing#upgrading).
 
 * В минуту. Этот лимит фиксирован для каждого сервиса и не может быть увеличен. Точные значения указаны в таблицах ниже.
-    
+
     При превышении этого лимита любым из ключей в подписке доступ к сервису будет временно ограничен для всех ключей. Вы можете дополнительно уменьшить этот лимит для отдельных ключей: см. раздел [Настройка лимитов для сервисов](/platform-manager/subscription/managing-keys#configuring-limits).
 
-Для [демо-ключей](/platform-manager/subscription/keys#demo) действуют [лимиты](#demo-limits) на количество запросов (единиц тарификации).
+Для [демо-ключей](/platform-manager/demo-key) действуют лимиты на количество запросов (единиц тарификации).
 
 ### Карты {#limits-maps}
+
+Лимиты для ключей в подписке:
 
 | <div style={{"width":"150px"}}>Сервис</div> | Лимит единиц в минуту |
 | ------ | --- |
@@ -94,7 +277,17 @@ HTTP-код ответа API содержится в поле `meta.code` в т�
 | Raster&nbsp;Tiles&nbsp;API | 3 000 |
 | Static&nbsp;API | 3 000 |
 
+Лимиты для демо-ключа:
+
+| <div style={{"width":"150px"}}>Сервис</div> | Общий лимит запросов |
+| ------ | --- |
+| Map&nbsp;Tiles&nbsp;API | 500 000 |
+| Raster&nbsp;Tiles&nbsp;API | 30 000 |
+| Static&nbsp;API | 30 000 |
+
 ### Поиск {#limits-search}
+
+Лимиты для ключей в подписке:
 
 | <div style={{"width":"150px"}}>Сервис</div> | Лимит единиц в минуту |
 | ------ | --- |
@@ -105,7 +298,20 @@ HTTP-код ответа API содержится в поле `meta.code` в т�
 | Regions&nbsp;API | 600 |
 | Markers&nbsp;API | 600 |
 
+Лимиты для демо-ключа:
+
+| <div style={{"width":"150px"}}>Сервис</div> | Общий лимит запросов |
+| ------ | --- |
+| Places&nbsp;API | 1 000 |
+| Geocoder&nbsp;API | 1 000 |
+| Suggest&nbsp;API | 1 000 |
+| Categories&nbsp;API | 1 000  |
+| Regions&nbsp;API | 1 000 |
+| Markers&nbsp;API | 1 000 |
+
 ### Навигация {#limits-navigation}
+
+Лимиты для ключей в подписке:
 
 | <div style={{"width":"150px"}}>Сервис</div> | Лимит единиц в минуту |
 | ------ | --- |
@@ -118,28 +324,7 @@ HTTP-код ответа API содержится в поле `meta.code` в т�
 | Map&nbsp;Matching&nbsp;API | 600 |
 | Radar&nbsp;API | 600 |
 
-### Лимиты для демо-ключей {#demo-limits}
-
-#### Карты {#demo-limits-maps}
-
-| <div style={{"width":"150px"}}>Сервис</div> | Общий лимит запросов |
-| ------ | --- |
-| Map&nbsp;Tiles&nbsp;API | 500 000 |
-| Raster&nbsp;Tiles&nbsp;API | 30 000 |
-| Static&nbsp;API | 30 000 |
-
-#### Поиск {#demo-limits-search}
-
-| <div style={{"width":"150px"}}>Сервис</div> | Общий лимит запросов |
-| ------ | --- |
-| Places&nbsp;API | 1 000 |
-| Geocoder&nbsp;API | 1 000 |
-| Suggest&nbsp;API | 1 000 |
-| Categories&nbsp;API | 1 000  |
-| Regions&nbsp;API | 1 000 |
-| Markers&nbsp;API | 1 000 |
-
-#### Навигация {#demo-limits-navigation}
+Лимиты для демо-ключа:
 
 | <div style={{"width":"150px"}}>Сервис</div> | Общий лимит запросов |
 | ------ | --- |
@@ -151,115 +336,3 @@ HTTP-код ответа API содержится в поле `meta.code` в т�
 | Isochrone&nbsp;API | 1 000 |
 | Map&nbsp;Matching&nbsp;API | 1 000 |
 | Radar&nbsp;API | 1 000 |
-
-## Стоимость сервисов {#pricing}
-
-Ниже указана стоимость покупки и докупки сервисов для количества единиц тарификации за платёжный месяц. Цены указаны в российских рублях (RUB). При покупке подписки на год действует скидка 10 % на стоимость сервисов.
-:::note[Map Tiles API]
-
-   Условия годовой оплаты Map Tiles API приведены на вкладке **Годовые тарифы**.
-
-:::
-Администрация сервиса вправе создавать и распространять промокоды на скидку, которые вы вводите при оплате (либо промокод валидируется через ссылку). Скидка по промокоду может суммироваться с годовой скидкой. Скидка по нескольким промокодам одновременно не допускается.
-
-Докупка сервисов позволяет в рамках текущей подписки приобрести доступ к сервисам, которые не были подключены при оформлении подписки, или увеличить лимиты для подключённых сервисов. Подробнее см. в разделе [Покупка дополнительных лимитов и сервисов](/platform-manager/subscription/purchase#upgrading).
-
-### Карты {#pricing-maps}
-
-<Tabs>
-<TabItem value="maps-main" label="Тарифы на покупку сервисов" default>
-
-| <div style={{"width":"150px"}}>Сервис</div> | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц | 130&nbsp;млн&nbsp;единиц |
-| ------ | ---------------- | ---------------- | ---------------- | ---------------- | ------------------ | ------------------ | ------------ | ------------------ | ------------------ |
-| Map&nbsp;Tiles&nbsp;API¹ | 8&nbsp;000&nbsp;₽ | 19&nbsp;200&nbsp;₽ | 32&nbsp;000&nbsp;₽ | 42&nbsp;000&nbsp;₽ | 56&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 120&nbsp;000&nbsp;₽ | ✗ | 200&nbsp;000&nbsp;₽ |
-| Raster&nbsp;Tiles&nbsp;API | ✗ | ✗ | 3&nbsp;500&nbsp;₽ | 4&nbsp;200&nbsp;₽ | 5&nbsp;600&nbsp;₽ | 7&nbsp;400&nbsp;₽ | 14&nbsp;700&nbsp;₽ | 24&nbsp;500&nbsp;₽ | ✗ |
-| Static&nbsp;API | ✗ | ✗ | 12&nbsp;500&nbsp;₽ | 13&nbsp;200&nbsp;₽ | 17&nbsp;500&nbsp;₽ | 18&nbsp;800&nbsp;₽ | 37&nbsp;500&nbsp;₽ | 62&nbsp;500&nbsp;₽ | ✗ |
-
-¹ Покупка Map Tiles API включает безлимитный доступ к MapGL JS API.
-
-</TabItem>
-<TabItem value="maps-additional" label="Тарифы на докупку сервисов">
-
-| <div style={{"width":"150px"}}>Сервис</div> | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц | 130&nbsp;млн&nbsp;единиц |
-| ------ | ---------------- | ---------------- | ---------------- | ---------------- | ------------------ | ------------------ | ------------ | ------------------ | ------------------ |
-| Map&nbsp;Tiles&nbsp;API¹ | 8&nbsp;001&nbsp;₽ | 19&nbsp;201&nbsp;₽ | 32&nbsp;001&nbsp;₽ | 42&nbsp;001&nbsp;₽ | 56&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 120&nbsp;001&nbsp;₽ | ✗ | 200&nbsp;001&nbsp;₽ |
-| Raster&nbsp;Tiles&nbsp;API | ✗ | ✗ | 3&nbsp;501&nbsp;₽ | 4&nbsp;201&nbsp;₽ | 5&nbsp;601&nbsp;₽ | 7&nbsp;401&nbsp;₽ | 14&nbsp;701&nbsp;₽ | 24&nbsp;501&nbsp;₽ | ✗ |
-| Static&nbsp;API | ✗ | ✗ | 12&nbsp;501&nbsp;₽ | 13&nbsp;201&nbsp;₽ | 17&nbsp;501&nbsp;₽ | 18&nbsp;801&nbsp;₽ | 37&nbsp;501&nbsp;₽ | 62&nbsp;501&nbsp;₽ | ✗ |
-
-¹ Покупка Map Tiles API включает безлимитный доступ к MapGL JS API.
-
-</TabItem>
-<TabItem value="maps-annual" label="Годовые тарифы">
-
-Для Map Tiles API при оплате сразу за год действуют цены из таблицы ниже, они уже включают скидки. Для Raster Tiles API и Static API доступны те же пакеты, что и при оплате за месяц, со скидкой 10 %.
-
-| <div style={{"width":"150px"}}>Сервис</div> | 100&nbsp;000&nbsp;единиц | 130&nbsp;млн&nbsp;единиц |
-| ------ | ---------------- | ------------------ |
-| Map&nbsp;Tiles&nbsp;API¹ | 86&nbsp;400&nbsp;₽ | 200&nbsp;000&nbsp;₽ |
-
-¹ Покупка Map Tiles API включает безлимитный доступ к MapGL JS API.
-
-</TabItem>
-</Tabs>
-
-### Поиск {#pricing-search}
-
-<Tabs>
-<TabItem value="search-main" label="Тарифы на покупку сервисов" default>
-
-| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
-| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
-| Places&nbsp;API     | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Geocoder&nbsp;API   | 4&nbsp;700&nbsp;₽ | 10&nbsp;500&nbsp;₽ | 14&nbsp;000&nbsp;₽ | 21&nbsp;000&nbsp;₽ | 32&nbsp;700&nbsp;₽ | 44&nbsp;400&nbsp;₽ | 55&nbsp;500&nbsp;₽ | 70&nbsp;000&nbsp;₽ | 96&nbsp;900&nbsp;₽ | 128&nbsp;400&nbsp;₽ | 175&nbsp;000&nbsp;₽ |
-| Suggest&nbsp;API    | ✗       | ✗        | ✗        | 7&nbsp;000&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 26&nbsp;700&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 45&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 75&nbsp;000&nbsp;₽ |
-| Categories&nbsp;API | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Regions&nbsp;API    | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Markers&nbsp;API    | 6&nbsp;700&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-
-</TabItem>
-<TabItem value="search-additional" label="Тарифы на докупку сервисов">
-
-| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
-| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
-| Places&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Geocoder&nbsp;API | 4&nbsp;701&nbsp;₽ | 10&nbsp;501&nbsp;₽ | 14&nbsp;001&nbsp;₽ | 21&nbsp;001&nbsp;₽ | 32&nbsp;701&nbsp;₽ | 44&nbsp;401&nbsp;₽ | 55&nbsp;501&nbsp;₽ | 70&nbsp;001&nbsp;₽ | 96&nbsp;901&nbsp;₽ | 128&nbsp;401&nbsp;₽ | 175&nbsp;001&nbsp;₽ |
-| Suggest&nbsp;API | ✗ | ✗ | ✗ | 7&nbsp;001&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 26&nbsp;701&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 45&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 75&nbsp;001&nbsp;₽ |
-| Categories&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Regions&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Markers&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-
-</TabItem>
-</Tabs>
-
-### Навигация {#pricing-navigation}
-
-<Tabs>
-<TabItem value="navi-main" label="Тарифы на покупку сервисов" default>
-
-| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
-| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
-| Routing&nbsp;API         | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Distance&nbsp;Matrix&nbsp;API | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| TSP&nbsp;API             | 14&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 40&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 93&nbsp;400&nbsp;₽ | 126&nbsp;800&nbsp;₽ | 158&nbsp;400&nbsp;₽ | 200&nbsp;000&nbsp;₽ | 276&nbsp;800&nbsp;₽ | 366&nbsp;800&nbsp;₽ | 500&nbsp;000&nbsp;₽ |
-| Directions&nbsp;API | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Truck&nbsp;Directions&nbsp;API | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Isochrone&nbsp;API       | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Map&nbsp;Matching&nbsp;API    | 6&nbsp;700&nbsp;₽  | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 46&nbsp;700&nbsp;₽ | 63&nbsp;400&nbsp;₽ | 79&nbsp;200&nbsp;₽ | 100&nbsp;000&nbsp;₽ | 138&nbsp;400&nbsp;₽ | 183&nbsp;400&nbsp;₽ | 250&nbsp;000&nbsp;₽ |
-| Radar&nbsp;API           | ✗        | ✗        | ✗        | 7&nbsp;000&nbsp;₽ | 15&nbsp;000&nbsp;₽ | 20&nbsp;000&nbsp;₽ | 26&nbsp;700&nbsp;₽ | 30&nbsp;000&nbsp;₽ | 45&nbsp;000&nbsp;₽ | 60&nbsp;000&nbsp;₽ | 75&nbsp;000&nbsp;₽ |
-
-</TabItem>
-<TabItem value="navi-additional" label="Тарифы на докупку сервисов">
-
-| <div style={{"width":"150px"}}>Сервис</div> | 10&nbsp;000&nbsp;единиц | 30&nbsp;000&nbsp;единиц | 50&nbsp;000&nbsp;единиц | 100&nbsp;000&nbsp;единиц | 300&nbsp;000&nbsp;единиц | 500&nbsp;000&nbsp;единиц | 750&nbsp;000&nbsp;единиц | 1&nbsp;млн&nbsp;единиц | 1,5&nbsp;млн&nbsp;единиц | 3&nbsp;млн&nbsp;единиц | 5&nbsp;млн&nbsp;единиц |
-| ------ | --------------- | --------------- | --------------- | ---------------- | ---------------- | ---------------- | ----------- | --------------- | ------------------ | ------------------ | ------------------ |
-| Routing&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Distance&nbsp;Matrix&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| TSP&nbsp;API | 14&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 40&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 93&nbsp;401&nbsp;₽ | 126&nbsp;801&nbsp;₽ | 158&nbsp;401&nbsp;₽ | 200&nbsp;001&nbsp;₽ | 276&nbsp;801&nbsp;₽ | 366&nbsp;801&nbsp;₽ | 500&nbsp;001&nbsp;₽ |
-| Directions&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Truck&nbsp;Directions&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Isochrone&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Map&nbsp;Matching&nbsp;API | 6&nbsp;701&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 46&nbsp;701&nbsp;₽ | 63&nbsp;401&nbsp;₽ | 79&nbsp;201&nbsp;₽ | 100&nbsp;001&nbsp;₽ | 138&nbsp;401&nbsp;₽ | 183&nbsp;401&nbsp;₽ | 250&nbsp;001&nbsp;₽ |
-| Radar&nbsp;API | ✗ | ✗ | ✗ | 7&nbsp;001&nbsp;₽ | 15&nbsp;001&nbsp;₽ | 20&nbsp;001&nbsp;₽ | 26&nbsp;701&nbsp;₽ | 30&nbsp;001&nbsp;₽ | 45&nbsp;001&nbsp;₽ | 60&nbsp;001&nbsp;₽ | 75&nbsp;001&nbsp;₽ |
-
-</TabItem>
-</Tabs>
