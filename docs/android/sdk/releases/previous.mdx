@@ -1,13 +1,339 @@
 ---
 sidebar: androidsdk
 ---
-# Релизы
+# Предыдущие релизы
 
 :::warning
 
-Прекращена поддержка версий SDK, описанных ниже. Используйте [версию 12.0.0 и выше](/android/sdk/releases/latest). Cм. инструкции по [миграции с предыдущих версий](/android/sdk/releases/migration).
+Прекращена поддержка версий SDK, описанных ниже. Используйте [версию 13.0.0 и выше](/android/sdk/releases/latest). Cм. инструкции по [миграции с предыдущих версий](/android/sdk/releases/migration).
 
 :::
+
+## 12.10.0 (2025-12-19)
+
+### 🌟 Новые возможности
+
+* [Marker.suppressOnOverlap](/android/sdk/reference/stable/class#ru.dgis.sdk.map.marker/var-suppress-on-overlap) и [MarkerOptions.suppressOnOverlap](/android/sdk/reference/stable/class#ru.dgis.sdk.map.marker-options/val-suppress-on-overlap) — свойство для управления видимостью иконки маркера при наложении объектов на карте.
+* [SimpleClusterObject.suppressOnOverlap](/android/sdk/reference/stable/class#ru.dgis.sdk.map.simple-cluster-object/var-suppress-on-overlap) и [SimpleClusterOptions.suppressOnOverlap](/android/sdk/reference/stable/class#ru.dgis.sdk.map.simple-cluster-options/val-suppress-on-overlap) — свойство для управления видимостью иконки кластерного объекта при наложении объектов на карте.
+
+### 🛠 Исправления
+
+* Исправлена ошибка построения офлайн-маршрутов между регионами.
+
+## 12.9.0 (2025-10-22)
+
+### 🌟 Новые возможности
+
+* [StorageOptions](/android/sdk/reference/stable/class#ru.dgis.sdk.platform.storage-options) — класс параметров хранилища офлайн-данных. Передаётся в [DGis](/android/sdk/reference/stable/class#ru.dgis.sdk.dgis) для указания пути к корневому каталогу основного хранилища загрузок.
+
+## 12.8.1 (2025-08-26)
+
+### 🌟 Новые возможности
+
+* Теперь SDK поддерживает использование [Dynamic Feature Delivery](https://developer.android.com/guide/playcore/feature-delivery). **Важно**: если вы используете стандартный способ [инициализации SDK](/android/sdk/start#initialize) (добавляете файл с ключом доступа в `assets` приложения), ключ должен находиться в `assets` модуля `feature`.
+
+### 🛠 Исправления
+
+* Исправлены проблемы с загрузкой нативной библиотеки (формат `.so`), которые приводили к ошибке `UnsatisfiedLinkError` в некоторых сессиях.
+
+## 12.8.0 (2025-08-14)
+
+### 🌟 Новые возможности
+
+* Добавлена поддержка армянского языка на карте, в справочнике и при построении маршрутов. Также добавлены голосовые пакеты уведомлений на армянском языке.
+* В [TrafficRouter](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router) добавлена возможность задавать тип поисковика маршрутов (онлайн, офлайн или гибрид) с помощью [RouterType](/android/sdk/reference/stable/enumeration#ru.dgis.sdk.routing.router-type).
+* В [NavigationManager](/android/sdk/reference/stable/class#ru.dgis.sdk.navigation.navigation-manager) и [RouteEditor](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.route-editor) добавлена возможность указывать поисковик маршрутов ([TrafficRouter](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-router)).
+
+### 🛠 Исправления
+
+* Добавлена опция линковщика для установки размера страницы памяти 16 КБ при сборке библиотеки.
+* Данные о пробках через источник [TrafficSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.traffic-source) теперь не запрашиваются и не обновляются в фоновом режиме приложения.
+* Исправлена утечка памяти в [SearchLayout](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-layout), которая происходила при смене конфигурации устройства.
+
+## 12.7.2 (2025-06-20)
+
+### 🌟 Новые возможности
+
+* [DirectoryObject.platformIds](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.directory-object/val-platform-ids) — информация об идентификаторах платформ общественного транспорта в объекте справочника.
+* [EntranceInfo.entranceNumber](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.entrance-info/val-entrance-number) — номер входа на станцию общественного транспорта.
+
+### 🛠 Исправления
+
+* [DirectoryObject.routeInfos](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.directory-object/val-route-infos) теперь возвращает корректную информацию о маршрутах, проходящих через определённую платформу общественного транспорта.
+* [DirectoryObject.entrances](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.directory-object/val-entrances) теперь возвращает корректную информацию о входах в метро.
+
+## 12.7.0 (2025-06-03)
+
+### 🌟 Новые возможности
+
+* [DirectoryObject.routeInfos](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.directory-object/val-route-infos) — информация о маршрутах общественного транспорта в объекте справочника.
+* [ItemMarkerInfo.tradeLicense](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.item-marker-info/val-trade-license) — информация о торговой лицензии организации в маркере.
+* [SearchResult.nearbyRequested](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-result/val-nearby-requested) — признак в результатах поиска, что при поиске были запрошены объекты поблизости.
+* [TrafficRoute.routeTollPaymentInfos](/android/sdk/reference/stable/class#ru.dgis.sdk.routing.traffic-route/val-route-toll-payment-infos) — информация о стоимости проезда по платным участкам маршрута.
+* [RoadMacroGraph](/android/sdk/reference/stable/ru.dgis.sdk.routing.RoadMacroGraph) — пакет глобального дорожного графа будет удалён в следующих версиях. Вы можете строить маршруты между регионами на основе скачанных [офлайн-данных](/android/sdk/start#offline-mode).
+
+### 🗺 Изменения в стилях карты
+
+* Повторно выгрузите стили: в навигаторе исправлено отображение иммерсивных дорог и тумана.
+
+## 12.6.3 (2025-05-13)
+
+### 🛠 Исправления
+
+* Оптимизирована работа [TrafficSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.traffic-source):
+
+  * Тайлы с пробками запрашиваются при изменении масштаба карты и по таймеру.
+  * Уровень пробок в баллах обновляется при смене региона и по таймеру.
+
+* Улучшена производительность карты при добавлении полигонов с большим количеством вершин через [MapObjectManager](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-object-manager).
+
+## 12.6.2 (2025-04-23)
+
+### 🛠 Исправления
+
+* Исправлено отображение динамических объектов, добавленных через [MapObjectManager](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-object-manager), на некоторых устройствах Huawei.
+
+## 12.6.0 (2025-04-17)
+
+### 🌟 Новые возможности
+
+* В источник геопозиции [DefaultLocationSource](/android/sdk/reference/stable/class#ru.dgis.sdk.positioning.default-location-source) добавлена возможность настроить использование сервиса [Radar API](/api/navigation/radar/overview) для геопозиционирования устройства по точкам доступа Wi-Fi и сотовым вышкам. Настроить использование Radar API можно через [RadarApiSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.positioning.radar.radar-api-settings). Подробнее см. в разделе [Использование Radar API](/android/sdk/examples/navigation#radar-api).
+* [TextStyle.suppressOnOverlap](/android/sdk/reference/stable/class#ru.dgis.sdk.map.text-style/val-suppress-on-overlap) — опция для скрытия текста подписи маркера при пересечении с другими объектами.
+
+### 🛠 Исправления
+
+* Исправлено обновление генерализации при изменении атрибутов объектов, добавленных через метод [MapObjectManager.withGeneralization()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-object-manager/with-generalization).
+* Исправлена ошибка, при которой приложение падало при логировании сетевых запросов.
+
+## 12.5.0 (2025-03-25)
+
+### 🌟 Новые возможности
+
+* [SearchQueryBuilder.setLocale()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-locale) — метод для задания локали, в которой выполняется поисковый запрос.
+* [DirectoryObject.group](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.directory-object/val-group) — объединение объектов разного типа в одной карточке. Например, карточка здания суда содержит информацию о здании как геообъекте и о суде как организации в здании.
+* [SearchQueryWithInfo.rubrics](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-with-info/val-rubrics) — список рубрик, по которым производится запрос.
+* [PackedSearchQuery.locale](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.packed-search-query/val-locale) — локаль для поискового запроса.
+
+### 🛠 Исправления
+
+* Исправлена ошибка, при которой маркер местоположения, добавленный через [MyLocationMapObjectSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.my-location-map-object-source), исчезал при первом перелёте камеры.
+* Исправлено отображение информации о маршруте на карте при направлении текста справа налево (RTL) для источника данных [RouteEditorSource](/android/sdk/reference/stable/class#ru.dgis.sdk.map.route-editor-source).
+* Изменены настройки кеширования данных из источника на маршруте. Теперь данные кешируются на расстоянии 4000 метров впереди от текущей позиции на маршруте вместо 20000.
+
+### 🗺 Изменения в стилях карты
+
+* Повторно выгрузите стили: исправлено отображение информации о маршруте на карте при направлении текста справа налево.
+
+## 12.4.3 (2025-02-19)
+
+### 🌟 Новые возможности
+
+* [Projection.distanceOnMap()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.projection/distance-on-map) — метод для вычисления расстояния между точками на карте, которые соответствуют указанным точкам на экране.
+* [Projection.distanceOnScreen()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.projection/distance-on-screen) — метод для вычисления расстояния между точками на экране, которые соответствуют указанным точкам на карте.
+
+### 🛠 Исправления
+
+* Исправлено отображение окружности на карте при добавлении объекта [Circle](/android/sdk/reference/stable/class#ru.dgis.sdk.map.circle) в [MapObjectManager.withClustering](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-object-manager/with-generalization) и [MapObjectManager.withGeneralization](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-object-manager/with-generalization).
+
+## 12.4.0 (2025-01-30)
+
+### 🌟 Новые возможности
+
+* [SpeechRecognizer](/android/sdk/reference/stable/interface#ru.dgis.sdk.directory.speech-recognizer) и [DefaultSpeechRecognizer](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.default-speech-recognizer) — возможность запускать распознавание речи и обрабатывать результаты через функции обратного вызова.
+* [Map.sublayerAttributes](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map/sublayer-attributes) — возможность переопределения атрибутов конкретного слоя карты.
+* [SearchHistory](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-history) — класс для работы с историей поисковых запросов: чтения, добавления и удаления записей с информацией о результате работы поиска и поисковых подсказках.
+* [SearchQueryBuilder.fromOrgId()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/from-org-id) — метод для формирования поискового запроса по идентификатору организации.
+* [SearchQueryBuilder.fromBuildingId()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/from-building-id) — метод для формирования поискового запроса по идентификатору здания.
+* [SearchQueryBuilder.fromGeoPoint()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/from-geo-point) — метод для формирования поискового запроса c центром области поиска.
+* [SearchQueryBuilder.setGeoPoint()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-geo-point) и [SearchQueryBuilder.setRadius()](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.search-query-builder/set-radius) — методы для установки центра области поиска и радиуса при формировании поискового запроса.
+* [DirectoryObject.orgInfo](/android/sdk/reference/stable/class#ru.dgis.sdk.directory.directory-object/val-org-info) — информация об организации в объекте справочника.
+* [MyLocationMapObject.setModelData()](/android/sdk/reference/stable/class#ru.dgis.sdk.map.my-location-map-object) — метод для установки 3D-модели маркера геопозиции.
+* [BaseCamera.viewPoint](/android/sdk/reference/stable/class#ru.dgis.sdk.map.base-camera/var-view-point) — возможность изменения точки обзора камеры относительно размера области видимости карты.
+* [AnimationSettings.animationName](/android/sdk/reference/stable/class#ru.dgis.sdk.map.animation-settings/var-animation-name) — возможность переключения анимации 3D-модели по названию.
+* Добавлена инструкция по работе с UI-элементами через [Android Compose](/android/sdk/examples/controls/compose).
+* Добавлена инструкция по [управлению стилями карты](/android/sdk/examples/map_styles).
+
+### 🛠 Исправления
+
+* Теперь положение 3D-модели совпадает с направлением камеры, если значение угла поворота не задано в [ModelMapObject.mapDirection](/android/sdk/reference/stable/class#ru.dgis.sdk.map.model-map-object/var-map-direction).
+* Исправлена некорректная установка атрибутов для генерализуемых объектов, добавленных на карту через [MapObjectManager.withClustering](/android/sdk/reference/stable/class#ru.dgis.sdk.map.map-object-manager/with-generalization). Теперь изменение атрибутов объектов на определённом zoom-уровне распространяется на все уровни.
+* Исправлена работа атрибута для управления видимостью объекта на карте [SimpleMapObject.isVisible](/android/sdk/reference/stable/class#ru.dgis.sdk.map.simple-map-object) при генерализации и кластеризации объектов.
+
+### 🗺 Изменения в стилях карты
+
+* Исправлен приоритет обработки нажатий между маркером геопозиции и зданиями на карте.
+
+## 12.3.0 (2024-12-18)
+
+### 🌟 Новые возможности
+
+* [ModelMapObject](/android/sdk/reference/12.3/class#ru.dgis.sdk.map.model-map-object) и [ModelMapObjectOptions](/android/sdk/reference/12.3/class#ru.dgis.sdk.map.model-map-object-options) — классы для создания и настройки динамических объектов с 3D-моделями. Вы можете добавить данные объекты на карту с помощью [MapObjectManager](/android/sdk/reference/12.3/class#ru.dgis.sdk.map.map-object-manager).
+* [ModelData](/android/sdk/reference/12.3/class#ru.dgis.sdk.map.model-data) и методы [createModelData(context, loader)](/android/sdk/reference/12.3/method#ru.dgis.sdk.map.create-model-data-context-loader-), [createModelData(context, data)](/android/sdk/reference/12.3/method#ru.dgis.sdk.map.create-model-data-context-data-), [modelDataFromAsset(context, assetName)](/android/sdk/reference/12.3/method#ru.dgis.sdk.map.model-data-from-asset-context-asset-name-) — возможность загрузки пользовательских 3D-моделей.
+* Теперь при добавлении [TrafficSource](/android/sdk/reference/12.3/class#ru.dgis.sdk.map.traffic-source) на карту тайлы с пробками запрашиваются на основе области видимости экрана независимо от обновления конфигурационного файла SDK.
+* [DirectoryObject.rubricIds](/android/sdk/reference/12.3/class#ru.dgis.sdk.directory.directory-object) — идентификаторы рубрик в объекте справочника.
+* Добавлена возможность отслеживать изменения в стабильной ([AndroidAutoMapSession.onStableAreaChanged](/android/sdk/reference/12.3/class#ru.dgis.sdk.androidauto.android-auto-map-session)) и видимой ([AndroidAutoMapSession.onVisibleAreaChanged](/android/sdk/reference/12.3/class#ru.dgis.sdk.androidauto.android-auto-map-session)) области карты в Android Auto.
+* [FreeRoamSelector](/android/sdk/reference/12.3/class#ru.dgis.sdk.navigation.free-roam-selector) и [NavigationManager.freeRoamSelector](/android/sdk/reference/12.3/class#ru.dgis.sdk.navigation.navigation-manager) — возможность включения и выключения перевода навигатора в режим `FreeRoam` при слишком долгом перестроении маршрута.
+* [RouteRebuilder](/android/sdk/reference/12.3/class#ru.dgis.sdk.navigation.route-rebuilder) и [NavigationManager.routeRebuilder](/android/sdk/reference/12.3/class#ru.dgis.sdk.navigation.navigation-manager) — возможность включения и выключения поиска нового маршрута при сходе с текущего маршрута.
+* [TrafficRouter.requestRoute](/android/sdk/reference/12.3/class#ru.dgis.sdk.routing.traffic-router) — возможность поиска маршрута по ранее сериализованным параметрам.
+
+### 🛠 Исправления
+
+* Исправлено дублирование числа филиалов для категорий организаций в [Suggest.subtitle](/android/sdk/reference/12.3/class#ru.dgis.sdk.directory.suggest).
+* Исправлена ошибка получения координат объекта при обработке клика на [Marker](/android/sdk/reference/12.3/class#ru.dgis.sdk.map.marker), добавленный на карту перед первичной загрузкой карты.
+* Исправлено отображение 3D-модели маркера геопозиции навигатора для всех типов маршрута, кроме пешеходного. Для пешеходного маршрута отображается обычная модель маркера геопозиции.
+* Обновлена конфигурация навигатора для улучшения работы при плохом сигнале GPS.
+
+### 🗺 Изменения в стилях карты
+
+* Добавлен слой для отображения динамических 3D-моделей.
+
+## 12.2.1 (2024-12-03)
+
+### 🛠 Исправления
+
+* Исправлены ошибки, которые приводили к снижению производительности при отображении большого количества объектов на карте.
+
+## 12.2.0 (2024-11-15)
+
+### 🌟 Новые возможности
+
+* [AnimationSettings](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.animation-settings) — класс для настройки анимаций объектов карты. Применяется для объектов с типами слоя `3D model` и `Directional model`.
+* [MyLocationMapObject.animationSettings](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.my-location-map-object) — возможность настройки анимаций для маркера геопозиции, если в качестве модели в стилях загружена анимированная модель.
+* [MyLocationMapObject.objectAttributes](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.my-location-map-object) — возможность настройки атрибутов стилей для маркера геопозиции. Возможные значения атрибутов можно увидеть в стилях для соответствующего слоя.
+* [RoadEventMapObject.animationSettings](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.road-event-map-object) — возможность настройки анимаций для дорожных событий, если в качестве модели в стилях загружена анимированная модель.
+* [RoadEvent.id](/android/sdk/reference/12.2/class#ru.dgis.sdk.road-events.road-event) — идентификатор дорожного события.
+* [ParkingControlModel](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.parking-control-model) — модель для удобного переключения видимости парковок на карте.
+* [ItemMarkerInfo.rubricIds](/android/sdk/reference/12.2/class#ru.dgis.sdk.directory.item-marker-info) — идентификаторы рубрик, к которым относится объект маркера.
+* [TextHorizontalAlignment](/android/sdk/reference/12.2/enumeration#ru.dgis.sdk.map.text-horizontal-alignment) — настройка для выравнивания надписи по горизонтали в [Marker](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.marker) через [TextStyle](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.text-style).
+* [RouteMapObjectsProvider](/android/sdk/reference/12.2/class#ru.dgis.sdk.navigation.route-map-objects-provider) и [NavigationManager.routeMapObjectsProvider](/android/sdk/reference/12.2/class#ru.dgis.sdk.navigation.navigation-manager) — класс для получения объектов маршрута на карте.
+* [RouteMapObject.roadEventObjects](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.route-map-object) — дорожные события на карте для соответствующего маршрута.
+* [MyLocationMapObjectSourceProvider](/android/sdk/reference/12.2/class#ru.dgis.sdk.navigation.my-location-map-object-source-provider) и [NavigationManager.myLocationMapObjectSourceProvider](/android/sdk/reference/12.2/class#ru.dgis.sdk.navigation.navigation-manager) — класс для получения источника маркера геопозиции в навигаторе.
+
+### 🛠 Исправления
+
+* Исправлен ряд ошибок для корректного отображения карты в Android Auto.
+* Доработан механизм получения названия объекта маркера [ItemMarkerInfo.title](/android/sdk/reference/12.2/class#ru.dgis.sdk.directory.item-marker-info). Теперь учитывается, что маркер может быть без названия.
+* Исправлена потенциальная проблема при инициализации карты, когда стиль устанавливался раньше, чем завершался процесс инициализации.
+* Исправлено потенциальное зависание в [MapObjectManager](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.map-object-manager) при частом добавлении и удалении объектов через метод [MapObjectManager.removeAndAddObjects](/android/sdk/reference/12.2/class#ru.dgis.sdk.map.map-object-manager/remove-and-add-objects).
+* Исправлена ошибка, при которой для некоторых регионов не работало отображение дорожных событий на карте.
+* Исправлено отображение стрелок маршрута относительно иммерсивных дорог реальной ширины в режиме навигатора.
+* Исправлена потенциальная проблема, при которой не отображались баблы полосности на маршруте в режиме навигатора.
+
+### 🗺 Изменения в стилях карты
+
+* Исправлены ошибки в стилях при отображении маркера геопозиции в режиме навигатора с иммерсивными дорогами реальной ширины.
+* Исправлены ошибки в стилях при отображении этажных планов зданий.
+
+## 12.1.0 (2024-09-24)
+
+### 🌟 Новые возможности
+
+* [ItemMarkerInfo.title](/android/sdk/reference/12.1/class#ru.dgis.sdk.directory.item-marker-info) — название объекта маркера.
+* [AndroidAutoMapSession.onSurfaceAvailable()](/android/sdk/reference/12.1/class#ru.dgis.sdk.androidauto.android-auto-map-session/on-surface-available) и [AndroidAutoMapSession.onSurfaceDestroyed()](/android/sdk/reference/12.1/class#ru.dgis.sdk.androidauto.android-auto-map-session/on-surface-destroyed) — методы для предоставления пользовательского объекта `Surface` в Android Auto для отрисовки дополнительного контента.
+* Отображение копирайта в Android Auto.
+* [DirectoryObject.chargingStation](/android/sdk/reference/12.1/class#ru.dgis.sdk.directory.directory-object) — информация о станциях зарядки электромобилей в объекте справочника.
+
+### 🛠 Исправления
+
+* [DgisSource.createDgisSource](/android/sdk/reference/12.1/class#ru.dgis.sdk.map.dgis-source/create-dgis-source) теперь возвращает гибридный источник тайлов карты по умолчанию в полной (**Full**) версии SDK.
+* Различные улучшения работы иммерсивных дорог реальной ширины в режиме навигатора.
+
+### 🗺 Изменения в стилях карты
+
+* Исправлены ошибки в стилях при отображении иммерсивных дорог реальной ширины.
+* Исправлено отображение тумана при различных углах наклона карты.
+
+## 12.0.0 (2024-08-19)
+
+:::note[Обновление с версии 10.x]
+
+Перед обновлением см. [инструкцию по миграции](/android/sdk/releases/migration#from-10-to-12).
+
+:::
+
+### 🌟 Новые возможности
+
+* Иммерсивные дороги реальной ширины отображаются в режиме навигации, если:
+
+  * В поле [Map.graphicsPreset](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.map/var-graphics-preset) установлено значение `IMMERSIVE`.
+  * `HttpCache` включен с помощью [HttpOptions.useCache](/android/sdk/reference/12.0/class#ru.dgis.sdk.platform.http-options/val-use-cache).
+
+  На момент релиза дороги реальной ширины доступны только в некоторых крупных городах России.
+
+* Отображение тумана для отсечения отдалённых объектов карты при наклоне камеры.
+
+* Пакет `ru.dgis.sdk.androidauto` для интегрирования SDK в Android Auto.
+
+* [BaseCamera.viewportRestriction](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.base-camera/var-viewport-restriction) — свойство для установки области видимости камеры.
+
+* [MapOptions.graphicsPreset](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.map-options/var-graphics-preset) — свойство для установки графического режима через [GraphicsPreset](/android/sdk/reference/12.0/enumeration#ru.dgis.sdk.map.graphics-preset) при инициализации карты.
+
+* [Map.graphicsPreset](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.map/var-graphics-preset) — свойство для установки графического режима через [GraphicsPreset](/android/sdk/reference/12.0/enumeration#ru.dgis.sdk.map.graphics-preset) для созданной карты.
+
+* [Map.graphicsPresetHint](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.map/val-graphics-preset-hint) — свойство для получения рекомендуемого графического режима для данного устройства.
+
+* Добавлена возможность наклона карты до 70 градусов, начиная с уровня масштабирования карты 18.
+
+* [RasterUrlTemplate](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.raster-url-template) — возможность задания шаблона URL для запроса растровых тайлов. Может иметь два значения: [DefaultRasterUrlTemplate](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.default-raster-url-template) для общего шаблона и [WmsRasterUrlTemplate](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.wms-raster-url-template) для растровых тайлов стандарта WMS.
+
+* [MapLocationController.mapToNorthOrientation](/android/sdk/reference/12.0/class#ru.dgis.sdk.navigation.map-location-controller) — свойство для включения принудительной ориентации карты на север.
+
+* [RouteCamera.maxSpeedLimit](/android/sdk/reference/12.0/class#ru.dgis.sdk.routing.route-camera/val-max-speed-limit) — свойство для установки скорости в м/с, превышение которой фиксируется камерой.
+
+* [NavigationFollowController.cameraBehaviour](/android/sdk/reference/12.0/class#ru.dgis.sdk.navigation.navigation-follow-controller/var-camera-behaviour) — режим слежения камеры за маркером геопозиции в навигаторе.
+
+* При отображении дорожных событий и данных о пробках на маршруте теперь учитывается высота рельефа.
+
+* Если текущая позиция на маршруте находится на расстоянии более 500 метров от следующего манёвра, произносится фраза «Двигайтесь прямо».
+
+* Добавлена поддержка звуковых инструкций для велосипедных и самокатных перекрёстков.
+
+* [RouterType](/android/sdk/reference/12.0/enumeration#ru.dgis.sdk.routing.router-type) — возможность установки типа поисковика в [AlternativeRoutesProviderSettings](/android/sdk/reference/12.0/class#ru.dgis.sdk.navigation.alternative-routes-provider-settings) для поиска альтернативных маршрутов.
+
+* `toRoutePoint` в методе [MillisecondsRouteAttribute.calculateDuration()](/android/sdk/reference/12.0/class#ru.dgis.sdk.routing.milliseconds-route-attribute/calculate-duration) — параметр для вычисления длительности движения по участку маршрута до конкретной точки.
+
+* [TerritoryManager.findByPoint()](/android/sdk/reference/12.0/class#ru.dgis.sdk.update.territory-manager/find-by-point) и [TerritoryManager.findByRect()](/android/sdk/reference/12.0/class#ru.dgis.sdk.update.territory-manager/find-by-rect) — методы для фильтрации офлайн-регионов, доступных для скачивания, по `GeoPoint` и `GeoRect`.
+
+### ❗ Изменения, влияющие на обратную совместимость
+
+* `KeySource`, `KeyFromAsset`, `KeyFromFile` и `KeyFromString` перенесены в `ru.dgis.sdk.platform`.
+* `VendorConfig`, `VendorConfigFromAsset`, `VendorConfigFromFile` и `VendorConfigFromString` перенесены в `ru.dgis.sdk.platform`.
+* `LogOptions`, `LogLevel`, `LogMessage` и `LogSink` перенесены в `ru.dgis.sdk.platform`.
+* `HttpOptions`, `Certificate`, `CertificateFromAsset`, `CertificateFromFile`, `SystemCertificate` и `HttpProxyOptions` перенесены в `ru.dgis.sdk.platform`.
+* Удалены `MyLocationController` и `MapLocationController.myLocationIndicatorController`. Для настройки источника маркера геопозиции используйте [MyLocationControllerSettings](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.my-location-controller-settings). В [NavigationView](/android/sdk/reference/12.0/class#ru.dgis.sdk.navigation.navigation-view) теперь не происходит подмена источника геопозиции.
+* Добавлено значение `GEO_POSITION` в [EventsProcessingSettings.rotationCenter](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.events-processing-settings) и [EventsProcessingSettings.scalingCenter](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.events-processing-settings) для установки режима работы жеста относительно геопозиции. Для задания позиции, относительно которой будет работать жест, используйте метод [GestureManager.setTargetGeoPoint()](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.gesture-manager/set-target-geo-point).
+* Перенесён [Meter](/android/sdk/reference/12.0/class#ru.dgis.sdk.meter) из модуля `ru.dgis.sdk.map` в `ru.dgis.sdk`.
+* Удалено значение `CameraState.FOLLOW_POSITION`. Вместо него используйте значение [Camera.behaviour](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.camera-behaviour).
+* Добавлены значения для [SuggestedType](/android/sdk/reference/12.0/enumeration#ru.dgis.sdk.directory.suggested-type), [SuggestorType](/android/sdk/reference/12.0/enumeration#ru.dgis.sdk.directory.suggestor-type) и [ObjectType](/android/sdk/reference/12.0/enumeration#ru.dgis.sdk.directory.object-type) и теперь соответствуют результатам Places API.
+* Удалён метод `createRasterTileDataSource()`. Добавлен новый источник [RasterTileSource](/android/sdk/reference/12.0/class#ru.dgis.sdk.map.raster-tile-source) с возможностью задания прозрачности растровых тайлов.
+* Удалён `AudioVolume`. Теперь вы можете задавать громкость инструкций от 0 до 100 через [AudioSettings.volume](/android/sdk/reference/12.0/class#ru.dgis.sdk.platform.audio-settings/var-volume).
+* [RouteMapObjectDisplayFlag.IMMERSIVE_ROUTE_PARTS](/android/sdk/reference/12.0/enumeration#ru.dgis.sdk.map.route-map-object-display-flag/immersive-route-parts) — флаг для использования иммерсивной геометрии для отрезков маршрута.
+
+### 🛠 Исправления
+
+* Оптимизировано кеширование дорожных событий при отображении на карте.
+* Исправлены артефакты при повороте экрана при включении `Vulkan`.
+* Исправлена ошибка, при которой варианты проезда не отображались, если среди маршрутов на общественном транспорте предлагался нерабочий вариант.
+* Исправлен учёт пройденного расстояния вдоль альтернативного маршрута.
+* Доработано отображение остановок на маршруте на общественном транспорте.
+* Доработано стирание маршрута при достижении финишной точки маршрута.
+* Исправлено отображение активного маршрута при плохом сигнале GPS.
+* Не озвучиваются голосовые инструкции во время навигации при плохом сигнале GPS.
+* Не озвучивается расстояние до следующей камеры, если оно меньше 150 метров.
+* Не озвучиваются голосовые инструкции при старте навигации.
+* Не озвучивается расстояние до камер контроля перекрёстка, полосы общественного транспорта и разметки.
+* Инструкция навигации «До конца маршрута осталось» не озвучивается, если впереди по маршруту есть другие инструкции.
+* Не озвучиваются пешеходные препятствия и подтипы дорог для непешеходных маршрутов.
+
+### 🗺 Изменения в стилях карты
+
+* Добавлены слои с иммерсивными дорогами реальной ширины.
+* Доработаны различные слои, чтобы они корректно отображались при наличии иммерсивных дорог реальной ширины на карте.
+* Обновлены дизайны маркера геопозиции в обычном режиме и в режиме навигации. Также отображение маркера в дневной и ночной темах приведены к одному виду.
+* Добавлена поддержка новой ветки Московского метро МЦД-4А (литера А).
+* Исправлены стили веток Московского метро МЦД-3, МЦД-4, МЦД-4А и МЦД-5.
+* Добавлены подписи остановок на маршруте общественного транспорта.
+* Добавлены подписи остановок при просмотре полного маршрута выбранного общественного транспорта.
 
 ## 10.8.0 (2024-11-02)
 

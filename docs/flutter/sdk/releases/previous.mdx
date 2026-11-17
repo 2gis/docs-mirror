@@ -1,0 +1,225 @@
+---
+sidebar: fluttersdk
+---
+# Предыдущие релизы
+
+:::warning
+
+Прекращена поддержка версий SDK, описанных ниже. Используйте [версию 13.0.0 и выше](/flutter/sdk/releases/latest). Cм. инструкции по [миграции с предыдущих версий](/flutter/sdk/releases/migration).
+
+:::
+
+## 12.10.0 (2025-12-19)
+
+### 🌟 Новые возможности
+
+* [Marker.suppressOnOverlap](https://pub.dev/documentation/dgis_mobile_sdk_full/12.10.0/dgis_mobile_sdk/Marker/suppressOnOverlap.html) и [MarkerOptions.suppressOnOverlap](https://pub.dev/documentation/dgis_mobile_sdk_full/12.10.0/dgis_mobile_sdk/MarkerOptions/suppressOnOverlap.html) — свойство для управления видимостью иконки маркера при наложении объектов на карте.
+* [SimpleClusterObject.suppressOnOverlap](https://pub.dev/documentation/dgis_mobile_sdk_full/12.10.0/dgis_mobile_sdk/SimpleClusterObject/suppressOnOverlap.html) и [SimpleClusterOptions.suppressOnOverlap](https://pub.dev/documentation/dgis_mobile_sdk_full/12.10.0/dgis_mobile_sdk/SimpleClusterOptions/suppressOnOverlap.html) — свойство для управления видимостью иконки кластерного объекта при наложении объектов на карте.
+* [Package.pause()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Package/pause.html) — метод для постановки на паузу установки или обновления пакета.
+
+### 🛠 Исправления
+
+* Исправлена ошибка построения офлайн-маршрутов между регионами.
+* Из iOS-сборки удалена библиотека `CallKit`, которая использовалась для отслеживания телефонных вызовов при воспроизведении голосовых инструкций в навигаторе.
+
+## 12.8.0 (2025-08-14)
+
+### 🌟 Новые возможности
+
+* Добавлена поддержка армянского языка на карте, в справочнике и при построении маршрутов. Также добавлены голосовые пакеты уведомлений на армянском языке.
+* В [TrafficRouter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter/TrafficRouter.html) добавлена возможность задавать тип поисковика маршрутов (онлайн, офлайн или гибрид) с помощью [RouterType](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouterType.html).
+* В [NavigationManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager/NavigationManager.html) и [RouteEditor](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEditor/RouteEditor.html) добавлена возможность указывать поисковик маршрутов ([TrafficRouter](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter/TrafficRouter.html)).
+
+### 🛠 Исправления
+
+* Данные о пробках через источник [TrafficSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficSource-class.html) теперь не запрашиваются и не обновляются в фоновом режиме приложения.
+* Добавлена опция линковщика для установки размера страницы памяти 16 КБ при сборке Android-библиотеки.
+* Исправлены визуальные артефакты в [MapWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidget-class.html), которые возникали при смене конфигурации устройства.
+* Исправлены анимации в [SpeedLimitWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SpeedLimitWidget-class.html).
+* Исправлено отображение [TrafficLineWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficLineWidget-class.html).
+
+## 12.7.2 (2025-07-07)
+
+### 🌟 Новые возможности
+
+* [DirectoryObject.routeInfos](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject/routeInfos.html) — информация о маршрутах общественного транспорта в объекте справочника.
+* [DirectoryObject.publicTransportScheduleInfo](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject/publicTransportScheduleInfo.html) — метод для получения информации о расписаниях платформ общественного транспорта и направлений маршрутов.
+* [DirectoryObject.platformIds](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject/platformIds.html) — информация об идентификаторах платформ общественного транспорта в объекте справочника.
+* [EntranceInfo.entranceNumber](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/EntranceInfo/entranceNumber.html) — номер входа на станцию общественного транспорта.
+* [ItemMarkerInfo.tradeLicense](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ItemMarkerInfo/tradeLicense.html) — информация о торговой лицензии организации в маркере.
+* [SearchQueryBuilder.setSearchNearby](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setSearchNearby.html) — метод, который указывает поисковому движку искать объекты рядом с пользователем.
+* [SuggestQueryBuilder.setSearchNearby](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQueryBuilder/setSearchNearby.html) — метод, который указывает поисковому движку искать объекты рядом с пользователем.
+* [SearchResult.nearbyRequested](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchResult/nearbyRequested.html) — признак в результатах поиска, что при поиске были запрошены объекты поблизости.
+* [SearchWidgetColorScheme](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchWidgetColorScheme-class.html) — класс для указания цветовой схемы для класса [DgisSearchWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSearchWidget-class.html).
+* Добавлена возможность указать сборщики для создания [SearchQuery](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQuery-class.html) и [SuggestQuery](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SuggestQuery-class.html) в классе [DgisSearchWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DgisSearchWidget-class.html).
+* [TrafficRoute.routeTollPaymentInfos](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRoute/routeTollPaymentInfos.html) — информация о стоимости проезда по платным участкам маршрута.
+* [RoadMacroGraph](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RoadMacroGraph-class.html) — пакет глобального дорожного графа будет удалён в следующих версиях. Вы можете строить маршруты между регионами на основе скачанных [офлайн-данных](/flutter/sdk/start#offline-mode).
+
+### 🛠 Исправления
+
+* Улучшена производительность карты для Android и iOS: карта может работать с кадровой частотой 120 FPS.
+
+### 🗺 Изменения в стилях карты
+
+* Заново выгрузите стили: в навигаторе исправлено отображение иммерсивных дорог и тумана.
+
+## 12.6.3 (2025-05-15)
+
+### 🌟 Новые возможности
+
+* Добавлена возможность использовать Flutter SDK на устройствах с операционной системой Аврора. Подробнее см. в разделе [Установка](/flutter/sdk/start#aurora-os).
+
+### 🛠 Исправления
+
+* Оптимизирована работа [TrafficSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficSource-class.html):
+
+  * Тайлы с пробками запрашиваются при изменении масштаба карты и по таймеру.
+  * Уровень пробок в баллах обновляется при смене региона и по таймеру.
+
+* Улучшена производительность карты при добавлении полигонов с большим количеством вершин через [MapObjectManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager-class.html).
+
+## 12.6.1 (2025-04-21)
+
+### 🌟 Новые возможности
+
+* В источник геопозиции по умолчанию для Android добавлена возможность настроить использование сервиса [Radar API](/api/navigation/radar/overview) для геопозиционирования устройства по точкам доступа Wi-Fi и сотовым вышкам. Настроить использование Radar API можно через [RadarApiSettings](/android/sdk/reference/stable/class#ru.dgis.sdk.positioning.radar.radar-api-settings) и `ru.dgis.sdk.positioning.RadarSettingsProvider` при регистрации Android-плагина. Подробнее см. в разделе [Использование Radar API](/flutter/sdk/examples/navigation#radar-api).
+* [File.fromAsset](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/File/fromAsset.html) — метод для загрузки файла из asset-директории приложения.
+* [TextStyle.suppressOnOverlap](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TextStyle/suppressOnOverlap.html) — опция для скрытия текста подписи маркера при пересечении с другими объектами.
+
+### 🛠 Исправления
+
+* Исправлено обновление генерализации при изменении атрибутов объектов, добавленных через метод [MapObjectManager.withGeneralization()](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager/withGeneralization.html).
+* Исправлена ошибка, при которой приложение падало при логировании сетевых запросов.
+
+## 12.5.0 (2025-03-25)
+
+### 🌟 Новые возможности
+
+* [SearchQueryBuilder.setLocale](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setLocale.html) — метод для задания локали, в которой выполняется поисковый запрос.
+* [DirectoryObject.group](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject/group.html) — объединение объектов разного типа в одной карточке. Например, карточка здания суда содержит информацию о здании как геообъекте и о суде как организации в здании.
+* [SearchQueryWithInfo.rubrics](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryWithInfo/rubrics.html) — список рубрик, по которым производится запрос.
+* [PackedSearchQuery.locale](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/PackedSearchQuery/locale.html) — локаль для поискового запроса.
+
+### 🛠 Исправления
+
+* Исправлена ошибка, при которой маркер местоположения, добавленный через [MyLocationMapObjectSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObjectSource-class.html), исчезает при первом перелёте камеры.
+* Исправлено отображение информации о маршруте на карте при направлении текста справа налево (RTL) для источника данных [RouteEditorSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteEditorSource-class.html).
+* Изменены настройки кеширования данных из источника на маршруте. Теперь данные кешируются на расстоянии 4000 метров впереди от текущей позиции на маршруте вместо 20000.
+
+### 🗺 Изменения в стилях карты
+
+* Повторно выгрузите стили: исправлено отображение информации о маршруте на карте при направлении текста справа налево.
+
+## 12.4.4 (2025-02-20)
+
+### 🌟 Новые возможности
+
+* [Projection.distanceOnMap](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Projection/distanceOnMap.html) — метод для вычисления расстояния между точками на карте, которые соответствуют указанным точкам на экране.
+* [Projection.distanceOnScreen](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Projection/distanceOnScreen.html) — метод для вычисления расстояния между точками на экране, которые соответствуют указанным точкам на карте.
+
+### 🛠 Исправления
+
+* Исправлено отображение окружности на карте при добавлении объекта [Circle](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Circle-class.html) в [MapObjectManager.withClustering](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager/withClustering.html) и [MapObjectManager.withGeneralization](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager/withGeneralization.html).
+
+## 12.4.1 (2025-02-06)
+
+### 🌟 Новые возможности
+
+* [Map.sublayerAttributes](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Map/sublayerAttributes.html) — возможность переопределения атрибутов конкретного слоя карты.
+* [SearchHistory](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchHistory-class.html) — класс для работы с историей поисковых запросов: чтения, добавления и удаления записей с информацией о результате работы поиска и поисковых подсказках.
+* [SearchQueryBuilder.fromOrgId](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromOrgId.html) — метод для формирования поискового запроса по идентификатору организации.
+* [SearchQueryBuilder.fromBuildingId](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromBuildingId.html) — метод для формирования поискового запроса по идентификатору здания.
+* [SearchQueryBuilder.fromGeoPoint](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/fromGeoPoint.html) — метод для формирования поискового запроса c центром области поиска.
+* [SearchQueryBuilder.setGeoPoint](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setGeoPoint.html) и [SearchQueryBuilder.setRadius](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SearchQueryBuilder/setRadius.html) — методы для установки центра области поиска и радиуса при формировании поискового запроса.
+* [DirectoryObject.orgInfo](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject/orgInfo.html) — информация об организации в объекте справочника.
+* [MyLocationMapObject.setModelData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObject/setModelData.html) — метод для установки 3D-модели маркера геопозиции.
+* [BaseCamera.viewPoint](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/BaseCamera/viewPoint.html) — возможность изменения точки обзора камеры относительно размера области видимости карты.
+* [AnimationSettings.animationName](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/AnimationSettings/animationName.html) — возможность переключения анимации 3D-модели по названию.
+* Добавлена инструкция по [управлению стилями карты](/flutter/sdk/examples/map_styles).
+
+### 🛠 Исправления
+
+* Теперь положение 3D-модели совпадает с направлением камеры, если значение угла поворота не задано в [ModelMapObject.mapDirection](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelMapObject/mapDirection.html).
+* Исправлена некорректная установка атрибутов для генерализуемых объектов, добавленных на карту через [MapObjectManager.withClustering](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager/withClustering.html). Теперь изменение атрибутов объектов на определённом zoom-уровне распространяется на все уровни.
+* Исправлена работа атрибута для управления видимостью объекта на карте [SimpleMapObject.isVisible](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/SimpleMapObject/isVisible.html) при генерализации и кластеризации объектов.
+* Доработано отображение [NavigationLayoutWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationLayoutWidget-class.html) в альбомной ориентации.
+
+### 🗺 Изменения в стилях карты
+
+* Исправлен приоритет обработки нажатий между маркером геопозиции и зданиями на карте.
+
+## 12.3.0 (2024-12-20)
+
+### 🌟 Новые возможности
+
+* [ModelMapObject](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelMapObject-class.html) и [ModelMapObjectOptions](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelMapObjectOptions-class.html) — классы для создания и настройки динамических объектов с 3D-моделями. Вы можете добавить данные объекты на карту с помощью [MapObjectManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager-class.html).
+* [ModelData](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelData-class.html) и [ModelLoader](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ModelLoader-class.html) — возможность загрузки пользовательских 3D-моделей.
+* Теперь при добавлении [TrafficSource](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficSource-class.html) на карту тайлы с пробками запрашиваются на основе области видимости экрана независимо от обновления конфигурационного файла SDK.
+* [DirectoryObject.rubricIds](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/DirectoryObject-class.html) — идентификаторы рубрик в объекте справочника.
+* [FreeRoamSelector](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/FreeRoamSelector-class.html) и [NavigationManager.freeRoamSelector](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager-class.html) — возможность включения и выключения перевода навигатора в режим `FreeRoam` при слишком долгом перестроении маршрута.
+* [RouteRebuilder](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteRebuilder-class.html) и [NavigationManager.freeRoamSelector](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager-class.html) — возможность включения и выключения поиска нового маршрута при сходе с текущего маршрута.
+* [TrafficRouter.requestRoute](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficRouter-class.html) — возможность поиска маршрута по ранее сериализованным параметрам.
+* [NavigationLayoutWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationLayoutWidget-class.html) — общий UI-элемент для отображения интерфейса навигатора.
+
+### 🛠 Исправления
+
+* Оптимизировано отображение карты на iOS и удалено мигание при слежении за текущим местоположением в навигаторе.
+* Исправлено дублирование числа филиалов для категорий организаций в [Suggest.subtitle](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Suggest-class.html).
+* Исправлена ошибка получения координат объекта при обработке клика на [Marker](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Marker-class.html), добавленный на карту перед первичной загрузкой карты.
+* Исправлено отображение 3D-модели маркера геопозиции навигатора для всех типов маршрута, кроме пешеходного. Для пешеходного маршрута отображается обычная модель маркера геопозиции.
+* Обновлена конфигурация навигатора для улучшения работы при плохом сигнале GPS.
+
+### 🗺 Изменения в стилях карты
+
+* Добавлен слой для отображения динамических 3D-моделей.
+
+## 12.2.0 (2024-11-18)
+
+### 🌟 Новые возможности
+
+* [AnimationSettings](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/AnimationSettings-class.html) — класс для настройки анимаций объектов карты. Применяется для объектов с типами слоя `3D model` и `Directional model`.
+* [MyLocationMapObject.animationSettings](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObject/animationSettings.html) — возможность настройки анимаций для маркера геопозиции, если в качестве модели в стилях загружена анимированная модель.
+* [MyLocationMapObject.objectAttributes](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObject/objectAttributes.html) — возможность настройки атрибутов стилей для маркера геопозиции. Возможные значения атрибутов можно увидеть в стилях для соответствующего слоя.
+* [RoadEventMapObject.animationSettings](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RoadEventMapObject/animationSettings.html) — возможность настройки анимаций для дорожных событий, если в качестве модели в стилях загружена анимированная модель.
+* [RoadEvent.id](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RoadEvent/id.html) — идентификатор дорожного события.
+* [ParkingControlModel](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ParkingControlModel-class.html) — модель для удобного переключения видимости парковок на карте.
+* [ItemMarkerInfo.rubricIds](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ItemMarkerInfo/rubricIds.html) — идентификаторы рубрик, к которым относится объект маркера.
+* [TextHorizontalAlignment](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TextStyle/textHorizontalAlignment.html) — настройка для выравнивания надписи по горизонтали в [Marker](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/Marker-class.html) через [TextStyle](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TextStyle-class.html).
+* [RouteMapObjectsProvider](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteMapObjectsProvider-class.html) и [NavigationManager.routeMapObjectsProvider](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager/routeMapObjectsProvider.html) — класс для получения объектов маршрута на карте.
+* [RouteMapObject.roadEventObjects](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/RouteMapObject/roadEventObjects.html) — дорожные события на карте для соответствующего маршрута.
+* [MyLocationMapObjectSourceProvider](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationMapObjectSourceProvider-class.html) и [NavigationManager.myLocationMapObjectSourceProvider](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/NavigationManager/myLocationMapObjectSourceProvider.html) — класс для получения источника маркера геопозиции в навигаторе.
+* UI-элементы навигатора: [MyLocationWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MyLocationWidget-class.html), [TrafficWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/TrafficWidget-class.html) и [ZoomWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ZoomWidget-class.html).
+
+### 🛠 Исправления
+
+* Оптимизировано отображение карты на iOS, чтобы не было миганий при частых перелетах и изменениях размера [MapWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidget-class.html).
+* Исправлены ошибки при отображении [IndoorWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/IndoorWidget-class.html).
+* `Copyright` в [MapWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidget-class.html) учитывает безопасные зоны экрана.
+* Доработан механизм получения названия объекта маркера [ItemMarkerInfo.title](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/ItemMarkerInfo/title.html). Теперь учитывается, что маркер может быть без названия.
+* Исправлена потенциальная проблема при инициализации карты, когда стиль устанавливался раньше, чем завершался процесс инициализации.
+* Исправлено потенциальное зависание в [MapObjectManager](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager-class.html) при частом добавлении и удалении объектов через метод [MapObjectManager.removeAndAddObjects](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapObjectManager/removeAndAddObjects.html).
+* Исправлена ошибка, при которой для некоторых регионов не работало отображение дорожных событий на карте.
+* Исправлено отображение стрелок маршрута относительно иммерсивных дорог реальной ширины в режиме навигатора.
+* Исправлена потенциальная проблема, при которой не отображались баблы полосности на маршруте в режиме навигатора.
+
+### 🗺 Изменения в стилях карты
+
+* Исправлены ошибки в стилях при отображении маркера геопозиции в режиме навигатора с иммерсивными дорогами реальной ширины.
+* Исправлены ошибки в стилях при отображении этажных планов зданий.
+
+## 12.1.4 (2024-10-31)
+
+### 🛠 Исправления
+
+* Исправлена проблема, из-за которой карта могла не отображаться на некоторых устройствах Android.
+
+## 12.1.3 (2024-10-25)
+
+### 🛠 Исправления
+
+* Исправлена работа Flutter SDK на устройствах с 32-битной архитектурой.
+* Исправлена проблема, из-за которой карта могла не отображаться на Android, если [MapWidget](https://pub.dev/documentation/dgis_mobile_sdk_full/latest/dgis_mobile_sdk/MapWidget-class.html) добавлен на стартовый экран приложения.
+
+## 12.1.0 (2024-09-27)
+
+Первый релиз Flutter SDK, который позволяет добавить карту в ваше приложение, отобразить её на экране, строить маршруты, получать информацию об объектах и так далее.
