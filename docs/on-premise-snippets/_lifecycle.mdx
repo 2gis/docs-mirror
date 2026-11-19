@@ -95,7 +95,7 @@ Cценарий обновления происходит в два этапа:
 
    1. Получите список всех манифестов нужного компонента в хранилище:
 
-      <Tabs>
+      <Tabs queryString="first-cleanup">
       <TabItem value="list-2.x" label="Для утилиты 2GIS CLI версии 2.x" default>
 
          ```bash
@@ -118,7 +118,7 @@ Cценарий обновления происходит в два этапа:
 
    3. Удалите остальные манифесты:
 
-      <Tabs>
+      <Tabs queryString="first-cleanup-delete">
       <TabItem value="delete-2.x" label="Для утилиты 2GIS CLI версии 2.x" default>
 
          ```bash
@@ -145,7 +145,7 @@ Cценарий обновления происходит в два этапа:
    2. Определите, сколько манифестов вы хотите оставить для отката на предыдущую версию.
    3. Удалите остальные манифесты:
 
-      <Tabs>
+      <Tabs queryString="next-cleanup-delete">
       <TabItem value="next-delete-2.x" label="Для утилиты 2GIS CLI версии 2.x" default>
 
          ```bash

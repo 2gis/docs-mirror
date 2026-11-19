@@ -210,9 +210,9 @@ Navi-Router использует файл правил, чтобы опреде�
 
 | Тип запросов (`queries`) | Назначение | Каким сервисом используется |
 | --- | --- | --- |
-| `free_roam` | Свободная навигация без маршрута. | Mobile SDK |
+| `free_roam`, `ctx` | Свободная навигация без маршрута. | Mobile SDK |
 | `routing` | Маршруты для транспорта, кроме общественного. | [Routing API](/api/navigation/routing/overview), [Directions API](/api/navigation/directions/overview) |
-| `ctx`, `public_transport` | Маршруты для общественного транспорта. | [Routing API](/api/navigation/routing/overview) |
+| `public_transport` | Маршруты для общественного транспорта. | [Routing API](/api/navigation/routing/overview) |
 | `get_pairs` | Построение нескольких маршрутов одновременно, кроме маршрутов для общественного транспорта. | [Routing API](/api/navigation/routing/overview) |
 | `get_hull` | Построение зон доступности. | [Isochrone API](/api/navigation/isochrone/overview) |
 | `map_matching` | Восстановление маршрута по точкам. | [Map Matching API](/api/navigation/map-matching/overview) |
@@ -288,7 +288,7 @@ rules:
       routing: ["motorcycle"]
 
     - name: all-ctx
-      queries: ["public_transport", "get_dist_matrix", "get_hull"]
+      queries: ["public_transport", "get_dist_matrix", "get_hull", "ctx"]
       routing: ["public_transport", "ctx"]
 
     - name: emergency
