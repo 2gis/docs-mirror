@@ -3,7 +3,19 @@ sidebar: geocoderAPI
 ---
 # Поиск по координатам (обратное геокодирование)
 
-Для поиска объекта по координатам укажите координаты точки в параметрах `lon` и `lat` в GET-запросе к [/3.0/items/geocode](/api/search/geocoder/reference/3.0/items/geocode): см. подробнее в разделе [Поиск по координатам точки](#lon-lat). Чтобы получить в ответе адрес объекта и административные единицы, которым он принадлежит, укажите в запросе параметр `fields=items.adm_div,items.address`.
+Для поиска объекта по координатам укажите координаты точки в параметрах `lon` и `lat` в GET-запросе к [/3.0/items/geocode](/api/search/geocoder/reference/3.0/items/geocode): см. подробнее в разделе [Поиск по координатам точки](#lon-lat). В ответе вернётся базовая информация об адресе найденного объекта.
+
+Чтобы получить в ответе детализированный адрес объекта, рекомендуется указать в запросе параметр `fields=items.adm_div,items.address,items.full_address_name`, где:
+
+* `items.adm_div` — детали административных единиц, к которым относится точка. Эти данные полезны в случаях, когда точка поиска попадает не в здание с конкретным адресом, а, например, на дорогу.
+* `items.address` — детализированный адрес объекта с индексом и достопримечательностью поблизости.
+* `items.full_address_name` — полный адрес объекта в виде строки в формате `<город>, <улица>, <дом с указанием корпуса, строения, литеры и т. д.>`. Этот готовый формат для использования в ваших сценариях или в других запросах для поиска и геокодирования.
+
+    :::note[Формат адреса]
+
+    Приведённый выше формат адреса используется по умолчанию в объектах в Российской Федерации. Если вас интересует формат адреса в других регионах, обратитесь в службу поддержки: отправьте электронное письмо на [api@2gis.ru](mailto:api@2gis.ru).
+
+    :::
 
 Также вы можете искать по координатам:
 
@@ -21,12 +33,12 @@ sidebar: geocoderAPI
 
 * `lon` — долгота точки поиска, например `lon=37.609256`.
 * `lat` — широта точки поиска, например `lat=55.770784`.
-* `fields=items.adm_div,items.address` — включает в ответ поля с административными единицами и адресом объекта.
+* `fields=items.adm_div,items.address,items.full_address_name` — комбинация параметров для детализации адреса в ответе.
 
 **Пример запроса:**
 
 ```bash
-https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609256&lat=55.770784&fields=items.adm_div,items.address&key=API_KEY
+https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609256&lat=55.770784&fields=items.adm_div,items.address,items.full_address_name&key=API_KEY
 ```
 
 **Пример ответа:**
@@ -37,9 +49,9 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609256&lat=55.770784&field
 ```json
 {
     "meta": {
-        "api_version": "3.0.21070",
+        "api_version": "3.0.22125",
         "code": 200,
-        "issue_date": "20260806"
+        "issue_date": "20261118"
     },
     "result": {
         "items": [
@@ -86,6 +98,8 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609256&lat=55.770784&field
                         "type": "district"
                     }
                 ],
+                "building_name": "Здание театра Эрмитаж",
+                "full_address_name": "Москва, улица Каретный Ряд, 3 ст1",
                 "full_name": "Москва, улица Каретный Ряд, 3 ст1",
                 "id": "4504235282731438",
                 "name": "улица Каретный Ряд, 3 ст1",
@@ -227,12 +241,12 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609256&lat=55.770784&field
 * `lon` — долгота точки поиска, например `lon=37.609484`.
 * `lat` — широта точки поиска, например `lat=55.770763`.
 * `radius` — радиус поиска в метрах, например `radius=50`.
-* `fields=items.adm_div,items.address` — включает в ответ поля с административными единицами и адресом объекта.
+* `fields=items.adm_div,items.address,items.full_address_name` — комбинация параметров для детализации адреса в ответе.
 
 **Пример запроса:**
 
 ```bash
-https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&radius=50&fields=items.adm_div,items.address&key=API_KEY
+https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&radius=50&fields=items.adm_div,items.address,items.full_address_name&key=API_KEY
 ```
 
 **Пример ответа:**
@@ -243,9 +257,9 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&radiu
 ```json
 {
     "meta": {
-        "api_version": "3.0.21070",
+        "api_version": "3.0.22125",
         "code": 200,
-        "issue_date": "20260806"
+        "issue_date": "20261118"
     },
     "result": {
         "items": [
@@ -292,6 +306,8 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&radiu
                         "type": "district"
                     }
                 ],
+                "building_name": "Здание театра Эрмитаж",
+                "full_address_name": "Москва, улица Каретный Ряд, 3 ст1",
                 "full_name": "Москва, улица Каретный Ряд, 3 ст1",
                 "id": "4504235282731438",
                 "name": "улица Каретный Ряд, 3 ст1",
@@ -484,7 +500,9 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&radiu
             },
             {
                 "address": {
-                    "landmark_name": "сад Эрмитаж"
+                    "building_id": "70030076641436461",
+                    "landmark_name": "сад Эрмитаж",
+                    "postcode": "127006"
                 },
                 "adm_div": [
                     {
@@ -514,15 +532,14 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&radiu
                         "type": "district"
                     }
                 ],
-                "full_name": "Москва, Сцена",
-                "id": "4504295434271768",
-                "name": "Сцена",
-                "subtype": "stage",
-                "subtype_name": "сцена",
-                "type": "attraction"
+                "full_name": "Москва, Киоск",
+                "id": "70030076641436461",
+                "name": "Киоск",
+                "purpose_name": "Киоск",
+                "type": "building"
             }
         ],
-        "total": 24
+        "total": 21
     }
 }
 ```
@@ -541,12 +558,13 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&radiu
 
    * `items.adm_div` — административные единицы.
    * `items.address` — адрес объекта.
+   * `items.full_address_name` — полный адрес объекта, включая город.
    * `items.links.database_entrances` — координаты входов в здание (требуется [дополнительное разрешение ключа](/api/search/geocoder/overview#info-on-demand)).
 
 **Пример запроса:**
 
 ```bash
-https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609376&lat=55.772302&type=building&radius=10&fields=items.adm_div,items.address,items.links.database_entrances&key=API_KEY
+https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609376&lat=55.772302&type=building&radius=10&fields=items.adm_div,items.address,items.full_address_name,items.links.database_entrances&key=API_KEY
 ```
 
 **Пример ответа:**
@@ -611,6 +629,7 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609376&lat=55.772302&type=
                         "type": "district"
                     }
                 ],
+                "full_address_name": "Москва, улица Каретный Ряд, 5/10 ст2 / Москва, Садовая-Каретная улица, 10",
                 "full_name": "Москва, улица Каретный Ряд, 5/10 ст2 / Садовая-Каретная улица, 10",
                 "id": "4504235282731036",
                 "links": {
@@ -661,12 +680,12 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609376&lat=55.772302&type=
 * `lon` — долгота точки поиска, например `lon=37.609484`.
 * `lat` — широта точки поиска, например `lat=55.770763`.
 * `type` — тип объекта, например `type=building` для поиска зданий.
-* `fields=items.adm_div,items.address` — включает в ответ поля с административными единицами и адресом объекта.
+* `fields=items.adm_div,items.address,items.full_address_name` — комбинация параметров для детализации адреса в ответе.
 
 **Пример запроса:**
 
 ```bash
-https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&type=building&fields=items.adm_div,items.address&key=API_KEY
+https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&type=building&fields=items.adm_div,items.address,items.full_address_name&key=API_KEY
 ```
 
 **Пример ответа:**
@@ -677,9 +696,9 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&type=
 ```json
 {
     "meta": {
-        "api_version": "3.0.21070",
+        "api_version": "3.0.22125",
         "code": 200,
-        "issue_date": "20260806"
+        "issue_date": "20261118"
     },
     "result": {
         "items": [
@@ -726,6 +745,8 @@ https://catalog.api.2gis.com/3.0/items/geocode?lon=37.609484&lat=55.770763&type=
                         "type": "district"
                     }
                 ],
+                "building_name": "Здание театра Эрмитаж",
+                "full_address_name": "Москва, улица Каретный Ряд, 3 ст1",
                 "full_name": "Москва, улица Каретный Ряд, 3 ст1",
                 "id": "4504235282731438",
                 "name": "улица Каретный Ряд, 3 ст1",
